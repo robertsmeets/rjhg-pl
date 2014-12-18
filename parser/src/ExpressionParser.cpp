@@ -225,11 +225,9 @@ template<typename T, typename InputIterator>
 void ExpressionParser::Print(const string& message,
 		const InputIterator& itbegin, const InputIterator& itend,
 		const string& delimiter) {
-	/*cout << message << endl;
-
+	cout << message << endl;
 	copy(itbegin, itend, ostream_iterator<T>(cout, delimiter.c_str()));
-
-	cout << endl; */
+	cout << endl;
 }
 
 int ExpressionParser::parse(string s) {
@@ -246,9 +244,9 @@ int ExpressionParser::parse(string s) {
 		double d = RPNtoDouble(rpn);
 		Print<string, cv_iter>("RPN tokens:  ", rpn.begin(), rpn.end(), " ");
 
-		// cout << "Result = " << d << endl;
+		cout << "Result = " << d << endl;
 	} else {
-		// cout << "Mis-match in parentheses" << endl;
+		cout << "Mis-match in parentheses" << endl;
 	}
 
 	return 0;

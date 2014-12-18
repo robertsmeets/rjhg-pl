@@ -229,7 +229,7 @@ cout << "PROCEDURE_DEFINITION" << endl;
 		assignments.push_back(a);
 
 		cout << "ASSIGNMENT " << a.left_side << " = " << a.right_side << endl;
-		// ep.parse(assignment_right);
+		ep.parse(assignment_right);
 	}
 
 }
