@@ -15,6 +15,7 @@
 #include <vector>
 #include <iterator>
 #include <stdlib.h>
+#include "ExpressionNode.h"
 
 using namespace std;
 
@@ -25,24 +26,31 @@ ExpressionParser::ExpressionParser() {
 ExpressionParser::~ExpressionParser() {
 
 }
-
-// Test if token is an pathensesis
+//
+// Test if token is an parenthesis
+//
 bool ExpressionParser::isParenthesis(const string& token) {
 	return token == "(" || token == ")";
 }
 
+//
 // Test if token is an operator
+//
 bool ExpressionParser::isOperator(const string& token) {
 	return token == "+" || token == "-" || token == "*" || token == "/";
 }
 
+//
 // Test associativity of operator token
+//
 bool ExpressionParser::isAssociative(const string& token, const int& type) {
 	const pair<int, int> p = opmap.find(token)->second;
 	return p.second == type;
 }
 
+//
 // Compare precedence of operators.
+//
 int ExpressionParser::cmpPrecedence(const string& token1,
 		const string& token2) {
 	const pair<int, int> p1 = opmap.find(token1)->second;
@@ -51,7 +59,9 @@ int ExpressionParser::cmpPrecedence(const string& token1,
 	return p1.first - p2.first;
 }
 
+//
 // Convert infix expression format into reverse Polish notation
+//
 bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 		const int& size, vector<string>& strArray) {
 	bool success = true;
@@ -187,22 +197,24 @@ double ExpressionParser::RPNtoDouble(vector<string> tokens) {
 			st.push(s.str());
 		}
 	}
-
 	return strtod(st.top().c_str(), NULL);
 }
 
+//
+// get the tokens from the string
+//
 vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 	vector<string> tokens;
 	string str = "";
-
 	for (int i = 0; i < (int) expression.length(); ++i) {
 		const string token(1, expression[i]);
-
 		if (isOperator(token) || isParenthesis(token)) {
 			if (!str.empty()) {
+				cout << "PUSH1 " << str << endl;
 				tokens.push_back(str);
 			}
 			str = "";
+			cout << "PUSH2 " << token << endl;
 			tokens.push_back(token);
 		} else {
 			// Append the numbers
@@ -210,17 +222,25 @@ vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 				str.append(token);
 			} else {
 				if (str != "") {
+					cout << "PUSH3 " << str << endl;
 					tokens.push_back(str);
 					str = "";
 				}
 			}
 		}
 	}
-
+	//
+	// check if empty
+	//
+	if (!str.empty())
+	{
+	   tokens.push_back(str);
+	}
 	return tokens;
 }
-
+//
 // Print iterators in a generic way
+//
 template<typename T, typename InputIterator>
 void ExpressionParser::Print(const string& message,
 		const InputIterator& itbegin, const InputIterator& itend,
@@ -230,24 +250,32 @@ void ExpressionParser::Print(const string& message,
 	cout << endl;
 }
 
-int ExpressionParser::parse(string s) {
+//
+// parse string
+//
+ExpressionNode ExpressionParser::parse(string s) {
 	// string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
-
 	Print<char, s_iter>("Input expression:", s.begin(), s.end(), "");
-
+	//
 	// Tokenize input expression
+	//
+	cout << "the string is " << s << endl;
 	vector<string> tokens = getExpressionTokens(s);
-
+	cout << "-----------here come some tokens-----------" << endl;
+	for( vector<string>::iterator it = tokens.begin(); it != tokens.end(); ++it) {
+	    cout << "---> TOKEN " << *it << endl;
+	}
+	cout << "-------------------------------------------" << endl;
+	//
 	// Evaluate feasible expressions
+	//
 	vector<string> rpn;
 	if (infixToRPN(tokens, tokens.size(), rpn)) {
-		double d = RPNtoDouble(rpn);
 		Print<string, cv_iter>("RPN tokens:  ", rpn.begin(), rpn.end(), " ");
-
-		cout << "Result = " << d << endl;
 	} else {
 		cout << "Mis-match in parentheses" << endl;
 	}
-
-	return 0;
+	ExpressionNode en;
+	en.setRpn(rpn);
+	return en;
 }

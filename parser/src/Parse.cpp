@@ -11,6 +11,7 @@
 #include "Parse.h"
 #include "PException.h"
 #include "ExpressionParser.h"
+#include "ProcedureNode.h"
 
 using namespace std;
 
@@ -22,6 +23,11 @@ Parse::Parse() {
 
 Parse::~Parse() {
 
+}
+
+ProgramNode Parse::getPn()
+{
+	return pn;
 }
 
 void Parse::start() {
@@ -62,7 +68,6 @@ void Parse::parse_from_memory() {
 	get_something(" \n\t\r");
 	for (;;) {
 		code_definition();
-		//cout << "PEEK_STRING is now <" << peek_string << ">" << endl;
 		if (peek_string.empty()) {
 			return;
 
@@ -78,9 +83,10 @@ bool Parse::get_something(string chars) {
 			return false;
 		}
 		if (!peek_string.empty()) {
-			return true;
+			break;
 		}
 	}
+	return true;
 }
 
 void Parse::code_definition() {
@@ -125,17 +131,13 @@ bool Parse::get_onething(string chars) {
 		if (found == string::npos) {
 			// strip the peek_string?
 			peek_string += c;
-			//cout << "peek_string is now <" << peek_string << ">" << endl;
-
 		} else {
 			found_char = c;
 			trim(peek_string);
-			//cout << "after trimming, peek_string is now <" << peek_string << ">"
-				//	<< endl;
-			return true;
+			break;
 		}
-
 	}
+	return true;
 }
 
 void Parse::class_definition() {
@@ -170,16 +172,17 @@ void Parse::method_definition() {
 
 void Parse::procedure_definition() {
 cout << "PROCEDURE_DEFINITION" << endl;
-	vector<assignment> assignments;
+    ProcedureNode pd;
+
 	//
 	// get the definition
 	//
 	get_something("(");
 	string proc_name = peek_string;
-	vector<string> parameters;
+	pd.setName(proc_name);
 	for (;;) {
 		get_something("),");
-		parameters.push_back(peek_string);
+		pd.addParameter(peek_string);
 		if (found_char == ')') {
 			// done
 			break;
@@ -195,7 +198,7 @@ cout << "PROCEDURE_DEFINITION" << endl;
 			get_something(" \n\t\r");
 			break;
 		}
-		instance_variables.push_back(peek_string);
+		pd.addInstanceVariable(peek_string);
 	}
 
 	//
@@ -210,7 +213,6 @@ cout << "PROCEDURE_DEFINITION" << endl;
 	for (;;) {
 		get_something("=\n\r");
 		if (peek_string == "end") {
-			cout << "FOUND THE END" << endl;
 			get_something(" \n\t\r");
 			break;
 		}
@@ -222,15 +224,14 @@ cout << "PROCEDURE_DEFINITION" << endl;
 		}
 		string assignment_left = peek_string;
 		get_something("\n\t\r");
+		AssignmentNode an;
+		an.setLhs(assignment_left);
 		string assignment_right = peek_string;
-		assignment a;
-		a.left_side = assignment_left;
-		a.right_side = assignment_right;
-		assignments.push_back(a);
-
-		cout << "ASSIGNMENT " << a.left_side << " = " << a.right_side << endl;
-		ep.parse(assignment_right);
+		ExpressionNode en = ep.parse(assignment_right);
+		an.setRhs(en);
+		pd.addAssignment(an);
 	}
+	pn.addProcedure(pd);
 
 }
 
@@ -254,3 +255,4 @@ void Parse::immediate_code() {
 	throw PException("unexpected string " + peek_string);
 
 }
+

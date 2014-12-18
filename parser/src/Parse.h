@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include "ExpressionParser.h"
+#include "ProgramNode.h"
 
 using namespace std;
 
@@ -20,11 +21,7 @@ class Parse {
 	string peek_string;
 	unsigned int offset;
 	ExpressionParser ep;
-	struct assignment
-			{
-			  string left_side;
-			  string right_side;
-			};
+	ProgramNode pn;
 
 public:
 	Parse();
@@ -41,7 +38,7 @@ public:
 	void immediate_code();
 	void procedure_definition();
 	void trim(string&);
-
+	ProgramNode getPn();
 };
 
 #endif /* PARSE_H_ */

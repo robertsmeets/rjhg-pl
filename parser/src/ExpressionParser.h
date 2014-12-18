@@ -17,6 +17,7 @@
 #include <vector>
 #include <iterator>
 #include <stdlib.h>
+#include "ExpressionNode.h"
 
 using namespace std;
 
@@ -63,7 +64,7 @@ public:
 	// Print iterators in a generic way
 		template<typename T, typename InputIterator> void Print(const string& message, const InputIterator& itbegin,
 			const InputIterator& itend, const string& delimiter);
-	int parse(string);
+	ExpressionNode parse(string);
 
 };
 
