@@ -6,6 +6,7 @@
  */
 
 #include "ExpressionParser.h"
+
 #include <iostream>
 #include <sstream>
 #include <list>
@@ -15,7 +16,9 @@
 #include <vector>
 #include <iterator>
 #include <stdlib.h>
+
 #include "ExpressionNode.h"
+#include "ExpressionThing.h"
 
 using namespace std;
 
@@ -27,7 +30,7 @@ ExpressionParser::~ExpressionParser() {
 
 }
 //
-// Test if token is an parenthesis
+// Test if token is a parenthesis
 //
 bool ExpressionParser::isParenthesis(const string& token) {
 	return token == "(" || token == ")";
@@ -38,6 +41,17 @@ bool ExpressionParser::isParenthesis(const string& token) {
 //
 bool ExpressionParser::isOperator(const string& token) {
 	return token == "+" || token == "-" || token == "*" || token == "/";
+}
+
+bool ExpressionParser::isInt(const string& token) {
+	for (unsigned int i = 0; i < token.length(); i++) //for each char in string,
+			{
+		if (!(token[i] >= '0' && token[i] <= '9')) {
+			return false;
+		}
+	}
+	return true;
+
 }
 
 //
@@ -63,98 +77,131 @@ int ExpressionParser::cmpPrecedence(const string& token1,
 // Convert infix expression format into reverse Polish notation
 //
 bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
-		const int& size, vector<string>& strArray) {
+		const int& size, vector<ExpressionThing>& strArray) {
 	bool success = true;
-
-	list<string> out;
+	list<ExpressionThing> out;
 	stack<string> stack;
-
+	//
 	// While there are tokens to be read
+	//
 	for (int i = 0; i < size; i++) {
+		//
 		// Read the token
+		//
 		const string token = inputTokens[i];
-
+		//
 		// If token is an operator
+		//
 		if (isOperator(token)) {
+			//
 			// While there is an operator token, o2, at the top of the stack AND
 			// either o1 is left-associative AND its precedence is equal to that of o2,
 			// OR o1 has precedence less than that of o2,
+			//
 			const string o1 = token;
-
 			if (!stack.empty()) {
 				string o2 = stack.top();
-
 				while (isOperator(o2)
 						&& ((isAssociative(o1, LEFT_ASSOC)
 								&& cmpPrecedence(o1, o2) == 0)
 								|| (cmpPrecedence(o1, o2) < 0))) {
+					//
 					// pop o2 off the stack, onto the output queue;
+					//
 					stack.pop();
-					out.push_back(o2);
-
+					ExpressionThing et(1, o2);
+					cout << "Push 1 type " << 1 << " string " << o2 << endl;
+					out.push_back(et);
 					if (!stack.empty())
 						o2 = stack.top();
 					else
 						break;
 				}
 			}
-
+			//
 			// push o1 onto the stack.
+			//
 			stack.push(o1);
 		}
+		//
 		// If the token is a left parenthesis, then push it onto the stack.
+		//
 		else if (token == "(") {
+			//
 			// Push token to top of the stack
+			//
 			stack.push(token);
 		}
+		//
 		// If token is a right bracket ')'
+		//
 		else if (token == ")") {
+			//
 			// Until the token at the top of the stack is a left parenthesis,
 			// pop operators off the stack onto the output queue.
+			//
 			string topToken = stack.top();
-
 			while (topToken != "(") {
-				out.push_back(topToken);
+				ExpressionThing et(1, topToken);
+				cout << "Push 2 type " << 1 << " string " << topToken << endl;
+				out.push_back(et);
 				stack.pop();
-
 				if (stack.empty())
 					break;
 				topToken = stack.top();
 			}
-
+			//
 			// Pop the left parenthesis from the stack, but not onto the output queue.
+			//
 			if (!stack.empty())
 				stack.pop();
-
+			//
 			// If the stack runs out without finding a left parenthesis,
 			// then there are mismatched parentheses.
+			//
 			if (topToken != "(") {
 				return false;
 			}
 		}
+		//
 		// If the token is a number, then add it to the output queue.
+		//
 		else {
-			out.push_back(token);
+			int atype;
+			if (isInt(token))
+			{
+				atype = 2;
+			}
+			else
+			{
+				atype = 3;
+			}
+			ExpressionThing et(atype, token);
+			cout << "Push 3 type " << atype << " string " << token << endl;
+			out.push_back(et);
 		}
 	}
-
+	//
 	// While there are still operator tokens in the stack:
+	//
 	while (!stack.empty()) {
 		const string stackToken = stack.top();
-
+		//
 		// If the operator token on the top of the stack is a parenthesis,
 		// then there are mismatched parentheses.
+		//
 		if (isParenthesis(stackToken)) {
 			return false;
 		}
-
-		// Pop the operator onto the output queue./
-		out.push_back(stackToken);
+		//
+		// Pop the operator onto the output queue.
+		//
+		ExpressionThing et(1, stackToken);
+		cout << "Push 4 type " << 1 << " string " << stackToken << endl;
+		out.push_back(et);
 		stack.pop();
 	}
-
 	strArray.assign(out.begin(), out.end());
-
 	return success;
 }
 
@@ -210,11 +257,9 @@ vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 		const string token(1, expression[i]);
 		if (isOperator(token) || isParenthesis(token)) {
 			if (!str.empty()) {
-				cout << "PUSH1 " << str << endl;
 				tokens.push_back(str);
 			}
 			str = "";
-			cout << "PUSH2 " << token << endl;
 			tokens.push_back(token);
 		} else {
 			// Append the numbers
@@ -222,7 +267,6 @@ vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 				str.append(token);
 			} else {
 				if (str != "") {
-					cout << "PUSH3 " << str << endl;
 					tokens.push_back(str);
 					str = "";
 				}
@@ -232,9 +276,8 @@ vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 	//
 	// check if empty
 	//
-	if (!str.empty())
-	{
-	   tokens.push_back(str);
+	if (!str.empty()) {
+		tokens.push_back(str);
 	}
 	return tokens;
 }
@@ -254,7 +297,9 @@ void ExpressionParser::Print(const string& message,
 // parse string
 //
 ExpressionNode ExpressionParser::parse(string s) {
-	// string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
+	//
+	// Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
+	//
 	Print<char, s_iter>("Input expression:", s.begin(), s.end(), "");
 	//
 	// Tokenize input expression
@@ -262,16 +307,18 @@ ExpressionNode ExpressionParser::parse(string s) {
 	cout << "the string is " << s << endl;
 	vector<string> tokens = getExpressionTokens(s);
 	cout << "-----------here come some tokens-----------" << endl;
-	for( vector<string>::iterator it = tokens.begin(); it != tokens.end(); ++it) {
-	    cout << "---> TOKEN " << *it << endl;
+	for (vector<string>::iterator it = tokens.begin(); it != tokens.end();
+			++it) {
+		cout << "---> TOKEN " << *it << endl;
 	}
 	cout << "-------------------------------------------" << endl;
 	//
 	// Evaluate feasible expressions
 	//
-	vector<string> rpn;
+	vector<ExpressionThing> rpn;
 	if (infixToRPN(tokens, tokens.size(), rpn)) {
-		Print<string, cv_iter>("RPN tokens:  ", rpn.begin(), rpn.end(), " ");
+		// Print<string, cv_iter>("RPN tokens:  ", rpn.begin(), rpn.end(), " ");
+		cout << "it worked" << endl;
 	} else {
 		cout << "Mis-match in parentheses" << endl;
 	}

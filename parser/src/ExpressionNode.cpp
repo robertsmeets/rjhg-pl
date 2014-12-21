@@ -16,7 +16,12 @@ ExpressionNode::~ExpressionNode() {
 
 }
 
-void ExpressionNode::setRpn(vector<string> a_rpn)
+void ExpressionNode::setRpn(vector<ExpressionThing> a_rpn)
 {
     rpn = a_rpn;
+}
+
+vector<ExpressionThing> ExpressionNode::getRpn()
+{
+    return rpn;
 }

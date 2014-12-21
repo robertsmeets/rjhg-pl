@@ -21,9 +21,9 @@ public:
 	AssignmentNode();
 	virtual ~AssignmentNode();
 	void setLhs(string);
+	string getLhs();
 	void setRhs(ExpressionNode);
-
-
+	ExpressionNode getRhs();
 };
 
 #endif /* ASSIGNMENTNODE_H_ */

@@ -18,6 +18,7 @@
 #include <iterator>
 #include <stdlib.h>
 #include "ExpressionNode.h"
+#include "ExpressionThing.h"
 
 using namespace std;
 
@@ -49,6 +50,8 @@ public:
 	// Test if token is an operator
 	bool isOperator(const string& );
 
+	bool isInt(const string&);
+
 	// Test associativity of operator token
 	bool isAssociative(const string& , const int& );
 
@@ -56,7 +59,7 @@ public:
 	int cmpPrecedence(const string& , const string& );
 	// Convert infix expression format into reverse Polish notation
 	bool infixToRPN(const vector<string>& ,
-			const int& , vector<string>& );
+			const int& , vector<ExpressionThing>& );
 
 	double RPNtoDouble(vector<string> tokens);
 	vector<string> getExpressionTokens(const string& expression);

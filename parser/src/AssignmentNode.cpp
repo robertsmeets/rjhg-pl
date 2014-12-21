@@ -9,19 +9,24 @@
 
 AssignmentNode::AssignmentNode() {
 
-
 }
 
 AssignmentNode::~AssignmentNode() {
 
 }
 
-void AssignmentNode::setLhs(string a_lhs)
-{
-   lhs = a_lhs;
+void AssignmentNode::setLhs(string a_lhs) {
+	lhs = a_lhs;
 }
 
-void AssignmentNode::setRhs(ExpressionNode a_rhs)
-{
-   rhs = a_rhs;
+void AssignmentNode::setRhs(ExpressionNode a_rhs) {
+	rhs = a_rhs;
 }
+
+string AssignmentNode::getLhs() {
+	return lhs;
+}
+ExpressionNode AssignmentNode::getRhs() {
+	return rhs;
+}
+
