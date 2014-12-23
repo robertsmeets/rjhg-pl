@@ -8,20 +8,19 @@
 #ifndef ASSIGNMENTNODE_H_
 #define ASSIGNMENTNODE_H_
 
-#include <string>
 #include "Node.h"
 #include "ExpressionNode.h"
 
 using namespace std;
 
 class AssignmentNode: public Node {
-	string lhs;
+	unsigned int lhs;
 	ExpressionNode rhs;
 public:
 	AssignmentNode();
 	virtual ~AssignmentNode();
-	void setLhs(string);
-	string getLhs();
+	void setLhs(unsigned int);
+	unsigned int getLhs();
 	void setRhs(ExpressionNode);
 	ExpressionNode getRhs();
 };

@@ -59,7 +59,7 @@ void CodeGenerator::start_proc(ProcedureNode a_proc) {
 			it != assignments.end(); ++it) {
 		cout << "assignment" << endl;
 		AssignmentNode an_assignment = *it;
-		string lhs = an_assignment.getLhs();
+		unsigned int lhs = an_assignment.getLhs();
 		ExpressionNode rhs = an_assignment.getRhs();
 		//
 		// emit the calculation instructions
@@ -68,17 +68,17 @@ void CodeGenerator::start_proc(ProcedureNode a_proc) {
 		//
 		// emit a "sto" to store the value in a variable
 		//
-		emit(4, 0, 0);
+		emit(4, 0, lhs);
 	}
 
 }
 
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
-	cout << "emitting " << f << "," << l << ","<< a << endl;
-	myfile << f;
+	cout << "emitting " << static_cast<unsigned>(f) << "," << l << "," << a
+			<< endl;
+	myfile.write(reinterpret_cast<const char*>(&f), sizeof(f));
 	myfile.write(reinterpret_cast<const char*>(&l), sizeof(l));
 	myfile.write(reinterpret_cast<const char*>(&a), sizeof(a));
-
 }
 
 void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
@@ -96,10 +96,11 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 			emitOperation(avalue);
 			break;
 		case 2: // literal integer
-			emit(1, atoi(avalue.c_str()), 0);
+			emit(1, 0,atoi(avalue.c_str()));
 			break;
 		case 3:  // variable name
 			cout << "variable" << endl;
+			emit(3, 0, 0); // LOD
 			break;
 		default:
 			throw PException("Unexpected ExpressionThing type");
@@ -109,18 +110,29 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 }
 
 void CodeGenerator::emitOperation(string avalue) {
-	if(avalue == "+") emit(2, 2, 0);
-else if (avalue == "-") emit(2, 3, 0);
-else if (avalue == "*") emit(2, 4, 0);
-else if (avalue == "/") emit(2, 5, 0);
-else if (avalue == "%") emit(2, 6, 0);
-else if (avalue == "==") emit(2, 7, 0);
-else if (avalue =="!=") emit(2, 8, 0);
-else if (avalue =="<") emit(2, 10, 0);
-		else if (avalue ==">=") emit(2, 11, 0);
-		else if (avalue ==">") emit(2, 12, 0);
-		else if (avalue =="<=") emit(2, 13, 0);
-		else
+	if (avalue == "+")
+		emit(2, 0, 2);
+	else if (avalue == "-")
+		emit(2, 0, 3);
+	else if (avalue == "*")
+		emit(2, 0, 4);
+	else if (avalue == "/")
+		emit(2, 0, 5);
+	else if (avalue == "%")
+		emit(2, 0, 6);
+	else if (avalue == "==")
+		emit(2, 0, 7);
+	else if (avalue == "!=")
+		emit(2, 0, 8);
+	else if (avalue == "<")
+		emit(2, 0, 10);
+	else if (avalue == ">=")
+		emit(2, 0, 11);
+	else if (avalue == ">")
+		emit(2, 0, 12);
+	else if (avalue == "<=")
+		emit(2, 0, 13);
+	else
 		throw PException("Unexpected Operation" + avalue);
 
-	}
+}

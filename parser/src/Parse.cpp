@@ -225,7 +225,11 @@ cout << "PROCEDURE_DEFINITION" << endl;
 		string assignment_left = peek_string;
 		get_something("\n\t\r");
 		AssignmentNode an;
-		an.setLhs(assignment_left);
+		//
+		// look up the instance variable
+		//
+		unsigned int i = pd.getInstanceVariable(assignment_left);
+		an.setLhs(i);
 		string assignment_right = peek_string;
 		ExpressionNode en = ep.parse(assignment_right);
 		an.setRhs(en);

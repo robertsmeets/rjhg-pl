@@ -29,7 +29,7 @@ public:
 	void addInstanceVariable(string);
 	void addAssignment(AssignmentNode);
 	vector<AssignmentNode> getAssignments();
-
+	unsigned int getInstanceVariable(string);
 };
 
 #endif /* PROCEDURENODE_H_ */

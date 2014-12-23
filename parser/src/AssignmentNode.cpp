@@ -15,7 +15,7 @@ AssignmentNode::~AssignmentNode() {
 
 }
 
-void AssignmentNode::setLhs(string a_lhs) {
+void AssignmentNode::setLhs(unsigned int a_lhs) {
 	lhs = a_lhs;
 }
 
@@ -23,7 +23,7 @@ void AssignmentNode::setRhs(ExpressionNode a_rhs) {
 	rhs = a_rhs;
 }
 
-string AssignmentNode::getLhs() {
+unsigned int AssignmentNode::getLhs() {
 	return lhs;
 }
 ExpressionNode AssignmentNode::getRhs() {
