@@ -9,12 +9,12 @@
 #define PROGRAMNODE_H_
 
 #include <vector>
-#include "Node.h"
+
 #include "ProcedureNode.h"
 
 using namespace std;
 
-class ProgramNode: public Node {
+class ProgramNode{
 public:
 	ProgramNode();
 	virtual ~ProgramNode();

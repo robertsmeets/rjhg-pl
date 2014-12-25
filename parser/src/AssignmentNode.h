@@ -8,12 +8,12 @@
 #ifndef ASSIGNMENTNODE_H_
 #define ASSIGNMENTNODE_H_
 
-#include "Node.h"
+
 #include "ExpressionNode.h"
 
 using namespace std;
 
-class AssignmentNode: public Node {
+class AssignmentNode{
 	unsigned int lhs;
 	ExpressionNode rhs;
 public:

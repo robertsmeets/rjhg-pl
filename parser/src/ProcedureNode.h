@@ -9,12 +9,12 @@
 #define PROCEDURENODE_H_
 
 #include <vector>
-#include "Node.h"
+
 #include "AssignmentNode.h"
 
 using namespace std;
 
-class ProcedureNode: public Node {
+class ProcedureNode {
 	string name;
 	vector<string> parameters;
 	vector<string> instance_variables;

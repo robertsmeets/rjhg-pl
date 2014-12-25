@@ -10,12 +10,12 @@
 
 #include <vector>
 #include <string>
-#include "Node.h"
+
 #include "ExpressionThing.h"
 
 using namespace std;
 
-class ExpressionNode: public Node {
+class ExpressionNode {
 	vector<ExpressionThing> rpn;
 
 public:
