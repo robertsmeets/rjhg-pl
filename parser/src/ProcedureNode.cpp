@@ -6,6 +6,7 @@
  */
 
 #include "ProcedureNode.h"
+#include <iostream>
 #include <vector>
 #include <algorithm>
 #include "PException.h"
@@ -14,12 +15,15 @@ using namespace std;
 
 ProcedureNode::ProcedureNode() {
 	name = "";
-	parameters.clear();
-	instance_variables.clear();
-	assignments.clear();
+	parameters = vector<string>();
+	instance_variables = vector<string>();
+	statements = vector<Statement*>();
 }
 
 ProcedureNode::~ProcedureNode() {
+	//
+	// delete all the statements
+	//
 
 }
 
@@ -39,26 +43,25 @@ void ProcedureNode::addInstanceVariable(string an_instance_variable) {
 	instance_variables.push_back(an_instance_variable);
 }
 
-void ProcedureNode::addAssignment(AssignmentNode an) {
-	assignments.push_back(an);
+void ProcedureNode::addStatement(Statement* s) {
+	statements.push_back(s);
 }
 
-vector<AssignmentNode> ProcedureNode::getAssignments()
-{
-	return assignments;
+vector<Statement*> ProcedureNode::getStatements() {
+	return statements;
 }
 
 /**
  * find the index of an index variable by string
  *
  */
-unsigned int ProcedureNode::getInstanceVariable(string s)
-{
-    unsigned int i = find(instance_variables.begin(),instance_variables.end(),s) - instance_variables.begin();
-    if (i==instance_variables.size())
-    {
-    	PException("instance variable " + s + " not found");
-    }
-    return i;
+unsigned int ProcedureNode::getInstanceVariable(string s) {
+	unsigned int i = find(instance_variables.begin(), instance_variables.end(),
+			s) - instance_variables.begin();
+	if (i == instance_variables.size()) {
+		PException("instance variable " + s + " not found");
+	}
+	return i;
 
 }
+

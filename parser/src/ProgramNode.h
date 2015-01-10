@@ -14,13 +14,16 @@
 
 using namespace std;
 
+class ProcedureNode; // forward declaration
+
 class ProgramNode{
+	vector<ProcedureNode*> procedures;
 public:
 	ProgramNode();
 	virtual ~ProgramNode();
-	vector<ProcedureNode> procedures;
-	void addProcedure(ProcedureNode);
-	vector<ProcedureNode> getProcedures();
+	void addProcedure(ProcedureNode*);
+	vector<ProcedureNode*> getProcedures();
+	unsigned int getProcedure(string);
 };
 
 #endif /* PROGRAMNODE_H_ */

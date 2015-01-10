@@ -296,7 +296,7 @@ void ExpressionParser::Print(const string& message,
 //
 // parse string
 //
-ExpressionNode ExpressionParser::parse(string s) {
+ExpressionNode* ExpressionParser::parse(string s) {
 	//
 	// Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
 	//
@@ -322,7 +322,7 @@ ExpressionNode ExpressionParser::parse(string s) {
 	} else {
 		cout << "Mis-match in parentheses" << endl;
 	}
-	ExpressionNode en;
-	en.setRpn(rpn);
+	ExpressionNode* en = new ExpressionNode();
+	en->setRpn(rpn);
 	return en;
 }

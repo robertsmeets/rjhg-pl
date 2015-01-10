@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "ExpressionParser.h"
 #include "ProgramNode.h"
 
@@ -26,6 +27,7 @@ class Parse {
 public:
 	Parse();
 	virtual ~Parse();
+	ProgramNode getPn();
 	void start();
 	void parse_from_memory();
 	void code_definition();
@@ -38,7 +40,8 @@ public:
 	void immediate_code();
 	void procedure_definition();
 	void trim(string&);
-	ProgramNode getPn();
+	void procedure_call(ProcedureNode*);
+
 };
 
 #endif /* PARSE_H_ */

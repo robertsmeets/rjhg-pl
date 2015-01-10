@@ -10,19 +10,25 @@
 
 
 #include "ExpressionNode.h"
+#include "Statement.h"
+#include "CodeGenerator.h"
 
 using namespace std;
 
-class AssignmentNode{
+class CodeGenerator; // forward declaration
+
+class AssignmentNode // : public Statement
+{
 	unsigned int lhs;
-	ExpressionNode rhs;
+	ExpressionNode* rhs;
 public:
 	AssignmentNode();
 	virtual ~AssignmentNode();
 	void setLhs(unsigned int);
 	unsigned int getLhs();
-	void setRhs(ExpressionNode);
-	ExpressionNode getRhs();
+	void setRhs(ExpressionNode*);
+	ExpressionNode* getRhs();
+	virtual void emit(CodeGenerator*);
 };
 
 #endif /* ASSIGNMENTNODE_H_ */

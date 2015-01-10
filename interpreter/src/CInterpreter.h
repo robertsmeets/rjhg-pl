@@ -17,11 +17,12 @@ using namespace std;
 class CInterpreter {
 	vector<char, allocator<char> > buffer;
 	int p;
-	int b;
+//	int b;
 	int t;
+	int tr;
 	int i;
 	vector<unsigned short int> s;
-
+	vector<unsigned short int> r;
 
 public:
 	CInterpreter(vector<char>);

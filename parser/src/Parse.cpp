@@ -12,6 +12,7 @@
 #include "PException.h"
 #include "ExpressionParser.h"
 #include "ProcedureNode.h"
+#include "ProcedureCallNode.h"
 
 using namespace std;
 
@@ -25,8 +26,7 @@ Parse::~Parse() {
 
 }
 
-ProgramNode Parse::getPn()
-{
+ProgramNode Parse::getPn() {
 	return pn;
 }
 
@@ -78,8 +78,7 @@ void Parse::parse_from_memory() {
 bool Parse::get_something(string chars) {
 	for (;;) {
 		bool result = get_onething(chars);
-		if (!result)
-		{
+		if (!result) {
 			return false;
 		}
 		if (!peek_string.empty()) {
@@ -104,13 +103,11 @@ void Parse::code_definition() {
 	}
 }
 
-
-void Parse::trim(string& s ) {
+void Parse::trim(string& s) {
 	s.erase(s.find_last_not_of(" \n\r\t") + 1);
-	unsigned int  first_useful= s.find_first_not_of(" \n\r\t");
-	if ((first_useful > 0) && (first_useful != string::npos))
-	{
-		s.erase(0,first_useful);
+	unsigned int first_useful = s.find_first_not_of(" \n\r\t");
+	if ((first_useful > 0) && (first_useful != string::npos)) {
+		s.erase(0, first_useful);
 	}
 }
 
@@ -122,7 +119,7 @@ bool Parse::get_onething(string chars) {
 	found_char = ' ';
 	for (;;) {
 		if (offset >= buffer.size()) {
-					return false;
+			return false;
 		}
 		char c = buffer[offset];
 		offset++;
@@ -171,18 +168,17 @@ void Parse::method_definition() {
 }
 
 void Parse::procedure_definition() {
-cout << "PROCEDURE_DEFINITION" << endl;
-    ProcedureNode pd;
-
+	ProcedureNode* pd = new ProcedureNode();
 	//
 	// get the definition
 	//
 	get_something("(");
 	string proc_name = peek_string;
-	pd.setName(proc_name);
+	cout << "PROCEDURE_DEFINITION " << proc_name << endl;
+	pd->setName(proc_name);
 	for (;;) {
 		get_something("),");
-		pd.addParameter(peek_string);
+		pd->addParameter(peek_string);
 		if (found_char == ')') {
 			// done
 			break;
@@ -198,9 +194,8 @@ cout << "PROCEDURE_DEFINITION" << endl;
 			get_something(" \n\t\r");
 			break;
 		}
-		pd.addInstanceVariable(peek_string);
+		pd->addInstanceVariable(peek_string);
 	}
-
 	//
 	// get the procedure body
 	//
@@ -208,35 +203,46 @@ cout << "PROCEDURE_DEFINITION" << endl;
 		throw PException("expected begin, received " + peek_string);
 	}
 	//
-	// get an assignment, or end
+	// get an assignment, procedure call, or end
 	//
 	for (;;) {
-		get_something("=\n\r");
+		get_something("(=\n\r");
+		cout << "peek_string = " << peek_string << endl;
+		cout << "found_char = " << found_char << endl;
 		if (peek_string == "end") {
 			get_something(" \n\t\r");
 			break;
 		}
 		//
-		// must be an assignment
+		// assignment or proc call
 		//
 		if (found_char != '=') {
-			throw PException("expected = but received " + found_char);
+			//
+			// assume procedure call
+			//
+			procedure_call(pd);
+		} else {
+			//
+			// must be an assignment
+			//
+			string assignment_left = peek_string;
+			get_something("\n\t\r");
+			//
+						// create assignment node with new, to avoid it going out of scope
+						//
+						AssignmentNode* an = new AssignmentNode();
+			//
+			// look up the instance variable
+			//
+			unsigned int i = pd->getInstanceVariable(assignment_left);
+			an->setLhs(i);
+			string assignment_right = peek_string;
+			ExpressionNode* en = ep.parse(assignment_right);
+			an->setRhs(en);
+			pd->addStatement((Statement*)an);
 		}
-		string assignment_left = peek_string;
-		get_something("\n\t\r");
-		AssignmentNode an;
-		//
-		// look up the instance variable
-		//
-		unsigned int i = pd.getInstanceVariable(assignment_left);
-		an.setLhs(i);
-		string assignment_right = peek_string;
-		ExpressionNode en = ep.parse(assignment_right);
-		an.setRhs(en);
-		pd.addAssignment(an);
 	}
 	pn.addProcedure(pd);
-
 }
 
 void Parse::instance_variable_definition() {
@@ -252,11 +258,30 @@ void Parse::instance_variable_definition() {
 	}
 
 }
+
 void Parse::local_variable_definition() {
 }
+
 void Parse::immediate_code() {
 
 	throw PException("unexpected string " + peek_string);
 
 }
 
+void Parse::procedure_call(ProcedureNode* pd) {
+	cout << "---------------------> procedure_call" << endl;
+	string proc_name = peek_string;
+	cout << "name " << proc_name << endl;
+	for (;;) {
+		get_something("),");
+		cout << "parameter " << peek_string << endl;
+		;
+		if (found_char == ')') {
+			// done
+			break;
+		}
+	}
+	ProcedureCallNode* pcn = new ProcedureCallNode();
+	pcn->setProcedureName(proc_name);
+	pd->addStatement((Statement*) pcn);
+}

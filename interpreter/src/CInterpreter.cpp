@@ -14,10 +14,12 @@ using namespace std;
 CInterpreter::CInterpreter(vector<char> a_buffer) {
 	buffer = a_buffer;
 	i = 0;
-	t = 0;
-	b = 1;
+	t = 0;   // is the top of the stack s
+	tr = 0;  // is the top of the stack r
+	// b = 1;
 	p = 0;
-	s = vector<unsigned short int>(500);
+	s = vector<unsigned short int>(500); // value stack
+	r = vector<unsigned short int>(500); // return stack
 
 }
 
@@ -71,14 +73,15 @@ int CInterpreter::execute_next() {
 		case 0:
 			cout << " RET" << endl;
 			// return
-			t = b - 1;
+			p=r[tr];
+			cout << "returning to " << p << endl;
+			tr--;
 			if (t==0)
 			{
+				cout << "exiting program" << endl;
 				// exit
 				return -1;
 			}
-			p = s[t + 3];
-			b = s[t + 2];
 			break;
 		case 1:
 			cout << " UNARY MINUS" << endl;
@@ -148,21 +151,23 @@ int CInterpreter::execute_next() {
 		cout << "LOD" << endl;
 		//lod: copy a local variable on top of the stack
 		t++;
-		s[t] = s[base(l) + a];
+		// s[t] = s[base(l) + a];
 		break;
 	case 4: // sto: pop a value from the stack and put it in a local variable
 		cout << "STO" << endl;
-		s[base(l) + a] = s[t];
+		// s[base(l) + a] = s[t];
 		cout << "output from sto: " << s[t] << endl;
 		t--;
 		break;
 	case 5: //cal:
-		// generate new block mark
+		// parameters should have already been pushed on the stack
+		// push the return address on the return stack
+		// call the procedure
+		//
 		cout << "CAL" << endl;
-		s[t + 1] = base(l);
-		s[t + 2] = b;
-		s[t + 3] = p;
-		b = t + 1;
+		cout << "return address " << p << endl;
+		r[tr] = p;
+		tr++;
 		p = a;
 		break;
 	case 6: // int:
@@ -197,10 +202,3 @@ int CInterpreter::execute_next() {
 	return 0;
 }
 
-int CInterpreter::base(int l) {
-	int b1 = b;	    // find base l levels down
-	for (; l > 0; l--) {
-		b1 = s[b1];
-	}
-	return b1;
-}

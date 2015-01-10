@@ -1,9 +1,4 @@
-/*
- * CTest.h
- *
- *  Created on: Dec 17, 2014
- *      Author: robert
- */
+
 
 #ifndef PEXCEPTION_H_
 #define PEXCEPTION_H_
