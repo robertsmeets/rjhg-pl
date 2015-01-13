@@ -15,12 +15,14 @@ using namespace std;
 
 class ProcedureCallNode:public Statement {
 	string procedure_name;
+	vector<ExpressionNode*> parameter_exps;
 public:
 	ProcedureCallNode();
 	virtual ~ProcedureCallNode();
 	void setProcedureName(string);
 	string getProcedureName();
 	virtual void emit(CodeGenerator*);
+	void addParametersExpression(ExpressionNode*);
 };
 
 #endif /* PROCEDURECALLNODE_H_ */

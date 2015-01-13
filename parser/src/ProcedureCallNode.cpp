@@ -11,7 +11,7 @@
 using namespace std;
 
 ProcedureCallNode::ProcedureCallNode() {
-
+parameter_exps = vector<ExpressionNode*>();
 }
 
 ProcedureCallNode::~ProcedureCallNode() {
@@ -29,9 +29,21 @@ void ProcedureCallNode::setProcedureName(string a_procedure_name) {
 void ProcedureCallNode::emit(CodeGenerator* cg)
 {
 	//
+	// put the parameters on the stack
+	//
+		for (vector<ExpressionNode*>::iterator it = parameter_exps.begin(); it != parameter_exps.end();
+				++it) {
+		cg->emitRpn((*it)->getRpn());
+	}
+	//
 	// emit a "cal"
 	// leave the call address 0, since this will be corrected in the fix stage
 	//
-	cg -> emit(4, 0, 0);
+	cg -> emit(5, 0, 0);
 	cg->addCallAddress(cg->getHere()-2,procedure_name);
+}
+
+void ProcedureCallNode::addParametersExpression(ExpressionNode* en)
+{
+	parameter_exps.push_back(en);
 }

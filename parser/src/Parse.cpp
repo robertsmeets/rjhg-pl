@@ -70,7 +70,6 @@ void Parse::parse_from_memory() {
 		code_definition();
 		if (peek_string.empty()) {
 			return;
-
 		}
 	}
 }
@@ -228,9 +227,9 @@ void Parse::procedure_definition() {
 			string assignment_left = peek_string;
 			get_something("\n\t\r");
 			//
-						// create assignment node with new, to avoid it going out of scope
-						//
-						AssignmentNode* an = new AssignmentNode();
+			// create assignment node with new, to avoid it going out of scope
+			//
+			AssignmentNode* an = new AssignmentNode();
 			//
 			// look up the instance variable
 			//
@@ -272,16 +271,22 @@ void Parse::procedure_call(ProcedureNode* pd) {
 	cout << "---------------------> procedure_call" << endl;
 	string proc_name = peek_string;
 	cout << "name " << proc_name << endl;
-	for (;;) {
+	ProcedureCallNode* pcn = new ProcedureCallNode();
+		pcn->setProcedureName(proc_name);
+		for (;;) {
 		get_something("),");
 		cout << "parameter " << peek_string << endl;
-		;
 		if (found_char == ')') {
 			// done
 			break;
 		}
+		else
+		{
+			// parameter
+			string parameter_expression = peek_string;
+			ExpressionNode* en = ep.parse(parameter_expression);
+			pcn->addParametersExpression(en);
+		}
 	}
-	ProcedureCallNode* pcn = new ProcedureCallNode();
-	pcn->setProcedureName(proc_name);
 	pd->addStatement((Statement*) pcn);
 }

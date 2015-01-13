@@ -28,6 +28,10 @@ CodeGenerator::~CodeGenerator() {
 
 }
 
+unsigned int CodeGenerator::getHere() {
+	return here;
+}
+
 void CodeGenerator::start(ProgramNode pn) {
 	//
 	// open a file
@@ -49,6 +53,7 @@ void CodeGenerator::start(ProgramNode pn) {
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
+	emit_to_file();
 	myfile.close();
 }
 
@@ -56,18 +61,27 @@ void CodeGenerator::start(ProgramNode pn) {
  * generate the code for a procedure
  */
 void CodeGenerator::start_proc(ProcedureNode* a_proc) {
+	//
+	// emit all the statements
+	//
 	vector<Statement*> statements = a_proc->getStatements();
 	for (vector<Statement*>::iterator it = statements.begin();
 			it != statements.end(); ++it) {
 		(*it)->emit(this);
 		}
-
+	//
+	// emit a return
+	//
+	emit(2,0,0);
 }
 
 void CodeGenerator::emit_to_file() {
-		myfile.write(reinterpret_cast<const char*>(&codebuffer), here);
+		for (unsigned int i=0; i< here; i++)
+		{
+			char c = codebuffer[i];
+			myfile.write(reinterpret_cast<const char*>(&c),sizeof(c));
+		}
 }
-
 void CodeGenerator::printcodebuffer()
 {
 	cout << "-------here is " << here << endl;
@@ -81,6 +95,7 @@ cout << "--- end" << endl;
 }
 
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
+	cout << "emit " << (unsigned int) f << "," << l<< "," << a << endl;
 	codebuffer.push_back(f);
 	here++;
 	codebuffer.push_back(l);
@@ -186,6 +201,3 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 		callpoints[address] = proc_name;
 }
 
-unsigned int CodeGenerator::getHere() {
-	return here;
-}
