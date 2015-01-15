@@ -37,7 +37,6 @@ void CodeGenerator::start(ProgramNode pn) {
 	// open a file
 	//
 	string filename = "F:\\robert\\projects\\parser\\code\\example.bin";
-	myfile.open(filename.c_str(), ios::binary);
 	vector<ProcedureNode*> procs;
 	procs = pn.getProcedures();
 	//
@@ -53,6 +52,7 @@ void CodeGenerator::start(ProgramNode pn) {
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
+	myfile.open(filename.c_str(), ios::binary);
 	emit_to_file();
 	myfile.close();
 }
@@ -68,34 +68,42 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 	for (vector<Statement*>::iterator it = statements.begin();
 			it != statements.end(); ++it) {
 		(*it)->emit(this);
-		}
+	}
 	//
 	// emit a return
 	//
-	emit(2,0,0);
+	emit(2, 0, 0);
 }
 
+//
+// write the codebuffer to a file
+//
 void CodeGenerator::emit_to_file() {
-		for (unsigned int i=0; i< here; i++)
-		{
-			char c = codebuffer[i];
-			myfile.write(reinterpret_cast<const char*>(&c),sizeof(c));
-		}
+	for (unsigned int i = 0; i < here; i++) {
+		char c = codebuffer[i];
+		myfile.write(reinterpret_cast<const char*>(&c), sizeof(c));
+	}
 }
-void CodeGenerator::printcodebuffer()
-{
+
+//
+// print the codebuffer
+//
+void CodeGenerator::printcodebuffer() {
 	cout << "-------here is " << here << endl;
-for (unsigned int i=0; i< here; i++)
-{
-cout << "codebuffer[" << i << "] = " << (unsigned int)(codebuffer[i]) << endl;;
+	for (unsigned int i = 0; i < here; i++) {
+		cout << "codebuffer[" << i << "] = " << (unsigned int) (codebuffer[i])
+				<< endl;
+		;
+	}
+	cout << "--- end" << endl;
+
 }
-cout << "--- end" << endl;
 
-
-}
-
+//
+// emit a f,l,a combination
+//
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
-	cout << "emit " << (unsigned int) f << "," << l<< "," << a << endl;
+	// cout << "emit " << (unsigned int) f << "," << l << "," << a << endl;
 	codebuffer.push_back(f);
 	here++;
 	codebuffer.push_back(l);
@@ -110,7 +118,9 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
 
 }
 
-
+//
+// emit the code for an expression
+//
 void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
@@ -138,6 +148,9 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 	}
 }
 
+//
+// emit the code for an operation
+//
 void CodeGenerator::emitOperation(string avalue) {
 	if (avalue == "+")
 		emit(2, 0, 2);
@@ -190,14 +203,18 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		// found the address of the proc
 		//
-		cout << "fixing proc " << proc_name << " call_address " << call_address << " to " << proc_address << endl;
+		cout << "fixing proc " << proc_name << " call_address " << call_address
+				<< " to " << proc_address << endl;
 		codebuffer[call_address] = proc_address;
 		codebuffer[call_address + 1] = proc_address >> 8;
 	}
 
 }
 
+//
+// add a call adress (starting point of a proc)
+//
 void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
-		callpoints[address] = proc_name;
+	callpoints[address] = proc_name;
 }
 

@@ -11,17 +11,16 @@
 using namespace std;
 
 PException::PException(string a_reason) {
-reason = a_reason;
+	reason = a_reason;
 
 }
 
 PException::~PException() {
 
-
 }
 
-string PException::ShowReason()
-{
-		return reason;
+string PException::ShowReason() {
+	return reason;
 
-};
+}
+;

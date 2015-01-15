@@ -9,14 +9,26 @@
 #include <iostream>
 #include "Parse.h"
 #include "CodeGenerator.h"
+#include "PException.h"
 
 using namespace std;
 
-int main() {
-	cout << "Parsing..." << endl;
+int main(int argc, char* argv[]) {
+	if (argc != 2) {
+		cout << "Must provide filename as an argument, example " << argv[0]
+				<< " c:\\test\\test.src" << endl;
+		return -1;
+	}
+	string filename = argv[1];
+	cout << "Parsing... " << filename << " ... " << endl;
 	Parse p;
-    p.start();
-    CodeGenerator cg;
-    cg.start(p.getPn());
-    return 0;
+	try {
+		p.start(filename);
+		CodeGenerator cg;
+		cg.start(p.getPn());
+	} catch (PException & E) {
+		cout << "Exception: " << E.ShowReason() << endl;
+		return -1;
+	}
+	return 0;
 }

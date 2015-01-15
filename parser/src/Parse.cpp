@@ -13,6 +13,7 @@
 #include "ExpressionParser.h"
 #include "ProcedureNode.h"
 #include "ProcedureCallNode.h"
+#include "ReturnNode.h"
 
 using namespace std;
 
@@ -30,8 +31,7 @@ ProgramNode Parse::getPn() {
 	return pn;
 }
 
-void Parse::start() {
-	string filename = "F:\\robert\\projects\\parser\\code\\example.src";
+void Parse::start(string filename) {
 	ifstream myfile(filename.c_str(), ios::binary);
 	streampos begin, end;
 	begin = myfile.tellg();
@@ -52,12 +52,7 @@ void Parse::start() {
 	// buffer now contains it
 	//
 	myfile.close();
-	try {
-		parse_from_memory();
-	} catch (PException & E) {
-		cout << "Caught exception type: " << E.ShowReason() << endl;
-	}
-
+	parse_from_memory();
 }
 
 void Parse::parse_from_memory() {
@@ -74,21 +69,27 @@ void Parse::parse_from_memory() {
 	}
 }
 
-bool Parse::get_something(string chars) {
+//
+// grab something until one of "chars" is reached
+//
+//
+void Parse::get_something(string chars) {
 	for (;;) {
 		bool result = get_onething(chars);
 		if (!result) {
-			return false;
+			peek_string="";
+			break;
 		}
 		if (!peek_string.empty()) {
 			break;
 		}
 	}
-	return true;
+	cout << "get Something: offset: " << offset << " peek_string: <"
+			<< peek_string << "> found_char: <" << found_char << "> " << endl;
 }
 
 void Parse::code_definition() {
-	cout << "in code_definition peek_string = <" << peek_string << ">" << endl;
+// cout << "in code_definition peek_string = <" << peek_string << ">" << endl;
 	if (peek_string == "class") {
 		class_definition();
 	} else if (peek_string == "method") {
@@ -102,6 +103,9 @@ void Parse::code_definition() {
 	}
 }
 
+/**
+ * trim off whitespace
+ */
 void Parse::trim(string& s) {
 	s.erase(s.find_last_not_of(" \n\r\t") + 1);
 	unsigned int first_useful = s.find_first_not_of(" \n\r\t");
@@ -110,12 +114,19 @@ void Parse::trim(string& s) {
 	}
 }
 
+//
+// get something until one of chars is reached
+//
+// return true if there is more to get, false if it's the end
+//
+// peek_string is the found thing
+// found_char is the next character after that
+//
 bool Parse::get_onething(string chars) {
 	if (chars == "") {
 		chars = " \n\t\r";
 	}
 	peek_string = "";
-	found_char = ' ';
 	for (;;) {
 		if (offset >= buffer.size()) {
 			return false;
@@ -123,30 +134,54 @@ bool Parse::get_onething(string chars) {
 		char c = buffer[offset];
 		offset++;
 		unsigned int found = chars.find(c);
+		//
 		// -1: not found
+		//
 		if (found == string::npos) {
-			// strip the peek_string?
 			peek_string += c;
 		} else {
-			found_char = c;
-			trim(peek_string);
 			break;
 		}
 	}
+//
+// strip the peek_string
+//
+	trim(peek_string);
+//
+// do some more lookahead, until we find a non blank found_char
+//
+	lookahead();
 	return true;
+}
+
+void Parse::lookahead() {
+	unsigned int my_offset = offset - 1;
+	char c = ' ';
+	for (;;) {
+		c = buffer[my_offset];
+		my_offset++;
+		if (c > 32) {
+			found_char = c;
+			break;
+		}
+		if (my_offset >= buffer.size()) {
+			break;
+		}
+	}
+	// cout << "[" << (unsigned int) c << "=" << c << "]" << endl;
 }
 
 void Parse::class_definition() {
 	cout << "class_definition" << endl;
 	get_something(" \n\t\r");
-	//
-	// get the class name
-	//
+//
+// get the class name
+//
 	string class_name = peek_string;
 	get_something(" \n\t\r");
-	//
-	// now expect instance_variables, or method keyword
-	//
+//
+// now expect instance_variables, or method keyword
+//
 	if (peek_string == "instance_variables") {
 		instance_variable_definition();
 	} else if (peek_string == "method") {
@@ -168,77 +203,67 @@ void Parse::method_definition() {
 
 void Parse::procedure_definition() {
 	ProcedureNode* pd = new ProcedureNode();
-	//
-	// get the definition
-	//
-	get_something("(");
+//
+// get the definition
+//
+	get_something("(\r\n");
 	string proc_name = peek_string;
-	cout << "PROCEDURE_DEFINITION " << proc_name << endl;
+//  cout << "PROCEDURE_DEFINITION " << proc_name << endl;
 	pd->setName(proc_name);
 	for (;;) {
-		get_something("),");
+		get_something("),\r\n");
 		pd->addParameter(peek_string);
 		if (found_char == ')') {
 			// done
 			break;
 		}
 	}
-	//
-	// get the instance variables
-	//
-	vector<string> instance_variables;
+//
+// get the procedure body
+//
+//
+// get an assignment, procedure call, return, or end
+//
 	for (;;) {
-		get_something(" \n\t\r");
-		if (peek_string == "end") {
-			get_something(" \n\t\r");
-			break;
-		}
-		pd->addInstanceVariable(peek_string);
-	}
-	//
-	// get the procedure body
-	//
-	if (peek_string != "begin") {
-		throw PException("expected begin, received " + peek_string);
-	}
-	//
-	// get an assignment, procedure call, or end
-	//
-	for (;;) {
-		get_something("(=\n\r");
-		cout << "peek_string = " << peek_string << endl;
-		cout << "found_char = " << found_char << endl;
+		get_something(" \t(=\n\r");
+		cout << "peek_string = <" << peek_string << ">" << endl;
+		cout << "found_char = <" << found_char << ">" << endl;
 		if (peek_string == "end") {
 			get_something(" \n\t\r");
 			break;
 		}
 		//
-		// assignment or proc call
+		// return, assignment or proc call
 		//
-		if (found_char != '=') {
-			//
-			// assume procedure call
-			//
-			procedure_call(pd);
-		} else {
+		if (peek_string == "return") {
+			cout << "DECISION: return" << endl;
+			return_statement(pd);
+		} else if (found_char == '=') {
 			//
 			// must be an assignment
 			//
+			cout << "DECISION: assignment" << endl;
 			string assignment_left = peek_string;
-			get_something("\n\t\r");
-			//
-			// create assignment node with new, to avoid it going out of scope
-			//
-			AssignmentNode* an = new AssignmentNode();
+			get_something("=\n\r");
 			//
 			// look up the instance variable
 			//
 			unsigned int i = pd->getInstanceVariable(assignment_left);
-			an->setLhs(i);
 			string assignment_right = peek_string;
+			cout << "ASSIGNMENT_EXPRESSION = <" << assignment_right << ">"
+					<< endl;
 			ExpressionNode* en = ep.parse(assignment_right);
-			an->setRhs(en);
-			pd->addStatement((Statement*)an);
+			//
+			// create assignment node with new, to avoid it going out of scope
+			//
+			AssignmentNode* an = new AssignmentNode(i, en);
+			pd->addStatement((Statement*) an);
+		} else {
+			//
+			// assume procedure call
+			//
+			cout << "DECISION: proc call" << endl;
+			procedure_call(pd);
 		}
 	}
 	pn.addProcedure(pd);
@@ -268,25 +293,39 @@ void Parse::immediate_code() {
 }
 
 void Parse::procedure_call(ProcedureNode* pd) {
-	cout << "---------------------> procedure_call" << endl;
+// cout << "---------------------> procedure_call" << endl;
 	string proc_name = peek_string;
-	cout << "name " << proc_name << endl;
+// cout << "name " << proc_name << endl;
 	ProcedureCallNode* pcn = new ProcedureCallNode();
-		pcn->setProcedureName(proc_name);
-		for (;;) {
-		get_something("),");
-		cout << "parameter " << peek_string << endl;
+	pcn->setProcedureName(proc_name);
+	for (;;) {
+		get_something("),\r\n");
+		// cout << "parameter " << peek_string << endl;
 		if (found_char == ')') {
 			// done
 			break;
-		}
-		else
-		{
+		} else {
 			// parameter
 			string parameter_expression = peek_string;
+			cout << "PROC Parameter_EXPRESSION = <" << parameter_expression
+					<< ">" << endl;
 			ExpressionNode* en = ep.parse(parameter_expression);
 			pcn->addParametersExpression(en);
 		}
 	}
 	pd->addStatement((Statement*) pcn);
+}
+
+void Parse::return_statement(ProcedureNode* pd) {
+	get_something("\n\r");
+	string return_expression = peek_string;
+	cout << "RETURN_EPRESSION = <" << return_expression << ">" << endl;
+	ExpressionNode* en;
+	if (return_expression.empty()) {
+		en = NULL;
+	} else {
+		en = ep.parse(return_expression);
+	}
+	ReturnNode* rn = new ReturnNode(en);
+	pd->addStatement((Statement*) rn);
 }

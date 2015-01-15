@@ -22,7 +22,7 @@ class AssignmentNode // : public Statement
 	unsigned int lhs;
 	ExpressionNode* rhs;
 public:
-	AssignmentNode();
+	AssignmentNode(unsigned int, ExpressionNode*);
 	virtual ~AssignmentNode();
 	void setLhs(unsigned int);
 	unsigned int getLhs();

@@ -28,10 +28,10 @@ public:
 	Parse();
 	virtual ~Parse();
 	ProgramNode getPn();
-	void start();
+	void start(string);
 	void parse_from_memory();
 	void code_definition();
-	bool get_something(string);
+	void get_something(string);
 	bool get_onething(string);
 	void class_definition();
 	void method_definition();
@@ -41,7 +41,8 @@ public:
 	void procedure_definition();
 	void trim(string&);
 	void procedure_call(ProcedureNode*);
-
+	void return_statement(ProcedureNode*);
+	void lookahead();
 };
 
 #endif /* PARSE_H_ */
