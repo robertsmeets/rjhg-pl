@@ -24,7 +24,7 @@ class CodeGenerator {
 	ofstream myfile;
 	map<string, unsigned int> procadresses;
 	map<unsigned int,string> callpoints;
-	vector<char> codebuffer;
+	vector<unsigned char> codebuffer;
 	unsigned int here;
 
 

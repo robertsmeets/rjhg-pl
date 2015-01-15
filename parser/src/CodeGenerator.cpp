@@ -18,7 +18,7 @@
 using namespace std;
 
 CodeGenerator::CodeGenerator() {
-	codebuffer = vector<char>();
+	codebuffer = vector<unsigned char>();
 	procadresses = map<string, unsigned int>();
 	callpoints = map<unsigned int, string>();
 	here = 0;
@@ -128,6 +128,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 		// type 1: operation
 		// type 2: literal integer
 		// type 3: variable name
+		// type 4: proc call
 		//
 		int atype = (*it).getType();
 		string avalue = (*it).getValue();
@@ -140,6 +141,13 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 			break;
 		case 3:  // variable name
 			emit(3, 0, 0); // LOD
+			break;
+		case 4: // call
+			//
+			// shorten the proc name (still has "(" at the end)
+			//
+			emit(5, 0, 0);
+			addCallAddress(here - 2, avalue.substr(0,avalue.size() -1));
 			break;
 		default:
 			throw PException("Unexpected ExpressionThing type");
@@ -215,6 +223,7 @@ void CodeGenerator::fix_proc_addresses() {
 // add a call adress (starting point of a proc)
 //
 void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
+	cout << "adding call: " << address << " calls " << proc_name << endl;
 	callpoints[address] = proc_name;
 }
 

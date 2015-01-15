@@ -45,14 +45,14 @@ int CInterpreter::execute_next() {
 	// a is the 3rd param
 	//
 	cout << "i="<< i << ": " ;
-	unsigned short int f = buffer[i];
+	unsigned short int f = buffer[i] & 255;
 	i++;
 	//
 	// using little endian
 	//
-	unsigned short int l = buffer[i] + (buffer[i+1] << 8) ;
+	// unsigned short int l = (buffer[i] & 255)+ (buffer[i+1] << 8) ;
 	i+=2;
-	unsigned short int a = buffer[i] + (buffer[i+1] << 8) ;
+	unsigned short int a = (buffer[i] & 255)+ (buffer[i+1] << 8) ;
 	i+=2;
 	// cout <<" f = "<<f<<" l = "<<l<<" a = " << a << endl;
 	//

@@ -23,10 +23,10 @@ Disassembler::~Disassembler() {
 void Disassembler::start(vector<char> buffer) {
 	for (unsigned int i = 0; i < buffer.size(); i += 5) {
 		char f = buffer[i];
-		unsigned short l = (buffer[i + 1]) + (buffer[i + 2] << 8);
-		unsigned short a = (buffer[i + 3]) + (buffer[i + 4] << 8);
+		unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
+		unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
 		string s = decode(f, l, a);
-		cout << "i=" << i << " " << s << endl;
+		cout << "i=" << i << " "<<  f << " " << l << " " << a << " "<< s << endl;
 	}
 }
 
