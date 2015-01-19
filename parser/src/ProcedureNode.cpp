@@ -17,7 +17,7 @@ ProcedureNode::ProcedureNode() {
 	name = "";
 	parameters = vector<string>();
 	instance_variables = vector<string>();
-	statements = vector<Statement*>();
+
 }
 
 ProcedureNode::~ProcedureNode() {
@@ -44,12 +44,17 @@ void ProcedureNode::addInstanceVariable(string an_instance_variable) {
 }
 
 void ProcedureNode::addStatement(Statement* s) {
-	statements.push_back(s);
+	statements->push_back(s);
 }
 
-vector<Statement*> ProcedureNode::getStatements() {
+vector<Statement*>* ProcedureNode::getStatements() {
 	return statements;
 }
+
+void  ProcedureNode::setStatements(vector<Statement*>* some_statements) {
+	statements = some_statements;
+}
+
 
 /**
  * find the index of an index variable by string

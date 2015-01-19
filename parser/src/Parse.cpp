@@ -14,6 +14,7 @@
 #include "ProcedureNode.h"
 #include "ProcedureCallNode.h"
 #include "ReturnNode.h"
+#include "IfNode.h"
 
 using namespace std;
 
@@ -77,15 +78,13 @@ void Parse::get_something(string chars) {
 	for (;;) {
 		bool result = get_onething(chars);
 		if (!result) {
-			peek_string="";
+			peek_string = "";
 			break;
 		}
 		if (!peek_string.empty()) {
 			break;
 		}
 	}
-	cout << "get Something: offset: " << offset << " peek_string: <"
-			<< peek_string << "> found_char: <" << found_char << "> " << endl;
 }
 
 void Parse::code_definition() {
@@ -203,61 +202,50 @@ void Parse::method_definition() {
 
 void Parse::procedure_definition() {
 	ProcedureNode* pd = new ProcedureNode();
-//
-// get the definition
-//
+	//
+	// get the definition
+	//
 	get_something("(\r\n");
 	string proc_name = peek_string;
-//  cout << "PROCEDURE_DEFINITION " << proc_name << endl;
+	//  cout << "PROCEDURE_DEFINITION " << proc_name << endl;
 	pd->setName(proc_name);
 	for (;;) {
-		get_something("),\r\n");
+		get_something("),");
 		pd->addParameter(peek_string);
 		if (found_char == ')') {
 			// done
 			break;
 		}
 	}
-//
-// get the procedure body
-//
-//
-// get an assignment, procedure call, return, or end
-//
+	vector<Statement*>* statements = block(pd);
+	pd->setStatements(statements);
+	get_something(" \n\t\r");
+	pn.addProcedure(pd);
+}
+
+vector<Statement*>* Parse::block(ProcedureNode* pd) {
+	vector<Statement*>* statements = new vector<Statement*>;
 	for (;;) {
 		get_something(" \t(=\n\r");
-		cout << "peek_string = <" << peek_string << ">" << endl;
-		cout << "found_char = <" << found_char << ">" << endl;
-		if (peek_string == "end") {
-			get_something(" \n\t\r");
+		//cout << "peek_string = <" << peek_string << ">" << endl;
+		//cout << "found_char = <" << found_char << ">" << endl;
+		if ((peek_string == "end") || (peek_string == "endif")
+				|| (peek_string == "else")) {
 			break;
 		}
 		//
-		// return, assignment or proc call
+		// return, assignment or proc call or if statement
 		//
 		if (peek_string == "return") {
 			cout << "DECISION: return" << endl;
-			return_statement(pd);
+			statements->push_back(return_statement(pd));
+		} else if (peek_string == "if") {
+			statements->push_back(if_statement(pd));
 		} else if (found_char == '=') {
 			//
 			// must be an assignment
 			//
-			cout << "DECISION: assignment" << endl;
-			string assignment_left = peek_string;
-			get_something("=\n\r");
-			//
-			// look up the instance variable
-			//
-			unsigned int i = pd->getInstanceVariable(assignment_left);
-			string assignment_right = peek_string;
-			cout << "ASSIGNMENT_EXPRESSION = <" << assignment_right << ">"
-					<< endl;
-			ExpressionNode* en = ep.parse(assignment_right);
-			//
-			// create assignment node with new, to avoid it going out of scope
-			//
-			AssignmentNode* an = new AssignmentNode(i, en);
-			pd->addStatement((Statement*) an);
+			statements->push_back(assignment(pd));
 		} else {
 			//
 			// assume procedure call
@@ -266,7 +254,24 @@ void Parse::procedure_definition() {
 			procedure_call(pd);
 		}
 	}
-	pn.addProcedure(pd);
+	return statements;
+}
+
+Statement* Parse::assignment(ProcedureNode* pd) {
+	string assignment_left = peek_string;
+	get_something("=\n\r");
+	//
+	// look up the instance variable
+	//
+	unsigned int i = pd->getInstanceVariable(assignment_left);
+	string assignment_right = peek_string;
+	cout << "ASSIGNMENT_EXPRESSION = <" << assignment_right << ">" << endl;
+	ExpressionNode* en = ep.parse(assignment_right);
+	//
+	// create assignment node with new, to avoid it going out of scope
+	//
+	AssignmentNode* an = new AssignmentNode(i, en);
+	return an;
 }
 
 void Parse::instance_variable_definition() {
@@ -292,7 +297,7 @@ void Parse::immediate_code() {
 
 }
 
-void Parse::procedure_call(ProcedureNode* pd) {
+Statement* Parse::procedure_call(ProcedureNode* pd) {
 // cout << "---------------------> procedure_call" << endl;
 	string proc_name = peek_string;
 // cout << "name " << proc_name << endl;
@@ -313,10 +318,10 @@ void Parse::procedure_call(ProcedureNode* pd) {
 			pcn->addParametersExpression(en);
 		}
 	}
-	pd->addStatement((Statement*) pcn);
+	return pcn;
 }
 
-void Parse::return_statement(ProcedureNode* pd) {
+Statement* Parse::return_statement(ProcedureNode* pd) {
 	get_something("\n\r");
 	string return_expression = peek_string;
 	cout << "RETURN_EPRESSION = <" << return_expression << ">" << endl;
@@ -327,5 +332,20 @@ void Parse::return_statement(ProcedureNode* pd) {
 		en = ep.parse(return_expression);
 	}
 	ReturnNode* rn = new ReturnNode(en);
-	pd->addStatement((Statement*) rn);
+	return (Statement*) rn;
+}
+
+Statement* Parse::if_statement(ProcedureNode* pd) {
+	get_something("\n\r");
+	string if_expression = peek_string;
+	ExpressionNode* en = ep.parse(if_expression);
+	vector<Statement*>* s_true = block(pd);
+	vector<Statement*>* s_false;
+	if (peek_string == "else") {
+		s_false = block(pd);
+	} else {
+		s_false = NULL;
+	}
+	IfNode* in = new IfNode(en, s_true, s_false);
+	return in;
 }

@@ -22,7 +22,7 @@ class ProcedureNode {
 	string name;
 	vector<string> parameters;
 	vector<string> instance_variables;
-	vector<Statement*> statements;
+	vector<Statement*>* statements;
 
 public:
 	ProcedureNode();
@@ -32,7 +32,8 @@ public:
 	void addParameter(string);
 	void addInstanceVariable(string);
 	void addStatement(Statement*);
-	vector<Statement*> getStatements();
+	vector<Statement*>* getStatements();
+	void setStatements(vector<Statement*>*);
 	unsigned int getInstanceVariable(string);
 
 };

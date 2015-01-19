@@ -14,7 +14,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-	if (argc != 2) {
+if (argc != 2) {
 		cout << "Must provide filename as an argument, example " << argv[0]
 				<< " c:\\test\\test.src" << endl;
 		return -1;

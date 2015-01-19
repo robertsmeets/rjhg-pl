@@ -9,16 +9,15 @@
 #define ASSIGNMENTNODE_H_
 
 
-#include "ExpressionNode.h"
 #include "Statement.h"
+#include "ExpressionNode.h"
 #include "CodeGenerator.h"
 
 using namespace std;
 
 class CodeGenerator; // forward declaration
 
-class AssignmentNode // : public Statement
-{
+class AssignmentNode: public Statement {
 	unsigned int lhs;
 	ExpressionNode* rhs;
 public:

@@ -64,15 +64,11 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 	//
 	// emit all the statements
 	//
-	vector<Statement*> statements = a_proc->getStatements();
-	for (vector<Statement*>::iterator it = statements.begin();
-			it != statements.end(); ++it) {
+	vector<Statement*>* statements = a_proc->getStatements();
+	for (vector<Statement*>::iterator it = statements->begin();it != statements->end(); ++it)
+	{
 		(*it)->emit(this);
 	}
-	//
-	// emit a return
-	//
-	emit(2, 0, 0);
 }
 
 //

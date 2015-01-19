@@ -40,9 +40,12 @@ public:
 	void immediate_code();
 	void procedure_definition();
 	void trim(string&);
-	void procedure_call(ProcedureNode*);
-	void return_statement(ProcedureNode*);
+	Statement* procedure_call(ProcedureNode*);
+	Statement* assignment(ProcedureNode*);
+	Statement* return_statement(ProcedureNode*);
 	void lookahead();
+	Statement* if_statement(ProcedureNode*);
+	vector<Statement*>* block(ProcedureNode*);
 };
 
 #endif /* PARSE_H_ */

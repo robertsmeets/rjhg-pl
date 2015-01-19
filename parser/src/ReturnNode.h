@@ -8,10 +8,11 @@
 #ifndef RETURNNODE_H_
 #define RETURNNODE_H_
 
+#include "Statement.h"
 #include "ExpressionNode.h"
 #include "CodeGenerator.h"
 
-class ReturnNode {
+class ReturnNode:public Statement {
 	ExpressionNode* return_expression;
 public:
 	ReturnNode(ExpressionNode*);

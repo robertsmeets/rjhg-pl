@@ -8,8 +8,10 @@
 #ifndef PROCEDURECALLNODE_H_
 #define PROCEDURECALLNODE_H_
 
+#include <vector>
 #include <string>
 #include "Statement.h"
+#include "ExpressionNode.h"
 
 using namespace std;
 

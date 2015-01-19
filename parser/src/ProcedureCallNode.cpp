@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "ProcedureCallNode.h"
+#include "CodeGenerator.h"
 
 using namespace std;
 
