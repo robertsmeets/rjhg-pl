@@ -51,10 +51,9 @@ vector<Statement*>* ProcedureNode::getStatements() {
 	return statements;
 }
 
-void  ProcedureNode::setStatements(vector<Statement*>* some_statements) {
+void ProcedureNode::setStatements(vector<Statement*>* some_statements) {
 	statements = some_statements;
 }
-
 
 /**
  * find the index of an index variable by string

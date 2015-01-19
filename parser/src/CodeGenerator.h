@@ -41,6 +41,7 @@ public:
 	unsigned int getHere();
 	void emit_to_file();
 	void printcodebuffer();
+	void fix(unsigned int,unsigned int);
 };
 
 #endif /* CODEGENERATOR_H_ */

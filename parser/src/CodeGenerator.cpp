@@ -209,10 +209,14 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		cout << "fixing proc " << proc_name << " call_address " << call_address
 				<< " to " << proc_address << endl;
-		codebuffer[call_address] = proc_address;
-		codebuffer[call_address + 1] = proc_address >> 8;
+		fix(call_address,proc_address);
 	}
+}
 
+void CodeGenerator::fix(unsigned int call_address,unsigned int dest_address)
+{
+	codebuffer[call_address] = dest_address & 255;
+	codebuffer[call_address + 1] = dest_address >> 8;
 }
 
 //

@@ -14,6 +14,9 @@
 #include "ExpressionNode.h"
 
 class IfNode:public Statement {
+	vector<Statement*>* statements_true;
+	vector<Statement*>* statements_false;
+	ExpressionNode* if_expression;
 public:
 	IfNode(ExpressionNode*,vector<Statement*>*,vector<Statement*>*);
 	virtual ~IfNode();
