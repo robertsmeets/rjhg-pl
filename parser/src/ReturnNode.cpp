@@ -7,11 +7,11 @@
 
 #include "ReturnNode.h"
 
-
-ReturnNode::ReturnNode(ExpressionNode* en) {
+ReturnNode::ReturnNode(ProcedureNode* p,ExpressionNode* en) {
 	//
 	// it's valid to have an empty return node, in which case en = NULL
 	//
+	pn = p;
 	return_expression = en;
 }
 
@@ -24,10 +24,15 @@ void ReturnNode::emit(CodeGenerator* cg) {
 	//
 	if (return_expression != NULL)
 	{
-		cg->emitRpn(return_expression->getRpn());
+		cg->emitRpn(return_expression->getRpn(),pn);
 	}
 	//
 	// return
 	//
 	cg->emit(2, 0, 0);
+}
+
+bool ReturnNode::isAssignment()
+{
+	return false;
 }

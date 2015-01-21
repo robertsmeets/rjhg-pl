@@ -198,7 +198,6 @@ void Parse::procedure_definition() {
 	//
 	get_something("(\r\n");
 	string proc_name = peek_string;
-	//  cout << "PROCEDURE_DEFINITION " << proc_name << endl;
 	pd->setName(proc_name);
 	for (;;) {
 		get_something("),");
@@ -247,7 +246,7 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 			// assume procedure call
 			//
 			cout << "DECISION: proc call" << endl;
-			procedure_call(pd);
+			statements->push_back(procedure_call(pd));
 		}
 	}
 	return statements;
@@ -259,13 +258,13 @@ Statement* Parse::assignment(ProcedureNode* pd) {
 	//
 	// look up the instance variable
 	//
-	unsigned int i = pd->getInstanceVariable(assignment_left);
+	unsigned int i = pd->assignLocalVariable(assignment_left);
 	string assignment_right = peek_string;
 	ExpressionNode* en = ep.parse(assignment_right);
 	//
 	// create assignment node with new, to avoid it going out of scope
 	//
-	AssignmentNode* an = new AssignmentNode(i, en);
+	AssignmentNode* an = new AssignmentNode(pd, i, en);
 	return an;
 }
 
@@ -294,7 +293,7 @@ void Parse::immediate_code() {
 
 Statement* Parse::procedure_call(ProcedureNode* pd) {
 	string proc_name = peek_string;
-	ProcedureCallNode* pcn = new ProcedureCallNode();
+	ProcedureCallNode* pcn = new ProcedureCallNode(pd);
 	pcn->setProcedureName(proc_name);
 	for (;;) {
 		get_something("),\r\n");
@@ -321,7 +320,7 @@ Statement* Parse::return_statement(ProcedureNode* pd) {
 	} else {
 		en = ep.parse(return_expression);
 	}
-	ReturnNode* rn = new ReturnNode(en);
+	ReturnNode* rn = new ReturnNode(pd,en);
 	return (Statement*) rn;
 }
 
@@ -339,7 +338,7 @@ Statement* Parse::if_statement(ProcedureNode* pd) {
 	if (peek_string != "endif") {
 		throw PException("missing endif, instead " + peek_string);
 	}
-	IfNode* in = new IfNode(en, s_true, s_false);
+	IfNode* in = new IfNode(pd,en, s_true, s_false);
 	return in;
 }
 
@@ -351,6 +350,7 @@ Statement* Parse::while_statement(ProcedureNode* pd) {
 	if (peek_string != "endwhile") {
 		throw PException("missing endwhile, instead " + peek_string);
 	}
-	WhileNode* in = new WhileNode(en, statements);
+	WhileNode* in = new WhileNode(pd, en, statements);
 	return in;
 }
+

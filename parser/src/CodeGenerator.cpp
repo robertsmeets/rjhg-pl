@@ -12,7 +12,7 @@ using namespace std;
 
 CodeGenerator::CodeGenerator() {
 	codebuffer = vector<unsigned char>();
-	procadresses = map<string, unsigned int>();
+	procaddresses = map<string, ProcedureNode*>();
 	callpoints = map<unsigned int, string>();
 	here = 0;
 }
@@ -38,7 +38,8 @@ void CodeGenerator::start(ProgramNode pn) {
 			++it) {
 		ProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
-		procadresses[pname] = here;
+		a_proc->setProcAddress(here);
+		procaddresses[pname] =a_proc;
 		start_proc(a_proc);
 	}
 	//
@@ -103,14 +104,12 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
 	here++;
 	codebuffer.push_back(a >> 8);
 	here++;
-	// printcodebuffer();
-
 }
 
 //
 // emit the code for an expression
 //
-void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
+void CodeGenerator::emitRpn(vector<ExpressionThing> vs,ProcedureNode* pn) {
 	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
 		//
@@ -129,7 +128,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs) {
 			emit(1, 0, atoi(avalue.c_str()));
 			break;
 		case 3:  // variable name
-			emit(3, 0, 0); // LOD
+			//map<string,unsigned int> something;
+			//
+			// now we have to look up the variable name.
+			// Can be either a local variable or a parameter name.
+			//
+			emit(3, 0,pn->getLocalVariables()[avalue]); // LOD
 			break;
 		case 4: // call
 			//
@@ -192,7 +196,8 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		// look up the proc name
 		//
-		unsigned int proc_address = procadresses[proc_name];
+		ProcedureNode* pn = procaddresses[proc_name];
+		unsigned int proc_address = pn->getProcAddress();
 		if (proc_address == 0) {
 			cout << "Proc " << proc_name << " not found" << endl;
 			throw PException("Proc " + proc_name + " not found");
@@ -203,6 +208,11 @@ void CodeGenerator::fix_proc_addresses() {
 		cout << "fixing proc " << proc_name << " call_address " << call_address
 				<< " to " << proc_address << endl;
 		fix(call_address,proc_address);
+		//
+		// also fix the INT depth to create room for local variables
+		//
+		//
+		codebuffer[call_address - 5] = pn->getLocalVariables().size();
 	}
 }
 
@@ -213,7 +223,7 @@ void CodeGenerator::fix(unsigned int call_address,unsigned int dest_address)
 }
 
 //
-// add a call adress (starting point of a proc)
+// add a call address (starting point of a proc)
 //
 void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	cout << "adding call: " << address << " calls " << proc_name << endl;

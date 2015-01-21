@@ -8,8 +8,9 @@
 #include "IfNode.h"
 
 
-IfNode::IfNode(ExpressionNode* en, vector<Statement*>* s_true,
+IfNode::IfNode(ProcedureNode* p,ExpressionNode* en, vector<Statement*>* s_true,
 		vector<Statement*>* s_false) {
+	pn = p;
 	if_expression = en;
 	statements_true = s_true;
 	statements_false = s_false;
@@ -24,7 +25,7 @@ void IfNode::emit(CodeGenerator* cg) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	cg->emitRpn(if_expression->getRpn());
+	cg->emitRpn(if_expression->getRpn(),pn);
 	if (statements_false == NULL) {
 		//
 		// emit JPC, jump if the stack top is 0 (false)
@@ -59,3 +60,9 @@ void IfNode::emit(CodeGenerator* cg) {
 		cg->fix(jump_address2, dest_address2);
 	}
 }
+
+bool IfNode::isAssignment()
+{
+	return false;
+}
+

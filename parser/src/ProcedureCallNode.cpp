@@ -9,7 +9,8 @@
 
 using namespace std;
 
-ProcedureCallNode::ProcedureCallNode() {
+ProcedureCallNode::ProcedureCallNode(ProcedureNode* p) {
+	pn = p;
 	parameter_exps = vector<ExpressionNode*>();
 }
 
@@ -31,8 +32,15 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	//
 	for (vector<ExpressionNode*>::iterator it = parameter_exps.begin();
 			it != parameter_exps.end(); ++it) {
-		cg->emitRpn((*it)->getRpn());
+		cg->emitRpn((*it)->getRpn(),pn);
 	}
+	//
+	// add room for the local variables.
+	// emit an INT
+	// Since we don't know how many, leave 0 for the INT parameter
+	// this will be corrected in the fix stage
+	//
+	cg->emit(6,0,0);
 	//
 	// emit a "cal"
 	// leave the call address 0, since this will be corrected in the fix stage
@@ -43,4 +51,9 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 
 void ProcedureCallNode::addParametersExpression(ExpressionNode* en) {
 	parameter_exps.push_back(en);
+}
+
+bool ProcedureCallNode::isAssignment()
+{
+	return false;
 }

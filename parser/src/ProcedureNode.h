@@ -10,13 +10,12 @@
 
 #include <vector>
 #include <iostream>
-#include <vector>
+#include <map>
 #include <algorithm>
 
 #include "Statement.h"
 #include "AssignmentNode.h"
 #include "PException.h"
-
 
 using namespace std;
 
@@ -29,18 +28,24 @@ class ProcedureNode {
 	vector<string> parameters;
 	vector<string> instance_variables;
 	vector<Statement*>* statements;
+	map<string,unsigned int> local_variables;
+	unsigned int proc_address;
 
 public:
 	ProcedureNode();
 	virtual ~ProcedureNode();
 	void setName(string);
 	string getName();
+	map<string,unsigned int> getLocalVariables();
+	void setProcAddress(unsigned int );
+	unsigned int getProcAddress();
 	void addParameter(string);
-	void addInstanceVariable(string);
+	unsigned int assignLocalVariable(string);
+	unsigned int get_proc_address();
 	void addStatement(Statement*);
 	vector<Statement*>* getStatements();
 	void setStatements(vector<Statement*>*);
-	unsigned int getInstanceVariable(string);
+	void analyze();
 
 };
 

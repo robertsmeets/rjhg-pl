@@ -18,16 +18,18 @@
 
 using namespace std;
 
-class ProcedureCallNode:public Statement {
+class ProcedureCallNode: public Statement {
+	ProcedureNode* pn;
 	string procedure_name;
 	vector<ExpressionNode*> parameter_exps;
 public:
-	ProcedureCallNode();
+	ProcedureCallNode(ProcedureNode*);
 	virtual ~ProcedureCallNode();
 	void setProcedureName(string);
 	string getProcedureName();
 	virtual void emit(CodeGenerator*);
 	void addParametersExpression(ExpressionNode*);
+	virtual bool isAssignment();
 };
 
 #endif /* PROCEDURECALLNODE_H_ */

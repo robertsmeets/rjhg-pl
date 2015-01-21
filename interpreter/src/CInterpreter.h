@@ -26,7 +26,6 @@ class CInterpreter {
 
 public:
 	CInterpreter(vector<char>);
-
 	virtual ~CInterpreter();
 	void start();
 	int execute_next();

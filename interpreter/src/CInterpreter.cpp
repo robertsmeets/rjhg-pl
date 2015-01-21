@@ -149,7 +149,7 @@ int CInterpreter::execute_next() {
 		cout << "LOD" ;
 		//lod: copy a local variable on top of the stack
 		t++;
-		// s[t] = s[base(l) + a];
+		//s[t] = s[base(l) + a];
 		break;
 	case 4: // sto: pop a value from the stack and put it in a local variable
 		cout << "STO " << s[t];

@@ -9,7 +9,8 @@
 
 using namespace std;
 
-AssignmentNode::AssignmentNode(unsigned int an_lhs, ExpressionNode* a_rhs) {
+AssignmentNode::AssignmentNode(ProcedureNode* p,unsigned int an_lhs, ExpressionNode* a_rhs) {
+	pn = p;
 	lhs = an_lhs;
 	rhs = a_rhs;
 }
@@ -37,10 +38,14 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	//
 	// emit the calculation instructions
 	//
-	cg->emitRpn(rhs->getRpn());
+	cg->emitRpn(rhs->getRpn(),pn);
 	//
 	// emit a "sto" to store the value in a variable
 	//
 	cg->emit(4, 0, lhs);
+}
 
+bool AssignmentNode::isAssignment()
+{
+	return true;
 }

@@ -8,18 +8,18 @@
 #ifndef RETURNNODE_H_
 #define RETURNNODE_H_
 
-#include "Statement.h"
 #include "ExpressionNode.h"
 #include "CodeGenerator.h"
 #include "ExpressionNode.h"
 
-
 class ReturnNode:public Statement {
+	ProcedureNode* pn;
 	ExpressionNode* return_expression;
 public:
-	ReturnNode(ExpressionNode*);
+	ReturnNode(ProcedureNode*,ExpressionNode*);
 	virtual ~ReturnNode();
 	virtual void emit(CodeGenerator*);
+	virtual bool isAssignment();
 };
 
 #endif /* RETURNNODE_H_ */

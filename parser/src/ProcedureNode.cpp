@@ -13,6 +13,7 @@ ProcedureNode::ProcedureNode() {
 	name = "";
 	parameters = vector<string>();
 	instance_variables = vector<string>();
+	local_variables = map<string, unsigned int>();
 }
 
 ProcedureNode::~ProcedureNode() {
@@ -30,12 +31,21 @@ string ProcedureNode::getName() {
 	return name;
 }
 
-void ProcedureNode::addParameter(string a_parameter) {
-	parameters.push_back(a_parameter);
+void ProcedureNode::setProcAddress(unsigned int a) {
+	proc_address = a;
 }
 
-void ProcedureNode::addInstanceVariable(string an_instance_variable) {
-	instance_variables.push_back(an_instance_variable);
+unsigned int ProcedureNode::getProcAddress() {
+	return proc_address;
+}
+
+map<string,unsigned int> ProcedureNode::getLocalVariables()
+{
+	return local_variables;
+}
+
+void ProcedureNode::addParameter(string a_parameter) {
+	parameters.push_back(a_parameter);
 }
 
 void ProcedureNode::addStatement(Statement* s) {
@@ -54,13 +64,31 @@ void ProcedureNode::setStatements(vector<Statement*>* some_statements) {
  * find the index of an index variable by string
  *
  */
-unsigned int ProcedureNode::getInstanceVariable(string s) {
-	unsigned int i = find(instance_variables.begin(), instance_variables.end(),
-			s) - instance_variables.begin();
-	if (i == instance_variables.size()) {
-		PException("instance variable " + s + " not found");
+unsigned int ProcedureNode::assignLocalVariable(string s) {
+	map<string, unsigned int>::iterator foundIter = local_variables.find(s);
+	if (foundIter != local_variables.end()) {
+		//
+		// the variable already exists.
+		//
+		return local_variables[s];
+	} else {
+		//
+		// the variable does not exist. add it.
+		//
+		unsigned int newval = local_variables.size();
+		local_variables[s] = newval;
+		return newval;
 	}
-	return i;
-
 }
 
+void ProcedureNode::analyze() {
+	//
+	// count the local variables
+	//
+	for (vector<Statement*>::iterator it = statements->begin();
+			it != statements->end(); ++it) {
+		if ((*it)->isAssignment()) {
+			// a_var = (AssignmentNode)(*it)->lhs;
+		}
+	}
+}

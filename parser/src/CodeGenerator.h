@@ -30,7 +30,7 @@ class ProcedureNode ; // forward declaration
 
 class CodeGenerator {
 	ofstream myfile;
-	map<string, unsigned int> procadresses;
+	map<string, ProcedureNode*> procaddresses;
 	map<unsigned int,string> callpoints;
 	vector<unsigned char> codebuffer;
 	unsigned int here;
@@ -42,7 +42,7 @@ public:
 	void start(ProgramNode);
 	void start_proc(ProcedureNode*);
 	void emit(char, unsigned short int, unsigned short int);
-	void emitRpn(vector<ExpressionThing>);
+	void emitRpn(vector<ExpressionThing>,ProcedureNode*);
 	void emitOperation(string avalue);
 	void fix_proc_addresses();
 	void addCallAddress(unsigned int,string);

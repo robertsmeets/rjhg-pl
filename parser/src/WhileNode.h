@@ -15,12 +15,14 @@
 #include "CodeGenerator.h"
 
 class WhileNode: public Statement {
+	ProcedureNode* pn;
 	vector<Statement*>* statements;
 	ExpressionNode* expression;
 public:
-	WhileNode(ExpressionNode*, vector<Statement*>*);
+	WhileNode(ProcedureNode*,ExpressionNode*, vector<Statement*>*);
 	virtual ~WhileNode();
 	void emit(CodeGenerator*);
+	virtual bool isAssignment();
 };
 
 #endif /* WHILENODE_H_ */
