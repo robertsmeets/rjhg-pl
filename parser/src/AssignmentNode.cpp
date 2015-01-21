@@ -5,7 +5,6 @@
  *      Author: robert
  */
 
-#include <iostream>
 #include "AssignmentNode.h"
 
 using namespace std;

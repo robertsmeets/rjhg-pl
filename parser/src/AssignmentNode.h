@@ -8,6 +8,7 @@
 #ifndef ASSIGNMENTNODE_H_
 #define ASSIGNMENTNODE_H_
 
+#include <iostream>
 
 #include "Statement.h"
 #include "ExpressionNode.h"

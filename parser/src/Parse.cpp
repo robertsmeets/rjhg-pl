@@ -5,16 +5,7 @@
  *      Author: robert
  */
 
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include "Parse.h"
-#include "PException.h"
-#include "ExpressionParser.h"
-#include "ProcedureNode.h"
-#include "ProcedureCallNode.h"
-#include "ReturnNode.h"
-#include "IfNode.h"
 
 using namespace std;
 
@@ -227,12 +218,12 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 	vector<Statement*>* statements = new vector<Statement*>;
 	for (;;) {
 		get_something(" \t(=\n\r");
-		//cout << "peek_string = <" << peek_string << ">" << endl;
-		//cout << "found_char = <" << found_char << ">" << endl;
 		if ((peek_string == "end") || (peek_string == "endif")
-				|| (peek_string == "else")) {
+				|| (peek_string == "endwhile") || (peek_string == "else")) {
 			break;
 		}
+		cout << "peek_string <" << peek_string << "> found_char <" << found_char
+						<< "> ";
 		//
 		// return, assignment or proc call or if statement
 		//
@@ -240,11 +231,16 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 			cout << "DECISION: return" << endl;
 			statements->push_back(return_statement(pd));
 		} else if (peek_string == "if") {
+			cout << "DECISION: if" << endl;
 			statements->push_back(if_statement(pd));
+		} else if (peek_string == "while") {
+			cout << "DECISION: while" << endl;
+			statements->push_back(while_statement(pd));
 		} else if (found_char == '=') {
 			//
 			// must be an assignment
 			//
+			cout << "DECISION: assignment" << endl;
 			statements->push_back(assignment(pd));
 		} else {
 			//
@@ -265,7 +261,6 @@ Statement* Parse::assignment(ProcedureNode* pd) {
 	//
 	unsigned int i = pd->getInstanceVariable(assignment_left);
 	string assignment_right = peek_string;
-	cout << "ASSIGNMENT_EXPRESSION = <" << assignment_right << ">" << endl;
 	ExpressionNode* en = ep.parse(assignment_right);
 	//
 	// create assignment node with new, to avoid it going out of scope
@@ -298,9 +293,7 @@ void Parse::immediate_code() {
 }
 
 Statement* Parse::procedure_call(ProcedureNode* pd) {
-// cout << "---------------------> procedure_call" << endl;
 	string proc_name = peek_string;
-// cout << "name " << proc_name << endl;
 	ProcedureCallNode* pcn = new ProcedureCallNode();
 	pcn->setProcedureName(proc_name);
 	for (;;) {
@@ -312,8 +305,6 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 		} else {
 			// parameter
 			string parameter_expression = peek_string;
-			cout << "PROC Parameter_EXPRESSION = <" << parameter_expression
-					<< ">" << endl;
 			ExpressionNode* en = ep.parse(parameter_expression);
 			pcn->addParametersExpression(en);
 		}
@@ -324,7 +315,6 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 Statement* Parse::return_statement(ProcedureNode* pd) {
 	get_something("\n\r");
 	string return_expression = peek_string;
-	cout << "RETURN_EPRESSION = <" << return_expression << ">" << endl;
 	ExpressionNode* en;
 	if (return_expression.empty()) {
 		en = NULL;
@@ -346,6 +336,21 @@ Statement* Parse::if_statement(ProcedureNode* pd) {
 	} else {
 		s_false = NULL;
 	}
+	if (peek_string != "endif") {
+		throw PException("missing endif, instead " + peek_string);
+	}
 	IfNode* in = new IfNode(en, s_true, s_false);
+	return in;
+}
+
+Statement* Parse::while_statement(ProcedureNode* pd) {
+	get_something("\n\r");
+	string expression = peek_string;
+	ExpressionNode* en = ep.parse(expression);
+	vector<Statement*>* statements = block(pd);
+	if (peek_string != "endwhile") {
+		throw PException("missing endwhile, instead " + peek_string);
+	}
+	WhileNode* in = new WhileNode(en, statements);
 	return in;
 }

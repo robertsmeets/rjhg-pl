@@ -5,7 +5,6 @@
  *      Author: robert
  */
 
-#include <iostream>
 #include "Statement.h"
 
 using namespace std;

@@ -8,6 +8,7 @@
 #ifndef EXPRESSIONPARSER_H_
 #define EXPRESSIONPARSER_H_
 
+#include <stdlib.h>
 #include <iostream>
 #include <sstream>
 #include <list>
@@ -16,9 +17,10 @@
 #include <string>
 #include <vector>
 #include <iterator>
-#include <stdlib.h>
+
 #include "ExpressionNode.h"
 #include "ExpressionThing.h"
+#include "PException.h"
 
 using namespace std;
 

@@ -7,19 +7,6 @@
 
 #include "ExpressionParser.h"
 
-#include <iostream>
-#include <sstream>
-#include <list>
-#include <stack>
-#include <map>
-#include <string>
-#include <vector>
-#include <iterator>
-#include <stdlib.h>
-
-#include "ExpressionNode.h"
-#include "ExpressionThing.h"
-#include "PException.h"
 
 using namespace std;
 
@@ -435,7 +422,6 @@ double ExpressionParser::RPNtoDouble(vector<string> tokens) {
 //   - function call
 //
 vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
-	cout << "--- getExpressionTokens <" << expression << ">" << endl;
 	vector<string> tokens;
 	string str = "";
 	for (int i = 0; i < (int) expression.length(); ++i) {

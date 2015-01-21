@@ -10,8 +10,11 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+
 #include "Statement.h"
 #include "ExpressionNode.h"
+#include "CodeGenerator.h"
 
 using namespace std;
 

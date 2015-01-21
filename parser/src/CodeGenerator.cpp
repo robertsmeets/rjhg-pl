@@ -5,15 +5,8 @@
  *      Author: robert
  */
 
-#include <iostream>
-#include <string>
-#include <cstdlib>
 
 #include "CodeGenerator.h"
-#include "ProgramNode.h"
-#include "AssignmentNode.h"
-#include "ExpressionThing.h"
-#include "PException.h"
 
 using namespace std;
 

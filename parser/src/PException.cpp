@@ -6,7 +6,6 @@
  */
 
 #include "PException.h"
-#include <string>
 
 using namespace std;
 

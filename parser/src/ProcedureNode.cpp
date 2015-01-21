@@ -6,10 +6,6 @@
  */
 
 #include "ProcedureNode.h"
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include "PException.h"
 
 using namespace std;
 
@@ -17,7 +13,6 @@ ProcedureNode::ProcedureNode() {
 	name = "";
 	parameters = vector<string>();
 	instance_variables = vector<string>();
-
 }
 
 ProcedureNode::~ProcedureNode() {

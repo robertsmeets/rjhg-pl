@@ -12,6 +12,7 @@
 
 #include "Statement.h"
 #include "ExpressionNode.h"
+#include "CodeGenerator.h"
 
 class IfNode:public Statement {
 	vector<Statement*>* statements_true;

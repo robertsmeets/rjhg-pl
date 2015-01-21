@@ -10,9 +10,17 @@
 
 #include <fstream>
 #include <map>
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
 #include "ProgramNode.h"
 #include "ProcedureNode.h"
 #include "ExpressionThing.h"
+#include "AssignmentNode.h"
+#include "PException.h"
+
+
 
 using namespace std;
 

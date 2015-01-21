@@ -6,7 +6,7 @@
  */
 
 #include "IfNode.h"
-#include "CodeGenerator.h"
+
 
 IfNode::IfNode(ExpressionNode* en, vector<Statement*>* s_true,
 		vector<Statement*>* s_false) {

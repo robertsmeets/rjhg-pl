@@ -9,8 +9,14 @@
 #define PROCEDURENODE_H_
 
 #include <vector>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 #include "Statement.h"
 #include "AssignmentNode.h"
+#include "PException.h"
+
 
 using namespace std;
 

@@ -11,8 +11,17 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <iostream>
+#include <fstream>
+
 #include "ExpressionParser.h"
 #include "ProgramNode.h"
+#include "PException.h"
+#include "ProcedureNode.h"
+#include "ProcedureCallNode.h"
+#include "ReturnNode.h"
+#include "IfNode.h"
+#include "WhileNode.h"
 
 using namespace std;
 
@@ -40,12 +49,13 @@ public:
 	void immediate_code();
 	void procedure_definition();
 	void trim(string&);
+	void lookahead();
+	vector<Statement*>* block(ProcedureNode*);
 	Statement* procedure_call(ProcedureNode*);
 	Statement* assignment(ProcedureNode*);
 	Statement* return_statement(ProcedureNode*);
-	void lookahead();
 	Statement* if_statement(ProcedureNode*);
-	vector<Statement*>* block(ProcedureNode*);
+	Statement* while_statement(ProcedureNode*);
 };
 
 #endif /* PARSE_H_ */
