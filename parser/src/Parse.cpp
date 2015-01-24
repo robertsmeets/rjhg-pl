@@ -235,7 +235,12 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 		} else if (peek_string == "while") {
 			cout << "DECISION: while" << endl;
 			statements->push_back(while_statement(pd));
-		} else if (found_char == '=') {
+		} else if (peek_string == "print")
+		{
+			cout << "DECISION: print" << endl;
+			statements->push_back(print_statement(pd));
+	}
+else if (found_char == '=') {
 			//
 			// must be an assignment
 			//
@@ -354,3 +359,10 @@ Statement* Parse::while_statement(ProcedureNode* pd) {
 	return in;
 }
 
+Statement* Parse::print_statement(ProcedureNode* pd) {
+	get_something("\n\r");
+	string expression = peek_string;
+	ExpressionNode* en = ep.parse(expression);
+	PrintNode* pn = new PrintNode(pd,en);
+	return pn;
+}

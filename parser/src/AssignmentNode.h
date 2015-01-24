@@ -35,7 +35,6 @@ public:
 	void setRhs(ExpressionNode*);
 	ExpressionNode* getRhs();
 	virtual void emit(CodeGenerator*);
-	virtual bool isAssignment();
 };
 
 #endif /* ASSIGNMENTNODE_H_ */

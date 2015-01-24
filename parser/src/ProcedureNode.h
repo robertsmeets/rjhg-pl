@@ -28,7 +28,7 @@ class ProcedureNode {
 	vector<string> parameters;
 	vector<string> instance_variables;
 	vector<Statement*>* statements;
-	map<string,unsigned int> local_variables;
+	map<string,unsigned int>* local_variables;
 	unsigned int proc_address;
 
 public:
@@ -36,9 +36,10 @@ public:
 	virtual ~ProcedureNode();
 	void setName(string);
 	string getName();
-	map<string,unsigned int> getLocalVariables();
+	map<string,unsigned int>* getLocalVariables();
 	void setProcAddress(unsigned int );
 	unsigned int getProcAddress();
+	vector<string> getParameters();
 	void addParameter(string);
 	unsigned int assignLocalVariable(string);
 	unsigned int get_proc_address();

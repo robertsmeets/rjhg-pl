@@ -120,6 +120,8 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs,ProcedureNode* pn) {
 		//
 		int atype = (*it).getType();
 		string avalue = (*it).getValue();
+		map<string,unsigned int>* local_variables ;
+		map<string, unsigned int>::iterator foundIter ;
 		switch (atype) {
 		case 1: // operation
 			emitOperation(avalue);
@@ -128,12 +130,19 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs,ProcedureNode* pn) {
 			emit(1, 0, atoi(avalue.c_str()));
 			break;
 		case 3:  // variable name
-			//map<string,unsigned int> something;
 			//
 			// now we have to look up the variable name.
 			// Can be either a local variable or a parameter name.
 			//
-			emit(3, 0,pn->getLocalVariables()[avalue]); // LOD
+			local_variables = pn->getLocalVariables();
+			foundIter = local_variables->find(avalue);
+			cout << "--- emitRpn looking up [" << avalue << "]" << endl;
+			if (foundIter == local_variables->end())
+			{
+				throw PException("local variable " + avalue + " not found");
+			}
+			emit(3, 0,local_variables->at(avalue)); // LOD
+
 			break;
 		case 4: // call
 			//
@@ -212,7 +221,7 @@ void CodeGenerator::fix_proc_addresses() {
 		// also fix the INT depth to create room for local variables
 		//
 		//
-		codebuffer[call_address - 5] = pn->getLocalVariables().size();
+		codebuffer[call_address - 5] = pn->getLocalVariables()->size();
 	}
 }
 

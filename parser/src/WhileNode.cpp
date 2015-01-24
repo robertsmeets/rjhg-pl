@@ -34,7 +34,3 @@ void WhileNode::emit(CodeGenerator* cg) {
 	cg->fix(jump_address, dest_address);
 }
 
-bool WhileNode::isAssignment()
-{
-	return false;
-}

@@ -26,7 +26,7 @@ void Disassembler::start(vector<char> buffer) {
 		unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
 		unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
 		string s = decode(f, l, a);
-		cout << "i=" << i << " "<<  f << " " << l << " " << a << " "<< s << endl;
+		cout << "i=" << i << " "<< s << endl;
 	}
 }
 
@@ -120,8 +120,15 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 		// jpc
 		sf = "JPC";
 		break;
+	case 9:
+			sf = "PRINT";
+			break;
+	case 10:
+			sf = "MININT";
+			break;
+
 	default:
-		sf = "unexpected F value: " + f;
+		sf = "------------------------------------> unexpected F value: " + int(f);
 		break;
 	}
 	string total = sf + " " + sl + "," + sa;

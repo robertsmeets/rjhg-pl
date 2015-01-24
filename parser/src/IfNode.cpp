@@ -61,8 +61,4 @@ void IfNode::emit(CodeGenerator* cg) {
 	}
 }
 
-bool IfNode::isAssignment()
-{
-	return false;
-}
 

@@ -19,7 +19,6 @@ public:
 	ReturnNode(ProcedureNode*,ExpressionNode*);
 	virtual ~ReturnNode();
 	virtual void emit(CodeGenerator*);
-	virtual bool isAssignment();
 };
 
 #endif /* RETURNNODE_H_ */

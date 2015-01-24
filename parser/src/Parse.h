@@ -22,6 +22,7 @@
 #include "ReturnNode.h"
 #include "IfNode.h"
 #include "WhileNode.h"
+#include "PrintNode.h"
 
 using namespace std;
 
@@ -56,6 +57,7 @@ public:
 	Statement* return_statement(ProcedureNode*);
 	Statement* if_statement(ProcedureNode*);
 	Statement* while_statement(ProcedureNode*);
+	Statement* print_statement(ProcedureNode*);
 };
 
 #endif /* PARSE_H_ */

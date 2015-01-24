@@ -73,13 +73,13 @@ int CInterpreter::execute_next() {
 			// return
 			p=r[tr];
 			// cout << "returning to " << p << endl;
-			tr--;
-			if (t==0)
+			if (p == 0)
 			{
 				cout << "exiting program" ;
 				// exit
 				return -1;
 			}
+			tr--;
 			break;
 		case 1:
 			cout << " UNARY MINUS" ;
@@ -146,14 +146,14 @@ int CInterpreter::execute_next() {
 		}
 		break;
 	case 3:
-		cout << "LOD" ;
+		cout << "LOD " << a << " " ;
 		//lod: copy a local variable on top of the stack
 		t++;
-		//s[t] = s[base(l) + a];
+		s[t] = s[t-a-1];
 		break;
 	case 4: // sto: pop a value from the stack and put it in a local variable
 		cout << "STO " << s[t];
-		// s[base(l) + a] = s[t];
+		s[t - a - 1] = s[t];
 		t--;
 		break;
 	case 5: //cal:
@@ -180,6 +180,21 @@ int CInterpreter::execute_next() {
 		if (s[t] == 0) {
 			p = a;
 			t = t - 1;
+		}
+		break;
+	case 9: // print
+		cout << "PRINT " << s[t];
+		t = t-1;
+		break;
+	case 10: // minint
+		cout << "MININT " << a;
+		if (t < a)
+		{
+			t = 0;
+		}
+		else
+		{
+			t = t-a;
 		}
 		break;
 	default:

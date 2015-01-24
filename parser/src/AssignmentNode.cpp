@@ -45,7 +45,3 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	cg->emit(4, 0, lhs);
 }
 
-bool AssignmentNode::isAssignment()
-{
-	return true;
-}

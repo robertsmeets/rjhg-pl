@@ -23,7 +23,6 @@ public:
 	Statement();
 	virtual ~Statement();
 	virtual void emit(CodeGenerator*) = 0;
-	virtual bool isAssignment() = 0;
 };
 
 #endif /* STATEMENT_H_ */

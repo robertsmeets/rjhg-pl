@@ -13,7 +13,7 @@ ProcedureNode::ProcedureNode() {
 	name = "";
 	parameters = vector<string>();
 	instance_variables = vector<string>();
-	local_variables = map<string, unsigned int>();
+	local_variables = new map<string, unsigned int>;
 }
 
 ProcedureNode::~ProcedureNode() {
@@ -39,8 +39,11 @@ unsigned int ProcedureNode::getProcAddress() {
 	return proc_address;
 }
 
-map<string,unsigned int> ProcedureNode::getLocalVariables()
-{
+vector<string> ProcedureNode::getParameters() {
+	return parameters;
+}
+
+map<string, unsigned int>* ProcedureNode::getLocalVariables() {
 	return local_variables;
 }
 
@@ -65,18 +68,23 @@ void ProcedureNode::setStatements(vector<Statement*>* some_statements) {
  *
  */
 unsigned int ProcedureNode::assignLocalVariable(string s) {
-	map<string, unsigned int>::iterator foundIter = local_variables.find(s);
-	if (foundIter != local_variables.end()) {
+
+	map<string, unsigned int>::iterator foundIter = local_variables->find(s);
+	if (foundIter != local_variables->end()) {
 		//
 		// the variable already exists.
 		//
-		return local_variables[s];
+		cout << "--- local variable " << s << " already exists with number "
+				<< local_variables->at(s) << endl;
+		return local_variables->at(s);
 	} else {
 		//
 		// the variable does not exist. add it.
 		//
-		unsigned int newval = local_variables.size();
-		local_variables[s] = newval;
+		unsigned int newval = local_variables->size();
+		local_variables->insert(pair<string, unsigned int>(s, newval));
+		cout << "--- local variable " << s << " added with number " << newval
+				<< endl;
 		return newval;
 	}
 }
@@ -87,8 +95,8 @@ void ProcedureNode::analyze() {
 	//
 	for (vector<Statement*>::iterator it = statements->begin();
 			it != statements->end(); ++it) {
-		if ((*it)->isAssignment()) {
-			// a_var = (AssignmentNode)(*it)->lhs;
-		}
+//		if ((*it)->isAssignment()) {
+		// a_var = (AssignmentNode)(*it)->lhs;
+		//	}
 	}
 }
