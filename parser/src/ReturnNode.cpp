@@ -22,11 +22,11 @@ void ReturnNode::emit(CodeGenerator* cg) {
 	//
 	// remove all call info from the stack
 	//
-	int l = pn->getLocalVariables()->size();
+	/*( int l = pn->getLocalVariables()->size();
 	if (l > 0)
 	{
 		cg -> emit(10,0,l);
-	}
+	} */
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//

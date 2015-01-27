@@ -502,17 +502,6 @@ vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 	return tokens;
 }
 
-//
-// Print iterators in a generic way
-//
-template<typename T, typename InputIterator>
-void ExpressionParser::Print(const string& message,
-		const InputIterator& itbegin, const InputIterator& itend,
-		const string& delimiter) {
-	cout << message << endl;
-	copy(itbegin, itend, ostream_iterator<T>(cout, delimiter.c_str()));
-	cout << endl;
-}
 
 //
 // parse string

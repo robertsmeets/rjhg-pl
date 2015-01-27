@@ -11,7 +11,7 @@ using namespace std;
 
 ProcedureNode::ProcedureNode() {
 	name = "";
-	parameters = vector<string>();
+	parameters = new vector<string>();
 	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
 }
@@ -39,7 +39,7 @@ unsigned int ProcedureNode::getProcAddress() {
 	return proc_address;
 }
 
-vector<string> ProcedureNode::getParameters() {
+vector<string>* ProcedureNode::getParameters() {
 	return parameters;
 }
 
@@ -48,7 +48,7 @@ map<string, unsigned int>* ProcedureNode::getLocalVariables() {
 }
 
 void ProcedureNode::addParameter(string a_parameter) {
-	parameters.push_back(a_parameter);
+	parameters->push_back(a_parameter);
 }
 
 void ProcedureNode::addStatement(Statement* s) {

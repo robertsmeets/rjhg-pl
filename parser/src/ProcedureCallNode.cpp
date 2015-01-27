@@ -40,11 +40,13 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	// Since we don't know how many, leave 0 for the INT parameter
 	// this will be corrected in the fix stage
 	//
+	cout << "emitting INT" << endl;
 	cg->emit(6,0,0);
 	//
 	// emit a "cal"
 	// leave the call address 0, since this will be corrected in the fix stage
 	//
+	cout << "emitting CAL" << endl;
 	cg->emit(5, 0, 0);
 	cg->addCallAddress(cg->getHere() - 2, procedure_name);
 }

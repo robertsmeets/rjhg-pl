@@ -25,7 +25,7 @@ class Statement; // forward declaration
 
 class ProcedureNode {
 	string name;
-	vector<string> parameters;
+	vector<string>* parameters;
 	vector<string> instance_variables;
 	vector<Statement*>* statements;
 	map<string,unsigned int>* local_variables;
@@ -39,7 +39,7 @@ public:
 	map<string,unsigned int>* getLocalVariables();
 	void setProcAddress(unsigned int );
 	unsigned int getProcAddress();
-	vector<string> getParameters();
+	vector<string>* getParameters();
 	void addParameter(string);
 	unsigned int assignLocalVariable(string);
 	unsigned int get_proc_address();

@@ -222,7 +222,7 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 			break;
 		}
 		cout << "peek_string <" << peek_string << "> found_char <" << found_char
-						<< "> ";
+				<< "> ";
 		//
 		// return, assignment or proc call or if statement
 		//
@@ -235,12 +235,10 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 		} else if (peek_string == "while") {
 			cout << "DECISION: while" << endl;
 			statements->push_back(while_statement(pd));
-		} else if (peek_string == "print")
-		{
+		} else if (peek_string == "print") {
 			cout << "DECISION: print" << endl;
 			statements->push_back(print_statement(pd));
-	}
-else if (found_char == '=') {
+		} else if (found_char == '=') {
 			//
 			// must be an assignment
 			//
@@ -292,7 +290,7 @@ void Parse::local_variable_definition() {
 
 void Parse::immediate_code() {
 
-	throw PException("unexpected string " + peek_string);
+	throw PException("unexpected string [" + peek_string + "]") ;
 
 }
 
@@ -325,7 +323,7 @@ Statement* Parse::return_statement(ProcedureNode* pd) {
 	} else {
 		en = ep.parse(return_expression);
 	}
-	ReturnNode* rn = new ReturnNode(pd,en);
+	ReturnNode* rn = new ReturnNode(pd, en);
 	return (Statement*) rn;
 }
 
@@ -343,7 +341,7 @@ Statement* Parse::if_statement(ProcedureNode* pd) {
 	if (peek_string != "endif") {
 		throw PException("missing endif, instead " + peek_string);
 	}
-	IfNode* in = new IfNode(pd,en, s_true, s_false);
+	IfNode* in = new IfNode(pd, en, s_true, s_false);
 	return in;
 }
 
@@ -363,6 +361,6 @@ Statement* Parse::print_statement(ProcedureNode* pd) {
 	get_something("\n\r");
 	string expression = peek_string;
 	ExpressionNode* en = ep.parse(expression);
-	PrintNode* pn = new PrintNode(pd,en);
+	PrintNode* pn = new PrintNode(pd, en);
 	return pn;
 }

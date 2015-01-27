@@ -126,7 +126,6 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 	case 10:
 			sf = "MININT";
 			break;
-
 	default:
 		sf = "------------------------------------> unexpected F value: " + int(f);
 		break;
