@@ -7,7 +7,6 @@
 
 #include "ExpressionParser.h"
 
-
 using namespace std;
 
 //
@@ -31,7 +30,9 @@ bool ExpressionParser::isParenthesis(const string& token) {
 // Test if token is an operator
 //
 bool ExpressionParser::isOperator(const string& token) {
-	return token == "+" || token == "-" || token == "*" || token == "/";
+	return token == "+" || token == "-" || token == "*" || token == "/"
+			|| token == "<" || token == "<=" || token == "==" || token == ">"
+			|| token == ">=" || token == "!=";
 }
 
 //
@@ -501,7 +502,6 @@ vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 	}
 	return tokens;
 }
-
 
 //
 // parse string

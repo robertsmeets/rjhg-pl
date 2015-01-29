@@ -199,8 +199,8 @@ int CInterpreter::execute_next() {
 		cout << "JPC " << a;
 		if (s[t - 1] == 0) {
 			pc = a;
-			t--;
 		}
+		t--;
 		break;
 	case 9: // print
 		t--;
