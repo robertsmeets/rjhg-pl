@@ -18,7 +18,7 @@ class Disassembler;
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int interpreter_main(int argc, char* argv[]) {
 	if (argc != 2) {
 		cout << "Must provide filename as an argument, example " << argv[0]
 				<< " c:\\test\\test.bin" << endl;
@@ -49,13 +49,13 @@ int main(int argc, char* argv[]) {
 	// buffer now contains it
 	//
 	myfile.close();
-	Disassembler d;
-	d.start(buffer);
+	//Disassembler d;
+	//d.start(buffer);
 	//
 	// start interpreting
 	//
-	CInterpreter i(buffer);
-	i.start();
+	//CInterpreter i(buffer);
+	//i.start();
 	return 0;
 }
 

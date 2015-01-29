@@ -23,6 +23,7 @@ public:
 	IfNode(ProcedureNode*,ExpressionNode*,vector<Statement*>*,vector<Statement*>*);
 	virtual ~IfNode();
 	void emit(CodeGenerator*);
+	virtual string stype();
 };
 
 #endif /* IFNODE_H_ */

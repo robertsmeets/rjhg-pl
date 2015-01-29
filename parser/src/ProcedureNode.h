@@ -16,6 +16,7 @@
 #include "Statement.h"
 #include "AssignmentNode.h"
 #include "PException.h"
+#include "ReturnNode.h"
 
 using namespace std;
 
@@ -46,8 +47,7 @@ public:
 	void addStatement(Statement*);
 	vector<Statement*>* getStatements();
 	void setStatements(vector<Statement*>*);
-	void analyze();
-
+	void fixReturn();
 };
 
 #endif /* PROCEDURENODE_H_ */

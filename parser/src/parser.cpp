@@ -10,6 +10,8 @@
 #include "Parse.h"
 #include "CodeGenerator.h"
 #include "PException.h"
+#include "Disassembler.h"
+#include "CInterpreter.h"
 
 using namespace std;
 
@@ -22,13 +24,34 @@ if (argc != 2) {
 	string filename = argv[1];
 	cout << "Parsing... " << filename << " ... " << endl;
 	Parse p;
+	CodeGenerator cg;
 	try {
 		p.start(filename);
-		CodeGenerator cg;
 		cg.start(p.getPn());
 	} catch (PException & E) {
 		cout << "Exception: " << E.ShowReason() << endl;
 		return -1;
 	}
+
+	//
+	//
+	vector<unsigned char>* b = cg.getCodeBuffer();
+	cout << "--- There NOW is a codebuffer of " << b->size() << endl;
+	for (unsigned int x=0;x< b->size();++x)
+	{
+		cout << "x = " << x << " " << (unsigned int) (b->at(x)) << endl;
+	}
+	cout << "--- Starting disassembly" << endl;
+
+	//
+	// do a disassembly
+	//
+	Disassembler d;
+	d.start(cg.getCodeBuffer());
+	//
+	// start interpreting
+	//
+	CInterpreter i(cg.getCodeBuffer());
+	i.start();
 	return 0;
 }

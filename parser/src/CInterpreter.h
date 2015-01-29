@@ -14,7 +14,7 @@
 using namespace std;
 
 class CInterpreter {
-	vector<char, allocator<char> > buffer;
+	vector<unsigned char>* buffer;
 	unsigned int pc;
 	unsigned int t;
 	unsigned int tr;
@@ -24,7 +24,7 @@ class CInterpreter {
 	vector<unsigned short int> b;
 
 public:
-	CInterpreter(vector<char>);
+	CInterpreter(vector<unsigned char>*);
 	virtual ~CInterpreter();
 	void start();
 	int execute_next();

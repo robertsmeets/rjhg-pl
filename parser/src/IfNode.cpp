@@ -61,4 +61,8 @@ void IfNode::emit(CodeGenerator* cg) {
 	}
 }
 
+string IfNode::stype()
+{
+	 return "if";
+}
 

@@ -10,45 +10,47 @@
 using namespace std;
 
 CodeGenerator::CodeGenerator() {
-	codebuffer = vector<unsigned char>();
+	codebuffer = new vector<unsigned char>();
 	procaddresses = map<string, ProcedureNode*>();
 	callpoints = map<unsigned int, string>();
 	here = 0;
 }
 
 CodeGenerator::~CodeGenerator() {
-
 }
 
 unsigned int CodeGenerator::getHere() {
 	return here;
 }
 
+vector<unsigned char>* CodeGenerator::getCodeBuffer() {
+	return codebuffer;
+}
+
 void CodeGenerator::start(ProgramNode pn) {
 	//
 	// open a file
 	//
-	string filename = "F:\\robert\\projects\\parser\\code\\example.bin";
 
 	//
 	// set up a call to main
 	//
 	// put a dummy value on the stack
 	//
-	emit(1,0,0);
+	emit(1, 0, 0);
 	//
 	// emit INT
 	//
-	emit(6,0,0);
+	emit(6, 0, 0);
 	//
 	// emit CAL
 	//
-	emit(5,0,0);
+	emit(5, 0, 0);
 	callpoints[here - 2] = "main";
 	//
 	// emit RET
 	//
-	emit(2,0,0);
+	emit(2, 0, 0);
 	//
 	// generate all the procedures
 	//
@@ -68,9 +70,6 @@ void CodeGenerator::start(ProgramNode pn) {
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
-	myfile.open(filename.c_str(), ios::binary);
-	emit_to_file();
-	myfile.close();
 }
 
 /**
@@ -91,10 +90,15 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 // write the codebuffer to a file
 //
 void CodeGenerator::emit_to_file() {
+
+	string filename = "F:\\robert\\projects\\parser\\code\\example.bin";
+	myfile.open(filename.c_str(), ios::binary);
 	for (unsigned int i = 0; i < here; i++) {
-		char c = codebuffer[i];
+		char c = codebuffer->at(i);
 		myfile.write(reinterpret_cast<const char*>(&c), sizeof(c));
 	}
+	myfile.close();
+
 }
 
 //
@@ -103,8 +107,8 @@ void CodeGenerator::emit_to_file() {
 void CodeGenerator::printcodebuffer() {
 	cout << "-------here is " << here << endl;
 	for (unsigned int i = 0; i < here; i++) {
-		cout << "codebuffer[" << i << "] = " << (unsigned int) (codebuffer[i])
-				<< endl;
+		cout << "codebuffer[" << i << "] = "
+				<< (unsigned int) (codebuffer->at(i)) << endl;
 		;
 	}
 	cout << "--- end" << endl;
@@ -115,16 +119,16 @@ void CodeGenerator::printcodebuffer() {
 // emit a f,l,a combination
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
-	// cout << "emit " << (unsigned int) f << "," << l << "," << a << endl;
-	codebuffer.push_back(f);
+	cout << "emit " << (unsigned int) f << "," << l << "," << a << endl;
+	codebuffer->push_back(f);
 	here++;
-	codebuffer.push_back(l);
+	codebuffer->push_back(l);
 	here++;
-	codebuffer.push_back(l >> 8);
+	codebuffer->push_back(l >> 8);
 	here++;
-	codebuffer.push_back(a);
+	codebuffer->push_back(a);
 	here++;
-	codebuffer.push_back(a >> 8);
+	codebuffer->push_back(a >> 8);
 	here++;
 }
 
@@ -167,7 +171,9 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 						++it2) {
 					if ((*it2) == avalue) {
 						unsigned int number = it2 - parameters->begin();
-						cout << "EMITTING LOD1, avalue is " << avalue << ", number is " << local_variables->size() + number << endl;
+						cout << "EMITTING LOD1, avalue is " << avalue
+								<< ", number is "
+								<< local_variables->size() + number << endl;
 						emit(3, 0, local_variables->size() + number); // LOD
 						break;
 					}
@@ -176,14 +182,14 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 					throw PException("variable " + avalue + " not found");
 				}
 			} else {
-				cout << "EMITTING LOD2, avalue is " << avalue << ", number is " << local_variables->at(avalue) << endl;
+				cout << "EMITTING LOD2, avalue is " << avalue << ", number is "
+						<< local_variables->at(avalue) << endl;
 				emit(3, 0, local_variables->at(avalue)); // LOD
 			}
 			break;
 		case 4: // call
 
-			emit(6,0,0);
-
+			emit(6, 0, 0);
 
 			//
 			// shorten the proc name (still has "(" at the end)
@@ -261,14 +267,15 @@ void CodeGenerator::fix_proc_addresses() {
 		// also fix the INT depth to create room for local variables
 		//
 		//
-		cout << "fix int depth to " << pn->getLocalVariables()->size() + pn->getParameters()->size()<< endl;
-		codebuffer[call_address - 5] = pn->getLocalVariables()->size() + pn->getParameters()->size();
-	}
+		codebuffer->at(call_address - 5) = pn->getLocalVariables()->size() ;
+		codebuffer->at(call_address - 7) = pn->getParameters()->size() ;
+
+		}
 }
 
 void CodeGenerator::fix(unsigned int call_address, unsigned int dest_address) {
-	codebuffer[call_address] = dest_address & 255;
-	codebuffer[call_address + 1] = dest_address >> 8;
+	codebuffer->at(call_address) = dest_address & 255;
+	codebuffer->at(call_address + 1) = dest_address >> 8;
 }
 
 //

@@ -29,6 +29,7 @@ public:
 	string getProcedureName();
 	virtual void emit(CodeGenerator*);
 	void addParametersExpression(ExpressionNode*);
+	virtual string stype();
 };
 
 #endif /* PROCEDURECALLNODE_H_ */

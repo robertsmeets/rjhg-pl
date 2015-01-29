@@ -23,7 +23,7 @@ public:
 	virtual ~ProgramNode();
 	void addProcedure(ProcedureNode*);
 	vector<ProcedureNode*> getProcedures();
-	unsigned int getProcedure(string);
+
 };
 
 #endif /* PROGRAMNODE_H_ */

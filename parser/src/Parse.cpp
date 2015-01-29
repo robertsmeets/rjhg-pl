@@ -209,6 +209,7 @@ void Parse::procedure_definition() {
 	}
 	vector<Statement*>* statements = block(pd);
 	pd->setStatements(statements);
+	pd->fixReturn();
 	get_something(" \n\t\r");
 	pn.addProcedure(pd);
 }

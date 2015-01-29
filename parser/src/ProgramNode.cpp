@@ -23,16 +23,3 @@ vector<ProcedureNode*> ProgramNode::getProcedures() {
 	return procedures;
 }
 
-unsigned int ProgramNode::getProcedure(string pname) {
-	unsigned int i = 0;
-	for (vector<ProcedureNode*>::iterator it = procedures.begin();
-			it != procedures.end(); ++it) {
-		ProcedureNode* a_proc = *it;
-		string pname = a_proc->getName();
-		if (pname == pname) {
-			return i;
-		}
-		i++;
-	}
-	return 0;
-}

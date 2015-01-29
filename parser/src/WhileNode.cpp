@@ -34,3 +34,7 @@ void WhileNode::emit(CodeGenerator* cg) {
 	cg->fix(jump_address, dest_address);
 }
 
+string WhileNode::stype()
+{
+	 return "while";
+}

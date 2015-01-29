@@ -20,6 +20,7 @@ public:
 	PrintNode(ProcedureNode*,ExpressionNode*);
 	virtual ~PrintNode();
 	virtual void emit(CodeGenerator*);
+	virtual string stype();
 };
 
 #endif /* PRINTNODE_H_ */

@@ -20,11 +20,11 @@ Disassembler::~Disassembler() {
 
 }
 
-void Disassembler::start(vector<char> buffer) {
-	for (unsigned int i = 0; i < buffer.size(); i += 5) {
-		char f = buffer[i];
-		unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
-		unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
+void Disassembler::start(vector<unsigned char>* buffer) {
+	for (unsigned int i = 0; i < buffer->size(); i += 5) {
+		char f = buffer->at(i);
+		unsigned short l = (buffer->at(i + 1) & 255) + (buffer->at(i + 2) << 8);
+		unsigned short a = (buffer->at(i + 3) & 255) + (buffer->at(i + 4) << 8);
 		string s = decode(f, l, a);
 		cout << "i=" << i << " "<< s << endl;
 	}

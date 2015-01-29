@@ -29,3 +29,7 @@ void PrintNode::emit(CodeGenerator* cg) {
 	//
 	cg->emit(9, 0, 0);
 }
+string PrintNode::stype()
+{
+	 return "print";
+}

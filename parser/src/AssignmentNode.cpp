@@ -45,3 +45,7 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	cg->emit(4, 0, lhs);
 }
 
+ string AssignmentNode::stype()
+ {
+	 return "assignment";
+ }

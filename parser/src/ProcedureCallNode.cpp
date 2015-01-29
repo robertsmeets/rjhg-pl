@@ -54,3 +54,8 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 void ProcedureCallNode::addParametersExpression(ExpressionNode* en) {
 	parameter_exps.push_back(en);
 }
+
+string ProcedureCallNode::stype()
+{
+	 return "procedure_call";
+}

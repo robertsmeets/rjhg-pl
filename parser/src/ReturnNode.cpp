@@ -20,23 +20,21 @@ ReturnNode::~ReturnNode() {
 
 void ReturnNode::emit(CodeGenerator* cg) {
 	//
-	// remove all call info from the stack
-	//
-	/*( int l = pn->getLocalVariables()->size();
-	if (l > 0)
-	{
-		cg -> emit(10,0,l);
-	} */
-	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
+	unsigned int l = 0;
 	if (return_expression != NULL)
 	{
+		l = 1;
 		cg->emitRpn(return_expression->getRpn(),pn);
 	}
 	//
 	// return
 	//
-	cg->emit(2, 0, 0);
+	cg->emit(2, l, 0);
 }
 
+string ReturnNode::stype()
+{
+	 return "return";
+}

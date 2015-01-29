@@ -22,6 +22,7 @@ public:
 	WhileNode(ProcedureNode*,ExpressionNode*, vector<Statement*>*);
 	virtual ~WhileNode();
 	void emit(CodeGenerator*);
+	virtual string stype();
 };
 
 #endif /* WHILENODE_H_ */

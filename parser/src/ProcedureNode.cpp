@@ -89,14 +89,23 @@ unsigned int ProcedureNode::assignLocalVariable(string s) {
 	}
 }
 
-void ProcedureNode::analyze() {
+void ProcedureNode::fixReturn() {
 	//
-	// count the local variables
+	// if return is missing, add it
 	//
-	for (vector<Statement*>::iterator it = statements->begin();
-			it != statements->end(); ++it) {
-//		if ((*it)->isAssignment()) {
-		// a_var = (AssignmentNode)(*it)->lhs;
-		//	}
+	unsigned int sz = statements->size();
+	bool addreturn = false;
+	if ((sz == 0))
+	{
+		addreturn = true;
+	}
+	else
+	{
+		Statement* last = statements->at(sz - 1);
+		addreturn = (last->stype() != "return");
+	}
+	if (addreturn)
+	{
+		statements->push_back(new ReturnNode(this, NULL));
 	}
 }

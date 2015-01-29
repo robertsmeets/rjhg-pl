@@ -16,7 +16,7 @@ class Disassembler {
 public:
 	Disassembler();
 	virtual ~Disassembler();
-	void start(vector<char>);
+	void start(vector<unsigned char>*);
 	string decode(char,unsigned short, unsigned short);
 };
 
