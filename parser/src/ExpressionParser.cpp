@@ -65,8 +65,8 @@ bool ExpressionParser::isInt(const string& token) {
 bool ExpressionParser::isFloat(const string& token) {
 	for (unsigned int i = 0; i < token.length(); i++) //for each char in string,
 			{
-		if (!(token[i] >= '0' && token[i] <= '9' && token[i] == '.'
-				&& token[i] == 'e')) {
+		if (!((token[i] >= '0' && token[i] <= '9') || token[i] == '.'
+				|| token[i] == 'e' || token[i] == '-')) {
 			return false;
 		}
 	}
@@ -187,7 +187,6 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// Until the token at the top of the stack is a left parenthesis, pop operators off
 			//	the stack onto the output queue.
 			//	Pop the left parenthesis from the stack, but not onto the output queue.
-
 			//
 			// Until the token at the top of the stack is a left parenthesis,
 			// pop operators off the stack onto the output queue.
@@ -205,22 +204,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 				// 6: boolean
 				// 7: string
 				//
-				unsigned int atype;
-				if (isOperator(topToken)) {
-					atype = 1;
-				} else if (isFunction(topToken)) {
-					atype = 4;
-				} else if (isInt(token)) {
-					atype = 2;
-				} else if (isFloat(token)) {
-					atype = 5;
-				} else if (isString(token)) {
-					atype = 7;
-				} else if (isBool(token)) {
-					atype = 6;
-				} else {
-					atype = 3;
-				}
+				unsigned int atype = figureType(topToken);
 				ExpressionThing et(atype, topToken);
 				out.push_back(et);
 				stack.pop();
@@ -304,16 +288,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 					break;
 				} else {
 
-					int atype;
-					if (isInt(token)) {
-						atype = 2;
-					} else {
-						atype = 3;
-					}
-					//
-					// type 2 is a number
-					// type 3 is a variable name
-					//
+					unsigned int atype = figureType(token);
 					ExpressionThing et(atype, token);
 					out.push_back(et);
 				}
@@ -333,16 +308,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 		// has a value on it, pop it and push true.
 		//
 		else {
-			int atype;
-			if (isInt(token)) {
-				atype = 2;
-			} else {
-				atype = 3;
-			}
-			//
-			// type 2 is a number
-			// type 3 is a variable name
-			//
+			unsigned int atype = figureType(token);
 			ExpressionThing et(atype, token);
 			out.push_back(et);
 			if (!were_values.empty()) {
@@ -541,4 +507,24 @@ ExpressionNode* ExpressionParser::parse(string s) {
 	ExpressionNode* en = new ExpressionNode();
 	en->setRpn(rpn);
 	return en;
+}
+
+unsigned int ExpressionParser::figureType(string token) {
+	unsigned int atype;
+	if (isOperator(token)) {
+		atype = 1;
+	} else if (isFunction(token)) {
+		atype = 4;
+	} else if (isInt(token)) {
+		atype = 2;
+	} else if (isFloat(token)) {
+		atype = 5;
+	} else if (isString(token)) {
+		atype = 7;
+	} else if (isBool(token)) {
+		atype = 6;
+	} else {
+		atype = 3;
+	}
+	return atype;
 }

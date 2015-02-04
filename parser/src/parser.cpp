@@ -35,8 +35,6 @@ if (argc != 2) {
 
 	//
 	//
-	//vector<unsigned char>* b = cg.getCodeBuffer();
-
 	//
 	// do a disassembly
 	//

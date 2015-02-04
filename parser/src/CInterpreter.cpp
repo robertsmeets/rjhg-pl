@@ -7,11 +7,9 @@
 
 #include "CInterpreter.h"
 
-#include <vector>
-
 using namespace std;
 
-CInterpreter::CInterpreter(vector<unsigned char>* a_buffer) {
+CInterpreter::CInterpreter(char* a_buffer) {
 	buffer = a_buffer;
 	pc = 0; // program counter
 	t = 0;   // is the top of the stack s
@@ -27,7 +25,7 @@ CInterpreter::~CInterpreter() {
 }
 
 void CInterpreter::start() {
-	for (unsigned int i = 0; i < buffer->size();) {
+	for (unsigned int i = 0; i < 100000;) {
 		i = execute_next();
 	}
 }
@@ -45,24 +43,62 @@ int CInterpreter::execute_next() {
 	// a is the 3rd param
 	//
 	cout << "pc=" << pc << ": ";
-	unsigned short int f = buffer->at(pc) & 255;
+	unsigned short int f = *((char*) buffer + pc) & 255;
 	pc++;
 	//
 	// using little endian
 	//
-	unsigned short int l = (buffer->at(pc) & 255) + (buffer->at(pc + 1) << 8);
+	char* lptr = (char*) buffer + pc;
+	unsigned short int l = (*lptr & 255) + (*(lptr + 1) << 8);
 	pc += 2;
-	unsigned short int a = (buffer->at(pc) & 255) + (buffer->at(pc + 1) << 8);
+	lptr = (char*) buffer + pc;
+	unsigned short int a = (*lptr & 255) + (*(lptr + 1) << 8);
 	pc += 2;
 	unsigned short int temp;
 	//
 	// opcode definitions
 	//
+	void* ptr;
+	double* d;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
-		cout << "LIT " << a;
-		s[t] = a;
-		t++;
+		cout << "LIT " << l;
+		switch (l) {
+		case 2: // Int
+			s[t] = a;
+			t++;
+			break;
+		case 5: // float
+			ptr = hm.allocate(a);
+			memcpy(&ptr, buffer + pc, a);
+			d = new double();
+			memcpy(d, buffer + pc, a);
+			cout << "The buffer is located at " << buffer << endl;
+			cout << "pc is now " << pc << endl;
+			cout << "FOUND A FLOAT with length " << a << " and value " << *d
+					<< endl;
+			pc += a;
+			break;
+		case 7: // string
+			cout << "FOUND A STRING with length " << a << endl;
+			ptr = hm.allocate(a);
+			memcpy(&ptr, buffer + pc, a);
+			cout << "--- Here is a string [";
+			for (unsigned int i = 0; i < a; i++) {
+				cout << *(buffer + pc + i);
+			}
+			cout << "]" << endl;
+
+			pc += a;
+			break;
+		case 6: // boolean
+			s[t] = a;
+			t++;
+			break;
+		default:
+			cout << "unexpected LIT value: " << l;
+			return -1;
+		}
 		break;
 	case 2: // opr
 		cout << "OPR";
@@ -83,13 +119,11 @@ int CInterpreter::execute_next() {
 			// there may be a return value on the top of the stack that needs to be saved
 			//
 			tb--;
-			if (l > 0)
-			{
-				temp = s[t-1];
+			if (l > 0) {
+				temp = s[t - 1];
 			}
 			t = b[tb];
-			if (l > 0)
-			{
+			if (l > 0) {
 				s[t] = temp;
 				t++;
 			}
@@ -183,7 +217,7 @@ int CInterpreter::execute_next() {
 		pc = a;
 		break;
 	case 6: // int:
-		cout << "INT " << l << ","<< a;
+		cout << "INT " << l << "," << a;
 		//
 		// this creates a new block with depth a for local variables and parameters
 		//

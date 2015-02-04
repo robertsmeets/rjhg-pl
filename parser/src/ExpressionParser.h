@@ -78,6 +78,7 @@ public:
 			const string& message, const InputIterator& itbegin,
 			const InputIterator& itend, const string& delimiter);
 	ExpressionNode* parse(string);
+	unsigned int figureType(string token);
 
 };
 
