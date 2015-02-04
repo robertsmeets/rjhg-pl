@@ -75,6 +75,7 @@ void Parse::get_something(string chars) {
 		if (!peek_string.empty()) {
 			break;
 		}
+
 	}
 }
 
@@ -113,9 +114,6 @@ void Parse::trim(string& s) {
 // found_char is the next character after that
 //
 bool Parse::get_onething(string chars) {
-	if (chars == "") {
-		chars = " \n\t\r";
-	}
 	peek_string = "";
 	for (;;) {
 		if (offset >= buffer.size()) {
@@ -158,7 +156,6 @@ void Parse::lookahead() {
 			break;
 		}
 	}
-	// cout << "[" << (unsigned int) c << "=" << c << "]" << endl;
 }
 
 void Parse::class_definition() {
@@ -202,7 +199,9 @@ void Parse::procedure_definition() {
 	for (;;) {
 		get_something("),");
 		pd->addParameter(peek_string);
-		if (found_char == ')') {
+		//if (peek_string == ")") {
+		if (found_char == ')')
+		{
 			// done
 			break;
 		}

@@ -16,6 +16,8 @@ ReturnNode::ReturnNode(ProcedureNode* p,ExpressionNode* en) {
 }
 
 ReturnNode::~ReturnNode() {
+	delete pn;
+	delete return_expression;
 }
 
 void ReturnNode::emit(CodeGenerator* cg) {

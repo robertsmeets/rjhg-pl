@@ -15,6 +15,9 @@ WhileNode::WhileNode(ProcedureNode* p, ExpressionNode* en,
 }
 
 WhileNode::~WhileNode() {
+	delete pn;
+	delete expression;
+	delete statements;
 }
 
 void WhileNode::emit(CodeGenerator* cg) {

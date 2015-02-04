@@ -59,6 +59,38 @@ bool ExpressionParser::isInt(const string& token) {
 	return true;
 
 }
+//
+// Test if token is a float
+//
+bool ExpressionParser::isFloat(const string& token) {
+	for (unsigned int i = 0; i < token.length(); i++) //for each char in string,
+			{
+		if (!(token[i] >= '0' && token[i] <= '9' && token[i] == '.'
+				&& token[i] == 'e')) {
+			return false;
+		}
+	}
+	return true;
+
+}
+
+//
+// Test if token is a string
+//
+bool ExpressionParser::isString(const string& token) {
+	unsigned int sz = token.length();
+	if (sz < 2) {
+		return false;
+	}
+	return ((token[0] == '"') && token[sz - 1] == '"');
+}
+
+//
+// Test if token is a boolean
+//
+bool ExpressionParser::isBool(const string& token) {
+	return ((token == "true") || (token == "false"));
+}
 
 //
 // Test if token is a comma
@@ -165,6 +197,14 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 				//
 				// type 1: operator ----- must evaluate what this is
 				//
+				// 1: operation
+				// 2: literal integer
+				// 3: variable name
+				// 4: procedure call
+				// 5: float
+				// 6: boolean
+				// 7: string
+				//
 				unsigned int atype;
 				if (isOperator(topToken)) {
 					atype = 1;
@@ -172,6 +212,12 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 					atype = 4;
 				} else if (isInt(token)) {
 					atype = 2;
+				} else if (isFloat(token)) {
+					atype = 5;
+				} else if (isString(token)) {
+					atype = 7;
+				} else if (isBool(token)) {
+					atype = 6;
 				} else {
 					atype = 3;
 				}
@@ -374,45 +420,6 @@ double ExpressionParser::RPNtoDouble(vector<string> tokens) {
 	return strtod(st.top().c_str(), NULL);
 }
 
-/*
- vector<string> ExpressionParser::getExpressionTokensOld(const string& expression) {
- vector<string> tokens;
- string str = "";
- for (int i = 0; i < (int) expression.length(); ++i) {
- //
- // look at one character and see if it is an operator or paren
- //
- const string token(1, expression[i]);
- if (isOperator(token) || isParenthesis(token)) {
- if (!str.empty()) {
- tokens.push_back(str);
- }
- str = "";
- tokens.push_back(token);
- } else {
- //
- // Append the numbers/letters
- //
- if (!token.empty() && token != " ") {
- str.append(token);
- } else {
- if (str != "") {
- tokens.push_back(str);
- str = "";
- }
- }
- }
- }
- //
- // check if empty
- //
- if (!str.empty()) {
- tokens.push_back(str);
- }
- return tokens;
- }
- */
-
 //
 // get the tokens from the string
 //
@@ -529,7 +536,7 @@ ExpressionNode* ExpressionParser::parse(string s) {
 	//
 	vector<ExpressionThing> rpn;
 	if (!infixToRPN(tokens, tokens.size(), rpn)) {
-		throw new PException("Mis-match in parentheses: " + s);
+		throw PException("Mis-match in parentheses: " + s);
 	}
 	ExpressionNode* en = new ExpressionNode();
 	en->setRpn(rpn);

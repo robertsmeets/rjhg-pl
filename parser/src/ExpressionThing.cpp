@@ -21,6 +21,16 @@ ExpressionThing::ExpressionThing(int a_type, string a_value) {
 ExpressionThing::~ExpressionThing() {
 
 }
+//
+// type:
+// 1: operation
+// 2: literal integer
+// 3: variable name
+// 4: procedure call
+// 5: float
+// 6: boolean
+// 7: string
+//
 
 int ExpressionThing::getType() {
 	return mytype;

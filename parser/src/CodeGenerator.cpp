@@ -11,12 +11,11 @@ using namespace std;
 
 CodeGenerator::CodeGenerator() {
 	codebuffer = new vector<unsigned char>();
-	procaddresses = map<string, ProcedureNode*>();
-	callpoints = map<unsigned int, string>();
 	here = 0;
 }
 
 CodeGenerator::~CodeGenerator() {
+	delete codebuffer;
 }
 
 unsigned int CodeGenerator::getHere() {
@@ -28,10 +27,6 @@ vector<unsigned char>* CodeGenerator::getCodeBuffer() {
 }
 
 void CodeGenerator::start(ProgramNode pn) {
-	//
-	// open a file
-	//
-
 	//
 	// set up a call to main
 	//
@@ -70,6 +65,11 @@ void CodeGenerator::start(ProgramNode pn) {
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
+	//
+	// send the literal doubles and strings
+	//
+	emit_lit_doubles();
+	emit_lit_strings();
 }
 
 /**
@@ -119,7 +119,6 @@ void CodeGenerator::printcodebuffer() {
 // emit a f,l,a combination
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
-	cout << "emit " << (unsigned int) f << "," << l << "," << a << endl;
 	codebuffer->push_back(f);
 	here++;
 	codebuffer->push_back(l);
@@ -150,12 +149,16 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		map<string, unsigned int>::iterator foundIter;
 		vector<string>* parameters;
 		vector<string>::iterator it2;
+		double my_double;
+		unsigned int strlen;
+		unsigned int sz;
+		string my_string;
 		switch (atype) {
 		case 1: // operation
 			emitOperation(avalue);
 			break;
 		case 2: // literal integer
-			emit(1, 0, atoi(avalue.c_str()));
+			emit(1, 2, atoi(avalue.c_str()));
 			break;
 		case 3:  // variable name
 			//
@@ -164,16 +167,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			//
 			local_variables = pn->getLocalVariables();
 			foundIter = local_variables->find(avalue);
-			cout << "--- emitRpn looking up [" << avalue << "]" << endl;
 			if (foundIter == local_variables->end()) {
 				parameters = pn->getParameters();
 				for (it2 = parameters->begin(); it2 != parameters->end();
 						++it2) {
 					if ((*it2) == avalue) {
 						unsigned int number = it2 - parameters->begin();
-						cout << "EMITTING LOD1, avalue is " << avalue
-								<< ", number is "
-								<< local_variables->size() + number << endl;
 						emit(3, 0, local_variables->size() + number); // LOD
 						break;
 					}
@@ -182,8 +181,6 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 					throw PException("variable " + avalue + " not found");
 				}
 			} else {
-				cout << "EMITTING LOD2, avalue is " << avalue << ", number is "
-						<< local_variables->at(avalue) << endl;
 				emit(3, 0, local_variables->at(avalue)); // LOD
 			}
 			break;
@@ -196,6 +193,22 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			//
 			emit(5, 0, 0);
 			addCallAddress(here - 2, avalue.substr(0, avalue.size() - 1));
+			break;
+
+		case 5: // float
+			my_double = atof(avalue.c_str());
+			sz = lit_doubles.size();
+			lit_doubles.push_back(my_double);
+			emit(1, 5, sz);
+			break;
+		case 6: // boolean
+			break;
+		case 7: // string
+			strlen = avalue.length();
+			my_string = avalue.substr(1, strlen - 2);
+			sz = lit_strings.size();
+			lit_strings.push_back(my_string);
+			emit(1, 7, sz);
 			break;
 		default:
 			throw PException("Unexpected ExpressionThing type");
@@ -267,10 +280,10 @@ void CodeGenerator::fix_proc_addresses() {
 		// also fix the INT depth to create room for local variables
 		//
 		//
-		codebuffer->at(call_address - 5) = pn->getLocalVariables()->size() ;
-		codebuffer->at(call_address - 7) = pn->getParameters()->size() ;
+		codebuffer->at(call_address - 5) = pn->getLocalVariables()->size();
+		codebuffer->at(call_address - 7) = pn->getParameters()->size();
 
-		}
+	}
 }
 
 void CodeGenerator::fix(unsigned int call_address, unsigned int dest_address) {
@@ -286,3 +299,24 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
+//
+// add the literal doubles as a constant lookup table
+//
+void CodeGenerator::emit_lit_doubles() {
+	for (unsigned i = 0; i < lit_doubles.size(); i++) {
+		unsigned int sz = sizeof(double);
+		double value = lit_doubles[i];
+		memcpy(&value, &codebuffer[here], sz);
+		here += sz;
+	}
+}
+//
+// add the literal strings as a constant lookup table
+//
+void CodeGenerator::emit_lit_strings() {
+	for (unsigned i = 0; i < lit_strings.size(); i++) {
+		unsigned int sz = sizeof(lit_strings[i]);
+		memcpy(&lit_strings[i], &codebuffer[here], sz);
+		here += sz;
+	}
+}

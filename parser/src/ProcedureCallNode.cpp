@@ -15,7 +15,7 @@ ProcedureCallNode::ProcedureCallNode(ProcedureNode* p) {
 }
 
 ProcedureCallNode::~ProcedureCallNode() {
-
+	delete pn;
 }
 
 string ProcedureCallNode::getProcedureName() {
@@ -32,7 +32,7 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	//
 	for (vector<ExpressionNode*>::iterator it = parameter_exps.begin();
 			it != parameter_exps.end(); ++it) {
-		cg->emitRpn((*it)->getRpn(),pn);
+		cg->emitRpn((*it)->getRpn(), pn);
 	}
 	//
 	// add room for the local variables.
@@ -41,7 +41,7 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	// this will be corrected in the fix stage
 	//
 	cout << "emitting INT" << endl;
-	cg->emit(6,0,0);
+	cg->emit(6, 0, 0);
 	//
 	// emit a "cal"
 	// leave the call address 0, since this will be corrected in the fix stage
@@ -55,7 +55,6 @@ void ProcedureCallNode::addParametersExpression(ExpressionNode* en) {
 	parameter_exps.push_back(en);
 }
 
-string ProcedureCallNode::stype()
-{
-	 return "procedure_call";
+string ProcedureCallNode::stype() {
+	return "procedure_call";
 }

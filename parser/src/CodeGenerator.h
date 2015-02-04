@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <cstring>
 
 #include "ProgramNode.h"
 #include "ProcedureNode.h"
@@ -34,6 +35,8 @@ class CodeGenerator {
 	map<unsigned int,string> callpoints;
 	vector<unsigned char>* codebuffer;
 	unsigned int here;
+	vector<double>lit_doubles;
+	vector<string>lit_strings;
 public:
 	CodeGenerator();
 	virtual ~CodeGenerator();
@@ -49,6 +52,8 @@ public:
 	void printcodebuffer();
 	void fix(unsigned int,unsigned int);
 	vector<unsigned char>* getCodeBuffer();
+	void emit_lit_doubles();
+	void emit_lit_strings();
 };
 
 #endif /* CODEGENERATOR_H_ */

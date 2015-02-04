@@ -20,7 +20,8 @@ ProcedureNode::~ProcedureNode() {
 	//
 	// delete all the statements
 	//
-
+	delete parameters;
+	delete local_variables;
 }
 
 void ProcedureNode::setName(string a_name) {

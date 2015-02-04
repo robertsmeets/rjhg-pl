@@ -35,19 +35,13 @@ if (argc != 2) {
 
 	//
 	//
-	vector<unsigned char>* b = cg.getCodeBuffer();
-	cout << "--- There NOW is a codebuffer of " << b->size() << endl;
-	for (unsigned int x=0;x< b->size();++x)
-	{
-		cout << "x = " << x << " " << (unsigned int) (b->at(x)) << endl;
-	}
-	cout << "--- Starting disassembly" << endl;
+	//vector<unsigned char>* b = cg.getCodeBuffer();
 
 	//
 	// do a disassembly
 	//
-	Disassembler d;
-	d.start(cg.getCodeBuffer());
+	//Disassembler d;
+	//d.start(cg.getCodeBuffer());
 	//
 	// start interpreting
 	//

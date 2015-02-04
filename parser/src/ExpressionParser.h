@@ -34,10 +34,10 @@ typedef vector<string>::const_iterator cv_iter;
 typedef string::iterator s_iter;
 
 const OpMap::value_type assocs[] = { OpMap::value_type("+",
-		make_pair<int, int>(0, LEFT_ASSOC)), OpMap::value_type("-",
-		make_pair<int, int>(0, LEFT_ASSOC)), OpMap::value_type("*",
-		make_pair<int, int>(5, LEFT_ASSOC)), OpMap::value_type("/",
-		make_pair<int, int>(5, LEFT_ASSOC)) };
+		make_pair<int, int>(0, (int) LEFT_ASSOC)), OpMap::value_type("-",
+		make_pair<int, int>(0, (int) LEFT_ASSOC)), OpMap::value_type("*",
+		make_pair<int, int>(5, (int) LEFT_ASSOC)), OpMap::value_type("/",
+		make_pair<int, int>(5, (int) LEFT_ASSOC)) };
 
 const OpMap opmap(assocs, assocs + sizeof(assocs) / sizeof(assocs[0]));
 
@@ -53,6 +53,9 @@ public:
 	bool isOperator(const string&);
 
 	bool isInt(const string&);
+	bool isFloat(const string&);
+	bool isString(const string&);
+	bool isBool(const string&);
 
 	bool isComma(const string&);
 

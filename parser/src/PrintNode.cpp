@@ -13,6 +13,8 @@ PrintNode::PrintNode(ProcedureNode* p,ExpressionNode* en) {
 }
 
 PrintNode::~PrintNode() {
+	delete pn;
+	delete print_expression;
 
 }
 
