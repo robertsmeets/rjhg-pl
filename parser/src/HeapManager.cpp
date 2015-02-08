@@ -33,6 +33,12 @@ char* HeapManager::allocate(unsigned int nbytes) {
 	return ptr;
 }
 
-void HeapManager::deallocate(char* ptr) {
+char* HeapManager::getStart()
+{
+	return space;
+}
 
+unsigned short int HeapManager::getOffset()
+{
+	return here - space;
 }

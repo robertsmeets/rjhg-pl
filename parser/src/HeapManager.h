@@ -18,7 +18,8 @@ public:
 	HeapManager();
 	virtual ~HeapManager();
 	char* allocate(unsigned int);
-	void deallocate(char*);
+	char* getStart();
+	unsigned short int getOffset();
 
 };
 

@@ -15,7 +15,11 @@ CInterpreter::CInterpreter(char* a_buffer) {
 	t = 0;   // is the top of the stack s
 	tr = 0;  // is the top of the stack r
 	tb = 0;  // is the top of the stack b
-	s = vector<unsigned short int>(500); // value stack
+
+
+	s = vector<stack_element>(500);
+
+
 	r = vector<unsigned short int>(500); // return stack
 	b = vector<unsigned short int>(500); // block address stack
 }
@@ -54,18 +58,21 @@ int CInterpreter::execute_next() {
 	lptr = (char*) buffer + pc;
 	unsigned short int a = (*lptr & 255) + (*(lptr + 1) << 8);
 	pc += 2;
-	unsigned short int temp;
+	stack_element temp;
 	//
 	// opcode definitions
 	//
-	void* ptr;
+	char* ptr;
 	double* d;
+	stack_element fr1;
+	stack_element fr2;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 		cout << "LIT " << l;
 		switch (l) {
 		case 2: // Int
-			s[t] = a;
+			s[t].atype = 2;
+			s[t].address = a;
 			t++;
 			break;
 		case 5: // float
@@ -81,18 +88,25 @@ int CInterpreter::execute_next() {
 			break;
 		case 7: // string
 			cout << "FOUND A STRING with length " << a << endl;
+			//
+			// get some memory
+			//
 			ptr = hm.allocate(a);
+			//
+			// copy the string to the heap
+			//
 			memcpy(&ptr, buffer + pc, a);
-			cout << "--- Here is a string [";
-			for (unsigned int i = 0; i < a; i++) {
-				cout << *(buffer + pc + i);
-			}
-			cout << "]" << endl;
-
+			//
+			// put the pointer and the type on the stack
+			//
+			s[t].atype = 7;
+			s[t].address = (short unsigned int) (ptr - hm.getStart());
+			t++;
 			pc += a;
 			break;
 		case 6: // boolean
-			s[t] = a;
+			s[t].atype = 6;
+			s[t].address = a;
 			t++;
 			break;
 		default:
@@ -130,62 +144,145 @@ int CInterpreter::execute_next() {
 			break;
 		case 1:
 			cout << " UNARY MINUS";
-			s[t - 1] = -s[t - 1];
+			fr1 = s[t - 1];
+			if (fr1.atype != 2) {
+				throw PException("type must be integer");
+			}
+			fr1.address = -fr1.address;
+			s[t - 1] = fr1;
 			break;
 		case 2:
 			cout << " PLUS";
 			t--;
-			s[t - 1] = s[t] + s[t - 1];
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 2;
+			fr1.address = fr1.address + fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 3:
 			cout << " MINUS";
 			t--;
-			s[t - 1] = s[t - 1] - s[t];
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 2;
+			fr1.address = fr1.address - fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 4:
 			cout << " MUL";
 			t--;
-			s[t - 1] = s[t] * s[t - 1];
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 2;
+			fr1.address = fr1.address / fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 5:
 			cout << " DIV";
 			t--;
-			s[t - 1] = s[t - 1] / s[t];
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 2;
+			fr1.address = fr1.address / fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 6:
 			cout << " MOD";
 			t--;
-			s[t - 1] = s[t - 1] % s[t];
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 2;
+			fr1.address = fr1.address % fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 8:
 			cout << " EQ" << endl;
 			t--;
-			s[t - 1] = (s[t - 1] == s[t]);
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 6;
+			fr1.address = fr1.address == fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 9:
 			cout << " NE";
 			t--;
-			s[t - 1] = (s[t - 1] != s[t]);
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 6;
+			fr1.address = fr1.address != fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 10:
 			cout << " LT";
 			t--;
-			s[t - 1] = (s[t - 1] < s[t]);
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 6;
+			fr1.address = fr1.address < fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 11:
 			cout << " GE";
 			t--;
-			s[t - 1] = (s[t - 1] >= s[t]);
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 6;
+			fr1.address = fr1.address >= fr2.address;
+			s[t - 1] = fr1;
 			break;
 		case 12:
 			cout << " GT";
 			t--;
-			s[t - 1] = (s[t - 1] > s[t]);
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 6;
+			fr1.address = fr1.address > fr2.address;
+			s[t - 1] = fr1;
+
 			break;
 		case 13:
 			cout << " LE";
 			t--;
-			s[t - 1] = (s[t - 1] <= s[t]);
+			fr1 = s[t - 1];
+			fr2 = s[t];
+			if ((fr1.atype != 2) || (fr2.atype != 2)) {
+				throw PException("comparison both types must be integer");
+			}
+			fr1.atype = 6;
+			fr1.address = fr1.address <= fr2.address;
+			s[t - 1] = fr1;
 			break;
 		default:
 			cout << "unexpected A value: " << a;
@@ -231,14 +328,19 @@ int CInterpreter::execute_next() {
 		break;
 	case 8: // jpc
 		cout << "JPC " << a;
-		if (s[t - 1] == 0) {
+		fr1 = s[t - 1];
+		if (fr1.atype != 6) {
+			throw PException("JPC value is not boolean");
+		}
+		if (fr1.address == 0) {
 			pc = a;
 		}
 		t--;
 		break;
 	case 9: // print
 		t--;
-		cout << "PRINT " << s[t];
+		fr1 = s[t];
+		cout << "PRINT type =" << fr1.atype << " address = " << fr1.address;
 		break;
 	default:
 		cout << "unexpected F value: " << f;
@@ -250,7 +352,7 @@ int CInterpreter::execute_next() {
 	//
 	cout << "      stack: ";
 	for (unsigned int i = 0; i < t; i++) {
-		cout << s[i] << " ";
+		cout << s[i].atype << ":" << s[i].address << " ";
 	}
 
 	cout << "      bstack: ";

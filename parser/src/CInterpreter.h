@@ -14,20 +14,24 @@
 #include <cstring>
 
 #include "HeapManager.h"
+#include "PException.h"
 
 using namespace std;
 
 class CInterpreter {
+	struct stack_element {
+	  unsigned short int atype;
+	  unsigned short int address;
+	} ;
 	char* buffer;
 	unsigned int pc;
 	unsigned int t;
 	unsigned int tr;
 	unsigned int tb;
-	vector<unsigned short int> s;
+	vector<stack_element> s;
 	vector<unsigned short int> r;
 	vector<unsigned short int> b;
 	HeapManager hm;
-
 public:
 	CInterpreter(char*);
 	virtual ~CInterpreter();
