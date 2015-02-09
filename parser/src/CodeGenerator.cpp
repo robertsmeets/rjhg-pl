@@ -238,7 +238,6 @@ void CodeGenerator::fix_proc_addresses() {
 	//
 	// loop over the callpoints
 	//
-	cout << "fix_proc_addresses" << endl;
 	for (map<unsigned int, string>::iterator it = callpoints.begin();
 			it != callpoints.end(); ++it) {
 		unsigned int call_address = it->first;
@@ -261,10 +260,18 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		// also fix the INT depth to create room for local variables
 		//
+		// size of the local variables
 		//
 		*((char*) codebuffer + call_address - 5) =
 				pn->getLocalVariables()->size();
+		//
+		// size of the parameters
+		//
 		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
+		//
+		cout << "--- Emitting an INT with local variables size " <<
+				 pn->getLocalVariables()->size() << " and parameters size " <<
+				 pn->getParameters()->size() << endl;
 
 	}
 }

@@ -15,11 +15,7 @@ CInterpreter::CInterpreter(char* a_buffer) {
 	t = 0;   // is the top of the stack s
 	tr = 0;  // is the top of the stack r
 	tb = 0;  // is the top of the stack b
-
-
 	s = vector<stack_element>(500);
-
-
 	r = vector<unsigned short int>(500); // return stack
 	b = vector<unsigned short int>(500); // block address stack
 }
@@ -68,7 +64,7 @@ int CInterpreter::execute_next() {
 	stack_element fr2;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
-		cout << "LIT " << l;
+		cout << "LIT " << l <<","<< a;
 		switch (l) {
 		case 2: // Int
 			s[t].atype = 2;
@@ -184,7 +180,7 @@ int CInterpreter::execute_next() {
 				throw PException("comparison both types must be integer");
 			}
 			fr1.atype = 2;
-			fr1.address = fr1.address / fr2.address;
+			fr1.address = fr1.address * fr2.address;
 			s[t - 1] = fr1;
 			break;
 		case 5:
@@ -318,9 +314,15 @@ int CInterpreter::execute_next() {
 		//
 		// this creates a new block with depth a for local variables and parameters
 		//
-		b[tb] = t - l;
+		b[tb] = t;
 		tb++;
-		t = t + a;
+		//
+		// a contains the number of local variables
+		// l contains the number of parameters
+		//
+		// only add a because the parameters will be pushed on the stack
+		//
+		t += a;
 		break;
 	case 7: // jmp
 		cout << "JMP " << a;
@@ -343,8 +345,7 @@ int CInterpreter::execute_next() {
 		cout << "PRINT type =" << fr1.atype << " address = " << fr1.address;
 		break;
 	default:
-		cout << "unexpected F value: " << f;
-		return -1;
+		throw PException("unexpected F value");
 		break;
 	}
 	//
