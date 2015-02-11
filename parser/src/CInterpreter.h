@@ -37,7 +37,8 @@ public:
 	virtual ~CInterpreter();
 	void start();
 	int execute_next();
-
+	void print_a_string(char*);
+	void print_a_string(char* , unsigned int );
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

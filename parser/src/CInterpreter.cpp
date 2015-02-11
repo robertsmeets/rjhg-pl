@@ -64,7 +64,7 @@ int CInterpreter::execute_next() {
 	stack_element fr2;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
-		cout << "LIT " << l <<","<< a;
+		cout << "LIT " << l << "," << a;
 		switch (l) {
 		case 2: // Int
 			s[t].atype = 2;
@@ -83,15 +83,22 @@ int CInterpreter::execute_next() {
 			pc += a;
 			break;
 		case 7: // string
-			cout << "FOUND A STRING with length " << a << endl;
 			//
 			// get some memory
 			//
-			ptr = hm.allocate(a);
+			ptr = hm.allocate(a + 2);
+			cout << "--- allocated " << (void*) ptr << endl;
 			//
 			// copy the string to the heap
 			//
-			memcpy(&ptr, buffer + pc, a);
+			*ptr = a & 255;
+			*(ptr + 1) = a >> 8;
+			cout << "--- copying a string from " << (void*) (buffer + pc) << " to " << (void*)(ptr + 2) << " with length " << a << endl;
+			cout << "--- original" << endl;
+			print_a_string(buffer + pc,a);
+			memcpy(ptr + 2, buffer + pc, a);
+			cout << "--- copy" << endl;
+			print_a_string(ptr);
 			//
 			// put the pointer and the type on the stack
 			//
@@ -152,12 +159,31 @@ int CInterpreter::execute_next() {
 			t--;
 			fr1 = s[t - 1];
 			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
+			if ((fr1.atype == 2) || (fr2.atype == 2)) {
+				fr1.atype = 2;
+				fr1.address = fr1.address + fr2.address;
+				s[t - 1] = fr1;
+			} else if ((fr1.atype == 7) || (fr2.atype == 7)) {
+				//
+				// add two strings
+				//
+				char * ptr1 = hm.getStart() + fr1.address;
+				char * ptr2 = hm.getStart() + fr2.address;
+				unsigned int len1 = *ptr1 + (*(ptr1 + 1) >> 8);
+				unsigned int len2 = *ptr2 + (*(ptr2 + 1) >> 8);
+				unsigned int newlen = len1 + len2;
+				ptr = hm.allocate(newlen + 2);
+				*ptr = newlen & 255;
+				*(ptr + 1) = newlen >> 8;
+				memcpy(ptr + 2, ptr1 + 2, len1);
+				memcpy(ptr + len1 + 2, ptr2 + 2, len2);
+				fr1.address = (unsigned int) (ptr - hm.getStart());
+				fr1.atype = 7;
+				s[t - 1] = fr1;
+
+			} else {
+				throw PException("plus: both types must be integer or string");
 			}
-			fr1.atype = 2;
-			fr1.address = fr1.address + fr2.address;
-			s[t - 1] = fr1;
 			break;
 		case 3:
 			cout << " MINUS";
@@ -342,7 +368,14 @@ int CInterpreter::execute_next() {
 	case 9: // print
 		t--;
 		fr1 = s[t];
-		cout << "PRINT type =" << fr1.atype << " address = " << fr1.address;
+		cout << "PRINT type =" << fr1.atype << " address = " << fr1.address
+				<< endl;
+		if (fr1.atype == 7) {
+			char* ptr = hm.getStart() + fr1.address;
+
+			print_a_string(ptr);
+
+		}
 		break;
 	default:
 		throw PException("unexpected F value");
@@ -370,3 +403,19 @@ int CInterpreter::execute_next() {
 	return 0;
 }
 
+void CInterpreter::print_a_string(char* ptr) {
+	unsigned int len = (unsigned int) (*ptr + (*(ptr + 1) >> 8));
+	cout << "[";
+	for (char* i = ptr + 2; i < ptr + 2 + len; i++) {
+		cout << *i;
+	}
+	cout << "]" << endl;
+}
+
+void CInterpreter::print_a_string(char* ptr, unsigned int len) {
+	cout << "[";
+	for (char* i = ptr; i < ptr  + len; i++) {
+		cout << *i;
+	}
+	cout << "]" << endl;
+}

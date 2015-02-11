@@ -11,13 +11,13 @@ HeapManager::HeapManager() {
 	//
 	// initial allocation
 	//
-	size = 256;
+	size = 2560;
 	space = (char*) malloc(size);
 	here = space;
 }
 
 HeapManager::~HeapManager() {
-
+	free(space);
 }
 
 char* HeapManager::allocate(unsigned int nbytes) {
