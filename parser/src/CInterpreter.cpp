@@ -73,13 +73,21 @@ int CInterpreter::execute_next() {
 			break;
 		case 5: // float
 			ptr = hm.allocate(a);
-			memcpy(&ptr, buffer + pc, a);
+			memcpy(ptr, buffer + pc, a);
 			d = new double();
 			memcpy(d, buffer + pc, a);
-			cout << "The buffer is located at " << buffer << endl;
+			cout << endl;
+			cout << "The buffer is located at " << (void*) buffer << endl;
 			cout << "pc is now " << pc << endl;
 			cout << "FOUND A FLOAT with length " << a << " and value " << *d
 					<< endl;
+			free(d);
+			//
+			// put the pointer and the type on the stack
+			//
+			s[t].atype = 5;
+			s[t].address = (short unsigned int) (ptr - hm.getStart());
+			t++;
 			pc += a;
 			break;
 		case 7: // string
@@ -372,9 +380,19 @@ int CInterpreter::execute_next() {
 				<< endl;
 		if (fr1.atype == 7) {
 			char* ptr = hm.getStart() + fr1.address;
-
 			print_a_string(ptr);
 
+		}
+		else if (fr1.atype==5)
+		{
+			//
+			// float
+			//
+			char* ptr = hm.getStart() + fr1.address;
+			d = new double();
+			memcpy(d,ptr,8);
+			cout << "double with value " << *d << endl;
+			free(d);
 		}
 		break;
 	default:
@@ -405,11 +423,7 @@ int CInterpreter::execute_next() {
 
 void CInterpreter::print_a_string(char* ptr) {
 	unsigned int len = (unsigned int) (*ptr + (*(ptr + 1) >> 8));
-	cout << "[";
-	for (char* i = ptr + 2; i < ptr + 2 + len; i++) {
-		cout << *i;
-	}
-	cout << "]" << endl;
+	print_a_string(ptr+2,len);
 }
 
 void CInterpreter::print_a_string(char* ptr, unsigned int len) {
