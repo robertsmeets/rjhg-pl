@@ -59,7 +59,9 @@ int CInterpreter::execute_next() {
 	// opcode definitions
 	//
 	char* ptr;
-	double* d;
+	double d1;
+	double d2;
+	double d3;
 	stack_element fr1;
 	stack_element fr2;
 	switch (f) {
@@ -74,14 +76,12 @@ int CInterpreter::execute_next() {
 		case 5: // float
 			ptr = hm.allocate(a);
 			memcpy(ptr, buffer + pc, a);
-			d = new double();
-			memcpy(d, buffer + pc, a);
+			memcpy(&d1, buffer + pc, a);
 			cout << endl;
 			cout << "The buffer is located at " << (void*) buffer << endl;
 			cout << "pc is now " << pc << endl;
-			cout << "FOUND A FLOAT with length " << a << " and value " << *d
+			cout << "FOUND A FLOAT with length " << a << " and value " << d1
 					<< endl;
-			free(d);
 			//
 			// put the pointer and the type on the stack
 			//
@@ -101,9 +101,11 @@ int CInterpreter::execute_next() {
 			//
 			*ptr = a & 255;
 			*(ptr + 1) = a >> 8;
-			cout << "--- copying a string from " << (void*) (buffer + pc) << " to " << (void*)(ptr + 2) << " with length " << a << endl;
+			cout << "--- copying a string from " << (void*) (buffer + pc)
+					<< " to " << (void*) (ptr + 2) << " with length " << a
+					<< endl;
 			cout << "--- original" << endl;
-			print_a_string(buffer + pc,a);
+			print_a_string(buffer + pc, a);
 			memcpy(ptr + 2, buffer + pc, a);
 			cout << "--- copy" << endl;
 			print_a_string(ptr);
@@ -167,11 +169,14 @@ int CInterpreter::execute_next() {
 			t--;
 			fr1 = s[t - 1];
 			fr2 = s[t];
-			if ((fr1.atype == 2) || (fr2.atype == 2)) {
+			if ((fr1.atype == 2) && (fr2.atype == 2)) {
+				//
+				// add two integers
+				//
 				fr1.atype = 2;
 				fr1.address = fr1.address + fr2.address;
 				s[t - 1] = fr1;
-			} else if ((fr1.atype == 7) || (fr2.atype == 7)) {
+			} else if ((fr1.atype == 7) && (fr2.atype == 7)) {
 				//
 				// add two strings
 				//
@@ -188,9 +193,31 @@ int CInterpreter::execute_next() {
 				fr1.address = (unsigned int) (ptr - hm.getStart());
 				fr1.atype = 7;
 				s[t - 1] = fr1;
-
+			} else if ((fr1.atype == 2) && (fr2.atype == 5)) { // integer plus float
+				cout << "------------------INT plus FLOAT" << endl;
+				fr1.atype = 5;
+				memcpy(&d2, hm.getStart() + fr2.address, 8);
+				d3 = fr1.address + d2;
+				memcpy(hm.getStart() + fr1.address, &d3, 8);
+				s[t - 1] = fr1;
+			}
+			else if ((fr1.atype == 5) && (fr2.atype == 2)) { // float plus integer
+				cout << "------------------ FLOAT plus INT" << endl;
+				memcpy(&d1, hm.getStart() + fr1.address, 8);
+				d3 = d1 + fr2.address;
+				memcpy(hm.getStart() + fr1.address, &d3, 8);
+				s[t - 1] = fr1;
+			}
+			else if ((fr1.atype == 5) && (fr1.atype == 5)) { // both floats
+				cout << "------------------ FLOAT plus FLOAT" << endl;
+				memcpy(&d1, hm.getStart() + fr1.address, 8);
+				memcpy(&d2, hm.getStart() + fr2.address, 8);
+				d3 = d1 + d2;
+				memcpy(hm.getStart() + fr1.address, &d3, 8);
+				s[t - 1] = fr1;
 			} else {
-				throw PException("plus: both types must be integer or string");
+				throw PException(
+						"plus: both types must be integer or float or string or something");
 			}
 			break;
 		case 3:
@@ -382,17 +409,13 @@ int CInterpreter::execute_next() {
 			char* ptr = hm.getStart() + fr1.address;
 			print_a_string(ptr);
 
-		}
-		else if (fr1.atype==5)
-		{
+		} else if (fr1.atype == 5) {
 			//
 			// float
 			//
 			char* ptr = hm.getStart() + fr1.address;
-			d = new double();
-			memcpy(d,ptr,8);
-			cout << "double with value " << *d << endl;
-			free(d);
+			memcpy(&d1, ptr, 8);
+			cout << "double with value " << d1 << endl;
 		}
 		break;
 	default:
@@ -423,12 +446,12 @@ int CInterpreter::execute_next() {
 
 void CInterpreter::print_a_string(char* ptr) {
 	unsigned int len = (unsigned int) (*ptr + (*(ptr + 1) >> 8));
-	print_a_string(ptr+2,len);
+	print_a_string(ptr + 2, len);
 }
 
 void CInterpreter::print_a_string(char* ptr, unsigned int len) {
 	cout << "[";
-	for (char* i = ptr; i < ptr  + len; i++) {
+	for (char* i = ptr; i < ptr + len; i++) {
 		cout << *i;
 	}
 	cout << "]" << endl;
