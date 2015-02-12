@@ -30,6 +30,26 @@ void CInterpreter::start() {
 	}
 }
 
+unsigned int func_plus_ii(unsigned int i, unsigned int j) {
+	cout << "---------------------func_plus_ii was reached" << endl;
+	return i + j;
+}
+
+double func_plus_id(int i, double j) {
+	return i + j;
+}
+
+double func_plus_di(double i, int j) {
+	return i + j;
+}
+
+double func_plus_dd(double i, double j) {
+	cout << "---------------------func_plus_dd was reached" << endl;
+	cout << "i = " << i << endl;
+	cout << "j = " << j << endl;
+		return i + j;
+}
+
 /*
 
  p, b, t: integer; {program-, base-, topstack-registers}
@@ -129,6 +149,32 @@ int CInterpreter::execute_next() {
 		break;
 	case 2: // opr
 		cout << "OPR";
+		//
+		// set up a call table matrix
+		// entries; first the operator 0..13
+		// second the first argument type 1..7
+		// third the second argument type 1..7
+		//
+		// The result is a function
+		//
+		//int (*foo)(int, int);
+		//		foo = (int (*)(int, int))(&func_plus_ii);}
+
+
+		typedef unsigned int(*iiptr)(unsigned int,unsigned int);
+		typedef double(*ddptr)(double,double);
+		typedef double(*idptr)(unsigned int,double);
+		typedef double(*diptr)(double,unsigned int);
+		iiptr fptrs[14][8][8] ;
+		// fill up for OPR 2 (PLUS);
+		fptrs[2][2][2] = (iiptr)(&func_plus_ii);
+		fptrs[2][2][5] = (iiptr)(&func_plus_id);
+		fptrs[2][5][2] = (iiptr)(&func_plus_di);
+		fptrs[2][5][5] = (iiptr)(&func_plus_dd);
+		iiptr aiiptr;
+		idptr aidptr;
+		diptr adiptr;
+		ddptr addptr;
 		switch (a) {
 		case 0:
 			cout << " RET";
@@ -170,261 +216,274 @@ int CInterpreter::execute_next() {
 			fr1 = s[t - 1];
 			fr2 = s[t];
 			if ((fr1.atype == 2) && (fr2.atype == 2)) {
-				//
-				// add two integers
-				//
+					//
+					// add two integers
+					//
+					aiiptr = fptrs[2][fr1.atype][fr2.atype];
+					fr1.address = (*aiiptr)(fr1.address,fr2.address);
+					s[t - 1] = fr1;
+
+				} else if ((fr1.atype == 7) && (fr2.atype == 7)) {
+					//
+					// add two strings
+					//
+					char * ptr1 = hm.getStart() + fr1.address;
+					char * ptr2 = hm.getStart() + fr2.address;
+					unsigned int len1 = *ptr1 + (*(ptr1 + 1) >> 8);
+					unsigned int len2 = *ptr2 + (*(ptr2 + 1) >> 8);
+					unsigned int newlen = len1 + len2;
+					ptr = hm.allocate(newlen + 2);
+					*ptr = newlen & 255;
+					*(ptr + 1) = newlen >> 8;
+					memcpy(ptr + 2, ptr1 + 2, len1);
+					memcpy(ptr + len1 + 2, ptr2 + 2, len2);
+					fr1.address = (unsigned int) (ptr - hm.getStart());
+					s[t - 1] = fr1;
+				} else if ((fr1.atype == 2) && (fr2.atype == 5)) {
+					//
+					// integer plus float
+					//
+					char* st = hm.getStart();
+					memcpy(&d2, st + fr2.address, 8);
+					aidptr = (idptr)(fptrs[2][fr1.atype][fr2.atype]);
+					d3 = (*aidptr)(fr1.address,d2);
+					fr1.atype = 5;
+					memcpy(st + fr1.address, &d3, 8);
+					s[t - 1] = fr1;
+				}
+				else if ((fr1.atype == 5) && (fr2.atype == 2)) {
+					//
+					// float plus integer
+					//
+					char* st = hm.getStart();
+					memcpy(&d1,st + fr1.address, 8);
+					adiptr = (diptr)(fptrs[2][fr1.atype][fr2.atype]);
+					d3 = (*adiptr)(d1,fr2.address);
+					memcpy(st + fr1.address, &d3, 8);
+					s[t - 1] = fr1;
+				}
+				else if ((fr1.atype == 5) && (fr1.atype == 5)) {
+					//
+					// both floats
+					//
+					char* st = hm.getStart();
+					memcpy(&d1,st + fr1.address, 8);
+					memcpy(&d2, st + fr2.address, 8);
+					addptr = (ddptr)(fptrs[2][fr1.atype][fr2.atype]);
+					cout << "--- before the call " << d1 << " and " << d2 << endl;
+					d3 = (*addptr)(d1,d2);
+					memcpy(st + fr1.address, &d3, 8);
+					s[t - 1] = fr1;
+				} else {
+					throw PException(
+							"plus: incompatible types");
+				}
+				break;
+				case 3:
+				cout << " MINUS";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
 				fr1.atype = 2;
-				fr1.address = fr1.address + fr2.address;
+				fr1.address = fr1.address - fr2.address;
 				s[t - 1] = fr1;
-			} else if ((fr1.atype == 7) && (fr2.atype == 7)) {
-				//
-				// add two strings
-				//
-				char * ptr1 = hm.getStart() + fr1.address;
-				char * ptr2 = hm.getStart() + fr2.address;
-				unsigned int len1 = *ptr1 + (*(ptr1 + 1) >> 8);
-				unsigned int len2 = *ptr2 + (*(ptr2 + 1) >> 8);
-				unsigned int newlen = len1 + len2;
-				ptr = hm.allocate(newlen + 2);
-				*ptr = newlen & 255;
-				*(ptr + 1) = newlen >> 8;
-				memcpy(ptr + 2, ptr1 + 2, len1);
-				memcpy(ptr + len1 + 2, ptr2 + 2, len2);
-				fr1.address = (unsigned int) (ptr - hm.getStart());
-				fr1.atype = 7;
+				break;
+				case 4:
+				cout << " MUL";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 2;
+				fr1.address = fr1.address * fr2.address;
 				s[t - 1] = fr1;
-			} else if ((fr1.atype == 2) && (fr2.atype == 5)) { // integer plus float
-				cout << "------------------INT plus FLOAT" << endl;
-				fr1.atype = 5;
-				memcpy(&d2, hm.getStart() + fr2.address, 8);
-				d3 = fr1.address + d2;
-				memcpy(hm.getStart() + fr1.address, &d3, 8);
+				break;
+				case 5:
+				cout << " DIV";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("division both types must be integer");
+				}
+				fr1.atype = 2;
+				fr1.address = fr1.address / fr2.address;
 				s[t - 1] = fr1;
-			}
-			else if ((fr1.atype == 5) && (fr2.atype == 2)) { // float plus integer
-				cout << "------------------ FLOAT plus INT" << endl;
-				memcpy(&d1, hm.getStart() + fr1.address, 8);
-				d3 = d1 + fr2.address;
-				memcpy(hm.getStart() + fr1.address, &d3, 8);
+				break;
+				case 6:
+				cout << " MOD";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("modulo both types must be integer");
+				}
+				fr1.atype = 2;
+				fr1.address = fr1.address % fr2.address;
 				s[t - 1] = fr1;
-			}
-			else if ((fr1.atype == 5) && (fr1.atype == 5)) { // both floats
-				cout << "------------------ FLOAT plus FLOAT" << endl;
-				memcpy(&d1, hm.getStart() + fr1.address, 8);
-				memcpy(&d2, hm.getStart() + fr2.address, 8);
-				d3 = d1 + d2;
-				memcpy(hm.getStart() + fr1.address, &d3, 8);
+				break;
+				case 8:
+				cout << " EQ" << endl;
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 6;
+				fr1.address = fr1.address == fr2.address;
 				s[t - 1] = fr1;
-			} else {
-				throw PException(
-						"plus: both types must be integer or float or string or something");
-			}
-			break;
-		case 3:
-			cout << " MINUS";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 2;
-			fr1.address = fr1.address - fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 4:
-			cout << " MUL";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 2;
-			fr1.address = fr1.address * fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 5:
-			cout << " DIV";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 2;
-			fr1.address = fr1.address / fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 6:
-			cout << " MOD";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 2;
-			fr1.address = fr1.address % fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 8:
-			cout << " EQ" << endl;
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 6;
-			fr1.address = fr1.address == fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 9:
-			cout << " NE";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 6;
-			fr1.address = fr1.address != fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 10:
-			cout << " LT";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 6;
-			fr1.address = fr1.address < fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 11:
-			cout << " GE";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 6;
-			fr1.address = fr1.address >= fr2.address;
-			s[t - 1] = fr1;
-			break;
-		case 12:
-			cout << " GT";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
-			}
-			fr1.atype = 6;
-			fr1.address = fr1.address > fr2.address;
-			s[t - 1] = fr1;
+				break;
+				case 9:
+				cout << " NE";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 6;
+				fr1.address = fr1.address != fr2.address;
+				s[t - 1] = fr1;
+				break;
+				case 10:
+				cout << " LT";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 6;
+				fr1.address = fr1.address < fr2.address;
+				s[t - 1] = fr1;
+				break;
+				case 11:
+				cout << " GE";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 6;
+				fr1.address = fr1.address >= fr2.address;
+				s[t - 1] = fr1;
+				break;
+				case 12:
+				cout << " GT";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 6;
+				fr1.address = fr1.address > fr2.address;
+				s[t - 1] = fr1;
 
-			break;
-		case 13:
-			cout << " LE";
-			t--;
-			fr1 = s[t - 1];
-			fr2 = s[t];
-			if ((fr1.atype != 2) || (fr2.atype != 2)) {
-				throw PException("comparison both types must be integer");
+				break;
+				case 13:
+				cout << " LE";
+				t--;
+				fr1 = s[t - 1];
+				fr2 = s[t];
+				if ((fr1.atype != 2) || (fr2.atype != 2)) {
+					throw PException("comparison both types must be integer");
+				}
+				fr1.atype = 6;
+				fr1.address = fr1.address <= fr2.address;
+				s[t - 1] = fr1;
+				break;
+				default:
+				cout << "unexpected A value: " << a;
+				return -1;
+				break;
 			}
-			fr1.atype = 6;
-			fr1.address = fr1.address <= fr2.address;
-			s[t - 1] = fr1;
 			break;
-		default:
-			cout << "unexpected A value: " << a;
-			return -1;
+			case 3:
+			cout << "LOD " << a << " ";
+			//
+			// lod: copy a local variable or parameter on top of the stack
+			//
+			s[t] = s[b[tb - 1] + a];
+			t++;
 			break;
-		}
-		break;
-	case 3:
-		cout << "LOD " << a << " ";
-		//
-		// lod: copy a local variable or parameter on top of the stack
-		//
-		s[t] = s[b[tb - 1] + a];
-		t++;
-		break;
-	case 4: // sto: pop a value from the stack and put it in a local variable or parameter
-		cout << "STO " << a << " ";
-		t--;
-		s[b[tb - 1] + a] = s[t];
-		break;
-	case 5: //cal:
-		// parameters should have already been pushed on the stack
-		// push the return address on the return stack
-		// call the procedure
-		//
-		cout << "CAL " << a;
-		r[tr] = pc;
-		tr++;
-		pc = a;
-		break;
-	case 6: // int:
-		cout << "INT " << l << "," << a;
-		//
-		// this creates a new block with depth a for local variables and parameters
-		//
-		b[tb] = t;
-		tb++;
-		//
-		// a contains the number of local variables
-		// l contains the number of parameters
-		//
-		// only add a because the parameters will be pushed on the stack
-		//
-		t += a;
-		break;
-	case 7: // jmp
-		cout << "JMP " << a;
-		pc = a;
-		break;
-	case 8: // jpc
-		cout << "JPC " << a;
-		fr1 = s[t - 1];
-		if (fr1.atype != 6) {
-			throw PException("JPC value is not boolean");
-		}
-		if (fr1.address == 0) {
+			case 4:// sto: pop a value from the stack and put it in a local variable or parameter
+			cout << "STO " << a << " ";
+			t--;
+			s[b[tb - 1] + a] = s[t];
+			break;
+			case 5://cal:
+			// parameters should have already been pushed on the stack
+			// push the return address on the return stack
+			// call the procedure
+			//
+			cout << "CAL " << a;
+			r[tr] = pc;
+			tr++;
 			pc = a;
-		}
-		t--;
-		break;
-	case 9: // print
-		t--;
-		fr1 = s[t];
-		cout << "PRINT type =" << fr1.atype << " address = " << fr1.address
-				<< endl;
-		if (fr1.atype == 7) {
-			char* ptr = hm.getStart() + fr1.address;
-			print_a_string(ptr);
+			break;
+			case 6:// int:
+			cout << "INT " << l << "," << a;
+			//
+			// this creates a new block with depth a for local variables and parameters
+			//
+			b[tb] = t;
+			tb++;
+			//
+			// a contains the number of local variables
+			// l contains the number of parameters
+			//
+			// only add a because the parameters will be pushed on the stack
+			//
+			t += a;
+			break;
+			case 7:// jmp
+			cout << "JMP " << a;
+			pc = a;
+			break;
+			case 8:// jpc
+			cout << "JPC " << a;
+			fr1 = s[t - 1];
+			if (fr1.atype != 6) {
+				throw PException("JPC value is not boolean");
+			}
+			if (fr1.address == 0) {
+				pc = a;
+			}
+			t--;
+			break;
+			case 9: // print
+			t--;
+			fr1 = s[t];
+			cout << "PRINT type =" << fr1.atype << " address = " << fr1.address
+			<< endl;
+			if (fr1.atype == 7) {
+				char* ptr = hm.getStart() + fr1.address;
+				print_a_string(ptr);
 
-		} else if (fr1.atype == 5) {
-			//
-			// float
-			//
-			char* ptr = hm.getStart() + fr1.address;
-			memcpy(&d1, ptr, 8);
-			cout << "double with value " << d1 << endl;
+			} else if (fr1.atype == 5) {
+				//
+				// float
+				//
+				char* ptr = hm.getStart() + fr1.address;
+				memcpy(&d1, ptr, 8);
+				cout << "double with value " << d1 << endl;
+			}
+			break;
+			default:
+			throw PException("unexpected F value");
+			break;
 		}
-		break;
-	default:
-		throw PException("unexpected F value");
-		break;
-	}
-	//
-	// print the stack
-	//
+		//
+		// print the stack
+		//
 	cout << "      stack: ";
 	for (unsigned int i = 0; i < t; i++) {
 		cout << s[i].atype << ":" << s[i].address << " ";
