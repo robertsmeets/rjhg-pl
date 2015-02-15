@@ -78,6 +78,8 @@ bool ExpressionParser::isFloat(const string& token) {
 // Test if token is a string
 //
 bool ExpressionParser::isString(const string& token) {
+
+	cout << "--- isString(" << token << ")" << endl;
 	unsigned int sz = token.length();
 	if (sz < 2) {
 		return false;
@@ -242,7 +244,6 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 				were_values.pop();
 				if (w) {
 					a++;
-//					f.argument_count = a;
 					ExpressionThing et(4, f);
 					out.push_back(et);
 				}
@@ -342,51 +343,6 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 }
 
 //
-// do a calculation based on the tokens
-//
-double ExpressionParser::RPNtoDouble(vector<string> tokens) {
-	stack<string> st;
-
-	// For each token
-	for (int i = 0; i < (int) tokens.size(); ++i) {
-		const string token = tokens[i];
-
-		// If the token is a value push it onto the stack
-		if (!isOperator(token)) {
-			st.push(token);
-		} else {
-			double result = 0.0;
-
-			// Token is an operator: pop top two entries
-			const string val2 = st.top();
-			st.pop();
-			const double d2 = strtod(val2.c_str(), NULL);
-
-			if (!st.empty()) {
-				const string val1 = st.top();
-				st.pop();
-				const double d1 = strtod(val1.c_str(), NULL);
-
-				//Get the result
-				result = token == "+" ? d1 + d2 : token == "-" ? d1 - d2 :
-							token == "*" ? d1 * d2 : d1 / d2;
-			} else {
-				if (token == "-")
-					result = d2 * -1;
-				else
-					result = d2;
-			}
-
-			// Push result onto stack
-			ostringstream s;
-			s << result;
-			st.push(s.str());
-		}
-	}
-	return strtod(st.top().c_str(), NULL);
-}
-
-//
 // get the tokens from the string
 //
 // There are 4 types of tokens:
@@ -398,65 +354,76 @@ double ExpressionParser::RPNtoDouble(vector<string> tokens) {
 vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
 	vector<string> tokens;
 	string str = "";
+	bool quote = false;
 	for (int i = 0; i < (int) expression.length(); ++i) {
 		//
 		// look at one character and see if it is an operator or paren
 		//
 		const string token(1, expression[i]);
+		if (token == "\"") {
+			quote = !quote;
+		}
+		cout << "TOKEN IS NOW [" << token << "]" << endl;
 		if (isOperator(token) || isComma(token) || (token == ")")) {
 			if (!str.empty()) {
-				//cout << "PUSHING <" << str << ">" << endl;
+				cout << "PUSHING <" << str << ">" << endl;
 				tokens.push_back(str);
 			}
 			str = "";
-			//cout << "PUSHING <" << token << ">" << endl;
+			cout << "PUSHING <" << token << ">" << endl;
 			tokens.push_back(token);
 		} else {
 			//
+			// Append the numbers/letters
 			// function call "myfunction(1,2,3)"
 			// should be tokenized as "myfunction(", "(", "," , "1" , "," , "2" , "," , "3" , ")"
-			//
-			// Append the numbers/letters
 			//
 			// There are the following possibilities:
 			//  - integer "1234" or "-1234" or variable name "myvar"
 			//  - function call start (may include one or more spaces, example "myfunction ("
+			//  - a string: "abcd"
 			//
 			if (!token.empty()) {
 				if (token == " ") {
-					//
-					// now we need to look ahead because this is either a new token or part of a function call with a space
-					//
-					for (unsigned int j = i + 1; j < expression.length(); j++) {
-						const string token2(1, expression[j]);
-						if (token2 == "(") {
-							//
-							// found a function call
-							//
-							str.append("(");
-							//cout << "PUSHING <" << str << ">" << endl;
-							tokens.push_back(str);
-							str = "";
-							tokens.push_back("(");
-							break;
-						} else if (token2 != " ") {
-							//
-							// found something else, push and leave loop
-							//
-							if (str != "") {
-								// cout << "PUSHING <" << str << ">" << endl;
+					if (quote) {
+						str.append(" ");
+					} else {
+						//
+						// now we need to look ahead because this is either a new token or part of a function call with a space
+						//
+						for (unsigned int j = i + 1; j < expression.length();
+								j++) {
+							const string token2(1, expression[j]);
+							if (token2 == "(") {
+								//
+								// found a function call
+								//
+								str.append("(");
+								cout << "PUSHING <" << str << ">" << endl;
 								tokens.push_back(str);
 								str = "";
+								tokens.push_back("(");
+								break;
+							} else if (token2 != " ") {
+								//
+								// found something else, push and leave loop
+								// but ignore strings
+								//
+								if (str != "") {
+									cout << "PUSHING <" << str << ">" << endl;
+									tokens.push_back(str);
+									str = "";
+								}
+								break;
 							}
-							break;
+							//
+							// found a space, keep looping
+							//
 						}
-						//
-						// found a space, keep looping
-						//
 					}
 				} else if (token == "(") {
 					str.append("(");
-					// cout << "PUSHING <" << str << ">" << endl;
+					cout << "PUSHING <" << str << ">" << endl;
 					tokens.push_back(str);
 					str = "";
 				} else {
@@ -483,7 +450,6 @@ ExpressionNode* ExpressionParser::parse(string s) {
 	//
 	// Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
 	//
-	//Print<char, s_iter>("Input expression:", s.begin(), s.end(), "");
 	if (s.size() == 0) {
 		throw PException("empty expression");
 	}
@@ -491,12 +457,6 @@ ExpressionNode* ExpressionParser::parse(string s) {
 	// Tokenize input expression
 	//
 	vector<string> tokens = getExpressionTokens(s);
-	//cout << "-----------here come some tokens-----------" << endl;
-	//for (vector<string>::iterator it = tokens.begin(); it != tokens.end();
-	//		++it) {
-	//	cout << "---> TOKEN " << *it << endl;
-	//}
-	//cout << "-------------------------------------------" << endl;
 	//
 	// Evaluate feasible expressions
 	//
