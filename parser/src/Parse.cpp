@@ -29,7 +29,7 @@ void Parse::start(string filename) {
 	begin = myfile.tellg();
 	myfile.seekg(0, ios::end);
 	end = myfile.tellg();
-	int size = end - begin;
+	unsigned int size = (unsigned int)(end - begin);
 	//
 	// reading it into a buffer
 	//

@@ -71,15 +71,12 @@ bool ExpressionParser::isFloat(const string& token) {
 		}
 	}
 	return true;
-
 }
 
 //
 // Test if token is a string
 //
 bool ExpressionParser::isString(const string& token) {
-
-	cout << "--- isString(" << token << ")" << endl;
 	unsigned int sz = token.length();
 	if (sz < 2) {
 		return false;
@@ -99,6 +96,12 @@ bool ExpressionParser::isBool(const string& token) {
 //
 bool ExpressionParser::isComma(const string& token) {
 	return token == ",";
+}
+
+bool ExpressionParser::isStartToken(char a_char) {
+	return a_char == '+' || a_char == '-' || a_char == '*' || a_char == '/'
+			|| a_char == '<' || a_char == '=' || a_char == '>' || a_char == '!';
+
 }
 
 //
@@ -347,119 +350,179 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 //
 // There are 4 types of tokens:
 //   - operator
-//   - literal (integer or variable name)
+//   - literal (integer or variable name or string)
 //   - parenthesis
 //   - function call
 //
-vector<string> ExpressionParser::getExpressionTokens(const string& expression) {
-	vector<string> tokens;
+
+vector<string> ExpressionParser::getExpressionTokens(string expression) {
+	//
+	// numerical literal 1234, or 5.12e-12 -> recognizable by numeral or by "-" + numeral
+	// string literal "a_string"            -> recognizable by quote
+	// boolean literal true or false        -> recognizable by full word
+	// function call my_function(a,b,c)     -> recognizable by word + paren
+	// operator + / - * < > <= >= != == %   -> recognizable by full word
+	// variable name abc
+	//
+	tokens.clear();
 	string str = "";
-	bool quote = false;
-	for (int i = 0; i < (int) expression.length(); ++i) {
-		//
-		// look at one character and see if it is an operator or paren
-		//
-		const string token(1, expression[i]);
-		if (token == "\"") {
-			quote = !quote;
+	for (unsigned int i = 0; i < expression.length(); ++i) {
+		char a_char = expression[i];
+		cout << "--- a_char " << a_char << " length = " << expression.length() << endl;
+		if (a_char == ' ' || a_char == '\t')
+		{
+			continue;
 		}
-		cout << "TOKEN IS NOW [" << token << "]" << endl;
-		if (isOperator(token) || isComma(token) || (token == ")")) {
-			if (!str.empty()) {
-				cout << "PUSHING <" << str << ">" << endl;
-				tokens.push_back(str);
-			}
+		//
+		// handle the strings
+		//
+		if (a_char == ')' || a_char == '(')
+		{
+			str += a_char;
+			tokens.push_back(str);
 			str = "";
-			cout << "PUSHING <" << token << ">" << endl;
-			tokens.push_back(token);
+		}
+		else if (a_char == '"') {
+			i = getString(expression, i);
+		} else if (a_char >= '0' && a_char <= '9') {
+			i = getNumeric(expression, i);
+		} else if (isStartToken(a_char)) {
+			i = getOperator(expression, i);
 		} else {
-			//
-			// Append the numbers/letters
-			// function call "myfunction(1,2,3)"
-			// should be tokenized as "myfunction(", "(", "," , "1" , "," , "2" , "," , "3" , ")"
-			//
-			// There are the following possibilities:
-			//  - integer "1234" or "-1234" or variable name "myvar"
-			//  - function call start (may include one or more spaces, example "myfunction ("
-			//  - a string: "abcd"
-			//
-			if (!token.empty()) {
-				if (token == " ") {
-					if (quote) {
-						str.append(" ");
-					} else {
-						//
-						// now we need to look ahead because this is either a new token or part of a function call with a space
-						//
-						for (unsigned int j = i + 1; j < expression.length();
-								j++) {
-							const string token2(1, expression[j]);
-							if (token2 == "(") {
-								//
-								// found a function call
-								//
-								str.append("(");
-								cout << "PUSHING <" << str << ">" << endl;
-								tokens.push_back(str);
-								str = "";
-								tokens.push_back("(");
-								break;
-							} else if (token2 != " ") {
-								//
-								// found something else, push and leave loop
-								// but ignore strings
-								//
-								if (str != "") {
-									cout << "PUSHING <" << str << ">" << endl;
-									tokens.push_back(str);
-									str = "";
-								}
-								break;
-							}
-							//
-							// found a space, keep looping
-							//
-						}
-					}
-				} else if (token == "(") {
-					str.append("(");
-					cout << "PUSHING <" << str << ">" << endl;
-					tokens.push_back(str);
-					str = "";
+			string f = getFunction(expression, i);
+			if (f != "") {
+				i += f.length();
+			} else {
+				f = getBoolean(expression, i);
+				if (f != "") {
+					i += f.length();
 				} else {
-					str.append(token);
+					i = getVariableName(expression, i);
+
 				}
 			}
 		}
+	}
 
+	cout << "----------TOKENS from "<<expression<<"-----------" << endl;
+	for (unsigned int i = 0;i<tokens.size();i++)
+	{
+		cout << tokens[i] << endl;
 	}
-	//
-	// check if empty
-	//
-	if (!str.empty()) {
-		// cout << "PUSHING <" << str << ">" << endl;
-		tokens.push_back(str);
-	}
+	cout << "----------END-----------" << endl;
+
 	return tokens;
 }
+
+unsigned int ExpressionParser::getVariableName(string expression,
+		unsigned int i) {
+	string str = "";
+	for (unsigned int j = i; j < expression.length(); j++) {
+		char a_char = expression[j];
+		if ((a_char >= 'a' && a_char <= 'z') ||( a_char >= '0' && a_char <= '9') ){
+			str += a_char;
+		} else {
+			tokens.push_back(str);
+			return j-1;
+		}
+	}
+	tokens.push_back(str);
+	return expression.length();
+}
+
+unsigned int ExpressionParser::getOperator(string expression, unsigned int i) {
+	string str = "";
+	for (unsigned int j = i; j < expression.length(); j++) {
+		char a_char = expression[j];
+		if (isStartToken(a_char)) {
+			str += a_char;
+		} else {
+			tokens.push_back(str);
+			return j;
+		}
+	}
+	return expression.length();
+}
+
+string ExpressionParser::getBoolean(string expression, unsigned int i) {
+
+	if (expression.substr(i, i + 3) == "true") {
+		return "true";
+	} else if (expression.substr(i, i + 4) == "false") {
+		return "false";
+	}
+	return "";
+}
+
+string ExpressionParser::getFunction(string expression, unsigned int i) {
+	string str = "";
+	bool whitespace = false;
+	for (unsigned int j = i; j < expression.length(); j++) {
+		char a_char = expression[j];
+		if ((a_char >= 'a') && (a_char <= 'z')) {
+			if (whitespace) {
+				return "";
+			}
+			str += a_char;
+		} else if (a_char == '(') {
+			return str;
+		} else if ((a_char == ' ') || (a_char == '\t')) {
+			whitespace = true;
+		}
+	}
+	return "";
+}
+
+unsigned int ExpressionParser::getNumeric(string expression, unsigned int i) {
+	string str = "";
+	for (unsigned int j = i; j < expression.length(); j++) {
+		char a_char = expression[j];
+		if ((a_char >= '0' && a_char <= '9') || a_char == '.'
+				|| a_char == 'e') {
+			str += a_char;
+		} else {
+			tokens.push_back(str);
+			return j;
+		}
+	}
+	if (str != "")
+		{
+		tokens.push_back(str);
+		}
+	return expression.length();
+}
+
+unsigned int ExpressionParser::getString(string expression, unsigned int i) {
+	string str = "\"";
+	for (unsigned int j = i+1; j < expression.length(); j++) {
+		char a_char = expression[j];
+		str += a_char;
+		if (a_char == '"') {
+			tokens.push_back(str);
+			return j + 1;
+		}
+	}
+	throw new PException("found unmatched double quote in " + expression);
+}
+
 
 //
 // parse string
 //
 ExpressionNode* ExpressionParser::parse(string s) {
-	//
-	// Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
-	//
+//
+// Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
+//
 	if (s.size() == 0) {
 		throw PException("empty expression");
 	}
-	//
-	// Tokenize input expression
-	//
+//
+// Tokenize input expression
+//
 	vector<string> tokens = getExpressionTokens(s);
-	//
-	// Evaluate feasible expressions
-	//
+//
+// Evaluate feasible expressions
+//
 	vector<ExpressionThing> rpn;
 	if (!infixToRPN(tokens, tokens.size(), rpn)) {
 		throw PException("Mis-match in parentheses: " + s);
