@@ -26,8 +26,9 @@ CInterpreter::~CInterpreter() {
 
 void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
-	for (;;) {
-		execute_next();
+	unsigned i = 0;
+	for (;!i;) {
+		 i=execute_next();
 	}
 }
 
@@ -495,6 +496,9 @@ int CInterpreter::execute_next() {
 		t--;
 		break;
 	case 9: // print
+#ifdef DEBUG
+	cout << "PRINT " << a;
+#endif
 		t--;
 		fr1 = s[t];
 		if (fr1.atype == 7) {
@@ -506,7 +510,10 @@ int CInterpreter::execute_next() {
 			//
 			char* ptr = hm.getStart() + fr1.address;
 			memcpy(&d1, ptr, 8);
-			cout << "double with value " << d1 << endl;
+			cout <<  d1 << endl;
+		} else if (fr1.atype ==2 )
+		{
+			cout << fr1.address << endl;
 		}
 		break;
 	default:
