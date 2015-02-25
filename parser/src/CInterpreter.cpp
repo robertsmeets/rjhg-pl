@@ -25,8 +25,9 @@ CInterpreter::~CInterpreter() {
 }
 
 void CInterpreter::start() {
-	for (unsigned int i = 0; i < 100000;) {
-		i = execute_next();
+	cout << "Starting interpreter..." << endl;
+	for (; ;) {
+		 execute_next();
 	}
 }
 
@@ -186,7 +187,9 @@ int CInterpreter::execute_next() {
 	// l is the 2nd param
 	// a is the 3rd param
 	//
+#ifdef DEBUG
 	cout << "pc=" << pc << ": ";
+#endif
 	unsigned short int f = *((char*) buffer + pc) & 255;
 	pc++;
 	//
@@ -210,7 +213,9 @@ int CInterpreter::execute_next() {
 	stack_element fr2;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
+#ifdef DEBUG
 		cout << "LIT " << l << "," << a;
+#endif
 		switch (l) {
 		case 2: // Int
 			s[t].atype = 2;
@@ -221,11 +226,13 @@ int CInterpreter::execute_next() {
 			ptr = hm.allocate(a);
 			memcpy(ptr, buffer + pc, a);
 			memcpy(&d1, buffer + pc, a);
+#ifdef DEBUG
 			cout << endl;
 			cout << "The buffer is located at " << (void*) buffer << endl;
 			cout << "pc is now " << pc << endl;
 			cout << "FOUND A FLOAT with length " << a << " and value " << d1
 					<< endl;
+#endif
 			//
 			// put the pointer and the type on the stack
 			//
@@ -239,20 +246,26 @@ int CInterpreter::execute_next() {
 			// get some memory
 			//
 			ptr = hm.allocate(a + 2);
+#ifdef DEBUG
 			cout << "--- allocated " << (void*) ptr << endl;
+#endif
 			//
 			// copy the string to the heap
 			//
 			*ptr = a & 255;
 			*(ptr + 1) = a >> 8;
+#ifdef DEBUG
 			cout << "--- copying a string from " << (void*) (buffer + pc)
 					<< " to " << (void*) (ptr + 2) << " with length " << a
 					<< endl;
 			cout << "--- original" << endl;
 			print_a_string(buffer + pc, a);
+#endif
 			memcpy(ptr + 2, buffer + pc, a);
+#ifdef DEBUG
 			cout << "--- copy" << endl;
 			print_a_string(ptr);
+#endif
 			//
 			// put the pointer and the type on the stack
 			//
@@ -267,12 +280,13 @@ int CInterpreter::execute_next() {
 			t++;
 			break;
 		default:
-			cout << "unexpected LIT value: " << l;
-			return -1;
+			throw PException("unexpected LIT value");
 		}
 		break;
 	case 2: // opr
+#ifdef DEBUG
 		cout << "OPR";
+#endif
 		//
 		// set up a call table matrix
 		// entries; first the operator 0..13
@@ -361,10 +375,14 @@ int CInterpreter::execute_next() {
 
 		switch (a) {
 		case 0:
+#ifdef DEBUG
 			cout << " RET";
+#endif
 			// return
 			if (tr <= 0) {
+#ifdef DEBUG
 				cout << endl << "exiting program" << endl;
+#endif
 				// exit
 				return -1;
 			}
@@ -386,7 +404,9 @@ int CInterpreter::execute_next() {
 			}
 			break;
 		case 1:
+#ifdef DEBUG
 			cout << " UNARY MINUS";
+#endif
 			fr1 = s[t - 1];
 			if (fr1.atype != 2) {
 				throw PException("type must be integer");
@@ -397,7 +417,9 @@ int CInterpreter::execute_next() {
 		case 2:
 		case 3:
 		case 4:
+#ifdef DEBUG
 			cout << " PLUS, MINUS oR MUL";
+#endif
 			t--;
 			fr1 = s[t - 1];
 			fr2 = s[t];
@@ -462,7 +484,9 @@ int CInterpreter::execute_next() {
 			}
 			break;
 		case 5:
+#ifdef DEBUG
 			cout << " DIV";
+#endif
 			t--;
 			fr1 = s[t - 1];
 			fr2 = s[t];
@@ -474,7 +498,9 @@ int CInterpreter::execute_next() {
 			s[t - 1] = fr1;
 			break;
 		case 6:
+#ifdef DEBUG
 			cout << " MOD";
+#endif
 			t--;
 			fr1 = s[t - 1];
 			fr2 = s[t];
@@ -544,13 +570,15 @@ int CInterpreter::execute_next() {
 			break;
 
 		default:
-			cout << "unexpected A value: " << a;
+throw  PException("unexpected A value");
 			return -1;
 			break;
 		}
 		break;
 	case 3:
+#ifdef DEBUG
 		cout << "LOD " << a << " ";
+#endif
 		//
 		// lod: copy a local variable or parameter on top of the stack
 		//
@@ -558,7 +586,9 @@ int CInterpreter::execute_next() {
 		t++;
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
+#ifdef DEBUG
 		cout << "STO " << a << " ";
+#endif
 		t--;
 		s[b[tb - 1] + a] = s[t];
 		break;
@@ -567,13 +597,17 @@ int CInterpreter::execute_next() {
 		// push the return address on the return stack
 		// call the procedure
 		//
+#ifdef DEBUG
 		cout << "CAL " << a;
+#endif
 		r[tr] = pc;
 		tr++;
 		pc = a;
 		break;
 	case 6:			// int:
+#ifdef DEBUG
 		cout << "INT " << l << "," << a;
+#endif
 		//
 		// this creates a new block with depth a for local variables and parameters
 		//
@@ -588,16 +622,20 @@ int CInterpreter::execute_next() {
 		t += a;
 		break;
 	case 7:			// jmp
+#ifdef DEBUG
 		cout << "JMP " << a;
+#endif
 		pc = a;
 		break;
-	case 8:			// jpc
+	case 8:			// jpc - jump when false
+#ifdef DEBUG
 		cout << "JPC " << a;
+#endif
 		fr1 = s[t - 1];
 		if (fr1.atype != 6) {
 			throw PException("JPC value is not boolean");
 		}
-		if (fr1.address != 0) {
+		if (fr1.address == 0) {
 			pc = a;
 		}
 		t--;
@@ -605,8 +643,6 @@ int CInterpreter::execute_next() {
 	case 9: // print
 		t--;
 		fr1 = s[t];
-		cout << "PRINT type =" << fr1.atype << " address = " << fr1.address
-				<< endl;
 		if (fr1.atype == 7) {
 			char* ptr = hm.getStart() + fr1.address;
 			print_a_string(ptr);
@@ -627,6 +663,7 @@ int CInterpreter::execute_next() {
 	//
 	// print the stack
 	//
+#ifdef DEBUG
 	cout << "      stack: ";
 	for (unsigned int i = 0; i < t; i++) {
 		cout << s[i].atype << ":" << s[i].address << " ";
@@ -643,18 +680,18 @@ int CInterpreter::execute_next() {
 	}
 
 	cout << endl;
+#endif
 	return 0;
 }
 
 void CInterpreter::print_a_string(char* ptr) {
 	unsigned int len = (unsigned int) (*ptr + (*(ptr + 1) >> 8));
 	print_a_string(ptr + 2, len);
+	cout << endl;
 }
 
 void CInterpreter::print_a_string(char* ptr, unsigned int len) {
-	cout << "[";
 	for (char* i = ptr; i < ptr + len; i++) {
 		cout << *i;
 	}
-	cout << "]" << endl;
 }

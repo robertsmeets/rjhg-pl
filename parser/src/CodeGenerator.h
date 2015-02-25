@@ -48,7 +48,6 @@ public:
 	void addCallAddress(unsigned int,string);
 	unsigned int getHere();
 	void emit_to_file();
-	void printcodebuffer();
 	void fix(unsigned int,unsigned int);
 	char* getCodeBuffer();
 };

@@ -166,9 +166,6 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			my_double = atof(avalue.c_str());
 			sz = sizeof(my_double);
 			emit(1, 5, sz);
-			cout << "--- EMITTING FLOAT " << my_double << " " << sz
-					<< " into address <" << codebuffer + here << ">" << endl;
-			//cout << "--- The codebuffer itself is at <"<< codebuffer << ">" << endl;
 			memcpy(codebuffer + here, &my_double, sz);
 			here += sz;
 			break;
@@ -185,11 +182,13 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			my_string = avalue.substr(1, strlen);
 			emit(1, 7, strlen);
 			memcpy(codebuffer + here, my_string.c_str(), strlen);
+#ifdef DEBUG
 			cout << "--- Here is a string [";
-			for (unsigned int i = 0; i < strlen; i++) {
+						for (unsigned int i = 0; i < strlen; i++) {
 				cout << *(codebuffer + here + i);
 			}
 			cout << "]" << endl;
+#endif
 			here += strlen;
 			break;
 		default:
@@ -248,14 +247,11 @@ void CodeGenerator::fix_proc_addresses() {
 		ProcedureNode* pn = procaddresses[proc_name];
 		unsigned int proc_address = pn->getProcAddress();
 		if (proc_address == 0) {
-			cout << "Proc " << proc_name << " not found" << endl;
 			throw PException("Proc " + proc_name + " not found");
 		}
 		//
 		// found the address of the proc
 		//
-		cout << "fixing proc " << proc_name << " call_address " << call_address
-				<< " to " << proc_address << endl;
 		fix(call_address, proc_address);
 		//
 		// also fix the INT depth to create room for local variables
@@ -269,9 +265,6 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
 		//
-		cout << "--- Emitting an INT with local variables size " <<
-				 pn->getLocalVariables()->size() << " and parameters size " <<
-				 pn->getParameters()->size() << endl;
 
 	}
 }
@@ -285,13 +278,6 @@ void CodeGenerator::fix(unsigned int call_address, unsigned int dest_address) {
 // add a call address (starting point of a proc)
 //
 void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
-	cout << "adding call: " << address << " calls " << proc_name << endl;
 	callpoints[address] = proc_name;
 }
 
-void CodeGenerator::printcodebuffer() {
-	for (unsigned int i = 0; i < here; i++) {
-		cout << "i=" << i << ": " << (unsigned int) (*((char*) codebuffer + i))
-				<< endl;
-	}
-}

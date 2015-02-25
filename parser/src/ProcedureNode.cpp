@@ -14,6 +14,8 @@ ProcedureNode::ProcedureNode() {
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
+	proc_address = 0;
+	statements = NULL;
 }
 
 ProcedureNode::~ProcedureNode() {

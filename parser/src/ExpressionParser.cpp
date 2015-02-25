@@ -235,10 +235,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			//
 			if (!stack.empty() && isFunction(stack.top())) {
 				string f = stack.top();
-				if (stack.empty()) {
-					cout << "Stack empty when receiving function token, ignored"
-							<< endl;
-				} else {
+				if (!stack.empty()) {
 					stack.pop();
 				}
 				unsigned int a = arg_count.top();
@@ -368,7 +365,6 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 	string str = "";
 	for (unsigned int i = 0; i < expression.length(); ++i) {
 		char a_char = expression[i];
-		cout << "--- a_char " << a_char << " length = " << expression.length() << endl;
 		if (a_char == ' ' || a_char == '\t')
 		{
 			continue;
@@ -403,14 +399,14 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 			}
 		}
 	}
-
+#ifdef DEBUG
 	cout << "----------TOKENS from "<<expression<<"-----------" << endl;
 	for (unsigned int i = 0;i<tokens.size();i++)
 	{
 		cout << tokens[i] << endl;
 	}
 	cout << "----------END-----------" << endl;
-
+#endif
 	return tokens;
 }
 
@@ -438,7 +434,7 @@ unsigned int ExpressionParser::getOperator(string expression, unsigned int i) {
 			str += a_char;
 		} else {
 			tokens.push_back(str);
-			return j;
+			return j-1;
 		}
 	}
 	return expression.length();
@@ -482,7 +478,7 @@ unsigned int ExpressionParser::getNumeric(string expression, unsigned int i) {
 			str += a_char;
 		} else {
 			tokens.push_back(str);
-			return j;
+			return j -1;
 		}
 	}
 	if (str != "")

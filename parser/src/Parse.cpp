@@ -29,7 +29,7 @@ void Parse::start(string filename) {
 	begin = myfile.tellg();
 	myfile.seekg(0, ios::end);
 	end = myfile.tellg();
-	unsigned int size = (unsigned int)(end - begin);
+	unsigned int size = (unsigned int) (end - begin);
 	//
 	// reading it into a buffer
 	//
@@ -39,6 +39,7 @@ void Parse::start(string filename) {
 	myfile.seekg(0, ios::beg);
 	if (!myfile.read(buffer.data(), size)) {
 		cout << "File " << filename << " could not be opened" << endl;
+		return;
 	}
 	//
 	// buffer now contains it
@@ -80,7 +81,6 @@ void Parse::get_something(string chars) {
 }
 
 void Parse::code_definition() {
-// cout << "in code_definition peek_string = <" << peek_string << ">" << endl;
 	if (peek_string == "class") {
 		class_definition();
 	} else if (peek_string == "method") {
@@ -159,7 +159,6 @@ void Parse::lookahead() {
 }
 
 void Parse::class_definition() {
-	cout << "class_definition" << endl;
 	get_something(" \n\t\r");
 //
 // get the class name
@@ -181,7 +180,6 @@ void Parse::class_definition() {
 }
 void Parse::method_definition() {
 
-	cout << "method_definition" << endl;
 	get_something(" \n\t\r");
 	string method_name = peek_string;
 	get_something(" \n\t\r");
@@ -200,8 +198,7 @@ void Parse::procedure_definition() {
 		get_something("),");
 		pd->addParameter(peek_string);
 		//if (peek_string == ")") {
-		if (found_char == ')')
-		{
+		if (found_char == ')') {
 			// done
 			break;
 		}
@@ -221,34 +218,48 @@ vector<Statement*>* Parse::block(ProcedureNode* pd) {
 				|| (peek_string == "endwhile") || (peek_string == "else")) {
 			break;
 		}
+#ifdef DEBUG
 		cout << "peek_string <" << peek_string << "> found_char <" << found_char
-				<< "> ";
+		<< "> ";
+#endif
 		//
 		// return, assignment or proc call or if statement
 		//
 		if (peek_string == "return") {
+#ifdef DEBUG
 			cout << "DECISION: return" << endl;
+#endif
 			statements->push_back(return_statement(pd));
 		} else if (peek_string == "if") {
+#ifdef DEBUG
 			cout << "DECISION: if" << endl;
+#endif
 			statements->push_back(if_statement(pd));
 		} else if (peek_string == "while") {
+#ifdef DEBUG
 			cout << "DECISION: while" << endl;
+#endif
 			statements->push_back(while_statement(pd));
 		} else if (peek_string == "print") {
+#ifdef DEBUG
 			cout << "DECISION: print" << endl;
+#endif
 			statements->push_back(print_statement(pd));
 		} else if (found_char == '=') {
 			//
 			// must be an assignment
 			//
+#ifdef DEBUG
 			cout << "DECISION: assignment" << endl;
+#endif
 			statements->push_back(assignment(pd));
 		} else {
 			//
 			// assume procedure call
 			//
+#ifdef DEBUG
 			cout << "DECISION: proc call" << endl;
+#endif
 			statements->push_back(procedure_call(pd));
 		}
 	}
@@ -273,14 +284,12 @@ Statement* Parse::assignment(ProcedureNode* pd) {
 
 void Parse::instance_variable_definition() {
 
-	cout << "instance_variable_definition" << endl;
 	for (;;) {
 		get_something(" \n\t\r");
 		if (peek_string == "end") {
 			get_something(" \n\t\r");
 			return;
 		}
-		cout << "INSTANCE VARIABLE " << peek_string << endl;
 	}
 
 }
@@ -290,7 +299,7 @@ void Parse::local_variable_definition() {
 
 void Parse::immediate_code() {
 
-	throw PException("unexpected string [" + peek_string + "]") ;
+	throw PException("unexpected string [" + peek_string + "]");
 
 }
 
