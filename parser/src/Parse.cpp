@@ -309,7 +309,6 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 	pcn->setProcedureName(proc_name);
 	for (;;) {
 		get_something("),\r\n");
-		// cout << "parameter " << peek_string << endl;
 		if (found_char == ')') {
 			// done
 			break;

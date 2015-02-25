@@ -461,6 +461,8 @@ string ExpressionParser::getFunction(string expression, unsigned int i) {
 			}
 			str += a_char;
 		} else if (a_char == '(') {
+			str += a_char;
+			tokens.push_back(str);
 			return str;
 		} else if ((a_char == ' ') || (a_char == '\t')) {
 			whitespace = true;

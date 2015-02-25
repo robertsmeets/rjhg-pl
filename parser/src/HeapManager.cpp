@@ -7,11 +7,13 @@
 
 #include "HeapManager.h"
 
+using namespace std;
+
 HeapManager::HeapManager() {
 	//
 	// initial allocation
 	//
-	size = 2560;
+	size = 8092;
 	space = (char*) malloc(size);
 	here = space;
 }
@@ -20,13 +22,24 @@ HeapManager::~HeapManager() {
 	free(space);
 }
 
+//
+// allocate nbytes of memory and return a pointer to it
+//
+// "here" is the pointer to the current free space
+// "space" is the start of memory, it may be moved around
+//
+//
 char* HeapManager::allocate(unsigned int nbytes) {
-	unsigned int available = here - space;
+	unsigned int used = here - space;
+	unsigned int available = size - used;
 	char* ptr;
 	if (available < nbytes) {
-		size *= 2;
+		size = max(2 * size, used+ 2 * nbytes);
+#ifdef DEBUG
+		cout << "--- Realloc " << size << endl;
+#endif
 		space = (char*)realloc(space, size);
-		here = space + available;
+		here = space + used;
 	}
 	ptr = here;
 	here += nbytes;

@@ -9,6 +9,7 @@
 #define HEAPMANAGER_H_
 
 #include <cstdlib>
+#include <iostream>
 
 class HeapManager {
    char* space;

@@ -27,8 +27,8 @@ CInterpreter::~CInterpreter() {
 void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
 	unsigned i = 0;
-	for (;!i;) {
-		 i=execute_next();
+	for (; !i;) {
+		i = execute_next();
 	}
 }
 
@@ -455,9 +455,16 @@ int CInterpreter::execute_next() {
 #ifdef DEBUG
 		cout << "CAL " << a;
 #endif
-		r[tr] = pc;
-		tr++;
-		pc = a;
+
+		if (a == 0) {
+			call_external();
+		}
+		else {
+
+			r[tr] = pc;
+			tr++;
+			pc = a;
+		}
 		break;
 	case 6:			// int:
 #ifdef DEBUG
@@ -510,9 +517,8 @@ int CInterpreter::execute_next() {
 			//
 			char* ptr = hm.getStart() + fr1.address;
 			memcpy(&d1, ptr, 8);
-			cout <<  d1 << endl;
-		} else if (fr1.atype ==2 )
-		{
+			cout << d1 << endl;
+		} else if (fr1.atype == 2) {
 			cout << fr1.address << endl;
 		}
 		break;
@@ -555,4 +561,65 @@ void CInterpreter::print_a_string(char* ptr, unsigned int len) {
 	for (char* i = ptr; i < ptr + len; i++) {
 		cout << *i;
 	}
+}
+
+void CInterpreter::call_external()
+{
+	cout << "--- call_external" << endl;
+
+//	C.1 Loading code
+	//string libpath = "c:\\mingw\\lib\\libmsvcrt.a";
+	//string libpath = "libmsvcrt.a";
+	//string libpath ="MSVCP100.dll"; < this exists
+	string libpath = "msvcrt.dll";
+	const char* lp = libpath.c_str();
+		DLLib* ll = dlLoadLibrary ( lp);
+	if (ll == NULL)
+	{
+		cout << "could not find " << libpath << endl;
+		return;
+	}
+	// libmsvcrt.a
+
+	// void dlFreeLibrary ( void * libhandle );
+	// dlLoadLibrary loads a dynamic library at libpath and returns a handle to it for use in dlFreeLibrary
+	// and dlFindSymbol calls.
+	// dlFreeLibrary frees the loaded library with handle pLib.
+
+	// C.2 Retrieving functions
+	// returns a pointer to a symbol with name pSymbolName in the library with handle pLib, or returns
+	// a null pointer if the symbol cannot be found.
+	DCpointer sym = dlFindSymbol ( ll , "sqrt");
+	if (sym == NULL)
+		{
+			cout << "could not find sqrt" << endl;
+			return;
+		}
+		/*
+	 Let's say, we want to make a call to the function:
+	double sqrt(double x);
+
+	Using the dyncall library, this function would be called as follows:
+	*/
+	double arg_in = 2;
+	double r;
+	DCCallVM* vm = dcNewCallVM(4096);
+	dcMode(vm, DC_CALL_C_DEFAULT);
+	dcReset(vm);
+	dcArgDouble(vm, arg_in);
+	//r = dcCallDouble(vm, (DCpointer)&sqrt);
+	r = dcCallDouble(vm, sym);
+		cout << "R is now " << r << endl;
+	dcFree(vm);
+/*
+	If you already have a DCCallVM object (e.g. for followup calls), this simply boils down to:
+	dcReset(vm); // Init/flush arguments.
+	dcArgDouble(vm, 5.2); // Push/bind argument(s).
+	r = dcCallDouble(vm, (DCpointer)&sqrt); // Call.
+*/
+
+
+
+
+
 }

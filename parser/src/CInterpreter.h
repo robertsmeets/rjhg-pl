@@ -17,6 +17,10 @@
 #include "PException.h"
 #include "CFunctions.h"
 
+#include <dyncall.h>
+#include <dynload.h>
+
+#include <math.h>
 using namespace std;
 
 class CInterpreter {
@@ -40,6 +44,7 @@ public:
 	int execute_next();
 	void print_a_string(char*);
 	void print_a_string(char* , unsigned int );
+	void call_external();
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

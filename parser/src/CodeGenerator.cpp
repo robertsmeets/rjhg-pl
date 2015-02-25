@@ -66,7 +66,6 @@ void CodeGenerator::start(ProgramNode pn) {
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
-	// printcodebuffer();
 }
 
 /**
@@ -245,10 +244,12 @@ void CodeGenerator::fix_proc_addresses() {
 		// look up the proc name
 		//
 		ProcedureNode* pn = procaddresses[proc_name];
-		unsigned int proc_address = pn->getProcAddress();
-		if (proc_address == 0) {
-			throw PException("Proc " + proc_name + " not found");
+		if (pn == NULL)
+		{
+		cout << "WARNING: Proc " << proc_name << " not found" << endl;
+		continue ;
 		}
+		unsigned int proc_address = pn->getProcAddress();
 		//
 		// found the address of the proc
 		//
