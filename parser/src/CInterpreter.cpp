@@ -25,14 +25,9 @@ CInterpreter::~CInterpreter() {
 }
 
 void CInterpreter::start() {
-<<<<<<< HEAD
 	cout << "Starting interpreter..." << endl;
 	for (;;) {
 		execute_next();
-=======
-	for (unsigned int i = 0; i < 100000;) {
-		i = execute_next();
->>>>>>> Float, String literals now work
 	}
 }
 
@@ -50,10 +45,7 @@ int CInterpreter::execute_next() {
 	//
 #ifdef DEBUG
 	cout << "pc=" << pc << ": ";
-<<<<<<< HEAD
 #endif
-=======
->>>>>>> Float, String literals now work
 	unsigned short int f = *((char*) buffer + pc) & 255;
 	pc++;
 	//
@@ -69,7 +61,6 @@ int CInterpreter::execute_next() {
 	//
 	// opcode definitions
 	//
-<<<<<<< HEAD
 	char* ptr;
 	double d1;
 	double d2;
@@ -85,21 +76,10 @@ int CInterpreter::execute_next() {
 		case 2: // Int
 			s[t].atype = 2;
 			s[t].address = a;
-=======
-	void* ptr;
-	double* d;
-	switch (f) {
-	case 1:   // lit: Literal value, to be pushed on the stack
-		cout << "LIT " << l;
-		switch (l) {
-		case 2: // Int
-			s[t] = a;
->>>>>>> Float, String literals now work
 			t++;
 			break;
 		case 5: // float
 			ptr = hm.allocate(a);
-<<<<<<< HEAD
 			memcpy(ptr, buffer + pc, a);
 			memcpy(&d1, buffer + pc, a);
 #ifdef DEBUG
@@ -157,36 +137,6 @@ int CInterpreter::execute_next() {
 			break;
 		default:
 			throw PException("unexpected LIT value");
-=======
-			memcpy(&ptr, buffer + pc, a);
-			d = new double();
-			memcpy(d, buffer + pc, a);
-			cout << "The buffer is located at " << buffer << endl;
-			cout << "pc is now " << pc << endl;
-			cout << "FOUND A FLOAT with length " << a << " and value " << *d
-					<< endl;
-			pc += a;
-			break;
-		case 7: // string
-			cout << "FOUND A STRING with length " << a << endl;
-			ptr = hm.allocate(a);
-			memcpy(&ptr, buffer + pc, a);
-			cout << "--- Here is a string [";
-			for (unsigned int i = 0; i < a; i++) {
-				cout << *(buffer + pc + i);
-			}
-			cout << "]" << endl;
-
-			pc += a;
-			break;
-		case 6: // boolean
-			s[t] = a;
-			t++;
-			break;
-		default:
-			cout << "unexpected LIT value: " << l;
-			return -1;
->>>>>>> Float, String literals now work
 		}
 		break;
 	case 2: // opr
@@ -508,15 +458,10 @@ int CInterpreter::execute_next() {
 		tr++;
 		pc = a;
 		break;
-<<<<<<< HEAD
 	case 6:			// int:
 #ifdef DEBUG
 	cout << "INT " << l << "," << a;
 #endif
-=======
-	case 6: // int:
-		cout << "INT " << l << "," << a;
->>>>>>> Float, String literals now work
 		//
 		// this creates a new block with depth a for local variables and parameters
 		//

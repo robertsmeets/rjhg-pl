@@ -79,15 +79,12 @@ public:
 			const InputIterator& itend, const string& delimiter);
 	ExpressionNode* parse(string);
 	unsigned int figureType(string token);
-<<<<<<< HEAD
 	unsigned int getString(string,unsigned int);
 	unsigned int getVariableName(string ,unsigned int );
 	unsigned int getOperator(string ,unsigned int );
 	string getBoolean(string ,unsigned int );
 	string getFunction(string ,unsigned int );
 	unsigned int getNumeric(string ,unsigned int );
-=======
->>>>>>> Float, String literals now work
 
 };
 
