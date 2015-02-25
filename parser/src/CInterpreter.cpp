@@ -26,153 +26,9 @@ CInterpreter::~CInterpreter() {
 
 void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
-	for (; ;) {
-		 execute_next();
+	for (;;) {
+		execute_next();
 	}
-}
-
-unsigned int func_plus_ii(unsigned int i, unsigned int j) {
-	return i + j;
-}
-
-double func_plus_id(int i, double j) {
-	return i + j;
-}
-
-double func_plus_di(double i, int j) {
-	return i + j;
-}
-
-double func_plus_dd(double i, double j) {
-	return i + j;
-}
-
-unsigned int func_minus_ii(unsigned int i, unsigned int j) {
-	return i - j;
-}
-
-double func_minus_id(int i, double j) {
-	return i - j;
-}
-
-double func_minus_di(double i, int j) {
-	return i - j;
-}
-
-double func_minus_dd(double i, double j) {
-	return i - j;
-}
-
-unsigned int func_mul_ii(unsigned int i, unsigned int j) {
-	return i * j;
-}
-
-double func_mul_id(int i, double j) {
-	return i * j;
-}
-
-double func_mul_di(double i, int j) {
-	return i * j;
-}
-
-double func_mul_dd(double i, double j) {
-	return i * j;
-}
-
-bool func_eq_ii(unsigned int i, unsigned int j) {
-	return i == j;
-}
-
-bool func_eq_id(int i, double j) {
-	return i == j;
-}
-
-bool func_eq_di(double i, int j) {
-	return i == j;
-}
-
-bool func_eq_dd(double i, double j) {
-	return i == j;
-}
-
-bool func_ne_ii(unsigned int i, unsigned int j) {
-	return i != j;
-}
-
-bool func_ne_id(unsigned int i, double j) {
-	return i != j;
-}
-
-bool func_ne_di(double i, unsigned int j) {
-	return i != j;
-}
-
-bool func_ne_dd(double i, double j) {
-	return i != j;
-}
-
-bool func_lt_ii(unsigned int i, unsigned int j) {
-	return i < j;
-}
-
-bool func_lt_id(unsigned int i, double j) {
-	return i < j;
-}
-
-bool func_lt_di(double i, int j) {
-	return i < j;
-}
-
-bool func_lt_dd(double i, double j) {
-	return i < j;
-}
-
-bool func_ge_ii(unsigned int i, unsigned int j) {
-	return i >= j;
-}
-
-bool func_ge_id(unsigned int i, double j) {
-	return i >= j;
-}
-
-bool func_ge_di(double i, unsigned int j) {
-	return i >= j;
-}
-
-bool func_ge_dd(double i, double j) {
-	return i >= j;
-}
-
-bool func_gt_ii(unsigned int i, unsigned int j) {
-	return i > j;
-}
-
-bool func_gt_id(unsigned int i, double j) {
-	return i > j;
-}
-
-bool func_gt_di(double i, unsigned int j) {
-	return i > j;
-}
-
-bool func_gt_dd(double i, double j) {
-	return i > j;
-}
-
-bool func_le_ii(unsigned int i, unsigned int j) {
-	return i <= j;
-}
-
-bool func_le_id(unsigned int i, double j) {
-	return i <= j;
-}
-
-bool func_le_di(double i, unsigned int j) {
-	return i <= j;
-}
-
-bool func_le_dd(double i, double j) {
-	return i <= j;
 }
 
 /*
@@ -214,7 +70,7 @@ int CInterpreter::execute_next() {
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-		cout << "LIT " << l << "," << a;
+	cout << "LIT " << l << "," << a;
 #endif
 		switch (l) {
 		case 2: // Int
@@ -231,7 +87,7 @@ int CInterpreter::execute_next() {
 			cout << "The buffer is located at " << (void*) buffer << endl;
 			cout << "pc is now " << pc << endl;
 			cout << "FOUND A FLOAT with length " << a << " and value " << d1
-					<< endl;
+			<< endl;
 #endif
 			//
 			// put the pointer and the type on the stack
@@ -256,8 +112,8 @@ int CInterpreter::execute_next() {
 			*(ptr + 1) = a >> 8;
 #ifdef DEBUG
 			cout << "--- copying a string from " << (void*) (buffer + pc)
-					<< " to " << (void*) (ptr + 2) << " with length " << a
-					<< endl;
+			<< " to " << (void*) (ptr + 2) << " with length " << a
+			<< endl;
 			cout << "--- original" << endl;
 			print_a_string(buffer + pc, a);
 #endif
@@ -285,7 +141,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 2: // opr
 #ifdef DEBUG
-		cout << "OPR";
+	cout << "OPR";
 #endif
 		//
 		// set up a call table matrix
@@ -380,9 +236,7 @@ int CInterpreter::execute_next() {
 #endif
 			// return
 			if (tr <= 0) {
-#ifdef DEBUG
-				cout << endl << "exiting program" << endl;
-#endif
+				cout << endl << "Exiting program..." << endl;
 				// exit
 				return -1;
 			}
@@ -437,8 +291,8 @@ int CInterpreter::execute_next() {
 				//
 				char * ptr1 = hm.getStart() + fr1.address;
 				char * ptr2 = hm.getStart() + fr2.address;
-				unsigned int len1 = *ptr1 + (*(ptr1 + 1) >> 8);
-				unsigned int len2 = *ptr2 + (*(ptr2 + 1) >> 8);
+				unsigned int len1 = ((*ptr1) & 255) + (*(ptr1 + 1) << 8);
+				unsigned int len2 = ((*ptr2) & 255) + (*(ptr2 + 1) << 8);
 				unsigned int newlen = len1 + len2;
 				ptr = hm.allocate(newlen + 2);
 				*ptr = newlen & 255;
@@ -524,7 +378,7 @@ int CInterpreter::execute_next() {
 				//
 				// operation on two integers
 				//
-				abiiptr = (biiptr)fptrs[a][fr1.atype][fr2.atype];
+				abiiptr = (biiptr) fptrs[a][fr1.atype][fr2.atype];
 				bool eq = (*abiiptr)(fr1.address, fr2.address);
 				fr1.atype = 6;
 				fr1.address = eq;
@@ -570,7 +424,7 @@ int CInterpreter::execute_next() {
 			break;
 
 		default:
-throw  PException("unexpected A value");
+			throw PException("unexpected A value");
 			return -1;
 			break;
 		}
@@ -587,7 +441,7 @@ throw  PException("unexpected A value");
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-		cout << "STO " << a << " ";
+	cout << "STO " << a << " ";
 #endif
 		t--;
 		s[b[tb - 1] + a] = s[t];
@@ -606,7 +460,7 @@ throw  PException("unexpected A value");
 		break;
 	case 6:			// int:
 #ifdef DEBUG
-		cout << "INT " << l << "," << a;
+	cout << "INT " << l << "," << a;
 #endif
 		//
 		// this creates a new block with depth a for local variables and parameters
@@ -623,13 +477,13 @@ throw  PException("unexpected A value");
 		break;
 	case 7:			// jmp
 #ifdef DEBUG
-		cout << "JMP " << a;
+	cout << "JMP " << a;
 #endif
 		pc = a;
 		break;
 	case 8:			// jpc - jump when false
 #ifdef DEBUG
-		cout << "JPC " << a;
+	cout << "JPC " << a;
 #endif
 		fr1 = s[t - 1];
 		if (fr1.atype != 6) {
@@ -646,7 +500,6 @@ throw  PException("unexpected A value");
 		if (fr1.atype == 7) {
 			char* ptr = hm.getStart() + fr1.address;
 			print_a_string(ptr);
-
 		} else if (fr1.atype == 5) {
 			//
 			// float
@@ -685,9 +538,10 @@ throw  PException("unexpected A value");
 }
 
 void CInterpreter::print_a_string(char* ptr) {
-	unsigned int len = (unsigned int) (*ptr + (*(ptr + 1) >> 8));
+	unsigned int len = ((*ptr) & 255) + (*(ptr + 1) << 8);
 	print_a_string(ptr + 2, len);
 	cout << endl;
+
 }
 
 void CInterpreter::print_a_string(char* ptr, unsigned int len) {

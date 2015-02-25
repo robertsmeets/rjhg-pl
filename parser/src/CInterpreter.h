@@ -15,6 +15,7 @@
 
 #include "HeapManager.h"
 #include "PException.h"
+#include "CFunctions.h"
 
 using namespace std;
 
