@@ -14,16 +14,22 @@
 #include <cstring>
 
 #include "HeapManager.h"
+<<<<<<< HEAD
 #include "PException.h"
 #include "CFunctions.h"
+=======
+>>>>>>> Float, String literals now work
 
 using namespace std;
 
 class CInterpreter {
+<<<<<<< HEAD
 	struct stack_element {
 	  unsigned short int atype;
 	  unsigned short int address;
 	} ;
+=======
+>>>>>>> Float, String literals now work
 	char* buffer;
 	unsigned int pc;
 	unsigned int t;
@@ -33,6 +39,10 @@ class CInterpreter {
 	vector<unsigned short int> r;
 	vector<unsigned short int> b;
 	HeapManager hm;
+<<<<<<< HEAD
+=======
+
+>>>>>>> Float, String literals now work
 public:
 	CInterpreter(char*);
 	virtual ~CInterpreter();

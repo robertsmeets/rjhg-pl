@@ -18,8 +18,12 @@ public:
 	HeapManager();
 	virtual ~HeapManager();
 	char* allocate(unsigned int);
+<<<<<<< HEAD
 	char* getStart();
 	unsigned short int getOffset();
+=======
+	void deallocate(char*);
+>>>>>>> Float, String literals now work
 
 };
 

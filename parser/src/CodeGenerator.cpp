@@ -166,6 +166,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			my_double = atof(avalue.c_str());
 			sz = sizeof(my_double);
 			emit(1, 5, sz);
+<<<<<<< HEAD
+=======
+			cout << "--- EMITTING FLOAT " << my_double << " " << sz
+					<< " into address <" << codebuffer + here << ">" << endl;
+			//cout << "--- The codebuffer itself is at <"<< codebuffer << ">" << endl;
+>>>>>>> Float, String literals now work
 			memcpy(codebuffer + here, &my_double, sz);
 			here += sz;
 			break;
@@ -182,6 +188,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			my_string = avalue.substr(1, strlen);
 			emit(1, 7, strlen);
 			memcpy(codebuffer + here, my_string.c_str(), strlen);
+<<<<<<< HEAD
 #ifdef DEBUG
 			cout << "--- Here is a string [";
 						for (unsigned int i = 0; i < strlen; i++) {
@@ -189,6 +196,13 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			}
 			cout << "]" << endl;
 #endif
+=======
+			cout << "--- Here is a string [";
+			for (unsigned int i = 0; i < strlen; i++) {
+				cout << *(codebuffer + here + i);
+			}
+			cout << "]" << endl;
+>>>>>>> Float, String literals now work
 			here += strlen;
 			break;
 		default:
@@ -265,6 +279,12 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
 		//
+<<<<<<< HEAD
+=======
+		*((char*) codebuffer + call_address - 5) =
+				pn->getLocalVariables()->size();
+		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
+>>>>>>> Float, String literals now work
 
 	}
 }
@@ -281,3 +301,12 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
+<<<<<<< HEAD
+=======
+void CodeGenerator::printcodebuffer() {
+	for (unsigned int i = 0; i < here; i++) {
+		cout << "i=" << i << ": " << (unsigned int) (*((char*) codebuffer + i))
+				<< endl;
+	}
+}
+>>>>>>> Float, String literals now work
