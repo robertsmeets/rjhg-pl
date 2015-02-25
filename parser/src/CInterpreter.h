@@ -10,25 +10,35 @@
 
 #include <vector>
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
+
+#include "HeapManager.h"
+#include "PException.h"
 
 using namespace std;
 
 class CInterpreter {
-	vector<unsigned char>* buffer;
+	struct stack_element {
+	  unsigned short int atype;
+	  unsigned short int address;
+	} ;
+	char* buffer;
 	unsigned int pc;
 	unsigned int t;
 	unsigned int tr;
 	unsigned int tb;
-	vector<unsigned short int> s;
+	vector<stack_element> s;
 	vector<unsigned short int> r;
 	vector<unsigned short int> b;
-
+	HeapManager hm;
 public:
-	CInterpreter(vector<unsigned char>*);
+	CInterpreter(char*);
 	virtual ~CInterpreter();
 	void start();
 	int execute_next();
-
+	void print_a_string(char*);
+	void print_a_string(char* , unsigned int );
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

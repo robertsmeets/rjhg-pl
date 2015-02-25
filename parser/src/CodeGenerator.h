@@ -33,10 +33,9 @@ class CodeGenerator {
 	ofstream myfile;
 	map<string, ProcedureNode*> procaddresses;
 	map<unsigned int,string> callpoints;
-	vector<unsigned char>* codebuffer;
+	char* codebuffer;
 	unsigned int here;
-	vector<double>lit_doubles;
-	vector<string>lit_strings;
+	unsigned int codesize;
 public:
 	CodeGenerator();
 	virtual ~CodeGenerator();
@@ -49,11 +48,8 @@ public:
 	void addCallAddress(unsigned int,string);
 	unsigned int getHere();
 	void emit_to_file();
-	void printcodebuffer();
 	void fix(unsigned int,unsigned int);
-	vector<unsigned char>* getCodeBuffer();
-	void emit_lit_doubles();
-	void emit_lit_strings();
+	char* getCodeBuffer();
 };
 
 #endif /* CODEGENERATOR_H_ */

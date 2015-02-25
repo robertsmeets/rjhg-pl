@@ -14,6 +14,8 @@ ProcedureNode::ProcedureNode() {
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
+	proc_address = 0;
+	statements = NULL;
 }
 
 ProcedureNode::~ProcedureNode() {
@@ -75,8 +77,6 @@ unsigned int ProcedureNode::assignLocalVariable(string s) {
 		//
 		// the variable already exists.
 		//
-		cout << "--- local variable " << s << " already exists with number "
-				<< local_variables->at(s) << endl;
 		return local_variables->at(s);
 	} else {
 		//
@@ -84,8 +84,6 @@ unsigned int ProcedureNode::assignLocalVariable(string s) {
 		//
 		unsigned int newval = local_variables->size();
 		local_variables->insert(pair<string, unsigned int>(s, newval));
-		cout << "--- local variable " << s << " added with number " << newval
-				<< endl;
 		return newval;
 	}
 }

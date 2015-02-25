@@ -34,7 +34,7 @@ int interpreter_main(int argc, char* argv[]) {
 	myfile.seekg(0, ios::end);
 	end = myfile.tellg();
 	cout << "size is: " << (end - begin) << " bytes.\n";
-	int size = end - begin;
+	unsigned int size = (unsigned int) (end - begin);
 	//
 	// reading it into a buffer
 	//

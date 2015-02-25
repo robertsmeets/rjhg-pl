@@ -42,7 +42,7 @@ const OpMap::value_type assocs[] = { OpMap::value_type("+",
 const OpMap opmap(assocs, assocs + sizeof(assocs) / sizeof(assocs[0]));
 
 class ExpressionParser {
-
+	vector<string> tokens;
 public:
 	ExpressionParser();
 	virtual ~ExpressionParser();
@@ -60,7 +60,7 @@ public:
 	bool isComma(const string&);
 
 	bool isFunction(const string&);
-
+	bool isStartToken(char );
 	// Test associativity of operator token
 	bool isAssociative(const string&, const int&);
 
@@ -71,13 +71,20 @@ public:
 			vector<ExpressionThing>&);
 
 	double RPNtoDouble(vector<string> tokens);
-	vector<string> getExpressionTokens(const string& expression);
+	vector<string> getExpressionTokens(string expression);
 
 	// Print iterators in a generic way
 	template<typename T, typename InputIterator> void Print(
 			const string& message, const InputIterator& itbegin,
 			const InputIterator& itend, const string& delimiter);
 	ExpressionNode* parse(string);
+	unsigned int figureType(string token);
+	unsigned int getString(string,unsigned int);
+	unsigned int getVariableName(string ,unsigned int );
+	unsigned int getOperator(string ,unsigned int );
+	string getBoolean(string ,unsigned int );
+	string getFunction(string ,unsigned int );
+	unsigned int getNumeric(string ,unsigned int );
 
 };
 

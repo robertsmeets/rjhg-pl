@@ -10,19 +10,20 @@
 using namespace std;
 
 CodeGenerator::CodeGenerator() {
-	codebuffer = new vector<unsigned char>();
+	codesize = 100000;
+	codebuffer = (char*) malloc(codesize);
 	here = 0;
 }
 
 CodeGenerator::~CodeGenerator() {
-	delete codebuffer;
+	free(codebuffer);
 }
 
 unsigned int CodeGenerator::getHere() {
 	return here;
 }
 
-vector<unsigned char>* CodeGenerator::getCodeBuffer() {
+char* CodeGenerator::getCodeBuffer() {
 	return codebuffer;
 }
 
@@ -32,7 +33,7 @@ void CodeGenerator::start(ProgramNode pn) {
 	//
 	// put a dummy value on the stack
 	//
-	emit(1, 0, 0);
+	emit(1, 2, 0);
 	//
 	// emit INT
 	//
@@ -65,11 +66,7 @@ void CodeGenerator::start(ProgramNode pn) {
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
-	//
-	// send the literal doubles and strings
-	//
-	emit_lit_doubles();
-	emit_lit_strings();
+	// printcodebuffer();
 }
 
 /**
@@ -87,48 +84,20 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 }
 
 //
-// write the codebuffer to a file
-//
-void CodeGenerator::emit_to_file() {
-
-	string filename = "F:\\robert\\projects\\parser\\code\\example.bin";
-	myfile.open(filename.c_str(), ios::binary);
-	for (unsigned int i = 0; i < here; i++) {
-		char c = codebuffer->at(i);
-		myfile.write(reinterpret_cast<const char*>(&c), sizeof(c));
-	}
-	myfile.close();
-
-}
-
-//
-// print the codebuffer
-//
-void CodeGenerator::printcodebuffer() {
-	cout << "-------here is " << here << endl;
-	for (unsigned int i = 0; i < here; i++) {
-		cout << "codebuffer[" << i << "] = "
-				<< (unsigned int) (codebuffer->at(i)) << endl;
-		;
-	}
-	cout << "--- end" << endl;
-
-}
-
-//
 // emit a f,l,a combination
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
-	codebuffer->push_back(f);
+	*((char*) codebuffer + here) = f;
 	here++;
-	codebuffer->push_back(l);
+	*((char*) codebuffer + here) = l & 255;
 	here++;
-	codebuffer->push_back(l >> 8);
+	*((char*) codebuffer + here) = l >> 8;
 	here++;
-	codebuffer->push_back(a);
+	*((char*) codebuffer + here) = a & 255;
 	here++;
-	codebuffer->push_back(a >> 8);
+	*((char*) codebuffer + here) = a >> 8;
 	here++;
+	//printcodebuffer();
 }
 
 //
@@ -152,6 +121,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		double my_double;
 		unsigned int strlen;
 		unsigned int sz;
+		unsigned int bvalue;
 		string my_string;
 		switch (atype) {
 		case 1: // operation
@@ -185,30 +155,41 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			}
 			break;
 		case 4: // call
-
 			emit(6, 0, 0);
-
+			emit(5, 0, 0);
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
-			emit(5, 0, 0);
 			addCallAddress(here - 2, avalue.substr(0, avalue.size() - 1));
 			break;
-
 		case 5: // float
 			my_double = atof(avalue.c_str());
-			sz = lit_doubles.size();
-			lit_doubles.push_back(my_double);
+			sz = sizeof(my_double);
 			emit(1, 5, sz);
+			memcpy(codebuffer + here, &my_double, sz);
+			here += sz;
 			break;
 		case 6: // boolean
+			if (avalue == "true") {
+				bvalue = 1;
+			} else {
+				bvalue = 0;
+			}
+			emit(1, 6, bvalue);
 			break;
 		case 7: // string
-			strlen = avalue.length();
-			my_string = avalue.substr(1, strlen - 2);
-			sz = lit_strings.size();
-			lit_strings.push_back(my_string);
-			emit(1, 7, sz);
+			strlen = avalue.length() - 2;
+			my_string = avalue.substr(1, strlen);
+			emit(1, 7, strlen);
+			memcpy(codebuffer + here, my_string.c_str(), strlen);
+#ifdef DEBUG
+			cout << "--- Here is a string [";
+						for (unsigned int i = 0; i < strlen; i++) {
+				cout << *(codebuffer + here + i);
+			}
+			cout << "]" << endl;
+#endif
+			here += strlen;
 			break;
 		default:
 			throw PException("Unexpected ExpressionThing type");
@@ -256,7 +237,6 @@ void CodeGenerator::fix_proc_addresses() {
 	//
 	// loop over the callpoints
 	//
-	cout << "fix_proc_addresses" << endl;
 	for (map<unsigned int, string>::iterator it = callpoints.begin();
 			it != callpoints.end(); ++it) {
 		unsigned int call_address = it->first;
@@ -267,56 +247,37 @@ void CodeGenerator::fix_proc_addresses() {
 		ProcedureNode* pn = procaddresses[proc_name];
 		unsigned int proc_address = pn->getProcAddress();
 		if (proc_address == 0) {
-			cout << "Proc " << proc_name << " not found" << endl;
 			throw PException("Proc " + proc_name + " not found");
 		}
 		//
 		// found the address of the proc
 		//
-		cout << "fixing proc " << proc_name << " call_address " << call_address
-				<< " to " << proc_address << endl;
 		fix(call_address, proc_address);
 		//
 		// also fix the INT depth to create room for local variables
 		//
+		// size of the local variables
 		//
-		codebuffer->at(call_address - 5) = pn->getLocalVariables()->size();
-		codebuffer->at(call_address - 7) = pn->getParameters()->size();
+		*((char*) codebuffer + call_address - 5) =
+				pn->getLocalVariables()->size();
+		//
+		// size of the parameters
+		//
+		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
+		//
 
 	}
 }
 
 void CodeGenerator::fix(unsigned int call_address, unsigned int dest_address) {
-	codebuffer->at(call_address) = dest_address & 255;
-	codebuffer->at(call_address + 1) = dest_address >> 8;
+	*((char*) codebuffer + call_address) = dest_address & 255;
+	*((char*) codebuffer + call_address + 1) = dest_address >> 8;
 }
 
 //
 // add a call address (starting point of a proc)
 //
 void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
-	cout << "adding call: " << address << " calls " << proc_name << endl;
 	callpoints[address] = proc_name;
 }
 
-//
-// add the literal doubles as a constant lookup table
-//
-void CodeGenerator::emit_lit_doubles() {
-	for (unsigned i = 0; i < lit_doubles.size(); i++) {
-		unsigned int sz = sizeof(double);
-		double value = lit_doubles[i];
-		memcpy(&value, &codebuffer[here], sz);
-		here += sz;
-	}
-}
-//
-// add the literal strings as a constant lookup table
-//
-void CodeGenerator::emit_lit_strings() {
-	for (unsigned i = 0; i < lit_strings.size(); i++) {
-		unsigned int sz = sizeof(lit_strings[i]);
-		memcpy(&lit_strings[i], &codebuffer[here], sz);
-		here += sz;
-	}
-}
