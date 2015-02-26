@@ -71,7 +71,7 @@ int CInterpreter::execute_next() {
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-		cout << "LIT " << l << "," << a;
+	cout << "LIT " << l << "," << a;
 #endif
 		switch (l) {
 		case 2: // Int
@@ -88,7 +88,7 @@ int CInterpreter::execute_next() {
 			cout << "The buffer is located at " << (void*) buffer << endl;
 			cout << "pc is now " << pc << endl;
 			cout << "FOUND A FLOAT with length " << a << " and value " << d1
-					<< endl;
+			<< endl;
 #endif
 			//
 			// put the pointer and the type on the stack
@@ -113,8 +113,8 @@ int CInterpreter::execute_next() {
 			*(ptr + 1) = a >> 8;
 #ifdef DEBUG
 			cout << "--- copying a string from " << (void*) (buffer + pc)
-					<< " to " << (void*) (ptr + 2) << " with length " << a
-					<< endl;
+			<< " to " << (void*) (ptr + 2) << " with length " << a
+			<< endl;
 			cout << "--- original" << endl;
 			print_a_string(buffer + pc, a);
 #endif
@@ -142,7 +142,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 2: // opr
 #ifdef DEBUG
-		cout << "OPR";
+	cout << "OPR";
 #endif
 		//
 		// set up a call table matrix
@@ -252,7 +252,7 @@ int CInterpreter::execute_next() {
 			if (l > 0) {
 				temp = s[t - 1];
 			}
-			t = b[tb];
+			t = b[tb] -1;
 			if (l > 0) {
 				s[t] = temp;
 				t++;
@@ -442,7 +442,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-		cout << "STO " << a << " ";
+	cout << "STO " << a << " ";
 #endif
 		t--;
 		s[b[tb - 1] + a] = s[t];
@@ -462,7 +462,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 6:			// int:
 #ifdef DEBUG
-		cout << "INT " << l << "," << a;
+	cout << "INT " << l << "," << a;
 #endif
 		//
 		// this creates a new block with depth a for local variables and parameters
@@ -470,8 +470,8 @@ int CInterpreter::execute_next() {
 		b[tb] = t;
 		tb++;
 		//
-		// a contains the number of local variables
 		// l contains the number of parameters
+		// a contains the number of local variables
 		//
 		// only add a because the parameters will be pushed on the stack
 		//
@@ -479,13 +479,13 @@ int CInterpreter::execute_next() {
 		break;
 	case 7:			// jmp
 #ifdef DEBUG
-		cout << "JMP " << a;
+	cout << "JMP " << a;
 #endif
 		pc = a;
 		break;
 	case 8:			// jpc - jump when false
 #ifdef DEBUG
-		cout << "JPC " << a;
+	cout << "JPC " << a;
 #endif
 		fr1 = s[t - 1];
 		if (fr1.atype != 6) {
@@ -498,7 +498,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 9: // print
 #ifdef DEBUG
-		cout << "PRINT " << a;
+	cout << "PRINT " << a;
 #endif
 		t--;
 		fr1 = s[t];
@@ -519,7 +519,7 @@ int CInterpreter::execute_next() {
 
 	case 10: // external function call
 #ifdef DEBUG
-		cout << "EXTCALL " << a;
+	cout << "EXTCALL " << a;
 #endif
 		// parameters should have already been pushed on the stack
 		//
@@ -550,7 +550,22 @@ int CInterpreter::execute_next() {
 #ifdef DEBUG
 	cout << "      stack: ";
 	for (unsigned int i = 0; i < t; i++) {
-		cout << s[i].atype << ":" << s[i].address << " ";
+		char* adr;
+		cout << s[i].atype << ":";
+		switch (s[i].atype) {
+		case 2:
+			cout << s[i].address << " ";
+			break;
+		case 5:
+			adr = hm.getStart() + s[i].address;
+			double d;
+			memcpy(&d, adr, 8);
+			cout << d << " ";
+			break;
+		default:
+			cout << "? ";
+			break;
+		}
 	}
 
 	cout << "      bstack: ";
@@ -604,7 +619,7 @@ void CInterpreter::call_external(char* function_name,
 	//
 	// get the arguments
 	//
-	stack_element f = s[t-2];
+	stack_element f = s[t - 1];
 	unsigned int atype = f.atype;
 	double arg_in;
 	char* adr;
@@ -625,6 +640,8 @@ void CInterpreter::call_external(char* function_name,
 	//
 	char* ptr = hm.allocate(8);
 	memcpy(ptr, &r, 8);
+	t = b[tb] + 2;
+	tb--;
 	s[t].atype = 5;
 	s[t].address = (short unsigned int) (ptr - hm.getStart());
 	t++;

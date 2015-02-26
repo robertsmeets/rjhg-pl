@@ -387,7 +387,7 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 		} else {
 			string f = getFunction(expression, i);
 			if (f != "") {
-				i += f.length();
+				i += f.length() - 1;
 			} else {
 				f = getBoolean(expression, i);
 				if (f != "") {
@@ -399,14 +399,6 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 			}
 		}
 	}
-#ifdef DEBUG
-	cout << "----------TOKENS from "<<expression<<"-----------" << endl;
-	for (unsigned int i = 0;i<tokens.size();i++)
-	{
-		cout << tokens[i] << endl;
-	}
-	cout << "----------END-----------" << endl;
-#endif
 	return tokens;
 }
 

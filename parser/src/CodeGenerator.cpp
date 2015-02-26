@@ -104,6 +104,7 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
 // emit the code for an expression
 //
 void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
+
 	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
 		//
@@ -237,24 +238,39 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		ProcedureNode* pn = procaddresses[proc_name];
 		if (pn == NULL) {
-			continue;
+			//
+			// external function
+			//
+			// fix the INT depth to create room for local variables
+			//
+			// size of the local variables (zero)
+			//
+			*((char*) codebuffer + call_address - 5) = 0;
+			//
+			// size of the parameters (assume 1)
+			//
+			*((char*) codebuffer + call_address - 7) = 1;
+
+		} else {
+			unsigned int proc_address = pn->getProcAddress();
+			//
+			// found the address of the proc
+			//
+			fix(call_address, proc_address);
+			//
+			// also fix the INT depth to create room for local variables
+			//
+			// size of the local variables
+			//
+			*((char*) codebuffer + call_address - 5) =
+					pn->getLocalVariables()->size();
+			//
+			// size of the parameters
+			//
+			*((char*) codebuffer + call_address - 7) =
+					pn->getParameters()->size();
 		}
-		unsigned int proc_address = pn->getProcAddress();
-		//
-		// found the address of the proc
-		//
-		fix(call_address, proc_address);
-		//
-		// also fix the INT depth to create room for local variables
-		//
-		// size of the local variables
-		//
-		*((char*) codebuffer + call_address - 5) =
-				pn->getLocalVariables()->size();
-		//
-		// size of the parameters
-		//
-		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
+
 	}
 }
 
@@ -294,7 +310,7 @@ void CodeGenerator::addCallTo(string procedure_name) {
 		// dealing with a dynamic call, to a library function
 		// The string is saved.
 		//
-		unsigned int strlen = procedure_name.length() ;
+		unsigned int strlen = procedure_name.length();
 		emit(10, 1, strlen);
 		addCallAddress(here - 2, procedure_name);
 		memcpy(codebuffer + here, procedure_name.c_str(), strlen);

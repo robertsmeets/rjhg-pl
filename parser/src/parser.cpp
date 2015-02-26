@@ -16,7 +16,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-if (argc != 2) {
+	if (argc != 2) {
 		cout << "Must provide filename as an argument, example " << argv[0]
 				<< " c:\\\\test\\\\test.src" << endl;
 		return -1;
@@ -28,22 +28,14 @@ if (argc != 2) {
 	try {
 		p.start(filename);
 		cg.start(p.getPn());
+		//
+		// start interpreting
+		//
+		CInterpreter i(cg.getCodeBuffer());
+		i.start();
 	} catch (PException & E) {
 		cout << "Exception: " << E.ShowReason() << endl;
 		return -1;
 	}
-
-	//
-	//
-	//
-	// do a disassembly
-	//
-	//Disassembler d;
-	//d.start(cg.getCodeBuffer());
-	//
-	// start interpreting
-	//
-	CInterpreter i(cg.getCodeBuffer());
-	i.start();
 	return 0;
 }
