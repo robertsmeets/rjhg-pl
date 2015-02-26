@@ -18,6 +18,7 @@
 #include "CFunctions.h"
 
 #include <dyncall.h>
+#include <dyncall_callf.h>
 #include <dynload.h>
 
 #include <math.h>
@@ -25,9 +26,9 @@ using namespace std;
 
 class CInterpreter {
 	struct stack_element {
-	  unsigned short int atype;
-	  unsigned short int address;
-	} ;
+		unsigned short int atype;
+		unsigned short int address;
+	};
 	char* buffer;
 	unsigned int pc;
 	unsigned int t;
@@ -43,8 +44,8 @@ public:
 	void start();
 	int execute_next();
 	void print_a_string(char*);
-	void print_a_string(char* , unsigned int );
-	void call_external();
+	void print_a_string(char*, unsigned int);
+	void call_external(char*, unsigned int);
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

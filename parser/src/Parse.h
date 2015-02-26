@@ -37,7 +37,7 @@ class Parse {
 public:
 	Parse();
 	virtual ~Parse();
-	ProgramNode getPn();
+	ProgramNode* getPn();
 	void start(string);
 	void parse_from_memory();
 	void code_definition();

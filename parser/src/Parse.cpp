@@ -19,8 +19,8 @@ Parse::~Parse() {
 
 }
 
-ProgramNode Parse::getPn() {
-	return pn;
+ProgramNode* Parse::getPn() {
+	return &pn;
 }
 
 void Parse::start(string filename) {

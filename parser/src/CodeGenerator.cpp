@@ -27,7 +27,8 @@ char* CodeGenerator::getCodeBuffer() {
 	return codebuffer;
 }
 
-void CodeGenerator::start(ProgramNode pn) {
+void CodeGenerator::start(ProgramNode* a_pn) {
+	pn = a_pn;
 	//
 	// set up a call to main
 	//
@@ -51,8 +52,9 @@ void CodeGenerator::start(ProgramNode pn) {
 	// generate all the procedures
 	//
 	vector<ProcedureNode*> procs;
-	procs = pn.getProcedures();
+	procs = pn->getProcedures();
 	//
+	// generate the code for all the procedures
 	//
 	for (vector<ProcedureNode*>::iterator it = procs.begin(); it != procs.end();
 			++it) {
@@ -73,7 +75,7 @@ void CodeGenerator::start(ProgramNode pn) {
  */
 void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 	//
-	// emit all the statements
+	// emit all the statements for a procedure
 	//
 	vector<Statement*>* statements = a_proc->getStatements();
 	for (vector<Statement*>::iterator it = statements->begin();
@@ -96,7 +98,6 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
 	here++;
 	*((char*) codebuffer + here) = a >> 8;
 	here++;
-	//printcodebuffer();
 }
 
 //
@@ -154,12 +155,10 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			}
 			break;
 		case 4: // call
-			emit(6, 0, 0);
-			emit(5, 0, 0);
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
-			addCallAddress(here - 2, avalue.substr(0, avalue.size() - 1));
+			addCallTo(avalue.substr(0, avalue.size() - 1));
 			break;
 		case 5: // float
 			my_double = atof(avalue.c_str());
@@ -181,13 +180,6 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			my_string = avalue.substr(1, strlen);
 			emit(1, 7, strlen);
 			memcpy(codebuffer + here, my_string.c_str(), strlen);
-#ifdef DEBUG
-			cout << "--- Here is a string [";
-						for (unsigned int i = 0; i < strlen; i++) {
-				cout << *(codebuffer + here + i);
-			}
-			cout << "]" << endl;
-#endif
 			here += strlen;
 			break;
 		default:
@@ -244,10 +236,8 @@ void CodeGenerator::fix_proc_addresses() {
 		// look up the proc name
 		//
 		ProcedureNode* pn = procaddresses[proc_name];
-		if (pn == NULL)
-		{
-		cout << "WARNING: Proc " << proc_name << " not found" << endl;
-		continue ;
+		if (pn == NULL) {
+			continue;
 		}
 		unsigned int proc_address = pn->getProcAddress();
 		//
@@ -265,8 +255,6 @@ void CodeGenerator::fix_proc_addresses() {
 		// size of the parameters
 		//
 		*((char*) codebuffer + call_address - 7) = pn->getParameters()->size();
-		//
-
 	}
 }
 
@@ -282,3 +270,47 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
+void CodeGenerator::addCallTo(string procedure_name) {
+	//
+	// add room for the local variables.
+	// emit an INT
+	// Since we don't know how many, leave 0 for the INT parameter
+	// this will be corrected in the fix stage
+	//
+	emit(6, 0, 0);
+	//
+	// determine if procedure_name was defined
+	// in the program code, if not it's a dynamic call
+	//
+	if (procDefined(procedure_name)) {
+		//
+		// emit a "cal"
+		// leave the call address 0, since this will be corrected in the fix stage
+		//
+		emit(5, 0, 0);
+		addCallAddress(here - 2, procedure_name);
+	} else {
+		//
+		// dealing with a dynamic call, to a library function
+		// The string is saved.
+		//
+		unsigned int strlen = procedure_name.length() ;
+		emit(10, 1, strlen);
+		addCallAddress(here - 2, procedure_name);
+		memcpy(codebuffer + here, procedure_name.c_str(), strlen);
+		here += strlen;
+	}
+}
+
+bool CodeGenerator::procDefined(string procedure_name) {
+	vector<ProcedureNode*> procedures = pn->getProcedures();
+	for (vector<ProcedureNode*>::iterator it = procedures.begin();
+			it != procedures.end(); ++it) {
+		ProcedureNode* a_proc = *it;
+		string pname = a_proc->getName();
+		if (pname == procedure_name) {
+			return true;
+		}
+	}
+	return false;
+}

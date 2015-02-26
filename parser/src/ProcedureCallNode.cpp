@@ -34,21 +34,9 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 			it != parameter_exps.end(); ++it) {
 		cg->emitRpn((*it)->getRpn(), pn);
 	}
-	//
-	// add room for the local variables.
-	// emit an INT
-	// Since we don't know how many, leave 0 for the INT parameter
-	// this will be corrected in the fix stage
-	//
-	cout << "emitting INT" << endl;
-	cg->emit(6, 0, 0);
-	//
-	// emit a "cal"
-	// leave the call address 0, since this will be corrected in the fix stage
-	//
-	cout << "emitting CAL" << endl;
-	cg->emit(5, 0, 0);
-	cg->addCallAddress(cg->getHere() - 2, procedure_name);
+
+
+	cg->addCallTo(procedure_name);
 }
 
 void ProcedureCallNode::addParametersExpression(ExpressionNode* en) {
