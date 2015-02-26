@@ -76,7 +76,6 @@ void Parse::get_something(string chars) {
 		if (!peek_string.empty()) {
 			break;
 		}
-
 	}
 }
 

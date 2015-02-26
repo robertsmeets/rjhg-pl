@@ -196,7 +196,11 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// Until the token at the top of the stack is a left parenthesis,
 			// pop operators off the stack onto the output queue.
 			//
-			string topToken = stack.top();
+			if (stack.empty())
+			{
+				break;
+			}
+			string topToken =  stack.top();
 			while (topToken != "(") {
 				//
 				// type 1: operator ----- must evaluate what this is
@@ -394,7 +398,6 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 					i += f.length();
 				} else {
 					i = getVariableName(expression, i);
-
 				}
 			}
 		}
