@@ -38,6 +38,18 @@ class CInterpreter {
 	vector<unsigned short int> r;
 	vector<unsigned short int> b;
 	HeapManager hm;
+
+	typedef unsigned int (*iiptr)(unsigned int, unsigned int);
+	typedef double (*ddptr)(double, double);
+	typedef double (*idptr)(unsigned int, double);
+	typedef double (*diptr)(double, unsigned int);
+
+	typedef bool (*biiptr)(unsigned int, unsigned int);
+	typedef bool (*bddptr)(double, double);
+	typedef bool (*bidptr)(unsigned int, double);
+	typedef bool (*bdiptr)(double, unsigned int);
+
+	iiptr fptrs[14][8][8];
 public:
 	CInterpreter(char*);
 	virtual ~CInterpreter();

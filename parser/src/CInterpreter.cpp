@@ -18,6 +18,71 @@ CInterpreter::CInterpreter(char* a_buffer) {
 	s = vector<stack_element>(500);
 	r = vector<unsigned short int>(500); // return stack
 	b = vector<unsigned short int>(500); // block address stack
+	//
+	// set up a call table matrix
+	// entries; first the operator 0..13
+	// second the first argument type 1..7
+	// third the second argument type 1..7
+	//
+	// The result is a function
+	//
+	//int (*foo)(int, int);
+	//		foo = (int (*)(int, int))(&func_plus_ii);}
+
+	//
+	// fill up for OPR 2 (PLUS);
+	//
+	fptrs[2][2][2] = (iiptr) (&func_plus_ii);
+	fptrs[2][2][5] = (iiptr) (&func_plus_id);
+	fptrs[2][5][2] = (iiptr) (&func_plus_di);
+	fptrs[2][5][5] = (iiptr) (&func_plus_dd);
+	//
+	// fill up for OPR 3 (MINUS);
+	//
+	fptrs[3][2][2] = (iiptr) (&func_minus_ii);
+	fptrs[3][2][5] = (iiptr) (&func_minus_id);
+	fptrs[3][5][2] = (iiptr) (&func_minus_di);
+	fptrs[3][5][5] = (iiptr) (&func_minus_dd);
+	//
+	// fill up for OPR 4 (MUL);
+	//
+	fptrs[4][2][2] = (iiptr) (&func_mul_ii);
+	fptrs[4][2][5] = (iiptr) (&func_mul_id);
+	fptrs[4][5][2] = (iiptr) (&func_mul_di);
+	fptrs[4][5][5] = (iiptr) (&func_mul_dd);
+	//
+	// fill up for OPR 8..13
+	//
+	fptrs[8][2][2] = (iiptr) (&func_eq_ii);
+	fptrs[8][2][5] = (iiptr) (&func_eq_id);
+	fptrs[8][5][2] = (iiptr) (&func_eq_di);
+	fptrs[8][5][5] = (iiptr) (&func_eq_dd);
+
+	fptrs[9][2][2] = (iiptr) (&func_ne_ii);
+	fptrs[9][2][5] = (iiptr) (&func_ne_id);
+	fptrs[9][5][2] = (iiptr) (&func_ne_di);
+	fptrs[9][5][5] = (iiptr) (&func_ne_dd);
+
+	fptrs[10][2][2] = (iiptr) (&func_lt_ii);
+	fptrs[10][2][5] = (iiptr) (&func_lt_id);
+	fptrs[10][5][2] = (iiptr) (&func_lt_di);
+	fptrs[10][5][5] = (iiptr) (&func_lt_dd);
+
+	fptrs[11][2][2] = (iiptr) (&func_ge_ii);
+	fptrs[11][2][5] = (iiptr) (&func_ge_id);
+	fptrs[11][5][2] = (iiptr) (&func_ge_di);
+	fptrs[11][5][5] = (iiptr) (&func_ge_dd);
+
+	fptrs[12][2][2] = (iiptr) (&func_gt_ii);
+	fptrs[12][2][5] = (iiptr) (&func_gt_id);
+	fptrs[12][5][2] = (iiptr) (&func_gt_di);
+	fptrs[12][5][5] = (iiptr) (&func_gt_dd);
+
+	fptrs[13][2][2] = (iiptr) (&func_le_ii);
+	fptrs[13][2][5] = (iiptr) (&func_le_id);
+	fptrs[13][5][2] = (iiptr) (&func_le_di);
+	fptrs[13][5][5] = (iiptr) (&func_le_dd);
+
 }
 
 CInterpreter::~CInterpreter() {
@@ -82,14 +147,6 @@ int CInterpreter::execute_next() {
 		case 5: // float
 			ptr = hm.allocate(a);
 			memcpy(ptr, buffer + pc, a);
-#ifdef DEBUG
-			memcpy(&d1, buffer + pc, a);
-			cout << endl;
-			cout << "The buffer is located at " << (void*) buffer << endl;
-			cout << "pc is now " << pc << endl;
-			cout << "FOUND A FLOAT with length " << a << " and value " << d1
-			<< endl;
-#endif
 			//
 			// put the pointer and the type on the stack
 			//
@@ -111,18 +168,7 @@ int CInterpreter::execute_next() {
 			//
 			*ptr = a & 255;
 			*(ptr + 1) = a >> 8;
-#ifdef DEBUG
-			cout << "--- copying a string from " << (void*) (buffer + pc)
-			<< " to " << (void*) (ptr + 2) << " with length " << a
-			<< endl;
-			cout << "--- original" << endl;
-			print_a_string(buffer + pc, a);
-#endif
 			memcpy(ptr + 2, buffer + pc, a);
-#ifdef DEBUG
-			cout << "--- copy" << endl;
-			print_a_string(ptr);
-#endif
 			//
 			// put the pointer and the type on the stack
 			//
@@ -144,81 +190,6 @@ int CInterpreter::execute_next() {
 #ifdef DEBUG
 	cout << "OPR";
 #endif
-		//
-		// set up a call table matrix
-		// entries; first the operator 0..13
-		// second the first argument type 1..7
-		// third the second argument type 1..7
-		//
-		// The result is a function
-		//
-		//int (*foo)(int, int);
-		//		foo = (int (*)(int, int))(&func_plus_ii);}
-
-		typedef unsigned int (*iiptr)(unsigned int, unsigned int);
-		typedef double (*ddptr)(double, double);
-		typedef double (*idptr)(unsigned int, double);
-		typedef double (*diptr)(double, unsigned int);
-
-		typedef bool (*biiptr)(unsigned int, unsigned int);
-		typedef bool (*bddptr)(double, double);
-		typedef bool (*bidptr)(unsigned int, double);
-		typedef bool (*bdiptr)(double, unsigned int);
-
-		iiptr fptrs[14][8][8];
-		//
-		// fill up for OPR 2 (PLUS);
-		//
-		fptrs[2][2][2] = (iiptr) (&func_plus_ii);
-		fptrs[2][2][5] = (iiptr) (&func_plus_id);
-		fptrs[2][5][2] = (iiptr) (&func_plus_di);
-		fptrs[2][5][5] = (iiptr) (&func_plus_dd);
-		//
-		// fill up for OPR 3 (MINUS);
-		//
-		fptrs[3][2][2] = (iiptr) (&func_minus_ii);
-		fptrs[3][2][5] = (iiptr) (&func_minus_id);
-		fptrs[3][5][2] = (iiptr) (&func_minus_di);
-		fptrs[3][5][5] = (iiptr) (&func_minus_dd);
-		//
-		// fill up for OPR 4 (MUL);
-		//
-		fptrs[4][2][2] = (iiptr) (&func_mul_ii);
-		fptrs[4][2][5] = (iiptr) (&func_mul_id);
-		fptrs[4][5][2] = (iiptr) (&func_mul_di);
-		fptrs[4][5][5] = (iiptr) (&func_mul_dd);
-		//
-		// fill up for OPR 8..13
-		//
-		fptrs[8][2][2] = (iiptr) (&func_eq_ii);
-		fptrs[8][2][5] = (iiptr) (&func_eq_id);
-		fptrs[8][5][2] = (iiptr) (&func_eq_di);
-		fptrs[8][5][5] = (iiptr) (&func_eq_dd);
-
-		fptrs[9][2][2] = (iiptr) (&func_ne_ii);
-		fptrs[9][2][5] = (iiptr) (&func_ne_id);
-		fptrs[9][5][2] = (iiptr) (&func_ne_di);
-		fptrs[9][5][5] = (iiptr) (&func_ne_dd);
-
-		fptrs[10][2][2] = (iiptr) (&func_lt_ii);
-		fptrs[10][2][5] = (iiptr) (&func_lt_id);
-		fptrs[10][5][2] = (iiptr) (&func_lt_di);
-		fptrs[10][5][5] = (iiptr) (&func_lt_dd);
-
-		fptrs[11][2][2] = (iiptr) (&func_ge_ii);
-		fptrs[11][2][5] = (iiptr) (&func_ge_id);
-		fptrs[11][5][2] = (iiptr) (&func_ge_di);
-		fptrs[11][5][5] = (iiptr) (&func_ge_dd);
-
-		fptrs[12][2][2] = (iiptr) (&func_gt_ii);
-		fptrs[12][2][5] = (iiptr) (&func_gt_id);
-		fptrs[12][5][2] = (iiptr) (&func_gt_di);
-		fptrs[12][5][5] = (iiptr) (&func_gt_dd);
-
-		fptrs[13][2][2] = (iiptr) (&func_le_ii);
-		fptrs[13][2][5] = (iiptr) (&func_le_id);
-		fptrs[13][5][2] = (iiptr) (&func_le_di);
-		fptrs[13][5][5] = (iiptr) (&func_le_dd);
 
 		iiptr aiiptr;
 		idptr aidptr;
@@ -252,7 +223,7 @@ int CInterpreter::execute_next() {
 			if (l > 0) {
 				temp = s[t - 1];
 			}
-			t = b[tb] -1;
+			t = b[tb] - 1;
 			if (l > 0) {
 				s[t] = temp;
 				t++;
@@ -553,16 +524,16 @@ int CInterpreter::execute_next() {
 		char* adr;
 		cout << s[i].atype << ":";
 		switch (s[i].atype) {
-		case 2:
+			case 2:
 			cout << s[i].address << " ";
 			break;
-		case 5:
+			case 5:
 			adr = hm.getStart() + s[i].address;
 			double d;
 			memcpy(&d, adr, 8);
 			cout << d << " ";
 			break;
-		default:
+			default:
 			cout << "? ";
 			break;
 		}
@@ -623,16 +594,29 @@ void CInterpreter::call_external(char* function_name,
 	unsigned int atype = f.atype;
 	double arg_in;
 	char* adr;
+	char* str;
+	unsigned int len;
 	switch (atype) {
 	case 5: // double
 		adr = hm.getStart() + f.address;
 		memcpy(&arg_in, adr, 8);
 		dcArgDouble(vm, arg_in);
 		break;
+	case 7: // string
+		adr = hm.getStart() + f.address;
+		memcpy(&arg_in, adr, 8);
+		len = ((*adr) & 255) + (*(adr + 1) << 8);
+		str = (char*) malloc(len + 1);
+		memcpy(str, adr + 2, len);
+		str[len] = '\0';
+		dcArgChar(vm, *str);
+		//free(str);
+		break;
 	default:
 		throw PException("unexpected type in external call");
 	}
 	double r = dcCallDouble(vm, sym);
+	// dcCallPointer(vm,sym);
 	dcFree(vm);
 	dlFreeLibrary(ll);
 	//
