@@ -256,9 +256,9 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// If the stack runs out without finding a left parenthesis,
 			// then there are mismatched parentheses.
 			//
-			if (!((topToken == "(") || isFunction(topToken))) {
+			/* if (!((topToken == "(") || isFunction(topToken))) {
 				return false;
-			}
+			} */
 		} else if (isFunction(token)) {
 			//
 			// found a function
@@ -402,6 +402,18 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 			}
 		}
 	}
+
+#ifdef DEBUG
+cout << "-------------------------" << endl;
+	for (vector<string>::iterator it=tokens.begin();it< tokens.end();++it)
+	{
+		cout << "TOKEN = " << *it << endl;
+	}
+	cout << "-------------------------" << endl;
+
+#endif
+
+
 	return tokens;
 }
 

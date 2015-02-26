@@ -408,7 +408,14 @@ int CInterpreter::execute_next() {
 		//
 		// lod: copy a local variable or parameter on top of the stack
 		//
-		s[t] = s[b[tb - 1] + a];
+
+		cout << "tb=" << tb << " a=" << a << " b[tb-1] = " << b[tb-1] <<  endl;
+
+
+		s[t] = s[b[tb-1 ] + a-1];
+
+
+
 		t++;
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
