@@ -13,10 +13,11 @@
 using namespace std;
 
 class Disassembler {
+	unsigned int i;
 public:
 	Disassembler();
 	virtual ~Disassembler();
-	void start(vector<unsigned char>*);
+	void start(char*,unsigned int);
 	string decode(char,unsigned short, unsigned short);
 };
 

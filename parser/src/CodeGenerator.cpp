@@ -13,6 +13,7 @@ CodeGenerator::CodeGenerator() {
 	codesize = 100000;
 	codebuffer = (char*) malloc(codesize);
 	here = 0;
+	pn = NULL;
 }
 
 CodeGenerator::~CodeGenerator() {

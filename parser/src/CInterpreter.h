@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #include "HeapManager.h"
 #include "PException.h"

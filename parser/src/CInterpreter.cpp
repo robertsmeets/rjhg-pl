@@ -306,7 +306,9 @@ int CInterpreter::execute_next() {
 				memcpy(st + fr1.address, &d3, 8);
 				s[t - 1] = fr1;
 			} else {
-				throw PException("plus: incompatible types");
+				ostringstream oss;
+				oss << "operation "<<a<<": incompatible types " << fr1.atype << " and " << fr2.atype ;
+				throw PException(oss.str());
 			}
 			break;
 		case 5:
@@ -390,7 +392,9 @@ int CInterpreter::execute_next() {
 				fr1.address = eq;
 				s[t - 1] = fr1;
 			} else {
-				throw PException("plus: incompatible types");
+				ostringstream oss;
+				oss << "operation "<<a<<": incompatible types " << fr1.atype << " and " << fr2.atype ;
+				throw PException(oss.str());
 			}
 
 			break;
@@ -412,7 +416,7 @@ int CInterpreter::execute_next() {
 		cout << "tb=" << tb << " a=" << a << " b[tb-1] = " << b[tb-1] <<  endl;
 
 
-		s[t] = s[b[tb-1 ] + a-1];
+		s[t] = s[b[tb-1 ] + a];
 
 
 

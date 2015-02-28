@@ -190,8 +190,8 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// If the token is a right parenthesis:
 			//
 			// Until the token at the top of the stack is a left parenthesis, pop operators off
-			//	the stack onto the output queue.
-			//	Pop the left parenthesis from the stack, but not onto the output queue.
+			// the stack onto the output queue.
+			// Pop the left parenthesis from the stack, but not onto the output queue.
 			//
 			// Until the token at the top of the stack is a left parenthesis,
 			// pop operators off the stack onto the output queue.
@@ -257,7 +257,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// then there are mismatched parentheses.
 			//
 			/* if (!((topToken == "(") || isFunction(topToken))) {
-				return false;
+				return true;
 			} */
 		} else if (isFunction(token)) {
 			//
@@ -376,7 +376,7 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 		//
 		// handle the strings
 		//
-		if (a_char == ')' || a_char == '(')
+		if (a_char == ')' || a_char == '(' || a_char == ',')
 		{
 			str += a_char;
 			tokens.push_back(str);
