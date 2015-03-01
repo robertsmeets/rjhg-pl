@@ -145,7 +145,10 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 						++it2) {
 					if ((*it2) == avalue) {
 						unsigned int number = it2 - parameters->begin();
-						emit(3, 0, local_variables->size() + number); // LOD
+						//
+						// it is a parameter
+						//
+						emit(3, 0, number); // LOD
 						break;
 					}
 				}
@@ -153,7 +156,10 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 					throw PException("variable " + avalue + " not found");
 				}
 			} else {
-				emit(3, 0, local_variables->at(avalue)); // LOD
+				//
+				// it is a local variable
+				//
+				emit(3, 0, pn->getParameters() -> size() + local_variables->at(avalue)); // LOD
 			}
 			break;
 		case 4: // call

@@ -44,7 +44,13 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	//
 	// emit a "sto" to store the value in a variable
 	//
-	cg->emit(4, 0, lhs);
+
+	// stack order:
+	// parameters
+	// local variables
+	// therefore if we want a local variable, we need to add the amount of parameters to it
+	//
+	cg->emit(4, 0, lhs + pn->getParameters()->size() );
 }
 
 string AssignmentNode::stype() {

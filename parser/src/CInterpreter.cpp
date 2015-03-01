@@ -86,7 +86,6 @@ CInterpreter::CInterpreter(char* a_buffer) {
 }
 
 CInterpreter::~CInterpreter() {
-
 }
 
 void CInterpreter::start() {
@@ -223,7 +222,11 @@ int CInterpreter::execute_next() {
 			if (l > 0) {
 				temp = s[t - 1];
 			}
-			t = b[tb] - 1;
+			if (b[tb] == 0) {
+				t = 0;
+			} else {
+				t = b[tb] - 1;
+			}
 			if (l > 0) {
 				s[t] = temp;
 				t++;
@@ -281,9 +284,11 @@ int CInterpreter::execute_next() {
 				memcpy(&d2, st + fr2.address, 8);
 				aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
 				d3 = (*aidptr)(fr1.address, d2);
-				fr1.atype = 5;
-				memcpy(st + fr1.address, &d3, 8);
-				s[t - 1] = fr1;
+				stack_element* fr3 = new stack_element();
+				fr3->atype = 5;
+				fr3->address = hm.allocate(8) - hm.getStart();
+				memcpy(st + fr3->address, &d3, 8);
+				s[t - 1] = *fr3;
 			} else if ((fr1.atype == 5) && (fr2.atype == 2)) {
 				//
 				// float plus integer
@@ -292,22 +297,41 @@ int CInterpreter::execute_next() {
 				memcpy(&d1, st + fr1.address, 8);
 				adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
 				d3 = (*adiptr)(d1, fr2.address);
-				memcpy(st + fr1.address, &d3, 8);
-				s[t - 1] = fr1;
+				stack_element* fr3 = new stack_element();
+				fr3->atype = 5;
+				fr3->address = hm.allocate(8) - hm.getStart();
+				memcpy(st + fr3->address, &d3, 8);
+				s[t - 1] = *fr3;
+
 			} else if ((fr1.atype == 5) && (fr1.atype == 5)) {
 				//
 				// both floats
 				//
 				char* st = hm.getStart();
+				//
+				// copy both floats to temp variables d1 and d2
+				//
 				memcpy(&d1, st + fr1.address, 8);
 				memcpy(&d2, st + fr2.address, 8);
+				//
+				// find the function
+				//
 				addptr = (ddptr) (fptrs[a][fr1.atype][fr2.atype]);
+				//
+				// perform the operation
+				//
 				d3 = (*addptr)(d1, d2);
-				memcpy(st + fr1.address, &d3, 8);
-				s[t - 1] = fr1;
+				//
+				//
+				stack_element* fr3 = new stack_element();
+				fr3->atype = 5;
+				fr3->address = hm.allocate(8) - hm.getStart();
+				memcpy(st + fr3->address, &d3, 8);
+				s[t - 1] = *fr3;
 			} else {
 				ostringstream oss;
-				oss << "operation "<<a<<": incompatible types " << fr1.atype << " and " << fr2.atype ;
+				oss << "operation " << a << ": incompatible types " << fr1.atype
+						<< " and " << fr2.atype;
 				throw PException(oss.str());
 			}
 			break;
@@ -393,7 +417,8 @@ int CInterpreter::execute_next() {
 				s[t - 1] = fr1;
 			} else {
 				ostringstream oss;
-				oss << "operation "<<a<<": incompatible types " << fr1.atype << " and " << fr2.atype ;
+				oss << "operation " << a << ": incompatible types " << fr1.atype
+						<< " and " << fr2.atype;
 				throw PException(oss.str());
 			}
 
@@ -412,14 +437,7 @@ int CInterpreter::execute_next() {
 		//
 		// lod: copy a local variable or parameter on top of the stack
 		//
-
-		cout << "tb=" << tb << " a=" << a << " b[tb-1] = " << b[tb-1] <<  endl;
-
-
-		s[t] = s[b[tb-1 ] + a];
-
-
-
+		s[t] = s[b[tb - 1] + a];
 		t++;
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
@@ -449,7 +467,7 @@ int CInterpreter::execute_next() {
 		//
 		// this creates a new block with depth a for local variables and parameters
 		//
-		b[tb] = t;
+		b[tb] = t - l;
 		tb++;
 		//
 		// l contains the number of parameters
@@ -533,21 +551,23 @@ int CInterpreter::execute_next() {
 	cout << "      stack: ";
 	for (unsigned int i = 0; i < t; i++) {
 		char* adr;
-		cout << s[i].atype << ":";
+		//cout << s[i].atype << ":";
+		cout << "[";
 		switch (s[i].atype) {
 			case 2:
-			cout << s[i].address << " ";
+			cout << s[i].address;
 			break;
 			case 5:
 			adr = hm.getStart() + s[i].address;
 			double d;
 			memcpy(&d, adr, 8);
-			cout << d << " ";
+			cout << d;
 			break;
 			default:
-			cout << "? ";
+			cout << "?" << s[i].atype;
 			break;
 		}
+		cout << "]";
 	}
 
 	cout << "      bstack: ";
@@ -621,7 +641,7 @@ void CInterpreter::call_external(char* function_name,
 		memcpy(str, adr + 2, len);
 		str[len] = '\0';
 		dcArgChar(vm, *str);
-		//free(str);
+		free(str);
 		break;
 	default:
 		throw PException("unexpected type in external call");
