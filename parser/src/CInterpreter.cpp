@@ -218,15 +218,11 @@ int CInterpreter::execute_next() {
 			//
 			// there may be a return value on the top of the stack that needs to be saved
 			//
-			tb--;
 			if (l > 0) {
 				temp = s[t - 1];
 			}
-			if (b[tb] == 0) {
-				t = 0;
-			} else {
-				t = b[tb] - 1;
-			}
+			t = b[tb-1]+1;
+			tb--;
 			if (l > 0) {
 				s[t] = temp;
 				t++;

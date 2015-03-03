@@ -518,6 +518,9 @@ ExpressionNode* ExpressionParser::parse(string s) {
 //
 // Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
 //
+#ifdef DEBUG
+	cout << "EXPRESSIONPARSER::PARSE " << s << endl;
+#endif
 	if (s.size() == 0) {
 		throw PException("empty expression");
 	}
