@@ -162,7 +162,9 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 				//
 				// it is a local variable
 				//
-				emit(3, 0, pn->getParameters() -> size() + local_variables->at(avalue)); // LOD
+				emit(3, 0,
+						pn->getParameters()->size()
+								+ local_variables->at(avalue)); // LOD
 			}
 			break;
 		case 4: // call
@@ -204,30 +206,21 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(string avalue) {
-	if (avalue == "+")
-		emit(2, 0, 2);
-	else if (avalue == "-")
-		emit(2, 0, 3);
-	else if (avalue == "*")
-		emit(2, 0, 4);
-	else if (avalue == "/")
-		emit(2, 0, 5);
-	else if (avalue == "%")
-		emit(2, 0, 6);
-	else if (avalue == "==")
-		emit(2, 0, 7);
-	else if (avalue == "!=")
-		emit(2, 0, 8);
-	else if (avalue == "<")
-		emit(2, 0, 10);
-	else if (avalue == ">=")
-		emit(2, 0, 11);
-	else if (avalue == ">")
-		emit(2, 0, 12);
-	else if (avalue == "<=")
-		emit(2, 0, 13);
-	else
-		throw PException("Unexpected Operation" + avalue);
+unordered_map<string, unsigned int> m;
+	m["+"] = 2;
+	m["-"] = 3;
+	m["*"] = 4;
+	m["/"] = 5;
+	m["%"] = 6;
+	m["=="] = 7;
+	m["!="] = 8;
+	m["<"] = 10;
+	m[">="] = 11;
+	m[">"] = 12;
+	m["<="] = 13;
+	unsigned int atype = m[avalue];
+	emit(2, 0, atype);
+	//		throw PException("Unexpected Operation" + avalue);
 
 }
 

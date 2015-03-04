@@ -14,6 +14,7 @@
 #include <string>
 #include <cstdlib>
 #include <cstring>
+#include <unordered_map>
 
 #include "ProgramNode.h"
 #include "ProcedureNode.h"

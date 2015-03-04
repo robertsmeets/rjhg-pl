@@ -44,7 +44,6 @@ public:
 	void addParameter(string);
 	unsigned int assignLocalVariable(string);
 	unsigned int get_proc_address();
-	void addStatement(Statement*);
 	vector<Statement*>* getStatements();
 	void setStatements(vector<Statement*>*);
 	void fixReturn();

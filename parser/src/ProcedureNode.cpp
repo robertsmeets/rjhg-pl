@@ -54,10 +54,6 @@ void ProcedureNode::addParameter(string a_parameter) {
 	parameters->push_back(a_parameter);
 }
 
-void ProcedureNode::addStatement(Statement* s) {
-	statements->push_back(s);
-}
-
 vector<Statement*>* ProcedureNode::getStatements() {
 	return statements;
 }
