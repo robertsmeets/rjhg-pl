@@ -66,7 +66,7 @@ bool ExpressionParser::isFloat(const string& token) {
 	for (unsigned int i = 0; i < token.length(); i++) //for each char in string,
 			{
 		if (!((token[i] >= '0' && token[i] <= '9') || token[i] == '.'
-				|| token[i] == 'e' || token[i] == '-')) {
+				|| (token[i] == 'e' && i>0) || token[i] == '-')) {
 			return false;
 		}
 	}
@@ -483,7 +483,7 @@ unsigned int ExpressionParser::getNumeric(string expression, unsigned int i) {
 	for (unsigned int j = i; j < expression.length(); j++) {
 		char a_char = expression[j];
 		if ((a_char >= '0' && a_char <= '9') || a_char == '.'
-				|| a_char == 'e') {
+				|| (a_char == 'e' && j>i)) {
 			str += a_char;
 		} else {
 			tokens.push_back(str);

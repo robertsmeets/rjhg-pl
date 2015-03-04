@@ -116,6 +116,9 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		//
 		int atype = (*it).getType();
 		string avalue = (*it).getValue();
+#ifdef DEBUG
+		cout << "emitrpn::" << atype <<","<< avalue << endl;
+#endif
 		map<string, unsigned int>* local_variables;
 		map<string, unsigned int>::iterator foundIter;
 		vector<string>* parameters;

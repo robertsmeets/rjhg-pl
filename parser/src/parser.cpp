@@ -35,7 +35,6 @@ int main(int argc, char* argv[]) {
 		d.start(cg.getCodeBuffer(),cg.getHere());
 #endif
 
-
 		//
 		// start interpreting
 		//
