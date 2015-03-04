@@ -141,6 +141,9 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 		// Read the token
 		//
 		const string token = inputTokens[i];
+#ifdef DEBUG
+		cout << "examining token [" << token << "]" << endl;
+#endif
 		//
 		// If token is an operator
 		//
@@ -289,13 +292,16 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 							"stack was empty when looking for '(' after a function call");
 				}
 				string value = stack.top();
+#ifdef DEBUG
+				cout << "VALUE is [" << value << "]" << endl;
+#endif
 				if ((value == "(") || isFunction(value)) {
 					break;
 				} else {
-
-					unsigned int atype = figureType(token);
-					ExpressionThing et(atype, token);
+					unsigned int atype = figureType(value);
+					ExpressionThing et(atype, value);
 					out.push_back(et);
+					stack.pop();
 				}
 			}
 			bool w = were_values.top();
