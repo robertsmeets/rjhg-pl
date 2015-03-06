@@ -10,29 +10,29 @@
 using namespace std;
 
 AssignmentNode::AssignmentNode(ProcedureNode* p, unsigned int an_lhs,
-		ExpressionNode* a_rhs) {
+		ExpressionNode a_rhs) {
 	pn = p;
 	lhs = an_lhs;
 	rhs = a_rhs;
 }
 
 AssignmentNode::~AssignmentNode() {
-	delete pn;
-	delete rhs;
+	//delete pn;
+	//delete rhs;
 }
 
 void AssignmentNode::setLhs(unsigned int a_lhs) {
 	lhs = a_lhs;
 }
 
-void AssignmentNode::setRhs(ExpressionNode* a_rhs) {
+void AssignmentNode::setRhs(ExpressionNode a_rhs) {
 	rhs = a_rhs;
 }
 
 unsigned int AssignmentNode::getLhs() {
 	return lhs;
 }
-ExpressionNode* AssignmentNode::getRhs() {
+ExpressionNode AssignmentNode::getRhs() {
 	return rhs;
 }
 
@@ -40,7 +40,7 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	//
 	// emit the calculation instructions
 	//
-	cg->emitRpn(rhs->getRpn(), pn);
+	cg->emitRpn(rhs.getRpn(), pn);
 	//
 	// emit a "sto" to store the value in a variable
 	//

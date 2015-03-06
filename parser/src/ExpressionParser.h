@@ -77,7 +77,7 @@ public:
 	template<typename T, typename InputIterator> void Print(
 			const string& message, const InputIterator& itbegin,
 			const InputIterator& itend, const string& delimiter);
-	ExpressionNode* parse(string);
+	ExpressionNode parse(string);
 	unsigned int figureType(string token);
 	unsigned int getString(string,unsigned int);
 	unsigned int getVariableName(string ,unsigned int );

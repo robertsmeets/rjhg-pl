@@ -51,7 +51,7 @@ public:
 	void procedure_definition();
 	void trim(string&);
 	void lookahead();
-	vector<Statement*>* block(ProcedureNode*);
+	vector<Statement*> block(ProcedureNode*);
 	Statement* procedure_call(ProcedureNode*);
 	Statement* assignment(ProcedureNode*);
 	Statement* return_statement(ProcedureNode*);

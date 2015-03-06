@@ -14,6 +14,18 @@ CodeGenerator::CodeGenerator() {
 	codebuffer = (char*) malloc(codesize);
 	here = 0;
 	pn = NULL;
+	opr_mapping["+"] = 2;
+	opr_mapping["-"] = 3;
+	opr_mapping["*"] = 4;
+	opr_mapping["/"] = 5;
+	opr_mapping["%"] = 6;
+	opr_mapping["=="] = 7;
+	opr_mapping["!="] = 8;
+	opr_mapping["<"] = 10;
+	opr_mapping[">="] = 11;
+	opr_mapping[">"] = 12;
+	opr_mapping["<="] = 13;
+
 }
 
 CodeGenerator::~CodeGenerator() {
@@ -78,9 +90,9 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 	//
 	// emit all the statements for a procedure
 	//
-	vector<Statement*>* statements = a_proc->getStatements();
-	for (vector<Statement*>::iterator it = statements->begin();
-			it != statements->end(); ++it) {
+	vector<Statement*> statements = a_proc->getStatements();
+	for (vector<Statement*>::iterator it = statements.begin();
+			it != statements.end(); ++it) {
 		(*it)->emit(this);
 	}
 }
@@ -206,21 +218,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(string avalue) {
-unordered_map<string, unsigned int> m;
-	m["+"] = 2;
-	m["-"] = 3;
-	m["*"] = 4;
-	m["/"] = 5;
-	m["%"] = 6;
-	m["=="] = 7;
-	m["!="] = 8;
-	m["<"] = 10;
-	m[">="] = 11;
-	m[">"] = 12;
-	m["<="] = 13;
-	unsigned int atype = m[avalue];
-	emit(2, 0, atype);
-	//		throw PException("Unexpected Operation" + avalue);
+	unsigned int atype = opr_mapping[avalue];
+	if (atype == 0) {
+		throw PException("Unexpected Operation" + avalue);
+	} else {
+		emit(2, 0, atype);
+	}
 
 }
 

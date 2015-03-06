@@ -520,7 +520,7 @@ unsigned int ExpressionParser::getString(string expression, unsigned int i) {
 //
 // parse string
 //
-ExpressionNode* ExpressionParser::parse(string s) {
+ExpressionNode ExpressionParser::parse(string s) {
 //
 // Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
 //
@@ -541,8 +541,8 @@ ExpressionNode* ExpressionParser::parse(string s) {
 	if (!infixToRPN(tokens, tokens.size(), rpn)) {
 		throw PException("Mis-match in parentheses: " + s);
 	}
-	ExpressionNode* en = new ExpressionNode();
-	en->setRpn(rpn);
+	ExpressionNode en;
+	en.setRpn(rpn);
 	return en;
 }
 

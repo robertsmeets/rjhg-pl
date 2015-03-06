@@ -17,6 +17,7 @@
 #include "AssignmentNode.h"
 #include "PException.h"
 #include "ReturnNode.h"
+#include "CFunctions.h"
 
 using namespace std;
 
@@ -28,13 +29,14 @@ class ProcedureNode {
 	string name;
 	vector<string>* parameters;
 	vector<string> instance_variables;
-	vector<Statement*>* statements;
+	vector<Statement*> statements;
 	map<string,unsigned int>* local_variables;
 	unsigned int proc_address;
 
 public:
 	ProcedureNode();
 	virtual ~ProcedureNode();
+	ProcedureNode(ProcedureNode&);
 	void setName(string);
 	string getName();
 	map<string,unsigned int>* getLocalVariables();
@@ -44,8 +46,8 @@ public:
 	void addParameter(string);
 	unsigned int assignLocalVariable(string);
 	unsigned int get_proc_address();
-	vector<Statement*>* getStatements();
-	void setStatements(vector<Statement*>*);
+	vector<Statement*> getStatements();
+	void setStatements(vector<Statement*>);
 	void fixReturn();
 };
 

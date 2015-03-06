@@ -10,20 +10,31 @@
 using namespace std;
 
 ProcedureNode::ProcedureNode() {
+	cout << "Beware a new procedurenode is constructed" << endl;
 	name = "";
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
 	proc_address = 0;
-	statements = NULL;
 }
 
 ProcedureNode::~ProcedureNode() {
+	cout << "procedurenode " << this << " Deleting procedure " << name << " removing " << statements.size() << " statements" << endl;
 	//
 	// delete all the statements
 	//
+	parameters->erase(parameters->begin(),parameters->end());
 	delete parameters;
 	delete local_variables;
+	//instance_variables.erase(instance_variables.begin(),instance_variables.end());
+	for_each(statements.begin(),statements.end(),delete_pointed_to<Statement>);
+	statements.clear();
+	 cout << "statements size = " <<statements.size() << endl;
+}
+
+ProcedureNode::ProcedureNode(ProcedureNode& other )
+{
+cout << "aarg a copy constructor" << endl;
 }
 
 void ProcedureNode::setName(string a_name) {
@@ -54,11 +65,11 @@ void ProcedureNode::addParameter(string a_parameter) {
 	parameters->push_back(a_parameter);
 }
 
-vector<Statement*>* ProcedureNode::getStatements() {
+vector<Statement*> ProcedureNode::getStatements() {
 	return statements;
 }
 
-void ProcedureNode::setStatements(vector<Statement*>* some_statements) {
+void ProcedureNode::setStatements(vector<Statement*> some_statements) {
 	statements = some_statements;
 }
 
@@ -88,7 +99,7 @@ void ProcedureNode::fixReturn() {
 	//
 	// if return is missing, add it
 	//
-	unsigned int sz = statements->size();
+	unsigned int sz = statements.size();
 	bool addreturn = false;
 	if ((sz == 0))
 	{
@@ -96,11 +107,12 @@ void ProcedureNode::fixReturn() {
 	}
 	else
 	{
-		Statement* last = statements->at(sz - 1);
+		Statement* last = statements.at(sz - 1);
 		addreturn = (last->stype() != "return");
 	}
 	if (addreturn)
 	{
-		statements->push_back(new ReturnNode(this, NULL));
+		ExpressionNode en;
+		statements.push_back(new ReturnNode (this,en));
 	}
 }

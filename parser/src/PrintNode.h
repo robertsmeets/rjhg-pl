@@ -15,9 +15,9 @@
 
 class PrintNode : public Statement{
 	ProcedureNode* pn;
-	ExpressionNode* print_expression;
+	ExpressionNode print_expression;
 public:
-	PrintNode(ProcedureNode*,ExpressionNode*);
+	PrintNode(ProcedureNode*,ExpressionNode);
 	virtual ~PrintNode();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();

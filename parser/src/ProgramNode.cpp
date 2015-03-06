@@ -12,8 +12,10 @@ ProgramNode::ProgramNode() {
 }
 
 ProgramNode::~ProgramNode() {
-
-
+	for(auto a_procedure:procedures)
+	{
+		delete a_procedure;
+	}
 }
 
 void ProgramNode::addProcedure(ProcedureNode* pn) {

@@ -16,11 +16,11 @@
 
 class IfNode:public Statement {
 	ProcedureNode* pn;
-	vector<Statement*>* statements_true;
-	vector<Statement*>* statements_false;
-	ExpressionNode* if_expression;
+	vector<Statement*> statements_true;
+	vector<Statement*> statements_false;
+	ExpressionNode if_expression;
 public:
-	IfNode(ProcedureNode*,ExpressionNode*,vector<Statement*>*,vector<Statement*>*);
+	IfNode(ProcedureNode*,ExpressionNode,vector<Statement*>,vector<Statement*>);
 	virtual ~IfNode();
 	void emit(CodeGenerator*);
 	virtual string stype();

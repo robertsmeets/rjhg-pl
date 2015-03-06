@@ -7,7 +7,7 @@
 
 #include "ReturnNode.h"
 
-ReturnNode::ReturnNode(ProcedureNode* p,ExpressionNode* en) {
+ReturnNode::ReturnNode(ProcedureNode* p, ExpressionNode en) {
 	//
 	// it's valid to have an empty return node, in which case en = NULL
 	//
@@ -16,8 +16,8 @@ ReturnNode::ReturnNode(ProcedureNode* p,ExpressionNode* en) {
 }
 
 ReturnNode::~ReturnNode() {
-	delete pn;
-	delete return_expression;
+	//delete pn;
+	//delete return_expression;
 }
 
 void ReturnNode::emit(CodeGenerator* cg) {
@@ -25,18 +25,14 @@ void ReturnNode::emit(CodeGenerator* cg) {
 	// emit the instructions to calculate the value and put it on the stack
 	//
 	unsigned int l = 0;
-	if (return_expression != NULL)
-	{
-		l = 1;
-		cg->emitRpn(return_expression->getRpn(),pn);
-	}
+	l = 1;
+	cg->emitRpn(return_expression.getRpn(), pn);
 	//
 	// return
 	//
 	cg->emit(2, l, 0);
 }
 
-string ReturnNode::stype()
-{
-	 return "return";
+string ReturnNode::stype() {
+	return "return";
 }

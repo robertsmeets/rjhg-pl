@@ -19,9 +19,9 @@ class ProcedureNode; // forward declaration
 
 class ReturnNode:public Statement {
 	ProcedureNode* pn;
-	ExpressionNode* return_expression;
+	ExpressionNode return_expression;
 public:
-	ReturnNode(ProcedureNode*,ExpressionNode*);
+	ReturnNode(ProcedureNode*,ExpressionNode);
 	virtual ~ReturnNode();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();

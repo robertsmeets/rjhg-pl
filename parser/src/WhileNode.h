@@ -13,13 +13,16 @@
 #include "Statement.h"
 #include "ExpressionNode.h"
 #include "CodeGenerator.h"
+#include "CFunctions.h"
+
+using namespace std;
 
 class WhileNode: public Statement {
 	ProcedureNode* pn;
-	vector<Statement*>* statements;
-	ExpressionNode* expression;
+	vector<Statement*> statements;
+	ExpressionNode expression;
 public:
-	WhileNode(ProcedureNode*,ExpressionNode*, vector<Statement*>*);
+	WhileNode(ProcedureNode*,ExpressionNode, vector<Statement*>);
 	virtual ~WhileNode();
 	void emit(CodeGenerator*);
 	virtual string stype();

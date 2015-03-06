@@ -21,14 +21,14 @@ using namespace std;
 class ProcedureCallNode: public Statement {
 	ProcedureNode* pn;
 	string procedure_name;
-	vector<ExpressionNode*> parameter_exps;
+	vector<ExpressionNode> parameter_exps;
 public:
 	ProcedureCallNode(ProcedureNode*);
 	virtual ~ProcedureCallNode();
 	void setProcedureName(string);
 	string getProcedureName();
 	virtual void emit(CodeGenerator*);
-	void addParametersExpression(ExpressionNode*);
+	void addParametersExpression(ExpressionNode);
 	virtual string stype();
 };
 

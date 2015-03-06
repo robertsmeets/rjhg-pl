@@ -7,17 +7,19 @@
 
 #include "WhileNode.h"
 
-WhileNode::WhileNode(ProcedureNode* p, ExpressionNode* en,
-		vector<Statement*>* s) {
+WhileNode::WhileNode(ProcedureNode* p, ExpressionNode en,
+		vector<Statement*> s) {
 	pn = p;
 	expression = en;
 	statements = s;
 }
 
 WhileNode::~WhileNode() {
-	delete pn;
-	delete expression;
-	delete statements;
+	//delete pn;
+	//delete expression;
+	cout << "Deleting while loop removing " << statements.size() << " statements" << endl;
+	for_each(statements.begin(),statements.end(),delete_pointed_to<Statement>);
+	statements.clear();
 }
 
 void WhileNode::emit(CodeGenerator* cg) {
@@ -25,7 +27,7 @@ void WhileNode::emit(CodeGenerator* cg) {
 	// emit the instructions to calculate the value and put it on the stack
 	//
 	unsigned int dest_address1 = cg->getHere();
-	cg->emitRpn(expression->getRpn(), pn);
+	cg->emitRpn(expression.getRpn(), pn);
 	//
 	// emit JPC, jump if the stack top is 0 (false)
 	//
@@ -34,8 +36,8 @@ void WhileNode::emit(CodeGenerator* cg) {
 	//
 	// emit the block statements
 	//
-	for (vector<Statement*>::iterator it = statements->begin();
-			it != statements->end(); ++it) {
+	for (vector<Statement*>::iterator it = statements.begin();
+			it != statements.end(); ++it) {
 		(*it)->emit(cg);
 	}
 	//

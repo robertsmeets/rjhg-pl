@@ -11,11 +11,11 @@ using namespace std;
 
 ProcedureCallNode::ProcedureCallNode(ProcedureNode* p) {
 	pn = p;
-	parameter_exps = vector<ExpressionNode*>();
+	parameter_exps = vector<ExpressionNode>();
 }
 
 ProcedureCallNode::~ProcedureCallNode() {
-	delete pn;
+	//delete pn;
 }
 
 string ProcedureCallNode::getProcedureName() {
@@ -30,16 +30,16 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	//
 	// put the parameters on the stack
 	//
-	for (vector<ExpressionNode*>::iterator it = parameter_exps.begin();
+	for (vector<ExpressionNode>::iterator it = parameter_exps.begin();
 			it != parameter_exps.end(); ++it) {
-		cg->emitRpn((*it)->getRpn(), pn);
+		cg->emitRpn((*it).getRpn(), pn);
 	}
 
 
 	cg->addCallTo(procedure_name);
 }
 
-void ProcedureCallNode::addParametersExpression(ExpressionNode* en) {
+void ProcedureCallNode::addParametersExpression(ExpressionNode en) {
 	parameter_exps.push_back(en);
 }
 

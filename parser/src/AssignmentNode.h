@@ -26,14 +26,14 @@ class ProcedureNode;
 class AssignmentNode: public Statement {
 	ProcedureNode* pn;
 	unsigned int lhs;
-	ExpressionNode* rhs;
+	ExpressionNode rhs;
 public:
-	AssignmentNode(ProcedureNode*,unsigned int, ExpressionNode*);
+	AssignmentNode(ProcedureNode*,unsigned int, ExpressionNode);
 	virtual ~AssignmentNode();
 	void setLhs(unsigned int);
 	unsigned int getLhs();
-	void setRhs(ExpressionNode*);
-	ExpressionNode* getRhs();
+	void setRhs(ExpressionNode);
+	ExpressionNode getRhs();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
 };

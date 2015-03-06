@@ -8,6 +8,10 @@
 #ifndef CFUNCTIONS_H_
 #define CFUNCTIONS_H_
 
+#include <iostream>
+
+using namespace std;
+
 unsigned int func_plus_ii(unsigned int, unsigned int);
 
 double func_plus_id(int, double);
@@ -79,5 +83,13 @@ bool func_le_id(unsigned int, double);
 bool func_le_di(double, unsigned int);
 
 bool func_le_dd(double, double);
+
+template <typename T>
+void delete_pointed_to(T* const ptr)
+{
+	cout << "deleting " << ptr << endl;
+    delete ptr;
+    cout << "after deleteing the thing" << endl;
+}
 
 #endif /* CFUNCTIONS_H_ */

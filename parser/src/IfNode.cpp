@@ -7,8 +7,8 @@
 
 #include "IfNode.h"
 
-IfNode::IfNode(ProcedureNode* p, ExpressionNode* en, vector<Statement*>* s_true,
-		vector<Statement*>* s_false) {
+IfNode::IfNode(ProcedureNode* p, ExpressionNode en, vector<Statement*> s_true,
+		vector<Statement*> s_false) {
 	pn = p;
 	if_expression = en;
 	statements_true = s_true;
@@ -17,25 +17,24 @@ IfNode::IfNode(ProcedureNode* p, ExpressionNode* en, vector<Statement*>* s_true,
 }
 
 IfNode::~IfNode() {
-	delete pn;
-	delete if_expression;
-	delete statements_true;
-	delete statements_false;
+	//delete pn;
+	// delete if_expression;
+
 }
 
 void IfNode::emit(CodeGenerator* cg) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	cg->emitRpn(if_expression->getRpn(), pn);
-	if (statements_false == NULL) {
+	cg->emitRpn(if_expression.getRpn(), pn);
+	if (statements_false.empty()) {
 		//
 		// emit JPC, jump if the stack top is 0 (false)
 		//
 		cg->emit(8, 0, 0);
 		unsigned int jump_address = cg->getHere() - 2;
-		for (vector<Statement*>::iterator it = statements_true->begin();
-				it != statements_true->end(); ++it) {
+		for (vector<Statement*>::iterator it = statements_true.begin();
+				it != statements_true.end(); ++it) {
 			(*it)->emit(cg);
 		}
 		unsigned int dest_address = cg->getHere();
@@ -43,8 +42,8 @@ void IfNode::emit(CodeGenerator* cg) {
 	} else {
 		cg->emit(8, 0, 0);
 		unsigned int jump_address1 = cg->getHere() - 2;
-		for (vector<Statement*>::iterator it = statements_false->begin();
-				it != statements_false->end(); ++it) {
+		for (vector<Statement*>::iterator it = statements_false.begin();
+				it != statements_false.end(); ++it) {
 			(*it)->emit(cg);
 		}
 		//
@@ -53,8 +52,8 @@ void IfNode::emit(CodeGenerator* cg) {
 		cg->emit(7, 0, 0);
 		unsigned int jump_address2 = cg->getHere() - 2;
 		unsigned int dest_address1 = cg->getHere();
-		for (vector<Statement*>::iterator it = statements_true->begin();
-				it != statements_true->end(); ++it) {
+		for (vector<Statement*>::iterator it = statements_true.begin();
+				it != statements_true.end(); ++it) {
 			(*it)->emit(cg);
 		}
 		unsigned int dest_address2 = cg->getHere();
