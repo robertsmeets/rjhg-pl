@@ -17,7 +17,6 @@ WhileNode::WhileNode(ProcedureNode* p, ExpressionNode en,
 WhileNode::~WhileNode() {
 	//delete pn;
 	//delete expression;
-	cout << "Deleting while loop removing " << statements.size() << " statements" << endl;
 	for_each(statements.begin(),statements.end(),delete_pointed_to<Statement>);
 	statements.clear();
 }

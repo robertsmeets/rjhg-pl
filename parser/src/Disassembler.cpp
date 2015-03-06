@@ -13,7 +13,7 @@
 using namespace std;
 
 Disassembler::Disassembler() {
-
+i=0;
 }
 
 Disassembler::~Disassembler() {

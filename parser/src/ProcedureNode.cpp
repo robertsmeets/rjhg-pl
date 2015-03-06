@@ -10,7 +10,6 @@
 using namespace std;
 
 ProcedureNode::ProcedureNode() {
-	cout << "Beware a new procedurenode is constructed" << endl;
 	name = "";
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
@@ -19,7 +18,6 @@ ProcedureNode::ProcedureNode() {
 }
 
 ProcedureNode::~ProcedureNode() {
-	cout << "procedurenode " << this << " Deleting procedure " << name << " removing " << statements.size() << " statements" << endl;
 	//
 	// delete all the statements
 	//
@@ -29,7 +27,6 @@ ProcedureNode::~ProcedureNode() {
 	//instance_variables.erase(instance_variables.begin(),instance_variables.end());
 	for_each(statements.begin(),statements.end(),delete_pointed_to<Statement>);
 	statements.clear();
-	 cout << "statements size = " <<statements.size() << endl;
 }
 
 ProcedureNode::ProcedureNode(ProcedureNode& other )
