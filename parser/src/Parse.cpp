@@ -124,9 +124,6 @@ bool Parse::get_onething(string chars) {
 			return false;
 		}
 		char c = buffer[offset];
-#ifdef DEBUG
-		cout << "c=[" << c << "]" <<endl;
-#endif
 		offset++;
 		size_t found = chars.find(c);
 		//
@@ -147,7 +144,7 @@ bool Parse::get_onething(string chars) {
 //
 	lookahead();
 #ifdef DEBUG
-	cout <<"peek_string is ["<<peek_string<<"]" << endl;
+	cout << "peek_string is [" << peek_string << "]" << endl;
 #endif
 	return true;
 }
@@ -230,7 +227,7 @@ vector<Statement*> Parse::block(ProcedureNode* pd) {
 		}
 #ifdef DEBUG
 		cout << "peek_string <" << peek_string << "> found_char <" << found_char
-		<< "> ";
+				<< "> ";
 #endif
 		//
 		// return, assignment or proc call or if statement
@@ -263,14 +260,17 @@ vector<Statement*> Parse::block(ProcedureNode* pd) {
 			cout << "DECISION: assignment" << endl;
 #endif
 			statements.push_back(assignment(pd));
-		} else {
+		} else if (found_char == '(') {
 			//
-			// assume procedure call
+			//  procedure call
 			//
 #ifdef DEBUG
 			cout << "DECISION: proc call" << endl;
 #endif
 			statements.push_back(procedure_call(pd));
+		} else {
+			throw PException(
+					"Unknown statement [" + peek_string + "]");
 		}
 	}
 	return statements;

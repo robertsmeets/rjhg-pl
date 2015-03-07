@@ -66,7 +66,7 @@ bool ExpressionParser::isFloat(const string& token) {
 	for (unsigned int i = 0; i < token.length(); i++) //for each char in string,
 			{
 		if (!((token[i] >= '0' && token[i] <= '9') || token[i] == '.'
-				|| (token[i] == 'e' && i>0) || token[i] == '-')) {
+				|| (token[i] == 'e' && i > 0) || token[i] == '-')) {
 			return false;
 		}
 	}
@@ -199,11 +199,10 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// Until the token at the top of the stack is a left parenthesis,
 			// pop operators off the stack onto the output queue.
 			//
-			if (stack.empty())
-			{
+			if (stack.empty()) {
 				break;
 			}
-			string topToken =  stack.top();
+			string topToken = stack.top();
 			while (topToken != "(") {
 				//
 				// type 1: operator ----- must evaluate what this is
@@ -260,8 +259,8 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			// then there are mismatched parentheses.
 			//
 			/* if (!((topToken == "(") || isFunction(topToken))) {
-				return true;
-			} */
+			 return true;
+			 } */
 		} else if (isFunction(token)) {
 			//
 			// found a function
@@ -375,20 +374,17 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 	string str = "";
 	for (unsigned int i = 0; i < expression.length(); ++i) {
 		char a_char = expression[i];
-		if (a_char == ' ' || a_char == '\t')
-		{
+		if (a_char == ' ' || a_char == '\t') {
 			continue;
 		}
 		//
 		// handle the strings
 		//
-		if (a_char == ')' || a_char == '(' || a_char == ',')
-		{
+		if (a_char == ')' || a_char == '(' || a_char == ',') {
 			str += a_char;
 			tokens.push_back(str);
 			str = "";
-		}
-		else if (a_char == '"') {
+		} else if (a_char == '"') {
 			i = getString(expression, i);
 		} else if (a_char >= '0' && a_char <= '9') {
 			i = getNumeric(expression, i);
@@ -410,7 +406,7 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 	}
 
 #ifdef DEBUG
-cout << "-------------------------" << endl;
+	cout << "-------------------------" << endl;
 	for (vector<string>::iterator it=tokens.begin();it< tokens.end();++it)
 	{
 		cout << "TOKEN = " << *it << endl;
@@ -418,7 +414,6 @@ cout << "-------------------------" << endl;
 	cout << "-------------------------" << endl;
 
 #endif
-
 
 	return tokens;
 }
@@ -428,11 +423,12 @@ unsigned int ExpressionParser::getVariableName(string expression,
 	string str = "";
 	for (unsigned int j = i; j < expression.length(); j++) {
 		char a_char = expression[j];
-		if ((a_char >= 'a' && a_char <= 'z') ||( a_char >= '0' && a_char <= '9') ){
+		if ((a_char >= 'a' && a_char <= 'z')
+				|| (a_char >= '0' && a_char <= '9')) {
 			str += a_char;
 		} else {
 			tokens.push_back(str);
-			return j-1;
+			return j - 1;
 		}
 	}
 	tokens.push_back(str);
@@ -447,7 +443,7 @@ unsigned int ExpressionParser::getOperator(string expression, unsigned int i) {
 			str += a_char;
 		} else {
 			tokens.push_back(str);
-			return j-1;
+			return j - 1;
 		}
 	}
 	return expression.length();
@@ -489,23 +485,22 @@ unsigned int ExpressionParser::getNumeric(string expression, unsigned int i) {
 	for (unsigned int j = i; j < expression.length(); j++) {
 		char a_char = expression[j];
 		if ((a_char >= '0' && a_char <= '9') || a_char == '.'
-				|| (a_char == 'e' && j>i)) {
+				|| (a_char == 'e' && j > i)) {
 			str += a_char;
 		} else {
 			tokens.push_back(str);
-			return j -1;
+			return j - 1;
 		}
 	}
-	if (str != "")
-		{
+	if (str != "") {
 		tokens.push_back(str);
-		}
+	}
 	return expression.length();
 }
 
 unsigned int ExpressionParser::getString(string expression, unsigned int i) {
 	string str = "\"";
-	for (unsigned int j = i+1; j < expression.length(); j++) {
+	for (unsigned int j = i + 1; j < expression.length(); j++) {
 		char a_char = expression[j];
 		str += a_char;
 		if (a_char == '"') {
@@ -515,7 +510,6 @@ unsigned int ExpressionParser::getString(string expression, unsigned int i) {
 	}
 	throw new PException("found unmatched double quote in " + expression);
 }
-
 
 //
 // parse string
@@ -528,7 +522,7 @@ ExpressionNode ExpressionParser::parse(string s) {
 	cout << "EXPRESSIONPARSER::PARSE " << s << endl;
 #endif
 	if (s.size() == 0) {
-		throw PException("empty expression");
+		throw PException("empty expression [" + s + "]");
 	}
 //
 // Tokenize input expression
