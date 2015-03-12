@@ -29,7 +29,7 @@ void ReturnNode::emit(CodeGenerator* cg) {
 	//
 	unsigned int l = 0;
 	l = 1;
-	cg->emitRpn(return_expression.getRpn(), pn);
+	cg->emitRpn(return_expression.getRpn(), pn,this);
 	//
 	// return
 	//

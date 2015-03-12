@@ -28,7 +28,7 @@ void WhileNode::emit(CodeGenerator* cg) {
 	// emit the instructions to calculate the value and put it on the stack
 	//
 	unsigned int dest_address1 = cg->getHere();
-	cg->emitRpn(expression.getRpn(), pn);
+	cg->emitRpn(expression.getRpn(), pn,this);
 	//
 	// emit JPC, jump if the stack top is 0 (false)
 	//

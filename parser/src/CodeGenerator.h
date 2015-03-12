@@ -47,8 +47,8 @@ public:
 	void start(ProgramNode*,DebugInfo*);
 	void start_proc(ProcedureNode*);
 	void emit(char, unsigned short int, unsigned short int,Statement*);
-	void emitRpn(vector<ExpressionThing>, ProcedureNode*);
-	void emitOperation(string);
+	void emitRpn(vector<ExpressionThing>, ProcedureNode*,Statement*);
+	void emitOperation(string,Statement*);
 	void fix_proc_addresses();
 	void addCallAddress(unsigned int, string);
 	unsigned int getHere();

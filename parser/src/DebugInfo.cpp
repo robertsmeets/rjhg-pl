@@ -20,7 +20,6 @@ DebugInfo::~DebugInfo() {
 
 void DebugInfo::setPosition(unsigned int here, unsigned int linep,
 		unsigned int charp, unsigned int absp) {
-	cout << "SETPOSITION " << here <<" "<< linep <<" "<< charp <<" "<< absp << endl;
 	cposition my_position;
 	my_position.code_location = here;
 	my_position.linepos = linep;

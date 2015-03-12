@@ -110,6 +110,7 @@ int CInterpreter::execute_next() {
 	// a is the 3rd param
 	//
 #ifdef DEBUG
+	di->printLine(pc);
 	cout << "pc=" << pc << ": ";
 #endif
 	unsigned short int f = *((char*) buffer + pc) & 255;

@@ -27,7 +27,7 @@ void IfNode::emit(CodeGenerator* cg) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	cg->emitRpn(if_expression.getRpn(), pn);
+	cg->emitRpn(if_expression.getRpn(), pn,this);
 	if (statements_false.empty()) {
 		//
 		// emit JPC, jump if the stack top is 0 (false)

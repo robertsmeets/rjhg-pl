@@ -102,9 +102,6 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 		Statement* s) {
-	if (s != NULL) {
-		di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
-	}
 	*((char*) codebuffer + here) = f;
 	here++;
 	*((char*) codebuffer + here) = l & 255;
@@ -115,12 +112,15 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 	here++;
 	*((char*) codebuffer + here) = a >> 8;
 	here++;
+	if (s != NULL) {
+		di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
+	}
 }
 
 //
 // emit the code for an expression
 //
-void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
+void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,Statement* s) {
 
 	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
@@ -143,10 +143,10 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		string my_string;
 		switch (atype) {
 		case 1: // operation
-			emitOperation(avalue);
+			emitOperation(avalue,s);
 			break;
 		case 2: // literal integer
-			emit(1, 2, atoi(avalue.c_str()), NULL);
+			emit(1, 2, atoi(avalue.c_str()), s);
 			break;
 		case 3:  // variable name
 			//
@@ -164,7 +164,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 						//
 						// it is a parameter
 						//
-						emit(3, 0, number, NULL); // LOD
+						emit(3, 0, number, s); // LOD
 						break;
 					}
 				}
@@ -177,7 +177,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 				//
 				emit(3, 0,
 						pn->getParameters()->size()
-								+ local_variables->at(avalue), NULL); // LOD
+								+ local_variables->at(avalue), s); // LOD
 			}
 			break;
 		case 4: // call
@@ -189,7 +189,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		case 5: // float
 			my_double = atof(avalue.c_str());
 			sz = sizeof(my_double);
-			emit(1, 5, sz, NULL);
+			emit(1, 5, sz, s);
 			memcpy(codebuffer + here, &my_double, sz);
 			here += sz;
 			break;
@@ -199,12 +199,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			} else {
 				bvalue = 0;
 			}
-			emit(1, 6, bvalue, NULL);
+			emit(1, 6, bvalue, s);
 			break;
 		case 7: // string
 			strlen = avalue.length() - 2;
 			my_string = avalue.substr(1, strlen);
-			emit(1, 7, strlen, NULL);
+			emit(1, 7, strlen, s);
 			memcpy(codebuffer + here, my_string.c_str(), strlen);
 			here += strlen;
 			break;
@@ -218,12 +218,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 //
 // emit the code for an operation
 //
-void CodeGenerator::emitOperation(string avalue) {
+void CodeGenerator::emitOperation(string avalue,Statement* s) {
 	unsigned int atype = opr_mapping[avalue];
 	if (atype == 0) {
 		throw PException("Unexpected Operation" + avalue);
 	} else {
-		emit(2, 0, atype, NULL);
+		emit(2, 0, atype, s);
 	}
 
 }
@@ -311,8 +311,8 @@ void CodeGenerator::addCallTo(string procedure_name) {
 		// emit a "cal"
 		// leave the call address 0, since this will be corrected in the fix stage
 		//
-      
-      emit(5, 0, 0, NULL);
+
+		emit(5, 0, 0, NULL);
 		addCallAddress(here - 2, procedure_name);
 	} else {
 		//

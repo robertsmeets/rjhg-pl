@@ -23,7 +23,7 @@ void PrintNode::emit(CodeGenerator* cg) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	cg->emitRpn(print_expression.getRpn(), pn);
+	cg->emitRpn(print_expression.getRpn(), pn,this);
 	//
 	// return
 	//
