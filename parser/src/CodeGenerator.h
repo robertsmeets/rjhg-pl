@@ -21,6 +21,7 @@
 #include "ExpressionThing.h"
 #include "AssignmentNode.h"
 #include "PException.h"
+#include "DebugInfo.h"
 
 using namespace std;
 
@@ -38,14 +39,14 @@ class CodeGenerator {
 	unsigned int here;
 	unsigned int codesize;
 	ProgramNode* pn;
+	DebugInfo* di;
 	unordered_map<string, unsigned int> opr_mapping;
-
 public:
 	CodeGenerator();
 	virtual ~CodeGenerator();
-	void start(ProgramNode*);
+	void start(ProgramNode*,DebugInfo*);
 	void start_proc(ProcedureNode*);
-	void emit(char, unsigned short int, unsigned short int);
+	void emit(char, unsigned short int, unsigned short int,Statement*);
 	void emitRpn(vector<ExpressionThing>, ProcedureNode*);
 	void emitOperation(string);
 	void fix_proc_addresses();
@@ -55,7 +56,7 @@ public:
 	void fix(unsigned int, unsigned int);
 	char* getCodeBuffer();
 	void addCallTo(string);
-	bool procDefined(string);
+	Statement* procDefined(string);
 };
 
 #endif /* CODEGENERATOR_H_ */

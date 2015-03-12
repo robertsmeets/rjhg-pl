@@ -7,17 +7,19 @@
 
 #include "WhileNode.h"
 
-WhileNode::WhileNode(ProcedureNode* p, ExpressionNode en,
-		vector<Statement*> s) {
+WhileNode::WhileNode(ProcedureNode* p, ExpressionNode en, vector<Statement*> s,
+		unsigned int linep, unsigned int charp,unsigned int absp) {
+	linepos = linep;
+	charpos = charp;
+	abspos = absp;
 	pn = p;
 	expression = en;
 	statements = s;
 }
 
 WhileNode::~WhileNode() {
-	//delete pn;
-	//delete expression;
-	for_each(statements.begin(),statements.end(),delete_pointed_to<Statement>);
+	for_each(statements.begin(), statements.end(),
+			delete_pointed_to<Statement>);
 	statements.clear();
 }
 
@@ -30,7 +32,7 @@ void WhileNode::emit(CodeGenerator* cg) {
 	//
 	// emit JPC, jump if the stack top is 0 (false)
 	//
-	cg->emit(8, 0, 0);
+	cg->emit(8, 0, 0, this);
 	unsigned int jump_address2 = cg->getHere() - 2;
 	//
 	// emit the block statements
@@ -42,7 +44,7 @@ void WhileNode::emit(CodeGenerator* cg) {
 	//
 	// jump back to the dest_address
 	//
-	cg->emit(7,0,0);
+	cg->emit(7, 0, 0, this);
 	unsigned int dest_address2 = cg->getHere();
 	unsigned int jump_address1 = cg->getHere() - 2;
 	cg->fix(jump_address1, dest_address1);

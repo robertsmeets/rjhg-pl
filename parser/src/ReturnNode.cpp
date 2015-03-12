@@ -7,11 +7,14 @@
 
 #include "ReturnNode.h"
 
-ReturnNode::ReturnNode(ProcedureNode* p, ExpressionNode en) {
+ReturnNode::ReturnNode(ProcedureNode* p, ExpressionNode en,unsigned int linep,unsigned int charp,unsigned int absp) {
 	//
 	// it's valid to have an empty return node, in which case en = NULL
 	//
-	pn = p;
+	linepos = linep;
+		charpos = charp;
+		abspos = absp;
+		pn = p;
 	return_expression = en;
 }
 
@@ -30,7 +33,7 @@ void ReturnNode::emit(CodeGenerator* cg) {
 	//
 	// return
 	//
-	cg->emit(2, l, 0);
+	cg->emit(2, l, 0,this);
 }
 
 string ReturnNode::stype() {

@@ -23,7 +23,7 @@ class ProcedureCallNode: public Statement {
 	string procedure_name;
 	vector<ExpressionNode> parameter_exps;
 public:
-	ProcedureCallNode(ProcedureNode*);
+	ProcedureCallNode(ProcedureNode*,unsigned int,unsigned int,unsigned int);
 	virtual ~ProcedureCallNode();
 	void setProcedureName(string);
 	string getProcedureName();

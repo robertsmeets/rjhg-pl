@@ -13,16 +13,16 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
+#include <dyncall.h>
+#include <dyncall_callf.h>
+#include <dynload.h>
+#include <math.h>
 
 #include "HeapManager.h"
 #include "PException.h"
 #include "CFunctions.h"
+#include "DebugInfo.h"
 
-#include <dyncall.h>
-#include <dyncall_callf.h>
-#include <dynload.h>
-
-#include <math.h>
 using namespace std;
 
 class CInterpreter {
@@ -30,6 +30,7 @@ class CInterpreter {
 		unsigned short int atype;
 		unsigned short int address;
 	};
+	DebugInfo* di;
 	char* buffer;
 	unsigned int pc;
 	unsigned int t;
@@ -52,7 +53,7 @@ class CInterpreter {
 
 	iiptr fptrs[14][8][8];
 public:
-	CInterpreter(char*);
+	CInterpreter(char*, DebugInfo*);
 	virtual ~CInterpreter();
 	void start();
 	int execute_next();

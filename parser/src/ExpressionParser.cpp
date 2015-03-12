@@ -141,9 +141,6 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 		// Read the token
 		//
 		const string token = inputTokens[i];
-#ifdef DEBUG
-		cout << "examining token [" << token << "]" << endl;
-#endif
 		//
 		// If token is an operator
 		//
@@ -404,17 +401,6 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 			}
 		}
 	}
-
-#ifdef DEBUG
-	cout << "-------------------------" << endl;
-	for (vector<string>::iterator it=tokens.begin();it< tokens.end();++it)
-	{
-		cout << "TOKEN = " << *it << endl;
-	}
-	cout << "-------------------------" << endl;
-
-#endif
-
 	return tokens;
 }
 
@@ -518,9 +504,6 @@ ExpressionNode ExpressionParser::parse(string s) {
 //
 // Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
 //
-#ifdef DEBUG
-	cout << "EXPRESSIONPARSER::PARSE " << s << endl;
-#endif
 	if (s.size() == 0) {
 		throw PException("empty expression [" + s + "]");
 	}

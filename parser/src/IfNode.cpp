@@ -8,7 +8,10 @@
 #include "IfNode.h"
 
 IfNode::IfNode(ProcedureNode* p, ExpressionNode en, vector<Statement*> s_true,
-		vector<Statement*> s_false) {
+		vector<Statement*> s_false, unsigned int linep, unsigned int charp,unsigned int absp) {
+	linepos = linep;
+	charpos = charp;
+	abspos =absp;
 	pn = p;
 	if_expression = en;
 	statements_true = s_true;
@@ -17,8 +20,6 @@ IfNode::IfNode(ProcedureNode* p, ExpressionNode en, vector<Statement*> s_true,
 }
 
 IfNode::~IfNode() {
-	//delete pn;
-	// delete if_expression;
 
 }
 
@@ -31,7 +32,7 @@ void IfNode::emit(CodeGenerator* cg) {
 		//
 		// emit JPC, jump if the stack top is 0 (false)
 		//
-		cg->emit(8, 0, 0);
+		cg->emit(8, 0, 0, this);
 		unsigned int jump_address = cg->getHere() - 2;
 		for (vector<Statement*>::iterator it = statements_true.begin();
 				it != statements_true.end(); ++it) {
@@ -40,7 +41,7 @@ void IfNode::emit(CodeGenerator* cg) {
 		unsigned int dest_address = cg->getHere();
 		cg->fix(jump_address, dest_address);
 	} else {
-		cg->emit(8, 0, 0);
+		cg->emit(8, 0, 0, this);
 		unsigned int jump_address1 = cg->getHere() - 2;
 		for (vector<Statement*>::iterator it = statements_false.begin();
 				it != statements_false.end(); ++it) {
@@ -49,7 +50,7 @@ void IfNode::emit(CodeGenerator* cg) {
 		//
 		// jump
 		//
-		cg->emit(7, 0, 0);
+		cg->emit(7, 0, 0, this);
 		unsigned int jump_address2 = cg->getHere() - 2;
 		unsigned int dest_address1 = cg->getHere();
 		for (vector<Statement*>::iterator it = statements_true.begin();

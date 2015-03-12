@@ -27,6 +27,8 @@
 using namespace std;
 
 class Parse {
+	unsigned int linepos;
+	unsigned int charpos;
 	vector<char, allocator<char> > buffer;
 	char found_char;
 	string peek_string;
@@ -58,6 +60,7 @@ public:
 	Statement* if_statement(ProcedureNode*);
 	Statement* while_statement(ProcedureNode*);
 	Statement* print_statement(ProcedureNode*);
+	vector<char, allocator<char> >* getBuffer();
 };
 
 #endif /* PARSE_H_ */

@@ -10,6 +10,8 @@
 using namespace std;
 
 Parse::Parse() {
+	linepos = 0;
+	charpos = 0;
 	found_char = ' ';
 	offset = 0;
 	ep = ExpressionParser();
@@ -24,6 +26,8 @@ ProgramNode* Parse::getPn() {
 }
 
 void Parse::start(string filename) {
+	linepos = 0;
+	charpos = 0;
 	ifstream myfile(filename.c_str(), ios::binary);
 	streampos begin, end;
 	begin = myfile.tellg();
@@ -124,8 +128,14 @@ bool Parse::get_onething(string chars) {
 			return false;
 		}
 		char c = buffer[offset];
+		if (c == '\n') {
+			linepos += 1;
+			charpos = 0;
+		} else if (c != '\r') {
+			charpos += 1;
+		}
 		offset++;
-		size_t found = chars.find(c);
+		std::size_t found = chars.find(c);
 		//
 		// -1: not found
 		//
@@ -143,9 +153,6 @@ bool Parse::get_onething(string chars) {
 // do some more lookahead, until we find a non blank found_char
 //
 	lookahead();
-#ifdef DEBUG
-	cout << "peek_string is [" << peek_string << "]" << endl;
-#endif
 	return true;
 }
 
@@ -269,8 +276,7 @@ vector<Statement*> Parse::block(ProcedureNode* pd) {
 #endif
 			statements.push_back(procedure_call(pd));
 		} else {
-			throw PException(
-					"Unknown statement [" + peek_string + "]");
+			throw PException("Unknown statement [" + peek_string + "]");
 		}
 	}
 	return statements;
@@ -288,8 +294,7 @@ Statement* Parse::assignment(ProcedureNode* pd) {
 	//
 	// create assignment node with new, to avoid it going out of scope
 	//
-	AssignmentNode* an = new AssignmentNode(pd, i, en);
-	return an;
+	return new AssignmentNode(pd, i, en, linepos, charpos, offset);
 }
 
 void Parse::instance_variable_definition() {
@@ -315,7 +320,8 @@ void Parse::immediate_code() {
 
 Statement* Parse::procedure_call(ProcedureNode* pd) {
 	string proc_name = peek_string;
-	ProcedureCallNode* pcn = new ProcedureCallNode(pd);
+	ProcedureCallNode* pcn = new ProcedureCallNode(pd, linepos, charpos,
+			offset);
 	pcn->setProcedureName(proc_name);
 	for (;;) {
 		get_something("),\r\n");
@@ -336,7 +342,7 @@ Statement* Parse::return_statement(ProcedureNode* pd) {
 	get_something("\n\r");
 	string return_expression = peek_string;
 	ExpressionNode en = ep.parse(return_expression);
-	ReturnNode* rn = new ReturnNode(pd, en);
+	ReturnNode* rn = new ReturnNode(pd, en, linepos, charpos, offset);
 	return (Statement*) rn;
 }
 
@@ -352,7 +358,7 @@ Statement* Parse::if_statement(ProcedureNode* pd) {
 	if (peek_string != "endif") {
 		throw PException("missing endif, instead " + peek_string);
 	}
-	IfNode* in = new IfNode(pd, en, s_true, s_false);
+	IfNode* in = new IfNode(pd, en, s_true, s_false, linepos, charpos, offset);
 	return in;
 }
 
@@ -364,7 +370,7 @@ Statement* Parse::while_statement(ProcedureNode* pd) {
 	if (peek_string != "endwhile") {
 		throw PException("missing endwhile, instead " + peek_string);
 	}
-	WhileNode* in = new WhileNode(pd, en, statements);
+	WhileNode* in = new WhileNode(pd, en, statements, linepos, charpos, offset);
 	return in;
 }
 
@@ -372,6 +378,11 @@ Statement* Parse::print_statement(ProcedureNode* pd) {
 	get_something("\n\r");
 	string expression = peek_string;
 	ExpressionNode en = ep.parse(expression);
-	PrintNode* pn = new PrintNode(pd, en);
+	PrintNode* pn = new PrintNode(pd, en, linepos, charpos, offset);
 	return pn;
+}
+
+vector<char, allocator<char> >* Parse::getBuffer()
+{
+return &buffer;
 }

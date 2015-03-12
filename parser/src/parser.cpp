@@ -7,11 +7,13 @@
 //============================================================================
 
 #include <iostream>
+
 #include "Parse.h"
 #include "CodeGenerator.h"
 #include "PException.h"
 #include "Disassembler.h"
 #include "CInterpreter.h"
+#include "DebugInfo.h"
 
 using namespace std;
 
@@ -25,20 +27,19 @@ int main(int argc, char* argv[]) {
 	cout << "Parsing... " << filename << " ... " << endl;
 	Parse p;
 	CodeGenerator cg;
+	DebugInfo di(cg.getCodeBuffer(),p.getBuffer());
 	try {
 		p.start(filename);
-		cg.start(p.getPn());
-
+		cg.start(p.getPn(),&di);
 #ifdef DEBUG
 		Disassembler d;
 		d = Disassembler();
-		d.start(cg.getCodeBuffer(),cg.getHere());
+		d.start(cg.getCodeBuffer(),cg.getHere(),&di);
 #endif
-
 		//
 		// start interpreting
 		//
-		CInterpreter i(cg.getCodeBuffer());
+		CInterpreter i(cg.getCodeBuffer(),&di);
 		i.start();
 	} catch (PException & E) {
 		cout << "Exception: " << E.ShowReason() << endl;

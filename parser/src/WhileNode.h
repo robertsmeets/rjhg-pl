@@ -22,7 +22,7 @@ class WhileNode: public Statement {
 	vector<Statement*> statements;
 	ExpressionNode expression;
 public:
-	WhileNode(ProcedureNode*,ExpressionNode, vector<Statement*>);
+	WhileNode(ProcedureNode*,ExpressionNode, vector<Statement*>,unsigned int,unsigned int,unsigned int);
 	virtual ~WhileNode();
 	void emit(CodeGenerator*);
 	virtual string stype();

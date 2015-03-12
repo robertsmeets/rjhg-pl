@@ -29,10 +29,6 @@ ProcedureNode::~ProcedureNode() {
 	statements.clear();
 }
 
-ProcedureNode::ProcedureNode(ProcedureNode& other )
-{
-cout << "aarg a copy constructor" << endl;
-}
 
 void ProcedureNode::setName(string a_name) {
 	name = a_name;
@@ -98,6 +94,9 @@ void ProcedureNode::fixReturn() {
 	//
 	unsigned int sz = statements.size();
 	bool addreturn = false;
+	unsigned int linepos=0;
+	unsigned int charpos=0;
+	unsigned int abspos =0;
 	if ((sz == 0))
 	{
 		addreturn = true;
@@ -105,11 +104,14 @@ void ProcedureNode::fixReturn() {
 	else
 	{
 		Statement* last = statements.at(sz - 1);
+		linepos = last->linepos;
+		charpos = last->charpos;
+		abspos = last ->abspos;
 		addreturn = (last->stype() != "return");
 	}
 	if (addreturn)
 	{
 		ExpressionNode en;
-		statements.push_back(new ReturnNode (this,en));
+		statements.push_back(new ReturnNode (this,en,linepos,charpos,abspos));
 	}
 }

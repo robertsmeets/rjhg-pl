@@ -7,15 +7,16 @@
 
 #include "PrintNode.h"
 
-PrintNode::PrintNode(ProcedureNode* p, ExpressionNode en) {
+PrintNode::PrintNode(ProcedureNode* p, ExpressionNode en, unsigned int linep,
+		unsigned int charp,unsigned int absp) {
+	linepos = linep;
+	charpos = charp;
+	abspos =absp;
 	pn = p;
 	print_expression = en;
 }
 
 PrintNode::~PrintNode() {
-	//delete pn;
-	//delete print_expression;
-
 }
 
 void PrintNode::emit(CodeGenerator* cg) {
@@ -26,7 +27,7 @@ void PrintNode::emit(CodeGenerator* cg) {
 	//
 	// return
 	//
-	cg->emit(9, 0, 0);
+	cg->emit(9, 0, 0,this);
 }
 string PrintNode::stype() {
 	return "print";

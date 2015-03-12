@@ -12,15 +12,22 @@
 #include <string>
 
 using namespace std;
-class CodeGenerator; // forward declaration
+class CodeGenerator;
+// forward declaration
 
 class Statement {
 
 public:
+	unsigned int linepos;
+	unsigned int charpos;
+	unsigned int abspos;
 	Statement();
 	virtual ~Statement();
 	virtual void emit(CodeGenerator*) = 0;
 	virtual string stype() = 0;
+	unsigned int getLinepos();
+	unsigned int getCharpos();
+	unsigned int getAbspos();
 };
 
 #endif /* STATEMENT_H_ */

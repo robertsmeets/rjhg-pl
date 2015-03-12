@@ -20,7 +20,7 @@ class IfNode:public Statement {
 	vector<Statement*> statements_false;
 	ExpressionNode if_expression;
 public:
-	IfNode(ProcedureNode*,ExpressionNode,vector<Statement*>,vector<Statement*>);
+	IfNode(ProcedureNode*,ExpressionNode,vector<Statement*>,vector<Statement*>,unsigned int,unsigned int,unsigned int);
 	virtual ~IfNode();
 	void emit(CodeGenerator*);
 	virtual string stype();

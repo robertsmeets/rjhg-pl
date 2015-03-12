@@ -9,7 +9,8 @@
 
 using namespace std;
 
-CInterpreter::CInterpreter(char* a_buffer) {
+CInterpreter::CInterpreter(char* a_buffer,DebugInfo* a_di) {
+	di = a_di;
 	buffer = a_buffer;
 	pc = 0; // program counter
 	t = 0;   // is the top of the stack s
@@ -159,9 +160,6 @@ int CInterpreter::execute_next() {
 			// get some memory
 			//
 			ptr = hm.allocate(a + 2);
-#ifdef DEBUG
-			cout << "--- allocated " << (void*) ptr << endl;
-#endif
 			//
 			// copy the string to the heap
 			//
@@ -182,7 +180,7 @@ int CInterpreter::execute_next() {
 			t++;
 			break;
 		default:
-			throw PException("unexpected LIT value");
+			throw PException("unexpected LIT value " + s[t].atype);
 		}
 		break;
 	case 2: // opr
@@ -565,17 +563,14 @@ int CInterpreter::execute_next() {
 		}
 		cout << "]";
 	}
-
 	cout << "      bstack: ";
 	for (unsigned int i = 0; i < tb; i++) {
 		cout << b[i] << " ";
 	}
-
 	cout << "      rstack: ";
 	for (unsigned int i = 0; i < tr; i++) {
 		cout << r[i] << " ";
 	}
-
 	cout << endl;
 #endif
 	return 0;
@@ -596,7 +591,7 @@ void CInterpreter::print_a_string(char* ptr, unsigned int len) {
 
 void CInterpreter::call_external(char* function_name,
 		unsigned int nparameters) {
-/*	string libpath = "msvcrt.dll";
+	string libpath = "msvcrt.dll";
 	const char* lp = libpath.c_str();
 	DLLib* ll = dlLoadLibrary(lp);
 	if (ll == NULL) {
@@ -656,5 +651,5 @@ void CInterpreter::call_external(char* function_name,
 	s[t].atype = 5;
 	s[t].address = (short unsigned int) (ptr - hm.getStart());
 	t++;
-	*/
+
 }

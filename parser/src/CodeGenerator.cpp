@@ -25,7 +25,6 @@ CodeGenerator::CodeGenerator() {
 	opr_mapping[">="] = 11;
 	opr_mapping[">"] = 12;
 	opr_mapping["<="] = 13;
-
 }
 
 CodeGenerator::~CodeGenerator() {
@@ -40,27 +39,28 @@ char* CodeGenerator::getCodeBuffer() {
 	return codebuffer;
 }
 
-void CodeGenerator::start(ProgramNode* a_pn) {
+void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
+	di = a_di;
 	pn = a_pn;
 	//
 	// set up a call to main
 	//
 	// put a dummy value on the stack
 	//
-	emit(1, 2, 0);
+	emit(1, 2, 0, NULL);
 	//
 	// emit INT
 	//
-	emit(6, 0, 0);
+	emit(6, 0, 0, NULL);
 	//
 	// emit CAL
 	//
-	emit(5, 0, 0);
+	emit(5, 0, 0, NULL);
 	callpoints[here - 2] = "main";
 	//
 	// emit RET
 	//
-	emit(2, 0, 0);
+	emit(2, 0, 0, NULL);
 	//
 	// generate all the procedures
 	//
@@ -100,7 +100,11 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 //
 // emit a f,l,a combination
 //
-void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a) {
+void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
+		Statement* s) {
+	if (s != NULL) {
+		di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
+	}
 	*((char*) codebuffer + here) = f;
 	here++;
 	*((char*) codebuffer + here) = l & 255;
@@ -128,9 +132,6 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		//
 		int atype = (*it).getType();
 		string avalue = (*it).getValue();
-#ifdef DEBUG
-		cout << "emitrpn::" << atype <<","<< avalue << endl;
-#endif
 		map<string, unsigned int>* local_variables;
 		map<string, unsigned int>::iterator foundIter;
 		vector<string>* parameters;
@@ -145,7 +146,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			emitOperation(avalue);
 			break;
 		case 2: // literal integer
-			emit(1, 2, atoi(avalue.c_str()));
+			emit(1, 2, atoi(avalue.c_str()), NULL);
 			break;
 		case 3:  // variable name
 			//
@@ -163,7 +164,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 						//
 						// it is a parameter
 						//
-						emit(3, 0, number); // LOD
+						emit(3, 0, number, NULL); // LOD
 						break;
 					}
 				}
@@ -176,7 +177,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 				//
 				emit(3, 0,
 						pn->getParameters()->size()
-								+ local_variables->at(avalue)); // LOD
+								+ local_variables->at(avalue), NULL); // LOD
 			}
 			break;
 		case 4: // call
@@ -188,7 +189,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 		case 5: // float
 			my_double = atof(avalue.c_str());
 			sz = sizeof(my_double);
-			emit(1, 5, sz);
+			emit(1, 5, sz, NULL);
 			memcpy(codebuffer + here, &my_double, sz);
 			here += sz;
 			break;
@@ -198,12 +199,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn) {
 			} else {
 				bvalue = 0;
 			}
-			emit(1, 6, bvalue);
+			emit(1, 6, bvalue, NULL);
 			break;
 		case 7: // string
 			strlen = avalue.length() - 2;
 			my_string = avalue.substr(1, strlen);
-			emit(1, 7, strlen);
+			emit(1, 7, strlen, NULL);
 			memcpy(codebuffer + here, my_string.c_str(), strlen);
 			here += strlen;
 			break;
@@ -222,7 +223,7 @@ void CodeGenerator::emitOperation(string avalue) {
 	if (atype == 0) {
 		throw PException("Unexpected Operation" + avalue);
 	} else {
-		emit(2, 0, atype);
+		emit(2, 0, atype, NULL);
 	}
 
 }
@@ -299,17 +300,19 @@ void CodeGenerator::addCallTo(string procedure_name) {
 	// Since we don't know how many, leave 0 for the INT parameter
 	// this will be corrected in the fix stage
 	//
-	emit(6, 0, 0);
+	emit(6, 0, 0, NULL);
 	//
 	// determine if procedure_name was defined
 	// in the program code, if not it's a dynamic call
 	//
-	if (procDefined(procedure_name)) {
+	Statement* proc = procDefined(procedure_name);
+	if (proc != NULL) {
 		//
 		// emit a "cal"
 		// leave the call address 0, since this will be corrected in the fix stage
 		//
-		emit(5, 0, 0);
+      
+      emit(5, 0, 0, NULL);
 		addCallAddress(here - 2, procedure_name);
 	} else {
 		//
@@ -317,22 +320,22 @@ void CodeGenerator::addCallTo(string procedure_name) {
 		// The string is saved.
 		//
 		unsigned int strlen = procedure_name.length();
-		emit(10, 1, strlen);
+		emit(10, 1, strlen, NULL);
 		addCallAddress(here - 2, procedure_name);
 		memcpy(codebuffer + here, procedure_name.c_str(), strlen);
 		here += strlen;
 	}
 }
 
-bool CodeGenerator::procDefined(string procedure_name) {
+Statement* CodeGenerator::procDefined(string procedure_name) {
 	vector<ProcedureNode*> procedures = pn->getProcedures();
 	for (vector<ProcedureNode*>::iterator it = procedures.begin();
 			it != procedures.end(); ++it) {
 		ProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
 		if (pname == procedure_name) {
-			return true;
+			return (Statement*) a_proc;
 		}
 	}
-	return false;
+	return NULL;
 }

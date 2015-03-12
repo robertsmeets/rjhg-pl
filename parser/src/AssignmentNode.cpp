@@ -10,15 +10,16 @@
 using namespace std;
 
 AssignmentNode::AssignmentNode(ProcedureNode* p, unsigned int an_lhs,
-		ExpressionNode a_rhs) {
+		ExpressionNode a_rhs,unsigned int linep,unsigned int charp,unsigned int absp) {
 	pn = p;
 	lhs = an_lhs;
 	rhs = a_rhs;
+	linepos = linep;
+	charpos = charp;
+	abspos =absp;
 }
 
 AssignmentNode::~AssignmentNode() {
-	//delete pn;
-	//delete rhs;
 }
 
 void AssignmentNode::setLhs(unsigned int a_lhs) {
@@ -50,7 +51,8 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	// local variables
 	// therefore if we want a local variable, we need to add the amount of parameters to it
 	//
-	cg->emit(4, 0, lhs + pn->getParameters()->size() );
+   cout << "emit assignment" << endl;
+	cg->emit(4, 0, lhs + pn->getParameters()->size(),this );
 }
 
 string AssignmentNode::stype() {

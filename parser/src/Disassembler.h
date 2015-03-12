@@ -10,14 +10,17 @@
 
 #include <vector>
 
+#include "DebugInfo.h"
+
 using namespace std;
 
 class Disassembler {
+	DebugInfo* di;
 	unsigned int i;
 public:
 	Disassembler();
 	virtual ~Disassembler();
-	void start(char*,unsigned int);
+	void start(char*,unsigned int,DebugInfo*);
 	string decode(char,unsigned short, unsigned short);
 };
 
