@@ -184,7 +184,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,Statem
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
-			addCallTo(avalue.substr(0, avalue.size() - 1));
+			addCallTo(avalue.substr(0, avalue.size() - 1),s);
 			break;
 		case 5: // float
 			my_double = atof(avalue.c_str());
@@ -293,14 +293,14 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
-void CodeGenerator::addCallTo(string procedure_name) {
+void CodeGenerator::addCallTo(string procedure_name,Statement* s) {
 	//
 	// add room for the local variables.
 	// emit an INT
 	// Since we don't know how many, leave 0 for the INT parameter
 	// this will be corrected in the fix stage
 	//
-	emit(6, 0, 0, NULL);
+	emit(6, 0, 0, s);
 	//
 	// determine if procedure_name was defined
 	// in the program code, if not it's a dynamic call
@@ -312,7 +312,7 @@ void CodeGenerator::addCallTo(string procedure_name) {
 		// leave the call address 0, since this will be corrected in the fix stage
 		//
 
-		emit(5, 0, 0, NULL);
+		emit(5, 0, 0, s);
 		addCallAddress(here - 2, procedure_name);
 	} else {
 		//
@@ -320,7 +320,7 @@ void CodeGenerator::addCallTo(string procedure_name) {
 		// The string is saved.
 		//
 		unsigned int strlen = procedure_name.length();
-		emit(10, 1, strlen, NULL);
+		emit(10, 1, strlen, s);
 		addCallAddress(here - 2, procedure_name);
 		memcpy(codebuffer + here, procedure_name.c_str(), strlen);
 		here += strlen;

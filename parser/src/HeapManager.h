@@ -10,6 +10,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <algorithm>
 
 class HeapManager {
    char* space;

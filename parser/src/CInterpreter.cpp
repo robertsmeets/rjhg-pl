@@ -592,7 +592,7 @@ void CInterpreter::print_a_string(char* ptr, unsigned int len) {
 
 void CInterpreter::call_external(char* function_name,
 		unsigned int nparameters) {
-	string libpath = "msvcrt.dll";
+	/* string libpath = "msvcrt.dll";
 	const char* lp = libpath.c_str();
 	DLLib* ll = dlLoadLibrary(lp);
 	if (ll == NULL) {
@@ -652,5 +652,5 @@ void CInterpreter::call_external(char* function_name,
 	s[t].atype = 5;
 	s[t].address = (short unsigned int) (ptr - hm.getStart());
 	t++;
-
+*/
 }

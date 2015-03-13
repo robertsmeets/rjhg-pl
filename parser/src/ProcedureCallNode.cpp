@@ -37,7 +37,7 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 			it != parameter_exps.end(); ++it) {
 		cg->emitRpn((*it).getRpn(), pn,this);
 	}
-	cg->addCallTo(procedure_name);
+	cg->addCallTo(procedure_name,this);
 }
 
 void ProcedureCallNode::addParametersExpression(ExpressionNode en) {

@@ -55,7 +55,7 @@ public:
 	void emit_to_file();
 	void fix(unsigned int, unsigned int);
 	char* getCodeBuffer();
-	void addCallTo(string);
+	void addCallTo(string,Statement*);
 	Statement* procDefined(string);
 };
 
