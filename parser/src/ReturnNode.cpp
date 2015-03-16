@@ -26,11 +26,21 @@ void ReturnNode::emit(CodeGenerator* cg) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	cg->emitRpn(return_expression.getRpn(), pn, this);
+	unsigned int l;
+	vector<ExpressionThing> rpn = return_expression.getRpn();
+	if (rpn.empty())
+	{
+		l=0;
+	}
+	else
+	{
+		l=1;
+		cg->emitRpn(rpn, pn, this);
+	}
 	//
 	// return
 	//
-	cg->emit(2, 1, 0, this);
+	cg->emit(2, l, 0, this);
 }
 
 string ReturnNode::stype() {

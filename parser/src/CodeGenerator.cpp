@@ -225,7 +225,6 @@ void CodeGenerator::emitOperation(string avalue,Statement* s) {
 	} else {
 		emit(2, 0, atype, s);
 	}
-
 }
 
 /**

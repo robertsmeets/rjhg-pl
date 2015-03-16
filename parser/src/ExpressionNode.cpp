@@ -8,12 +8,9 @@
 #include "ExpressionNode.h"
 
 ExpressionNode::ExpressionNode() {
-
-
 }
 
 ExpressionNode::~ExpressionNode() {
-
 }
 
 void ExpressionNode::setRpn(vector<ExpressionThing> a_rpn)

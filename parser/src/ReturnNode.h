@@ -15,13 +15,15 @@
 
 using namespace std;
 
-class ProcedureNode; // forward declaration
+class ProcedureNode;
+// forward declaration
 
-class ReturnNode:public Statement {
+class ReturnNode: public Statement {
 	ProcedureNode* pn;
 	ExpressionNode return_expression;
 public:
-	ReturnNode(ProcedureNode*,ExpressionNode,unsigned int,unsigned int,unsigned int);
+	ReturnNode(ProcedureNode*, ExpressionNode, unsigned int, unsigned int,
+			unsigned int);
 	virtual ~ReturnNode();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
