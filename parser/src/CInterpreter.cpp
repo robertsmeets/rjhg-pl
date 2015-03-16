@@ -9,7 +9,7 @@
 
 using namespace std;
 
-CInterpreter::CInterpreter(char* a_buffer,DebugInfo* a_di) {
+CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
 	di = a_di;
 	buffer = a_buffer;
 	pc = 0; // program counter
@@ -137,7 +137,7 @@ int CInterpreter::execute_next() {
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-	cout << "LIT " << l << "," << a;
+		cout << "LIT " << l << "," << a;
 #endif
 		switch (l) {
 		case 2: // Int
@@ -186,7 +186,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 2: // opr
 #ifdef DEBUG
-	cout << "OPR";
+		cout << "OPR";
 #endif
 
 		iiptr aiiptr;
@@ -202,7 +202,7 @@ int CInterpreter::execute_next() {
 		switch (a) {
 		case 0:
 #ifdef DEBUG
-			cout << " RET";
+			cout << " RET l= " << l;
 #endif
 			// return
 			if (tr <= 0) {
@@ -220,7 +220,7 @@ int CInterpreter::execute_next() {
 			if (l > 0) {
 				temp = s[t - 1];
 			}
-			t = b[tb-1]+1;
+			t = b[tb - 1] ;
 			tb--;
 			if (l > 0) {
 				s[t] = temp;
@@ -437,7 +437,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-	cout << "STO " << a << " ";
+		cout << "STO " << a << " ";
 #endif
 		t--;
 		s[b[tb - 1] + a] = s[t];
@@ -457,7 +457,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 6:			// int:
 #ifdef DEBUG
-	cout << "INT " << l << "," << a;
+		cout << "INT " << l << "," << a;
 #endif
 		//
 		// this creates a new block with depth a for local variables and parameters
@@ -474,13 +474,13 @@ int CInterpreter::execute_next() {
 		break;
 	case 7:			// jmp
 #ifdef DEBUG
-	cout << "JMP " << a;
+		cout << "JMP " << a;
 #endif
 		pc = a;
 		break;
 	case 8:			// jpc - jump when false
 #ifdef DEBUG
-	cout << "JPC " << a;
+		cout << "JPC " << a;
 #endif
 		fr1 = s[t - 1];
 		if (fr1.atype != 6) {
@@ -493,7 +493,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 9: // print
 #ifdef DEBUG
-	cout << "PRINT " << a;
+		cout << "PRINT " << a;
 #endif
 		t--;
 		fr1 = s[t];
@@ -514,7 +514,7 @@ int CInterpreter::execute_next() {
 
 	case 10: // external function call
 #ifdef DEBUG
-	cout << "EXTCALL " << a;
+		cout << "EXTCALL " << a;
 #endif
 		// parameters should have already been pushed on the stack
 		//
@@ -549,16 +549,16 @@ int CInterpreter::execute_next() {
 		//cout << s[i].atype << ":";
 		cout << "[";
 		switch (s[i].atype) {
-			case 2:
+		case 2:
 			cout << s[i].address;
 			break;
-			case 5:
+		case 5:
 			adr = hm.getStart() + s[i].address;
 			double d;
 			memcpy(&d, adr, 8);
 			cout << d;
 			break;
-			default:
+		default:
 			cout << "?" << s[i].atype;
 			break;
 		}
@@ -593,64 +593,64 @@ void CInterpreter::print_a_string(char* ptr, unsigned int len) {
 void CInterpreter::call_external(char* function_name,
 		unsigned int nparameters) {
 	/* string libpath = "msvcrt.dll";
-	const char* lp = libpath.c_str();
-	DLLib* ll = dlLoadLibrary(lp);
-	if (ll == NULL) {
-		throw PException("could not find library " + libpath);
-	}
-	//
-	// dlLoadLibrary loads a dynamic library at libpath and returns a handle
-	// to it for use in dlFreeLibrary and dlFindSymbol calls.
-	// dlFreeLibrary frees the loaded library with handle pLib.
-	//
-	DCpointer sym = dlFindSymbol(ll, function_name);
-	if (sym == NULL) {
-		throw PException("could not find external symbol");
-	}
-	DCCallVM* vm = dcNewCallVM(4096);
-	dcMode(vm, DC_CALL_C_DEFAULT);
-	dcReset(vm);
-	//
-	// get the arguments
-	//
-	stack_element f = s[t - 1];
-	unsigned int atype = f.atype;
-	double arg_in;
-	char* adr;
-	char* str;
-	unsigned int len;
-	switch (atype) {
-	case 5: // double
-		adr = hm.getStart() + f.address;
-		memcpy(&arg_in, adr, 8);
-		dcArgDouble(vm, arg_in);
-		break;
-	case 7: // string
-		adr = hm.getStart() + f.address;
-		memcpy(&arg_in, adr, 8);
-		len = ((*adr) & 255) + (*(adr + 1) << 8);
-		str = (char*) malloc(len + 1);
-		memcpy(str, adr + 2, len);
-		str[len] = '\0';
-		dcArgChar(vm, *str);
-		free(str);
-		break;
-	default:
-		throw PException("unexpected type in external call");
-	}
-	double r = dcCallDouble(vm, sym);
-	// dcCallPointer(vm,sym);
-	dcFree(vm);
-	dlFreeLibrary(ll);
-	//
-	// put the result on the stack
-	//
-	char* ptr = hm.allocate(8);
-	memcpy(ptr, &r, 8);
-	t = b[tb] + 2;
-	tb--;
-	s[t].atype = 5;
-	s[t].address = (short unsigned int) (ptr - hm.getStart());
-	t++;
-*/
+	 const char* lp = libpath.c_str();
+	 DLLib* ll = dlLoadLibrary(lp);
+	 if (ll == NULL) {
+	 throw PException("could not find library " + libpath);
+	 }
+	 //
+	 // dlLoadLibrary loads a dynamic library at libpath and returns a handle
+	 // to it for use in dlFreeLibrary and dlFindSymbol calls.
+	 // dlFreeLibrary frees the loaded library with handle pLib.
+	 //
+	 DCpointer sym = dlFindSymbol(ll, function_name);
+	 if (sym == NULL) {
+	 throw PException("could not find external symbol");
+	 }
+	 DCCallVM* vm = dcNewCallVM(4096);
+	 dcMode(vm, DC_CALL_C_DEFAULT);
+	 dcReset(vm);
+	 //
+	 // get the arguments
+	 //
+	 stack_element f = s[t - 1];
+	 unsigned int atype = f.atype;
+	 double arg_in;
+	 char* adr;
+	 char* str;
+	 unsigned int len;
+	 switch (atype) {
+	 case 5: // double
+	 adr = hm.getStart() + f.address;
+	 memcpy(&arg_in, adr, 8);
+	 dcArgDouble(vm, arg_in);
+	 break;
+	 case 7: // string
+	 adr = hm.getStart() + f.address;
+	 memcpy(&arg_in, adr, 8);
+	 len = ((*adr) & 255) + (*(adr + 1) << 8);
+	 str = (char*) malloc(len + 1);
+	 memcpy(str, adr + 2, len);
+	 str[len] = '\0';
+	 dcArgChar(vm, *str);
+	 free(str);
+	 break;
+	 default:
+	 throw PException("unexpected type in external call");
+	 }
+	 double r = dcCallDouble(vm, sym);
+	 // dcCallPointer(vm,sym);
+	 dcFree(vm);
+	 dlFreeLibrary(ll);
+	 //
+	 // put the result on the stack
+	 //
+	 char* ptr = hm.allocate(8);
+	 memcpy(ptr, &r, 8);
+	 t = b[tb] + 2;
+	 tb--;
+	 s[t].atype = 5;
+	 s[t].address = (short unsigned int) (ptr - hm.getStart());
+	 t++;
+	 */
 }

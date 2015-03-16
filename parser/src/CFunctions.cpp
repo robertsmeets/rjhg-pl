@@ -10,7 +10,6 @@
 using namespace std;
 
 unsigned int func_plus_ii(unsigned int i, unsigned int j) {
-	cout<<"FPLUS"<<endl;
 	return i + j;
 }
 
@@ -27,8 +26,7 @@ double func_plus_dd(double i, double j) {
 }
 
 unsigned int func_minus_ii(unsigned int i, unsigned int j) {
-	cout<<"FMINUS"<<endl;
-		return i - j;
+	return i - j;
 }
 
 double func_minus_id(int i, double j) {
@@ -44,8 +42,7 @@ double func_minus_dd(double i, double j) {
 }
 
 unsigned int func_mul_ii(unsigned int i, unsigned int j) {
-	cout<<"FMUL"<<endl;
-		return i * j;
+	return i * j;
 }
 
 double func_mul_id(int i, double j) {
