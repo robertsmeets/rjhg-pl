@@ -515,6 +515,21 @@ int CInterpreter::execute_next() {
 			cout << d1 << endl;
 		} else if (fr1.atype == 2) {
 			cout << fr1.address << endl;
+		} else if (fr1.atype == 6) { // boolean
+			if (fr1.address)
+			{
+				cout << "true" << endl;
+			}
+			else
+			{
+				cout << "false" << endl;
+			}
+		}
+		else
+		{
+			stringstream out;
+			out << "Cannot print something of type " << fr1.atype << endl;
+			throw new PException(out.str());
 		}
 		break;
 

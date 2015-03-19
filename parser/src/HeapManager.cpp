@@ -13,7 +13,7 @@ HeapManager::HeapManager() {
 	//
 	// initial allocation
 	//
-	size = 8092;
+	size = 4096;
 	space = (char*) malloc(size);
 	here = space;
 }
@@ -36,8 +36,9 @@ void HeapManager::setInterpreter(CInterpreter* ci) {
 char* HeapManager::allocate(unsigned int nbytes) {
 	unsigned int used = here - space;
 	unsigned int available = size - used;
+	// cout << "used=" << used << " available=" << available << " requested="
+		//	<< nbytes << endl;
 	char* ptr;
-
 	if (available < nbytes) {
 		garbageCollect();
 	}
@@ -143,7 +144,9 @@ void HeapManager::garbageCollect() {
 	//
 	// set here to the new value
 	//
+#ifdef DEBUG
 	cout << "reclaimed " << here - space - last << " bytes" << endl;
+#endif
 	here = space + last;
 #ifdef DEBUG
 	cout << "--- That were the addresses" << endl;
