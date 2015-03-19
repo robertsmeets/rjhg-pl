@@ -25,11 +25,14 @@
 
 using namespace std;
 
-class CInterpreter {
-	struct stack_element {
+class HeapManager; // forward declaration
+
+struct stack_element {
 		unsigned short int atype;
 		unsigned short int address;
 	};
+
+class CInterpreter {
 	DebugInfo* di;
 	char* buffer;
 	unsigned int pc;
@@ -39,7 +42,7 @@ class CInterpreter {
 	vector<stack_element> s;
 	vector<unsigned short int> r;
 	vector<unsigned short int> b;
-	HeapManager hm;
+	HeapManager* hm;
 
 	typedef unsigned int (*iiptr)(unsigned int, unsigned int);
 	typedef double (*ddptr)(double, double);
@@ -60,6 +63,7 @@ public:
 	void print_a_string(char*);
 	void print_a_string(char*, unsigned int);
 	void call_external(char*, unsigned int);
+	vector<stack_element>* getStack();
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

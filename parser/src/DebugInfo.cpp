@@ -54,7 +54,7 @@ void DebugInfo::printLine(unsigned int i) {
 	//
 	if ((found != 0) && (lastprinted != found))
 	{
-		cout << "==> " << i << ": ";
+		/* cout << "==> " << i << ": ";
 		for (unsigned int j = found;; j++) {
 			char c = (*textbuffer)[j];
 			if (c == '\0' || c == '\n' || c == '\r') {
@@ -62,7 +62,7 @@ void DebugInfo::printLine(unsigned int i) {
 			}
 			cout << c;
 		}
-		cout << endl;
+		cout << endl; */
 		lastprinted = found;
 	}
 }

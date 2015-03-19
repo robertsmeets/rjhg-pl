@@ -22,6 +22,10 @@ HeapManager::~HeapManager() {
 	free(space);
 }
 
+void HeapManager::setInterpreter(CInterpreter* ci) {
+	interpreter = ci;
+}
+
 //
 // allocate nbytes of memory and return a pointer to it
 //
@@ -33,12 +37,16 @@ char* HeapManager::allocate(unsigned int nbytes) {
 	unsigned int used = here - space;
 	unsigned int available = size - used;
 	char* ptr;
+
 	if (available < nbytes) {
-		size = max(2 * size, used+ 2 * nbytes);
-#ifdef DEBUG
+		garbageCollect();
+	}
+	used = here - space;
+	available = size - used;
+	if (available < nbytes) {
+		size = max(2 * size, used + 2 * nbytes);
 		cout << "--- Realloc " << size << endl;
-#endif
-		space = (char*)realloc(space, size);
+		space = (char*) realloc(space, size);
 		here = space + used;
 	}
 	ptr = here;
@@ -46,12 +54,112 @@ char* HeapManager::allocate(unsigned int nbytes) {
 	return ptr;
 }
 
-char* HeapManager::getStart()
-{
+char* HeapManager::getStart() {
 	return space;
 }
 
-unsigned short int HeapManager::getOffset()
-{
+unsigned short int HeapManager::getOffset() {
 	return here - space;
+}
+
+void HeapManager::garbageCollect() {
+	//
+	// loop over the stack
+	//
+	map<unsigned int, unsigned int> addresses;   // relative address, length
+	map<unsigned int, unsigned int> references; // rel. address, stack index
+	map<unsigned int, unsigned int> movetable; // old rel. address, new rel.address
+	vector<stack_element>* s = interpreter->getStack();
+	unsigned int i = 0;
+	for (auto const &an_element : *s) {
+		//
+		// the following types can be found
+		//
+		//   0: Null
+		//	 2: integer
+		//	 5: float            -> stored on the heap
+		//   6: boolean
+		//	 7: string           -> stored on the heap
+		//
+		unsigned int t = an_element.atype;
+		if (t == 5) { // float
+			//
+			// the size is 8
+			//
+			unsigned int address = an_element.address;
+			unsigned int len = 8;
+			//
+			// store the address reference
+			//
+			addresses[address] = len;
+			references[address] = i;
+
+		} else if (t == 7) { // string
+			//
+			// figure out the size
+			//
+			unsigned int address = an_element.address;
+			char* ptr = space + address;
+			unsigned int len = ((*ptr) & 255) + (*(ptr + 1) << 8) + 2;
+			//
+			// store the address reference
+			//
+			addresses[address] = len;
+			references[address] = i;
+		}
+		i++;
+	}
+	//
+	// the references are gathered. Find the holes.
+	//
+#ifdef DEBUG
+	cout << "--- Here come the addresses" << endl;
+#endif
+	unsigned int last = 0;
+	for (auto const &it : addresses) {
+		//
+		// it.first is the address
+		// it.second is the length
+		//
+#ifdef DEBUG
+		cout << "address " << it.first << " length " << it.second << endl;
+#endif
+		if (it.first > last) {
+			//
+			// there is a hole
+			//
+			// Move the data. Use memmove since the areas may overlap.
+			// memmove(destination,origin,length)
+			//
+			memmove(space + last, space + it.first, it.second);
+#ifdef DEBUG
+			cout << "Moved " << it.second << " bytes from " << it.first << " to " << last << endl;
+#endif
+			movetable[it.first] = last;
+
+		}
+		last += it.second;
+	}
+	//
+	// set here to the new value
+	//
+	cout << "reclaimed " << here - space - last << " bytes" << endl;
+	here = space + last;
+#ifdef DEBUG
+	cout << "--- That were the addresses" << endl;
+#endif
+	//
+	// all data is moved. Now fix up the addresses.
+	// loop over all references
+	//
+	for (auto const &it : references) {
+		if (movetable.find(it.first) != movetable.end()) {
+			unsigned int new_address = movetable[it.first];
+#ifdef DEBUG
+			cout << "fixing stack entry "<< (*s)[it.second].address <<" to " << new_address << endl;
+#endif
+			(*s)[it.second].address = new_address;
+		}
+	}
+
 }

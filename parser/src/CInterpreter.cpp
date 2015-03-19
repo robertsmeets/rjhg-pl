@@ -10,6 +10,8 @@
 using namespace std;
 
 CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
+	hm = new HeapManager();
+	hm->setInterpreter(this);
 	di = a_di;
 	buffer = a_buffer;
 	pc = 0; // program counter
@@ -87,6 +89,10 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
 }
 
 CInterpreter::~CInterpreter() {
+	delete hm;
+}
+vector<stack_element>* CInterpreter::getStack() {
+	return &s;
 }
 
 void CInterpreter::start() {
@@ -146,13 +152,13 @@ int CInterpreter::execute_next() {
 			t++;
 			break;
 		case 5: // float
-			ptr = hm.allocate(a);
+			ptr = hm->allocate(a);
 			memcpy(ptr, buffer + pc, a);
 			//
 			// put the pointer and the type on the stack
 			//
 			s[t].atype = 5;
-			s[t].address = (short unsigned int) (ptr - hm.getStart());
+			s[t].address = (short unsigned int) (ptr - hm->getStart());
 			t++;
 			pc += a;
 			break;
@@ -160,7 +166,7 @@ int CInterpreter::execute_next() {
 			//
 			// get some memory
 			//
-			ptr = hm.allocate(a + 2);
+			ptr = hm->allocate(a + 2);
 			//
 			// copy the string to the heap
 			//
@@ -171,7 +177,7 @@ int CInterpreter::execute_next() {
 			// put the pointer and the type on the stack
 			//
 			s[t].atype = 7;
-			s[t].address = (short unsigned int) (ptr - hm.getStart());
+			s[t].address = (short unsigned int) (ptr - hm->getStart());
 			t++;
 			pc += a;
 			break;
@@ -206,7 +212,7 @@ int CInterpreter::execute_next() {
 #endif
 			// return
 			if (tr <= 0) {
-				cout << endl << "Exiting program..." << endl;
+				cout << "Exiting program..." << endl;
 				// exit
 				return -1;
 			}
@@ -220,7 +226,7 @@ int CInterpreter::execute_next() {
 			if (l > 0) {
 				temp = s[t - 1];
 			}
-			t = b[tb - 1] ;
+			t = b[tb - 1];
 			tb--;
 			if (l > 0) {
 				s[t] = temp;
@@ -259,42 +265,42 @@ int CInterpreter::execute_next() {
 				//
 				// add two strings
 				//
-				char * ptr1 = hm.getStart() + fr1.address;
-				char * ptr2 = hm.getStart() + fr2.address;
+				char * ptr1 = hm->getStart() + fr1.address;
+				char * ptr2 = hm->getStart() + fr2.address;
 				unsigned int len1 = ((*ptr1) & 255) + (*(ptr1 + 1) << 8);
 				unsigned int len2 = ((*ptr2) & 255) + (*(ptr2 + 1) << 8);
 				unsigned int newlen = len1 + len2;
-				ptr = hm.allocate(newlen + 2);
+				ptr = hm->allocate(newlen + 2);
 				*ptr = newlen & 255;
 				*(ptr + 1) = newlen >> 8;
 				memcpy(ptr + 2, ptr1 + 2, len1);
 				memcpy(ptr + len1 + 2, ptr2 + 2, len2);
-				fr1.address = (unsigned int) (ptr - hm.getStart());
+				fr1.address = (unsigned int) (ptr - hm->getStart());
 				s[t - 1] = fr1;
 			} else if ((fr1.atype == 2) && (fr2.atype == 5)) {
 				//
 				// integer plus float
 				//
-				char* st = hm.getStart();
+				char* st = hm->getStart();
 				memcpy(&d2, st + fr2.address, 8);
 				aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
 				d3 = (*aidptr)(fr1.address, d2);
 				stack_element* fr3 = new stack_element();
 				fr3->atype = 5;
-				fr3->address = hm.allocate(8) - hm.getStart();
+				fr3->address = hm->allocate(8) - hm->getStart();
 				memcpy(st + fr3->address, &d3, 8);
 				s[t - 1] = *fr3;
 			} else if ((fr1.atype == 5) && (fr2.atype == 2)) {
 				//
 				// float plus integer
 				//
-				char* st = hm.getStart();
+				char* st = hm->getStart();
 				memcpy(&d1, st + fr1.address, 8);
 				adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
 				d3 = (*adiptr)(d1, fr2.address);
 				stack_element* fr3 = new stack_element();
 				fr3->atype = 5;
-				fr3->address = hm.allocate(8) - hm.getStart();
+				fr3->address = hm->allocate(8) - hm->getStart();
 				memcpy(st + fr3->address, &d3, 8);
 				s[t - 1] = *fr3;
 
@@ -302,7 +308,7 @@ int CInterpreter::execute_next() {
 				//
 				// both floats
 				//
-				char* st = hm.getStart();
+				char* st = hm->getStart();
 				//
 				// copy both floats to temp variables d1 and d2
 				//
@@ -320,7 +326,7 @@ int CInterpreter::execute_next() {
 				//
 				stack_element* fr3 = new stack_element();
 				fr3->atype = 5;
-				fr3->address = hm.allocate(8) - hm.getStart();
+				fr3->address = hm->allocate(8) - hm->getStart();
 				memcpy(st + fr3->address, &d3, 8);
 				s[t - 1] = *fr3;
 			} else {
@@ -380,7 +386,7 @@ int CInterpreter::execute_next() {
 				//
 				// integer plus float
 				//
-				char* st = hm.getStart();
+				char* st = hm->getStart();
 				memcpy(&d2, st + fr2.address, 8);
 				abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
 				bool eq = (*abidptr)(fr1.address, d2);
@@ -391,7 +397,7 @@ int CInterpreter::execute_next() {
 				//
 				// float plus integer
 				//
-				char* st = hm.getStart();
+				char* st = hm->getStart();
 				memcpy(&d1, st + fr1.address, 8);
 				abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
 				bool eq = (*abdiptr)(d1, fr2.address);
@@ -402,7 +408,7 @@ int CInterpreter::execute_next() {
 				//
 				// both floats
 				//
-				char* st = hm.getStart();
+				char* st = hm->getStart();
 				memcpy(&d1, st + fr1.address, 8);
 				memcpy(&d2, st + fr2.address, 8);
 				abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
@@ -498,13 +504,13 @@ int CInterpreter::execute_next() {
 		t--;
 		fr1 = s[t];
 		if (fr1.atype == 7) {
-			char* ptr = hm.getStart() + fr1.address;
+			char* ptr = hm->getStart() + fr1.address;
 			print_a_string(ptr);
 		} else if (fr1.atype == 5) {
 			//
 			// float
 			//
-			char* ptr = hm.getStart() + fr1.address;
+			char* ptr = hm->getStart() + fr1.address;
 			memcpy(&d1, ptr, 8);
 			cout << d1 << endl;
 		} else if (fr1.atype == 2) {
@@ -553,7 +559,7 @@ int CInterpreter::execute_next() {
 			cout << s[i].address;
 			break;
 		case 5:
-			adr = hm.getStart() + s[i].address;
+			adr = hm->getStart() + s[i].address;
 			double d;
 			memcpy(&d, adr, 8);
 			cout << d;
