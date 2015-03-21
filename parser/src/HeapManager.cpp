@@ -36,8 +36,8 @@ void HeapManager::setInterpreter(CInterpreter* ci) {
 char* HeapManager::allocate(unsigned int nbytes) {
 	unsigned int used = here - space;
 	unsigned int available = size - used;
-	// cout << "used=" << used << " available=" << available << " requested="
-		//	<< nbytes << endl;
+ cout << "used=" << used << " available=" << available << " requested="
+	<< nbytes << endl;
 	char* ptr;
 	if (available < nbytes) {
 		garbageCollect();
@@ -50,6 +50,13 @@ char* HeapManager::allocate(unsigned int nbytes) {
 		space = (char*) realloc(space, size);
 		here = space + used;
 	}
+	/* else if (used + nbytes < size / 3)
+	{
+		size = size / 2;
+		cout << "--- Min Realloc " << size << endl;
+		space = (char*) realloc(space, size);
+		here = space + used;
+	} */
 	ptr = here;
 	here += nbytes;
 	return ptr;
@@ -62,7 +69,12 @@ char* HeapManager::getStart() {
 unsigned short int HeapManager::getOffset() {
 	return here - space;
 }
+struct saddress {
+	unsigned int address;
+	unsigned int len;
 
+};
+bool acompare(saddress lhs, saddress rhs) { return lhs.address < rhs.address; }
 void HeapManager::garbageCollect() {
 	//
 	// loop over the stack
@@ -111,35 +123,54 @@ void HeapManager::garbageCollect() {
 		i++;
 	}
 	//
+	// addresses must be sorted now
+	// transfer them to a vector
+	//
+
+	vector<saddress> vaddresses;
+	for (auto const &it : addresses) {
+		//
+		// it.first is the address
+		// it.second is the length
+		//
+		saddress s;
+		s.address = it.first;
+		s.len = it.second;
+		vaddresses.push_back(s);
+	}
+	//
+	// sort them
+	//
+	sort(vaddresses.begin(), vaddresses.end(),acompare);
+	//
 	// the references are gathered. Find the holes.
 	//
 #ifdef DEBUG
 	cout << "--- Here come the addresses" << endl;
 #endif
 	unsigned int last = 0;
-	for (auto const &it : addresses) {
+	for (auto const &it : vaddresses) {
 		//
 		// it.first is the address
 		// it.second is the length
 		//
 #ifdef DEBUG
-		cout << "address " << it.first << " length " << it.second << endl;
+		cout << "address " << it.address << " length " << it.len << endl;
 #endif
-		if (it.first > last) {
+		if (it.address > last) {
 			//
 			// there is a hole
 			//
 			// Move the data. Use memmove since the areas may overlap.
 			// memmove(destination,origin,length)
 			//
-			memmove(space + last, space + it.first, it.second);
+			memmove(space + last, space + it.address, it.len);
 #ifdef DEBUG
-			cout << "Moved " << it.second << " bytes from " << it.first << " to " << last << endl;
+			cout << "Moved " << it.len << " bytes from " << it.address << " to " << last << endl;
 #endif
-			movetable[it.first] = last;
-
+			movetable[it.address] = last;
 		}
-		last += it.second;
+		last += it.len;
 	}
 	//
 	// set here to the new value
