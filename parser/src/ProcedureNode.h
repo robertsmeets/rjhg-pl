@@ -18,29 +18,32 @@
 #include "PException.h"
 #include "ReturnNode.h"
 #include "CFunctions.h"
+#include "ClassDefinition.h"
 
 using namespace std;
 
-class ProgramNode; // forward declaration
+class ProgramNode;
+// forward declaration
 
-class Statement; // forward declaration
+class Statement;
+// forward declaration
 
 class ProcedureNode {
 	string name;
+	ClassDefinition* cd;
 	vector<string>* parameters;
 	vector<string> instance_variables;
 	vector<Statement*> statements;
-	map<string,unsigned int>* local_variables;
+	map<string, unsigned int>* local_variables;
 	unsigned int proc_address;
 
 public:
-	ProcedureNode();
+	ProcedureNode(ClassDefinition*, string);
 	virtual ~ProcedureNode();
-	ProcedureNode(ProcedureNode&);
 	void setName(string);
 	string getName();
-	map<string,unsigned int>* getLocalVariables();
-	void setProcAddress(unsigned int );
+	map<string, unsigned int>* getLocalVariables();
+	void setProcAddress(unsigned int);
 	unsigned int getProcAddress();
 	vector<string>* getParameters();
 	void addParameter(string);

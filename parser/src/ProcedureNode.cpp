@@ -9,8 +9,9 @@
 
 using namespace std;
 
-ProcedureNode::ProcedureNode() {
-	name = "";
+ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name) {
+	cd = a_cd;
+	name = method_name;
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
@@ -21,14 +22,13 @@ ProcedureNode::~ProcedureNode() {
 	//
 	// delete all the statements
 	//
-	parameters->erase(parameters->begin(),parameters->end());
+	parameters->erase(parameters->begin(), parameters->end());
 	delete parameters;
 	delete local_variables;
-	//instance_variables.erase(instance_variables.begin(),instance_variables.end());
-	for_each(statements.begin(),statements.end(),delete_pointed_to<Statement>);
+	for_each(statements.begin(), statements.end(),
+			delete_pointed_to<Statement>);
 	statements.clear();
 }
-
 
 void ProcedureNode::setName(string a_name) {
 	name = a_name;
@@ -94,24 +94,21 @@ void ProcedureNode::fixReturn() {
 	//
 	unsigned int sz = statements.size();
 	bool addreturn = false;
-	unsigned int linepos=0;
-	unsigned int charpos=0;
-	unsigned int abspos =0;
-	if ((sz == 0))
-	{
+	unsigned int linepos = 0;
+	unsigned int charpos = 0;
+	unsigned int abspos = 0;
+	if ((sz == 0)) {
 		addreturn = true;
-	}
-	else
-	{
+	} else {
 		Statement* last = statements.at(sz - 1);
 		linepos = last->linepos;
 		charpos = last->charpos;
-		abspos = last ->abspos;
+		abspos = last->abspos;
 		addreturn = (last->stype() != "return");
 	}
-	if (addreturn)
-	{
+	if (addreturn) {
 		ExpressionNode en;
-		statements.push_back(new ReturnNode (this,en,linepos,charpos,abspos));
+		statements.push_back(
+				new ReturnNode(this, en, linepos, charpos, abspos));
 	}
 }

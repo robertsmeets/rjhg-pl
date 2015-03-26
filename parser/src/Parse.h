@@ -23,6 +23,7 @@
 #include "IfNode.h"
 #include "WhileNode.h"
 #include "PrintNode.h"
+#include "ClassDefinition.h"
 
 using namespace std;
 
@@ -48,7 +49,6 @@ public:
 	void class_definition();
 	void method_definition();
 	void instance_variable_definition();
-	void local_variable_definition();
 	void immediate_code();
 	void procedure_definition();
 	void trim(string&);

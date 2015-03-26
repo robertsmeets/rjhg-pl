@@ -13,6 +13,7 @@
 #include "ExpressionNode.h"
 #include "ProcedureNode.h"
 
+
 using namespace std;
 
 class ProcedureNode;
@@ -24,6 +25,7 @@ class ReturnNode: public Statement {
 public:
 	ReturnNode(ProcedureNode*, ExpressionNode, unsigned int, unsigned int,
 			unsigned int);
+
 	virtual ~ReturnNode();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();

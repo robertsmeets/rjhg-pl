@@ -89,6 +89,7 @@ void Parse::get_something(string chars) {
 }
 
 void Parse::code_definition() {
+	cout << "in code_definition peek_string =" << peek_string << endl;
 	if (peek_string == "class") {
 		class_definition();
 	} else if (peek_string == "method") {
@@ -178,40 +179,65 @@ void Parse::class_definition() {
 // get the class name
 //
 	string class_name = peek_string;
-	get_something(" \n\t\r");
-//
-// now expect instance_variables, or method keyword
-//
-	if (peek_string == "instance_variables") {
-		instance_variable_definition();
-	} else if (peek_string == "method") {
-		method_definition();
-	} else {
-		cout << "expected instance_variables or method but got <" << peek_string
-				<< ">" << endl;
+	cout << "class name is " << class_name << endl;
+	ClassDefinition cd(class_name);
+	get_something(", \n\t\r");
+	//
+	// now expect instance_variables
+	//
+	while (peek_string != "end") {
+		//
+		// instance variable
+		//
+		cout << "peek string = " << peek_string << endl;
+		cd.add_instance_variable(peek_string);
+		get_something(", \n\t\r");
 	}
+	get_something(" \n\t\r");
 
 }
 void Parse::method_definition() {
-
+	get_something(".");
+	string class_name = peek_string;
+	cout << "class_name = " << class_name << endl;
 	get_something(" \n\t\r");
 	string method_name = peek_string;
-	get_something(" \n\t\r");
 
+	ClassDefinition* cd = NULL;
+	if (class_name != "")
+	{
+		cd =pn.getClass(class_name);
+	}
+	ProcedureNode* pd = new ProcedureNode(cd, method_name);
+	get_something("(\r\n");
+	//
+	// get the definition
+	//
+	for (;;) {
+		get_something("),");
+		pd->addParameter(peek_string);
+		if (found_char == ')') {
+			// done
+			break;
+		}
+	}
+	vector<Statement*> statements = block(pd);
+	pd->setStatements(statements);
+	pd->fixReturn();
+	get_something(" \n\t\r");
+	pn.addProcedure(pd);
 }
 
 void Parse::procedure_definition() {
-	ProcedureNode* pd = new ProcedureNode();
 	//
 	// get the definition
 	//
 	get_something("(\r\n");
 	string proc_name = peek_string;
-	pd->setName(proc_name);
+	ProcedureNode* pd = new ProcedureNode(NULL, proc_name);
 	for (;;) {
 		get_something("),");
 		pd->addParameter(peek_string);
-		//if (peek_string == ")") {
 		if (found_char == ')') {
 			// done
 			break;
@@ -234,7 +260,7 @@ vector<Statement*> Parse::block(ProcedureNode* pd) {
 		}
 #ifdef DEBUG
 		cout << "peek_string <" << peek_string << "> found_char <" << found_char
-				<< "> ";
+		<< "> ";
 #endif
 		//
 		// return, assignment or proc call or if statement
@@ -309,9 +335,6 @@ void Parse::instance_variable_definition() {
 
 }
 
-void Parse::local_variable_definition() {
-}
-
 void Parse::immediate_code() {
 
 	throw PException("unexpected string [" + peek_string + "]");
@@ -382,7 +405,6 @@ Statement* Parse::print_statement(ProcedureNode* pd) {
 	return pn;
 }
 
-vector<char, allocator<char> >* Parse::getBuffer()
-{
-return &buffer;
+vector<char, allocator<char> >* Parse::getBuffer() {
+	return &buffer;
 }
