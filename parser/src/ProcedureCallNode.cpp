@@ -9,16 +9,17 @@
 
 using namespace std;
 
-ProcedureCallNode::ProcedureCallNode(ProcedureNode* p,unsigned int linep,unsigned int charp,unsigned int absp) {
+ProcedureCallNode::ProcedureCallNode(ProcedureNode* p, unsigned int linep,
+		unsigned int charp, unsigned int absp) {
 	linepos = linep;
-		charpos = charp;
-		pn = p;
-		abspos =absp;
+	charpos = charp;
+	pn = p;
+	abspos = absp;
 	parameter_exps = vector<ExpressionNode>();
 }
 
 ProcedureCallNode::~ProcedureCallNode() {
-	//delete pn;
+
 }
 
 string ProcedureCallNode::getProcedureName() {
@@ -35,9 +36,9 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	//
 	for (vector<ExpressionNode>::iterator it = parameter_exps.begin();
 			it != parameter_exps.end(); ++it) {
-		cg->emitRpn((*it).getRpn(), pn,this);
+		cg->emitRpn((*it).getRpn(), pn, this);
 	}
-	cg->addCallTo(procedure_name,this);
+	cg->addCallTo(procedure_name, this);
 }
 
 void ProcedureCallNode::addParametersExpression(ExpressionNode en) {

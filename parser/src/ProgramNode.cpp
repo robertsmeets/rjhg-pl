@@ -6,6 +6,7 @@
  */
 
 #include "ProgramNode.h"
+#include "ClassDefinition.h"
 
 ProgramNode::ProgramNode() {
 

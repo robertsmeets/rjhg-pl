@@ -9,6 +9,9 @@
 
 using namespace std;
 
+/**
+ * constructor
+ */
 ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name) {
 	cd = a_cd;
 	name = method_name;
@@ -18,6 +21,9 @@ ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name) {
 	proc_address = 0;
 }
 
+/**
+ * destructor
+ */
 ProcedureNode::~ProcedureNode() {
 	//
 	// delete all the statements
@@ -30,16 +36,30 @@ ProcedureNode::~ProcedureNode() {
 	statements.clear();
 }
 
+/**
+ * setter methods
+ */
 void ProcedureNode::setName(string a_name) {
 	name = a_name;
 }
 
-string ProcedureNode::getName() {
-	return name;
-}
-
 void ProcedureNode::setProcAddress(unsigned int a) {
 	proc_address = a;
+}
+
+void ProcedureNode::addParameter(string a_parameter) {
+	parameters->push_back(a_parameter);
+}
+
+void ProcedureNode::setStatements(vector<Statement*> some_statements) {
+	statements = some_statements;
+}
+
+/**
+ * getter methods
+ */
+string ProcedureNode::getName() {
+	return name;
 }
 
 unsigned int ProcedureNode::getProcAddress() {
@@ -54,17 +74,10 @@ map<string, unsigned int>* ProcedureNode::getLocalVariables() {
 	return local_variables;
 }
 
-void ProcedureNode::addParameter(string a_parameter) {
-	parameters->push_back(a_parameter);
-}
-
 vector<Statement*> ProcedureNode::getStatements() {
 	return statements;
 }
 
-void ProcedureNode::setStatements(vector<Statement*> some_statements) {
-	statements = some_statements;
-}
 
 /**
  * find the index of an index variable by string
@@ -88,6 +101,9 @@ unsigned int ProcedureNode::assignLocalVariable(string s) {
 	}
 }
 
+/**
+ * add a return statement if the procedure does not define one
+ */
 void ProcedureNode::fixReturn() {
 	//
 	// if return is missing, add it
