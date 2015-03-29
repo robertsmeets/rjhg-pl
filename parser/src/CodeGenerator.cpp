@@ -40,6 +40,28 @@ char* CodeGenerator::getCodeBuffer() {
 }
 
 void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
+	//
+	// emit a magic number
+	//
+	emitByte('R');
+	emitByte('J');
+	emitByte('H');
+	emitByte('G');
+	emitByte('P');
+	emitByte('L');
+	//
+	// emit the method table
+	//
+	for (auto const &a_class : a_pn->getClasses()) {
+		for (auto const &a_method : a_class->getMethods()) {
+			cout << "--- a CLASS: " << a_class->getName() << " has METHOD: "
+					<< a_method->getName() << endl;
+			unsigned int cnum = a_class->getClassNum();
+			unsigned int mnum = a_method->getMethodNumber();
+			emit2Byte(cnum);
+			emit2Byte(mnum);
+		}
+	}
 	di = a_di;
 	pn = a_pn;
 	//
@@ -102,19 +124,23 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 		Statement* s) {
-	*((char*) codebuffer + here) = f;
-	here++;
-	*((char*) codebuffer + here) = l & 255;
-	here++;
-	*((char*) codebuffer + here) = l >> 8;
-	here++;
-	*((char*) codebuffer + here) = a & 255;
-	here++;
-	*((char*) codebuffer + here) = a >> 8;
-	here++;
+	emitByte(f);
+	emit2Byte(l);
+	emit2Byte(a);
 	if (s != NULL) {
 		di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
 	}
+}
+
+void CodeGenerator::emitByte(char b) {
+	*((char*) codebuffer + here) = b;
+	here++;
+
+}
+
+void CodeGenerator::emit2Byte(unsigned int val) {
+	emitByte(val & 255);
+	emitByte(val >> 8);
 }
 
 //
@@ -327,7 +353,8 @@ void CodeGenerator::addCallTo(string name, Statement* s) {
 	}
 }
 
-void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd, Statement* s) {
+void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
+		Statement* s) {
 	cout << "ClassConstructor " << endl;
 	unsigned int ivs = cd->getInstanceVariables().size();
 	unsigned int classnum = cd->getClassNum();
@@ -337,8 +364,6 @@ void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd, Statement* s)
 void CodeGenerator::addCallToMethod(string class_name, string method_name,
 		Statement* s) {
 	cout << "Method call " << class_name << "." << method_name << endl;
-
-
 
 }
 

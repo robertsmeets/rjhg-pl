@@ -89,6 +89,12 @@ vector<Statement*> ProcedureNode::getStatements() {
 	return statements;
 }
 
+unsigned int  ProcedureNode::getMethodNumber()
+{
+	return method_number;
+}
+
+
 /**
  * find the index of an index variable by string
  *

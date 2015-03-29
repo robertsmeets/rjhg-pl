@@ -7,7 +7,7 @@
 
 #include "ClassDefinition.h"
 
-ClassDefinition::ClassDefinition(string a_name,unsigned int num) {
+ClassDefinition::ClassDefinition(string a_name, unsigned int num) {
 	name = a_name;
 	classnum = num;
 }
@@ -33,4 +33,8 @@ void ClassDefinition::add_method(ProcedureNode* m) {
 
 unsigned int ClassDefinition::getClassNum() {
 	return classnum;
+}
+
+vector<ProcedureNode*> ClassDefinition::getMethods() {
+	return methods;
 }

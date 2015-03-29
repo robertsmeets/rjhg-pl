@@ -31,6 +31,7 @@ public:
 	void add_method(ProcedureNode*);
 	vector<string> getInstanceVariables();
 	unsigned int getClassNum();
+	vector<ProcedureNode*> getMethods();
 };
 
 #endif /* CLASSDEFINITION_H_ */

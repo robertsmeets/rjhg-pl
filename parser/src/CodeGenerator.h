@@ -61,6 +61,8 @@ public:
 	void addCallToMethod(string, string, Statement*);
 	void addCallToProcedure(string, Statement*);
 	Statement* procDefined(string);
+	void emitByte(char);
+	void emit2Byte(unsigned int);
 };
 
 #endif /* CODEGENERATOR_H_ */

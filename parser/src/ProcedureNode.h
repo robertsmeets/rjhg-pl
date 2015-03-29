@@ -54,6 +54,7 @@ public:
 	vector<Statement*> getStatements();
 	void setStatements(vector<Statement*>);
 	void fixReturn();
+	unsigned int getMethodNumber();
 };
 
 #endif /* PROCEDURENODE_H_ */
