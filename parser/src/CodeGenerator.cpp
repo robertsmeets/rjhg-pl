@@ -120,7 +120,8 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 //
 // emit the code for an expression
 //
-void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,Statement* s) {
+void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
+		Statement* s) {
 
 	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
@@ -143,7 +144,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,Statem
 		string my_string;
 		switch (atype) {
 		case 1: // operation
-			emitOperation(avalue,s);
+			emitOperation(avalue, s);
 			break;
 		case 2: // literal integer
 			emit(1, 2, atoi(avalue.c_str()), s);
@@ -184,7 +185,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,Statem
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
-			addCallTo(avalue.substr(0, avalue.size() - 1),s);
+			addCallTo(avalue.substr(0, avalue.size() - 1), s);
 			break;
 		case 5: // float
 			my_double = atof(avalue.c_str());
@@ -218,7 +219,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,Statem
 //
 // emit the code for an operation
 //
-void CodeGenerator::emitOperation(string avalue,Statement* s) {
+void CodeGenerator::emitOperation(string avalue, Statement* s) {
 	unsigned int atype = opr_mapping[avalue];
 	if (atype == 0) {
 		throw PException("Unexpected Operation" + avalue);
@@ -292,18 +293,68 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
-void CodeGenerator::addCallTo(string procedure_name,Statement* s) {
+void CodeGenerator::addCallTo(string name, Statement* s) {
 	//
-	// add room for the local variables.
-	// emit an INT
-	// Since we don't know how many, leave 0 for the INT parameter
-	// this will be corrected in the fix stage
+	// there are 3 variants to consider:
 	//
+	//   - calling a method
+	//   - calling a class constructor
+	//   - calling a procedure
+	//
+	// check if there's a point in the name
+	//
+	unsigned int pos = name.find('.');
+	if (pos != string::npos) {
+		//
+		// it's a method call
+		//
+		string expression = name.substr(0, pos);
+		string method_name = name.substr(pos + 1);
+		addCallToMethod(expression, method_name, s);
+	} else {
+		ClassDefinition* a_class = pn->getClass(name);
+		if (a_class != NULL) {
+			//
+			// it's a class constructor
+			//
+			addCallToClassConstructor(a_class, s);
+		} else {
+			//
+			// it's a procedure
+			//
+			addCallToProcedure(name, s);
+		}
+	}
+}
+
+void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd, Statement* s) {
+	cout << "ClassConstructor " << endl;
+	unsigned int ivs = cd->getInstanceVariables().size();
+	unsigned int classnum = cd->getClassNum();
+	emit(11, classnum, ivs, s);
+}
+
+void CodeGenerator::addCallToMethod(string class_name, string method_name,
+		Statement* s) {
+	cout << "Method call " << class_name << "." << method_name << endl;
+
+
+
+}
+
+void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {
+
+//
+// add room for the local variables.
+// emit an INT
+// Since we don't know how many, leave 0 for the INT parameter
+// this will be corrected in the fix stage
+//
 	emit(6, 0, 0, s);
-	//
-	// determine if procedure_name was defined
-	// in the program code, if not it's a dynamic call
-	//
+//
+// determine if procedure_name was defined
+// in the program code, if not it's a dynamic call
+//
 	Statement* proc = procDefined(procedure_name);
 	if (proc != NULL) {
 		//

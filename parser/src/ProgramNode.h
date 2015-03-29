@@ -15,13 +15,16 @@
 
 using namespace std;
 
-class ProcedureNode; // forward declaration
-class ClassDefinition; // forward declaration
+class ProcedureNode;
+// forward declaration
+class ClassDefinition;
+// forward declaration
 
 class ProgramNode {
 	vector<ProcedureNode*> procedures;
 	vector<ClassDefinition*> classes;
-
+	map<string, unsigned int> method_numbers;
+	unsigned int next_methodnumber;
 public:
 	ProgramNode();
 	virtual ~ProgramNode();
@@ -30,6 +33,7 @@ public:
 	vector<ProcedureNode*> getProcedures();
 	vector<ClassDefinition*> getClasses();
 	ClassDefinition* getClass(string);
+	unsigned int assignMethodNumber(string);
 };
 
 #endif /* PROGRAMNODE_H_ */

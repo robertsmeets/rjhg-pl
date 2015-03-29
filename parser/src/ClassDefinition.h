@@ -19,14 +19,18 @@ class ProcedureNode; // forward declaration
 
 class ClassDefinition {
 	string name;
+	unsigned int classnum;
 	vector<string> instance_variables;
 	vector<ProcedureNode*> methods;
+
 public:
-	ClassDefinition(string);
+	ClassDefinition(string,unsigned int);
 	virtual ~ClassDefinition();
 	string getName();
 	void add_instance_variable(string);
 	void add_method(ProcedureNode*);
+	vector<string> getInstanceVariables();
+	unsigned int getClassNum();
 };
 
 #endif /* CLASSDEFINITION_H_ */

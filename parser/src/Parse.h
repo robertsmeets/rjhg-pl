@@ -30,6 +30,7 @@ using namespace std;
 class Parse {
 	unsigned int linepos;
 	unsigned int charpos;
+	unsigned int classnum;
 	vector<char, allocator<char> > buffer;
 	char found_char;
 	string peek_string;

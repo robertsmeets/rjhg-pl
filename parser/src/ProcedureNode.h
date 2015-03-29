@@ -36,9 +36,11 @@ class ProcedureNode {
 	vector<Statement*> statements;
 	map<string, unsigned int>* local_variables;
 	unsigned int proc_address;
+	unsigned int method_number;
+	ProgramNode* pn;
 
 public:
-	ProcedureNode(ClassDefinition*, string);
+	ProcedureNode(ClassDefinition*, string, ProgramNode*);
 	virtual ~ProcedureNode();
 	void setName(string);
 	string getName();

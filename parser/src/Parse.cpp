@@ -15,6 +15,7 @@ Parse::Parse() {
 	found_char = ' ';
 	offset = 0;
 	ep = ExpressionParser();
+	classnum = 1;
 }
 
 Parse::~Parse() {
@@ -180,7 +181,9 @@ void Parse::class_definition() {
 //
 	string class_name = peek_string;
 	cout << "class name is " << class_name << endl;
-	ClassDefinition cd(class_name);
+	ClassDefinition cd(class_name, classnum);
+	pn.addClass(&cd);
+	classnum++;
 	get_something(", \n\t\r");
 	//
 	// now expect instance_variables
@@ -202,13 +205,13 @@ void Parse::method_definition() {
 	cout << "class_name = " << class_name << endl;
 	get_something(" \n\t\r");
 	string method_name = peek_string;
-
 	ClassDefinition* cd = NULL;
-	if (class_name != "")
-	{
-		cd =pn.getClass(class_name);
+	if (class_name != "") {
+		cd = pn.getClass(class_name);
 	}
-	ProcedureNode* pd = new ProcedureNode(cd, method_name);
+	cout <<"--- method_definition, my class is " << class_name << endl;
+	cout << "cd is " << cd << endl;
+	ProcedureNode* pd = new ProcedureNode(cd, method_name, &pn);
 	get_something("(\r\n");
 	//
 	// get the definition
@@ -234,7 +237,7 @@ void Parse::procedure_definition() {
 	//
 	get_something("(\r\n");
 	string proc_name = peek_string;
-	ProcedureNode* pd = new ProcedureNode(NULL, proc_name);
+	ProcedureNode* pd = new ProcedureNode(NULL, proc_name, &pn);
 	for (;;) {
 		get_something("),");
 		pd->addParameter(peek_string);

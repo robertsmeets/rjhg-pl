@@ -12,13 +12,24 @@ using namespace std;
 /**
  * constructor
  */
-ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name) {
+ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name,
+		ProgramNode* a_pn) {
+	pn = a_pn;
 	cd = a_cd;
 	name = method_name;
+	if (cd != NULL) {
+		method_number = pn->assignMethodNumber(method_name);
+		cout << "--- ASSIGNING " << method_number << " TO " << method_name << endl;
+	}
+	else
+	{
+		cout << "--- Defining plain procedure " << method_name << endl;
+	}
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
 	proc_address = 0;
+
 }
 
 /**
@@ -77,7 +88,6 @@ map<string, unsigned int>* ProcedureNode::getLocalVariables() {
 vector<Statement*> ProcedureNode::getStatements() {
 	return statements;
 }
-
 
 /**
  * find the index of an index variable by string

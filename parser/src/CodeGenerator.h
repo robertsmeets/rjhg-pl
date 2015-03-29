@@ -22,6 +22,7 @@
 #include "AssignmentNode.h"
 #include "PException.h"
 #include "DebugInfo.h"
+#include "ClassDefinition.h"
 
 using namespace std;
 
@@ -44,18 +45,21 @@ class CodeGenerator {
 public:
 	CodeGenerator();
 	virtual ~CodeGenerator();
-	void start(ProgramNode*,DebugInfo*);
+	void start(ProgramNode*, DebugInfo*);
 	void start_proc(ProcedureNode*);
-	void emit(char, unsigned short int, unsigned short int,Statement*);
-	void emitRpn(vector<ExpressionThing>, ProcedureNode*,Statement*);
-	void emitOperation(string,Statement*);
+	void emit(char, unsigned short int, unsigned short int, Statement*);
+	void emitRpn(vector<ExpressionThing>, ProcedureNode*, Statement*);
+	void emitOperation(string, Statement*);
 	void fix_proc_addresses();
 	void addCallAddress(unsigned int, string);
 	unsigned int getHere();
 	void emit_to_file();
 	void fix(unsigned int, unsigned int);
 	char* getCodeBuffer();
-	void addCallTo(string,Statement*);
+	void addCallTo(string, Statement*);
+	void addCallToClassConstructor(ClassDefinition*, Statement*);
+	void addCallToMethod(string, string, Statement*);
+	void addCallToProcedure(string, Statement*);
 	Statement* procDefined(string);
 };
 
