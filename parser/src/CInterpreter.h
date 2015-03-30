@@ -64,6 +64,8 @@ public:
 	void print_a_string(char*, unsigned int);
 	void call_external(char*, unsigned int);
 	vector<stack_element>* getStack();
+	void check_magic_number();
+	unsigned int find_offset();
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

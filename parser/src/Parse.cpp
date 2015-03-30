@@ -203,7 +203,7 @@ void Parse::method_definition() {
 	get_something(".");
 	string class_name = peek_string;
 	cout << "class_name = " << class_name << endl;
-	get_something(" \n\t\r");
+	get_something(" \n\t\r(");
 	string method_name = peek_string;
 	ClassDefinition* cd = NULL;
 	if (class_name != "") {

@@ -97,10 +97,22 @@ vector<stack_element>* CInterpreter::getStack() {
 
 void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
-	unsigned i = 0;
+	check_magic_number();
+	unsigned int i = find_offset();
 	for (; !i;) {
 		i = execute_next();
 	}
+}
+
+void CInterpreter::check_magic_number() {
+	if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
+			&& buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
+		throw new PException("Magic number does not match, invalid bytecode");
+	}
+}
+
+unsigned int CInterpreter::find_offset() {
+	return buffer[6] + buffer[7] * 256;
 }
 
 /*

@@ -50,18 +50,34 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	emitByte('P');
 	emitByte('L');
 	//
+	// leave some space for the start address of the code
+	//
+	emit2Byte(0);
+	//
 	// emit the method table
 	//
+	unsigned int amount_of_methods = 0;
 	for (auto const &a_class : a_pn->getClasses()) {
 		for (auto const &a_method : a_class->getMethods()) {
 			cout << "--- a CLASS: " << a_class->getName() << " has METHOD: "
 					<< a_method->getName() << endl;
 			unsigned int cnum = a_class->getClassNum();
 			unsigned int mnum = a_method->getMethodNumber();
+			unsigned int address = a_method->getProcAddress();
 			emit2Byte(cnum);
 			emit2Byte(mnum);
+			emit2Byte(address);
+			amount_of_methods++;
 		}
 	}
+	//
+	// save the start address of the code
+	//
+	unsigned int offset = 6 * amount_of_methods + 6;
+	*((char*) codebuffer + 7) = offset & 255;
+	*((char*) codebuffer + 8) = offset >> 8;
+	//
+	//
 	di = a_di;
 	pn = a_pn;
 	//
