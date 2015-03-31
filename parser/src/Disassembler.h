@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "DebugInfo.h"
+#include "PException.h"
 
 using namespace std;
 

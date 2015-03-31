@@ -31,11 +31,10 @@ int main(int argc, char* argv[]) {
 	try {
 		p.start(filename);
 		cg.start(p.getPn(),&di);
-#ifdef DEBUG
+
 		Disassembler d;
 		d = Disassembler();
 		d.start(cg.getCodeBuffer(),cg.getHere(),&di);
-#endif
 		//
 		// start interpreting
 		//

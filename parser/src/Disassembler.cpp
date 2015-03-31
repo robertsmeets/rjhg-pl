@@ -21,9 +21,15 @@ Disassembler::~Disassembler() {
 }
 
 void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
+	cout << "Starting disassembler..." << endl;
+	if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
+			&& buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
+		throw new PException("Magic number does not match, invalid bytecode");
+	}
 	di = a_di;
 	di->reset();
-	i = 0;
+	i = buffer[6] + buffer[7] * 256;
+	cout << "i is now " << i << " size is now " << size<< endl;
 	for (; i < size;) {
 		di->printLine(i);
 		cout << "i=" << i << " ";

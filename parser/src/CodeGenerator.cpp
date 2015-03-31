@@ -40,6 +40,7 @@ char* CodeGenerator::getCodeBuffer() {
 }
 
 void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
+	cout << "Code generation..." << endl;
 	//
 	// emit a magic number
 	//
@@ -58,6 +59,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	unsigned int amount_of_methods = 0;
 	for (auto const &a_class : a_pn->getClasses()) {
+		cout << "--- a CLASS: " << a_class->getName() << " found" << endl;
 		for (auto const &a_method : a_class->getMethods()) {
 			cout << "--- a CLASS: " << a_class->getName() << " has METHOD: "
 					<< a_method->getName() << endl;
@@ -73,9 +75,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	// save the start address of the code
 	//
-	unsigned int offset = 6 * amount_of_methods + 6;
-	*((char*) codebuffer + 7) = offset & 255;
-	*((char*) codebuffer + 8) = offset >> 8;
+	unsigned int offset = 6 * amount_of_methods + 8;
+	cout << "---> Calculated offset = " << offset << endl;
+	*((char*) codebuffer + 6) = offset & 255;
+	*((char*) codebuffer + 7) = offset >> 8;
 	//
 	//
 	di = a_di;

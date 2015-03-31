@@ -181,8 +181,8 @@ void Parse::class_definition() {
 //
 	string class_name = peek_string;
 	cout << "class name is " << class_name << endl;
-	ClassDefinition cd(class_name, classnum);
-	pn.addClass(&cd);
+	ClassDefinition* cd = new ClassDefinition(class_name, classnum);
+	pn.addClass(cd);
 	classnum++;
 	get_something(", \n\t\r");
 	//
@@ -193,7 +193,7 @@ void Parse::class_definition() {
 		// instance variable
 		//
 		cout << "peek string = " << peek_string << endl;
-		cd.add_instance_variable(peek_string);
+		cd->add_instance_variable(peek_string);
 		get_something(", \n\t\r");
 	}
 	get_something(" \n\t\r");
@@ -212,6 +212,7 @@ void Parse::method_definition() {
 	cout <<"--- method_definition, my class is " << class_name << endl;
 	cout << "cd is " << cd << endl;
 	ProcedureNode* pd = new ProcedureNode(cd, method_name, &pn);
+	cd->add_method(pd);
 	get_something("(\r\n");
 	//
 	// get the definition

@@ -30,6 +30,7 @@ vector<ProcedureNode*> ProgramNode::getProcedures() {
 }
 
 void ProgramNode::addClass(ClassDefinition* cd) {
+	cout << "adding class";
 	classes.push_back(cd);
 }
 

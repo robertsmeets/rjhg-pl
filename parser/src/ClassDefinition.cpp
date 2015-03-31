@@ -28,6 +28,7 @@ void ClassDefinition::add_instance_variable(string i) {
 }
 
 void ClassDefinition::add_method(ProcedureNode* m) {
+	cout << "adding a method " << endl;
 	methods.push_back(m);
 }
 
