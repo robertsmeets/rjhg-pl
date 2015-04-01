@@ -59,10 +59,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	unsigned int amount_of_methods = 0;
 	for (auto const &a_class : a_pn->getClasses()) {
-		cout << "--- a CLASS: " << a_class->getName() << " found" << endl;
 		for (auto const &a_method : a_class->getMethods()) {
-			cout << "--- a CLASS: " << a_class->getName() << " has METHOD: "
-					<< a_method->getName() << endl;
 			unsigned int cnum = a_class->getClassNum();
 			unsigned int mnum = a_method->getMethodNumber();
 			unsigned int address = a_method->getProcAddress();

@@ -29,7 +29,7 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 	di = a_di;
 	di->reset();
 	i = buffer[6] + buffer[7] * 256;
-	cout << "i is now " << i << " size is now " << size<< endl;
+	cout << "i is now " << i << " size is now " << size << endl;
 	for (; i < size;) {
 		di->printLine(i);
 		cout << "i=" << i << " ";
@@ -165,6 +165,9 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 		sf = "DYNCAL";
 		i += 5 + a;
 		break;
+	case 11:
+		sf = "CLASS CONSTRUCTOR";
+		i += 5;
 	default:
 		sf = "------------------------------------> unexpected F value: "
 				+ int(f);

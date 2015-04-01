@@ -576,6 +576,15 @@ int CInterpreter::execute_next() {
 		//
 		*ptr = l & 255;
 		*(ptr + 1) = l >> 8;
+		//
+		// leave the new object on the stack
+		//
+
+		s[t].atype = 8; // Object?
+		s[t].address = ptr-hm->getStart() ;
+		t++;
+
+
 		break;
 	case 12: // method call, the object is already on the stack.
 		// the string of the method to call is embedded in the bytecode.
