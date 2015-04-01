@@ -98,7 +98,8 @@ vector<stack_element>* CInterpreter::getStack() {
 void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
 	check_magic_number();
-	unsigned int i = find_offset();
+	pc = find_offset();
+	unsigned i=0;
 	for (; !i;) {
 		i = execute_next();
 	}
