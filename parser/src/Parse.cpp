@@ -90,7 +90,6 @@ void Parse::get_something(string chars) {
 }
 
 void Parse::code_definition() {
-	cout << "in code_definition peek_string =" << peek_string << endl;
 	if (peek_string == "class") {
 		class_definition();
 	} else if (peek_string == "method") {
@@ -180,7 +179,6 @@ void Parse::class_definition() {
 // get the class name
 //
 	string class_name = peek_string;
-	cout << "class name is " << class_name << endl;
 	ClassDefinition* cd = new ClassDefinition(class_name, classnum);
 	pn.addClass(cd);
 	classnum++;
@@ -192,7 +190,6 @@ void Parse::class_definition() {
 		//
 		// instance variable
 		//
-		cout << "peek string = " << peek_string << endl;
 		cd->add_instance_variable(peek_string);
 		get_something(", \n\t\r");
 	}
@@ -202,18 +199,15 @@ void Parse::class_definition() {
 void Parse::method_definition() {
 	get_something(".");
 	string class_name = peek_string;
-	cout << "class_name = " << class_name << endl;
 	get_something(" \n\t\r(");
 	string method_name = peek_string;
 	ClassDefinition* cd = NULL;
 	if (class_name != "") {
 		cd = pn.getClass(class_name);
 	}
-	cout <<"--- method_definition, my class is " << class_name << endl;
-	cout << "cd is " << cd << endl;
 	ProcedureNode* pd = new ProcedureNode(cd, method_name, &pn);
 	cd->add_method(pd);
-	get_something("(\r\n");
+	//get_something("(\r\n");
 	//
 	// get the definition
 	//
@@ -229,7 +223,6 @@ void Parse::method_definition() {
 	pd->setStatements(statements);
 	pd->fixReturn();
 	get_something(" \n\t\r");
-	pn.addProcedure(pd);
 }
 
 void Parse::procedure_definition() {
@@ -264,7 +257,7 @@ vector<Statement*> Parse::block(ProcedureNode* pd) {
 		}
 #ifdef DEBUG
 		cout << "peek_string <" << peek_string << "> found_char <" << found_char
-		<< "> ";
+				<< "> ";
 #endif
 		//
 		// return, assignment or proc call or if statement

@@ -22,6 +22,7 @@ ProgramNode::~ProgramNode() {
 }
 
 void ProgramNode::addProcedure(ProcedureNode* pn) {
+	cout << "--- ADDING PROCEDURE " << pn->getName() << endl;
 	procedures.push_back(pn);
 }
 
@@ -30,7 +31,6 @@ vector<ProcedureNode*> ProgramNode::getProcedures() {
 }
 
 void ProgramNode::addClass(ClassDefinition* cd) {
-	cout << "adding class";
 	classes.push_back(cd);
 }
 
@@ -40,14 +40,8 @@ vector<ClassDefinition*> ProgramNode::getClasses() {
 
 ClassDefinition* ProgramNode::getClass(string class_name) {
 	for (auto a_class : classes) {
-		cout << "a_class " << a_class->getName() << endl;
 		if (a_class->getName() == class_name) {
-			cout << " match" << endl;
 			return a_class;
-		}
-		else
-		{
-			cout << "no match" << endl;
 		}
 	}
 	return NULL;
