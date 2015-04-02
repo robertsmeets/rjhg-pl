@@ -166,11 +166,17 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 		i += 5 + a;
 		break;
 	case 11:
-		sf = "CLASS CONSTRUCTOR";
+		sf = "OBJ CREATION";
 		i += 5;
+		break;
+	case 12:
+		sf = "METHOD CALL";
+		i += 5;
+		break;
 	default:
-		sf = "------------------------------------> unexpected F value: "
+		sf = "-----------------------------------+> unexpected F value: "
 				+ int(f);
+		cout << " F=" << (unsigned int) f << " L=" << l << " A=" << a << endl;
 		i += 5;
 		break;
 	}

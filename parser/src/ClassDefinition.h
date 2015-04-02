@@ -15,7 +15,8 @@
 
 using namespace std;
 
-class ProcedureNode; // forward declaration
+class ProcedureNode;
+// forward declaration
 
 class ClassDefinition {
 	string name;
@@ -24,7 +25,7 @@ class ClassDefinition {
 	vector<ProcedureNode*> methods;
 
 public:
-	ClassDefinition(string,unsigned int);
+	ClassDefinition(string, unsigned int);
 	virtual ~ClassDefinition();
 	string getName();
 	void add_instance_variable(string);
@@ -32,6 +33,8 @@ public:
 	vector<string> getInstanceVariables();
 	unsigned int getClassNum();
 	vector<ProcedureNode*> getMethods();
+	ProcedureNode* findMethod(string);
+
 };
 
 #endif /* CLASSDEFINITION_H_ */

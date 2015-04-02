@@ -99,7 +99,14 @@ void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
 	check_magic_number();
 	pc = find_offset();
-	unsigned i=0;
+	for (unsigned int j = 6; j < pc; j += 6) {
+		unsigned int classnum = buffer[j] + buffer[j + 1] * 256;
+		unsigned int methodnum = buffer[j + 2] + buffer[j + 3] * 256;
+		unsigned int address = buffer[j + 4] + buffer[j + 5] * 256;
+		cout << "--- CLASS=" << classnum << " METHOD=" << methodnum
+				<< " ADRESS=" << address << endl;
+	}
+	unsigned i = 0;
 	for (; !i;) {
 		i = execute_next();
 	}
@@ -156,7 +163,7 @@ int CInterpreter::execute_next() {
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-	cout << "LIT " << l << "," << a;
+		cout << "LIT " << l << "," << a;
 #endif
 		switch (l) {
 		case 2: // Int
@@ -205,7 +212,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 2: // opr
 #ifdef DEBUG
-	cout << "OPR";
+		cout << "OPR";
 #endif
 
 		iiptr aiiptr;
@@ -456,7 +463,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-	cout << "STO " << a << " ";
+		cout << "STO " << a << " ";
 #endif
 		t--;
 		s[b[tb - 1] + a] = s[t];
@@ -476,7 +483,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 6:			// int:
 #ifdef DEBUG
-	cout << "INT " << l << "," << a;
+		cout << "INT " << l << "," << a;
 #endif
 		//
 		// this creates a new block with depth a for local variables and parameters
@@ -493,13 +500,13 @@ int CInterpreter::execute_next() {
 		break;
 	case 7:			// jmp
 #ifdef DEBUG
-	cout << "JMP " << a;
+		cout << "JMP " << a;
 #endif
 		pc = a;
 		break;
 	case 8:			// jpc - jump when false
 #ifdef DEBUG
-	cout << "JPC " << a;
+		cout << "JPC " << a;
 #endif
 		fr1 = s[t - 1];
 		if (fr1.atype != 6) {
@@ -512,7 +519,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 9: // print
 #ifdef DEBUG
-	cout << "PRINT " << a;
+		cout << "PRINT " << a;
 #endif
 		t--;
 		fr1 = s[t];
@@ -534,6 +541,8 @@ int CInterpreter::execute_next() {
 			} else {
 				cout << "false" << endl;
 			}
+		} else if (fr1.atype == 8) {
+			cout << "A fancy object" << endl;
 		} else {
 			stringstream out;
 			out << "Cannot print something of type " << fr1.atype << endl;
@@ -543,7 +552,7 @@ int CInterpreter::execute_next() {
 
 	case 10: // external function call
 #ifdef DEBUG
-	cout << "EXTCALL " << a;
+		cout << "EXTCALL " << a;
 #endif
 		// parameters should have already been pushed on the stack
 		//
@@ -564,7 +573,7 @@ int CInterpreter::execute_next() {
 		free(ptr);
 		break;
 	case 11: // object creation
-		cout << "OBJECT CREATION";
+		cout << "OBJ CREATION";
 		//
 		// l contains the classnum
 		// a contains the number of instance variables
@@ -579,22 +588,22 @@ int CInterpreter::execute_next() {
 		//
 		// leave the new object on the stack
 		//
-
 		s[t].atype = 8; // Object?
-		s[t].address = ptr-hm->getStart() ;
+		s[t].address = ptr - hm->getStart();
 		t++;
-
-
 		break;
 	case 12: // method call, the object is already on the stack.
 		// the string of the method to call is embedded in the bytecode.
 		//
 		cout << "METHOD CALL";
 		//
-		// get the string
 		// lookup the method by object type and name
 		// call the method
 		//
+		// l is the class number
+		// a is the method number
+		//
+
 		pc += a;
 		break;
 	default:
@@ -611,16 +620,16 @@ int CInterpreter::execute_next() {
 		//cout << s[i].atype << ":";
 		cout << "[";
 		switch (s[i].atype) {
-			case 2:
+		case 2:
 			cout << s[i].address;
 			break;
-			case 5:
+		case 5:
 			adr = hm->getStart() + s[i].address;
 			double d;
 			memcpy(&d, adr, 8);
 			cout << d;
 			break;
-			default:
+		default:
 			cout << "?" << s[i].atype;
 			break;
 		}
