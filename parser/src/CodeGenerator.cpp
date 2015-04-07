@@ -377,20 +377,20 @@ void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
 	emit(11, classnum, ivs, s);
 }
 
-void CodeGenerator::addCallToMethod(string class_name, string method_name,
+void CodeGenerator::addCallToMethod(string expression, string method_name,
 		Statement* s) {
-	cout << "Method call " << class_name << "." << method_name << endl;
-	ClassDefinition* cd = pn->getClass(class_name);
-	if (cd == NULL)
-	{
-		throw new PException("Class "+class_name+" not found");
+	cout << "Method call " << expression << "." << method_name << endl;
+/*	ClassDefinition* cd = pn->getClass(class_name);
+	if (cd == NULL) {
+		cout << "Class not found " << class_name << endl;
+		throw new PException("Class " + class_name + " not found");
 	}
 	ProcedureNode* m = cd->findMethod(method_name);
-	if (m==NULL)
-	{
-		throw new PException("Class "+class_name+" does not have method " + method_name);
+	if (m == NULL) {
+		throw new PException(
+				"Class " + class_name + " does not have method " + method_name);
 	}
-	emit(12,cd->getClassNum(),m->getMethodNumber(),s);
+	emit(12, cd->getClassNum(), m->getMethodNumber(), s); */
 }
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {

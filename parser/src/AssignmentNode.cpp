@@ -42,7 +42,7 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 	//
 	// emit the calculation instructions
 	//
-	cg->emitRpn(rhs.getRpn(), pn,this);
+	cg->emitRpn(rhs.getRpn(), pn, this);
 	//
 	// emit a "sto" to store the value in a variable
 	//

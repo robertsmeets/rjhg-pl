@@ -16,6 +16,7 @@ ProcedureCallNode::ProcedureCallNode(ProcedureNode* p, unsigned int linep,
 	pn = p;
 	abspos = absp;
 	parameter_exps = vector<ExpressionNode>();
+	method = false;
 }
 
 ProcedureCallNode::~ProcedureCallNode() {
@@ -30,6 +31,14 @@ void ProcedureCallNode::setProcedureName(string a_procedure_name) {
 	procedure_name = a_procedure_name;
 }
 
+void ProcedureCallNode::setLhsExpression(ExpressionNode en) {
+	LhsExpression = en;
+}
+
+void ProcedureCallNode::setMethod(bool b) {
+	method = b;
+}
+
 void ProcedureCallNode::emit(CodeGenerator* cg) {
 	//
 	// put the parameters on the stack
@@ -37,6 +46,10 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	for (vector<ExpressionNode>::iterator it = parameter_exps.begin();
 			it != parameter_exps.end(); ++it) {
 		cg->emitRpn((*it).getRpn(), pn, this);
+	}
+	if (method)
+	{
+		cg->emitRpn(LhsExpression.getRpn(), pn, this);
 	}
 	cg->addCallTo(procedure_name, this);
 }

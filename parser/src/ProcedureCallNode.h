@@ -22,6 +22,8 @@ class ProcedureCallNode: public Statement {
 	ProcedureNode* pn;
 	string procedure_name;
 	vector<ExpressionNode> parameter_exps;
+	ExpressionNode LhsExpression;
+	bool method;
 public:
 	ProcedureCallNode(ProcedureNode*,unsigned int,unsigned int,unsigned int);
 	virtual ~ProcedureCallNode();
@@ -29,6 +31,8 @@ public:
 	string getProcedureName();
 	virtual void emit(CodeGenerator*);
 	void addParametersExpression(ExpressionNode);
+	void setLhsExpression(ExpressionNode);
+	void setMethod(bool);
 	virtual string stype();
 };
 
