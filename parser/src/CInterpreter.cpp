@@ -99,7 +99,7 @@ void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
 	check_magic_number();
 	pc = find_offset();
-	for (unsigned int j = 6; j < pc; j += 6) {
+	for (unsigned int j = 8; j < pc; j += 6) {
 		unsigned int classnum = buffer[j] + buffer[j + 1] * 256;
 		unsigned int methodnum = buffer[j + 2] + buffer[j + 3] * 256;
 		unsigned int address = buffer[j + 4] + buffer[j + 5] * 256;

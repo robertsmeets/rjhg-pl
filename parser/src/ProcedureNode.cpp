@@ -19,10 +19,9 @@ ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name,
 	name = method_name;
 	if (cd != NULL) {
 		method_number = pn->assignMethodNumber(method_name);
-		cout << "--- ASSIGNING " << method_number << " TO " << method_name << endl;
-	}
-	else
-	{
+		cout << "--- ASSIGNING " << method_number << " TO " << method_name
+				<< endl;
+	} else {
 		cout << "--- Defining plain procedure " << method_name << endl;
 	}
 	parameters = new vector<string>();
@@ -89,11 +88,13 @@ vector<Statement*> ProcedureNode::getStatements() {
 	return statements;
 }
 
-unsigned int  ProcedureNode::getMethodNumber()
-{
+unsigned int ProcedureNode::getMethodNumber() {
 	return method_number;
 }
 
+string ProcedureNode::getFullMethodName() {
+	return cd->getName() + "." + name;
+}
 
 /**
  * find the index of an index variable by string

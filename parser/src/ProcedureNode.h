@@ -48,6 +48,7 @@ public:
 	void setProcAddress(unsigned int);
 	unsigned int getProcAddress();
 	vector<string>* getParameters();
+	string getFullMethodName();
 	void addParameter(string);
 	unsigned int assignLocalVariable(string);
 	unsigned int get_proc_address();

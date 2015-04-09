@@ -111,9 +111,21 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			++it) {
 		ProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
+		cout << "-------------------> starting procedure " << pname << " at " << here << endl;
 		a_proc->setProcAddress(here);
 		procaddresses[pname] = a_proc;
 		start_proc(a_proc);
+	}
+	//
+	// also the methods
+	//
+	for (auto const &a_class : a_pn->getClasses()) {
+		for (auto const &a_method : a_class->getMethods()) {
+			a_method->setProcAddress(here);
+			procaddresses[a_method->getFullMethodName()] = a_method;
+			cout << "-------------------> starting method " << a_method->getFullMethodName()<< " at " << here << endl;
+					start_proc(a_method);
+		}
 	}
 	//
 	// fix the proc addresses
@@ -380,17 +392,12 @@ void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
 void CodeGenerator::addCallToMethod(string expression, string method_name,
 		Statement* s) {
 	cout << "Method call " << expression << "." << method_name << endl;
-/*	ClassDefinition* cd = pn->getClass(class_name);
-	if (cd == NULL) {
-		cout << "Class not found " << class_name << endl;
-		throw new PException("Class " + class_name + " not found");
-	}
-	ProcedureNode* m = cd->findMethod(method_name);
-	if (m == NULL) {
-		throw new PException(
-				"Class " + class_name + " does not have method " + method_name);
-	}
-	emit(12, cd->getClassNum(), m->getMethodNumber(), s); */
+/*
+ *
+ * evaluate the expression here}
+	*/
+	emit(12, 0,0, s);
+
 }
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {
