@@ -1,0 +1,75 @@
+CC=cl.exe
+CFLAGS=/c /I..\..\..\dyncall-0.8_win\include /EHsc
+
+.PHONY: all
+all: parser.exe
+
+parser.obj: parser.cpp
+	$(CC) $(CFLAGS) parser.cpp
+
+ProcedureNode.obj: ProcedureNode.cpp 
+	$(CC) $(CFLAGS) ProcedureNode.cpp
+
+CFunctions.obj: CFunctions.cpp 
+	$(CC) $(CFLAGS) CFunctions.cpp
+
+ExpressionNode.obj: ExpressionNode.cpp 
+	$(CC) $(CFLAGS) ExpressionNode.cpp
+
+PrintNode.obj: PrintNode.cpp 
+	$(CC) $(CFLAGS) PrintNode.cpp
+ 
+IfNode.obj: IfNode.cpp 
+	$(CC) $(CFLAGS) IfNode.cpp
+ 
+CodeGenerator.obj: CodeGenerator.cpp 
+	$(CC) $(CFLAGS) CodeGenerator.cpp 
+ 
+ExpressionParser.obj: ExpressionParser.cpp 
+	$(CC) $(CFLAGS) ExpressionParser.cpp 
+ 
+AssignmentNode.obj: AssignmentNode.cpp 
+	$(CC) $(CFLAGS) AssignmentNode.cpp 
+ 
+ProgramNode.obj: ProgramNode.cpp 
+	$(CC) $(CFLAGS) ProgramNode.cpp 
+ 
+DebugInfo.obj: DebugInfo.cpp 
+	$(CC) $(CFLAGS) DebugInfo.cpp 
+ 
+Statement.obj: Statement.cpp 
+	$(CC) $(CFLAGS) Statement.cpp 
+ 
+HeapManager.obj: HeapManager.cpp 
+	$(CC) $(CFLAGS) HeapManager.cpp 
+ 
+WhileNode.obj: WhileNode.cpp 
+	$(CC) $(CFLAGS) WhileNode.cpp 
+ 
+CInterpreter.obj: CInterpreter.cpp 
+	$(CC) $(CFLAGS) CInterpreter.cpp 
+ 
+PException.obj: PException.cpp 
+	$(CC) $(CFLAGS) PException.cpp 
+ 
+ProcedureCallNode.obj: ProcedureCallNode.cpp 
+	$(CC) $(CFLAGS) ProcedureCallNode.cpp 
+ 
+Disassembler.obj: Disassembler.cpp 
+	$(CC) $(CFLAGS) Disassembler.cpp 
+ 
+ExpressionThing.obj: ExpressionThing.cpp 
+	$(CC) $(CFLAGS) ExpressionThing.cpp 
+ 
+Parse.obj: Parse.cpp 
+	$(CC) $(CFLAGS) Parse.cpp 
+ 
+ReturnNode.obj: ReturnNode.cpp 
+	$(CC) $(CFLAGS) ReturnNode.cpp 
+
+ClassDefinition.obj: ClassDefinition.cpp 
+	$(CC) $(CFLAGS) ClassDefinition.cpp 
+ 
+parser.exe: parser.obj Statement.obj ReturnNode.obj ProgramNode.obj ProcedureNode.obj ProcedureCallNode.obj PrintNode.obj Parse.obj PException.obj IfNode.obj HeapManager.obj ExpressionThing.obj ExpressionParser.obj ExpressionNode.obj Disassembler.obj DebugInfo.obj CodeGenerator.obj CInterpreter.obj CFunctions.obj AssignmentNode.obj WhileNode.obj ClassDefinition.obj
+	$(CC) parser.obj Statement.obj ReturnNode.obj ProgramNode.obj ProcedureNode.obj ProcedureCallNode.obj PrintNode.obj Parse.obj PException.obj IfNode.obj HeapManager.obj ExpressionThing.obj ExpressionParser.obj ExpressionNode.obj Disassembler.obj DebugInfo.obj CodeGenerator.obj CInterpreter.obj CFunctions.obj AssignmentNode.obj WhileNode.obj ClassDefinition.obj
+	
