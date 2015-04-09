@@ -59,15 +59,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	unsigned int amount_of_methods = 0;
 	for (auto const &a_class : a_pn->getClasses()) {
-		for (auto const &a_method : a_class->getMethods()) {
-			unsigned int cnum = a_class->getClassNum();
-			unsigned int mnum = a_method->getMethodNumber();
-			unsigned int address = a_method->getProcAddress();
-			emit2Byte(cnum);
-			emit2Byte(mnum);
-			emit2Byte(address);
-			amount_of_methods++;
-		}
+		amount_of_methods += a_class->getMethods().size();
 	}
 	//
 	// save the start address of the code
@@ -111,7 +103,8 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			++it) {
 		ProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
-		cout << "-------------------> starting procedure " << pname << " at " << here << endl;
+		cout << "-------------------> starting procedure " << pname << " at "
+				<< here << endl;
 		a_proc->setProcAddress(here);
 		procaddresses[pname] = a_proc;
 		start_proc(a_proc);
@@ -122,15 +115,43 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	for (auto const &a_class : a_pn->getClasses()) {
 		for (auto const &a_method : a_class->getMethods()) {
 			a_method->setProcAddress(here);
-			procaddresses[a_method->getFullMethodName()] = a_method;
-			cout << "-------------------> starting method " << a_method->getFullMethodName()<< " at " << here << endl;
-					start_proc(a_method);
+			cout << "-------------------> starting method "
+					<< a_method->getFullMethodName() << " at " << here << endl;
+			start_proc(a_method);
 		}
 	}
 	//
 	// fix the proc addresses
 	//
 	fix_proc_addresses();
+	//
+	// emit the method table
+	//
+	unsigned int the_index = 8;
+	for (auto const &a_class : a_pn->getClasses()) {
+		cout << "THE INDEX " << the_index << endl;
+		for (auto const &a_method : a_class->getMethods()) {
+			unsigned int cnum = a_class->getClassNum();
+			unsigned int mnum = a_method->getMethodNumber();
+			unsigned int address = a_method->getProcAddress();
+			cout << "Emitting method table " << a_method->getFullMethodName()
+					<< ": " << cnum << "," << mnum << "," << address << endl;
+			*((char*) codebuffer + the_index) = cnum & 255;
+			the_index++;
+			*((char*) codebuffer + the_index) = cnum >> 8;
+			the_index++;
+			*((char*) codebuffer + the_index) = mnum & 255;
+			the_index++;
+			*((char*) codebuffer + the_index) = mnum >> 8;
+			the_index++;
+			*((char*) codebuffer + the_index) = address & 255;
+			the_index++;
+			*((char*) codebuffer + the_index) = address >> 8;
+			the_index++;
+		}
+		cout << "THE INDEX AFT " << the_index << endl;
+
+	}
 }
 
 /**
@@ -163,7 +184,6 @@ void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 void CodeGenerator::emitByte(char b) {
 	*((char*) codebuffer + here) = b;
 	here++;
-
 }
 
 void CodeGenerator::emit2Byte(unsigned int val) {
@@ -239,7 +259,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
-			addCallTo(avalue.substr(0, avalue.size() - 1), s);
+			addCallToProcedure(avalue.substr(0, avalue.size() - 1), s);
 			break;
 		case 5: // float
 			my_double = atof(avalue.c_str());
@@ -347,38 +367,28 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
-void CodeGenerator::addCallTo(string name, Statement* s) {
+void CodeGenerator::addCallToProc(string name, Statement* s) {
 	//
-	// there are 3 variants to consider:
 	//
-	//   - calling a method
-	//   - calling a class constructor
-	//   - calling a procedure
-	//
-	// check if there's a point in the name
-	//
-	unsigned int pos = name.find('.');
-	if (pos != string::npos) {
+	ClassDefinition* a_class = pn->getClass(name);
+	if (a_class != NULL) {
 		//
-		// it's a method call
+		// it's a class constructor
 		//
-		string expression = name.substr(0, pos);
-		string method_name = name.substr(pos + 1);
-		addCallToMethod(expression, method_name, s);
+		addCallToClassConstructor(a_class, s);
 	} else {
-		ClassDefinition* a_class = pn->getClass(name);
-		if (a_class != NULL) {
-			//
-			// it's a class constructor
-			//
-			addCallToClassConstructor(a_class, s);
-		} else {
-			//
-			// it's a procedure
-			//
-			addCallToProcedure(name, s);
-		}
+		//
+		// it's a procedure
+		//
+		addCallToProcedure(name, s);
 	}
+}
+
+void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
+	//
+	//
+	unsigned int method_number = pn->getMethodNumber(method_name);
+	emit(12, method_number, 0, s);
 }
 
 void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
@@ -387,17 +397,6 @@ void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
 	unsigned int ivs = cd->getInstanceVariables().size();
 	unsigned int classnum = cd->getClassNum();
 	emit(11, classnum, ivs, s);
-}
-
-void CodeGenerator::addCallToMethod(string expression, string method_name,
-		Statement* s) {
-	cout << "Method call " << expression << "." << method_name << endl;
-/*
- *
- * evaluate the expression here}
-	*/
-	emit(12, 0,0, s);
-
 }
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {

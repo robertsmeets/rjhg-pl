@@ -55,6 +55,10 @@ class CInterpreter {
 	typedef bool (*bdiptr)(double, unsigned int);
 
 	iiptr fptrs[14][8][8];
+
+	map<unsigned int,map<unsigned int, unsigned int>> methodmap;
+
+
 public:
 	CInterpreter(char*, DebugInfo*);
 	virtual ~CInterpreter();

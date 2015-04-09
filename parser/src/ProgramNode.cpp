@@ -59,3 +59,7 @@ unsigned int ProgramNode::assignMethodNumber(string method_name) {
 	}
 	return i;
 }
+
+unsigned int ProgramNode::getMethodNumber(string method_name) {
+	return method_numbers[method_name];
+}

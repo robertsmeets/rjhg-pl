@@ -97,6 +97,7 @@ vector<stack_element>* CInterpreter::getStack() {
 
 void CInterpreter::start() {
 	cout << "Starting interpreter..." << endl;
+	methodmap.clear();
 	check_magic_number();
 	pc = find_offset();
 	for (unsigned int j = 8; j < pc; j += 6) {
@@ -105,6 +106,15 @@ void CInterpreter::start() {
 		unsigned int address = buffer[j + 4] + buffer[j + 5] * 256;
 		cout << "--- CLASS=" << classnum << " METHOD=" << methodnum
 				<< " ADRESS=" << address << endl;
+
+		auto k = methodmap.find(methodnum);
+		if (k == methodmap.end()) {
+			//
+			// was not found
+			//
+			methodmap[methodnum] = map<unsigned int, unsigned int>();
+		}
+		methodmap[methodnum][classnum] = address;
 	}
 	unsigned i = 0;
 	for (; !i;) {
@@ -600,11 +610,21 @@ int CInterpreter::execute_next() {
 		// lookup the method by object type and name
 		// call the method
 		//
-		// l is the class number
-		// a is the method number
+		// l is the method number
+		// a is unused
 		//
-
-		pc += a;
+		// figure out what class type is on top of the stack
+		//
+		if (s[t].atype != 8) {
+			throw PException("Performed a method call on a nonfancy object");
+		}
+		ptr = hm->getStart() + s[t].address;
+		cout << "--- found classnum " << (*ptr & 255) + (*(ptr + 1) << 8)
+				<< endl;
+		cout << "--- found adress "
+				<< methodmap[l][(*ptr & 255) + (*(ptr + 1) << 8)] << endl;
+		pc = methodmap[l][(*ptr & 255) + (*(ptr + 1) << 8)];
+		t--;
 		break;
 	default:
 		throw PException("unexpected F value");
@@ -617,7 +637,6 @@ int CInterpreter::execute_next() {
 	cout << "      stack: ";
 	for (unsigned int i = 0; i < t; i++) {
 		char* adr;
-		//cout << s[i].atype << ":";
 		cout << "[";
 		switch (s[i].atype) {
 		case 2:

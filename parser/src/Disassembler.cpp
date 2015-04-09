@@ -34,6 +34,7 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 		di->printLine(i);
 		cout << "i=" << i << " ";
 		char f = buffer[i];
+		cout << "f=" << (unsigned int)f << " ";
 		unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
 		unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
 		string s = decode(f, l, a);

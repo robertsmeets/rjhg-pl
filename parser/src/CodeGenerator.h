@@ -58,7 +58,8 @@ public:
 	char* getCodeBuffer();
 	void addCallTo(string, Statement*);
 	void addCallToClassConstructor(ClassDefinition*, Statement*);
-	void addCallToMethod(string, string, Statement*);
+	void addCallToMethod(string, Statement*);
+	void addCallToProc(string, Statement*);
 	void addCallToProcedure(string, Statement*);
 	Statement* procDefined(string);
 	void emitByte(char);

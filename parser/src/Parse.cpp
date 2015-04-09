@@ -345,22 +345,20 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 	string proc_name = peek_string;
 	ProcedureCallNode* pcn = new ProcedureCallNode(pd, linepos, charpos,
 			offset);
-
 	//
 	// difference between a method call and a procedure call
 	//
 	unsigned int pos = proc_name.find('.');
 	if (pos != string::npos) {
-			//
-			// it's a method call
-			//
-			string expression = proc_name.substr(0, pos);
-			string method_name = proc_name.substr(pos + 1);
-			pcn->setMethod(true);
-			pcn->setLhsExpression(ep.parse(expression));
-	}
-	else
-	{
+		//
+		// it's a method call
+		//
+		cout << "-----------> DETECTED method call to " << proc_name << endl;
+		string expression = proc_name.substr(0, pos);
+		string method_name = proc_name.substr(pos + 1);
+		pcn->setMethod(true);
+		pcn->setLhsExpression(ep.parse(expression));
+	} else {
 		pcn->setProcedureName(proc_name);
 	}
 	for (;;) {

@@ -50,8 +50,12 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	if (method)
 	{
 		cg->emitRpn(LhsExpression.getRpn(), pn, this);
+		cg->addCallToMethod(procedure_name, this);
 	}
-	cg->addCallTo(procedure_name, this);
+	else
+	{
+		cg->addCallToProc(procedure_name, this);
+	}
 }
 
 void ProcedureCallNode::addParametersExpression(ExpressionNode en) {

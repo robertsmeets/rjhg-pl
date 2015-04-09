@@ -34,6 +34,7 @@ public:
 	vector<ClassDefinition*> getClasses();
 	ClassDefinition* getClass(string);
 	unsigned int assignMethodNumber(string);
+	unsigned int getMethodNumber(string);
 };
 
 #endif /* PROGRAMNODE_H_ */
