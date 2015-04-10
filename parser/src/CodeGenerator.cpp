@@ -68,6 +68,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	cout << "---> Calculated offset = " << offset << endl;
 	*((char*) codebuffer + 6) = offset & 255;
 	*((char*) codebuffer + 7) = offset >> 8;
+	here = offset;
 	//
 	//
 	di = a_di;
@@ -150,7 +151,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			the_index++;
 		}
 		cout << "THE INDEX AFT " << the_index << endl;
-
 	}
 }
 

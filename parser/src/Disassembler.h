@@ -13,6 +13,10 @@
 #include "DebugInfo.h"
 #include "PException.h"
 
+#include <ctype.h>
+#include <stdio.h>
+
+
 using namespace std;
 
 class Disassembler {
@@ -21,8 +25,9 @@ class Disassembler {
 public:
 	Disassembler();
 	virtual ~Disassembler();
-	void start(char*,unsigned int,DebugInfo*);
-	string decode(char,unsigned short, unsigned short);
+	void start(char*, unsigned int, DebugInfo*);
+	string decode(char, unsigned short, unsigned short);
+	void hexdump(char*, unsigned int);
 };
 
 #endif /* DISASSEMBLER_H_ */

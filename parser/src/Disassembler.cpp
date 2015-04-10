@@ -13,11 +13,11 @@
 using namespace std;
 
 Disassembler::Disassembler() {
+	di = NULL;
 	i = 0;
 }
 
 Disassembler::~Disassembler() {
-
 }
 
 void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
@@ -28,13 +28,17 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 	}
 	di = a_di;
 	di->reset();
+	//
+	// hexdump
+	//
+	hexdump(buffer, size);
 	i = buffer[6] + buffer[7] * 256;
 	cout << "i is now " << i << " size is now " << size << endl;
 	for (; i < size;) {
 		di->printLine(i);
 		cout << "i=" << i << " ";
 		char f = buffer[i];
-		cout << "f=" << (unsigned int)f << " ";
+		cout << "f=" << (unsigned int) f << " ";
 		unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
 		unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
 		string s = decode(f, l, a);
@@ -42,10 +46,27 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 	}
 }
 
+void Disassembler::hexdump(char* buf, unsigned int buflen) {
+	unsigned int i, j;
+	for (i = 0; i < buflen; i += 16) {
+		printf("%06x: ", i);
+		for (j = 0; j < 16; j++)
+			if (i + j < buflen)
+				printf("%02x ", buf[i + j] &255);
+			else
+				printf("   ");
+		printf(" ");
+		for (j = 0; j < 16; j++)
+			if (i + j < buflen)
+				printf("%c", isprint(buf[i + j]) ? buf[i + j] : '.');
+		printf("\n");
+	}
+}
+
 string Disassembler::decode(char f, unsigned short l, unsigned short a) {
-	//
-	// opcode definitions
-	//
+//
+// opcode definitions
+//
 	string sf, sl, sa;
 	stringstream out1;
 	out1 << l;

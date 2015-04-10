@@ -101,11 +101,14 @@ void CInterpreter::start() {
 	check_magic_number();
 	pc = find_offset();
 	for (unsigned int j = 8; j < pc; j += 6) {
-		unsigned int classnum = buffer[j] + buffer[j + 1] * 256;
-		unsigned int methodnum = buffer[j + 2] + buffer[j + 3] * 256;
-		unsigned int address = buffer[j + 4] + buffer[j + 5] * 256;
+		unsigned int classnum = (buffer[j] & 255) + ((buffer[j + 1] & 255) >> 8);
+		unsigned int methodnum = (buffer[j + 2]
+				& 255 )+ ((buffer[j + 3] & 255) >> 8);
+		unsigned int address = (buffer[j + 4] & 255 )+ ((buffer[j + 5] & 255) >> 8);
+		cout << "plus 4 " << (unsigned int) buffer[j + 4] << endl;
+		cout << "plus 5 " << (unsigned int) buffer[j + 5] << endl;
 		cout << "--- CLASS=" << classnum << " METHOD=" << methodnum
-				<< " ADRESS=" << address << endl;
+				<< " ADDRESS=" << address << endl;
 
 		auto k = methodmap.find(methodnum);
 		if (k == methodmap.end()) {
