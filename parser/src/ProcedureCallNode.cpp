@@ -49,6 +49,7 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	}
 	if (method)
 	{
+		cout << "ProcedureCallNode::emit hooray a method call to <"<<procedure_name<<">" << endl;
 		cg->emitRpn(LhsExpression.getRpn(), pn, this);
 		cg->addCallToMethod(procedure_name, this);
 	}

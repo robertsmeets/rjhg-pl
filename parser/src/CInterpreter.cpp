@@ -101,10 +101,12 @@ void CInterpreter::start() {
 	check_magic_number();
 	pc = find_offset();
 	for (unsigned int j = 8; j < pc; j += 6) {
-		unsigned int classnum = (buffer[j] & 255) + ((buffer[j + 1] & 255) >> 8);
-		unsigned int methodnum = (buffer[j + 2]
-				& 255 )+ ((buffer[j + 3] & 255) >> 8);
-		unsigned int address = (buffer[j + 4] & 255 )+ ((buffer[j + 5] & 255) >> 8);
+		unsigned int classnum = (buffer[j] & 255)
+				+ ((buffer[j + 1] & 255) >> 8);
+		unsigned int methodnum = (buffer[j + 2] & 255)
+				+ ((buffer[j + 3] & 255) >> 8);
+		unsigned int address = (buffer[j + 4] & 255)
+				+ ((buffer[j + 5] & 255) >> 8);
 		cout << "plus 4 " << (unsigned int) buffer[j + 4] << endl;
 		cout << "plus 5 " << (unsigned int) buffer[j + 5] << endl;
 		cout << "--- CLASS=" << classnum << " METHOD=" << methodnum
@@ -173,6 +175,11 @@ int CInterpreter::execute_next() {
 	double d3;
 	stack_element fr1;
 	stack_element fr2;
+
+	unsigned int classnum;
+	unsigned int methodnum;
+	unsigned int address;
+
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
@@ -618,16 +625,16 @@ int CInterpreter::execute_next() {
 		//
 		// figure out what class type is on top of the stack
 		//
+		t--;
 		if (s[t].atype != 8) {
 			throw PException("Performed a method call on a nonfancy object");
 		}
 		ptr = hm->getStart() + s[t].address;
-		cout << "--- found classnum " << (*ptr & 255) + (*(ptr + 1) << 8)
-				<< endl;
-		cout << "--- found adress "
-				<< methodmap[l][(*ptr & 255) + (*(ptr + 1) << 8)] << endl;
-		pc = methodmap[l][(*ptr & 255) + (*(ptr + 1) << 8)];
-		t--;
+		classnum = (*ptr & 255) + (*(ptr + 1) << 8);
+		cout << "--- methodnum = " << l << endl;
+		cout << "--- found classnum " << classnum << endl;
+		cout << "--- found address " << methodmap[l][classnum] << endl;
+		pc = methodmap[l][classnum];
 		break;
 	default:
 		throw PException("unexpected F value");

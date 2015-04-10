@@ -259,7 +259,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
-			addCallToProcedure(avalue.substr(0, avalue.size() - 1), s);
+			addCallToProc(avalue.substr(0, avalue.size() - 1), s);
 			break;
 		case 5: // float
 			my_double = atof(avalue.c_str());
@@ -370,6 +370,7 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 void CodeGenerator::addCallToProc(string name, Statement* s) {
 	//
 	//
+	cout << "-------------------------REACHED AddCallToProc()" << endl;
 	ClassDefinition* a_class = pn->getClass(name);
 	if (a_class != NULL) {
 		//

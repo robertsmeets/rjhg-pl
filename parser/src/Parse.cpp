@@ -358,6 +358,7 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 		string method_name = proc_name.substr(pos + 1);
 		pcn->setMethod(true);
 		pcn->setLhsExpression(ep.parse(expression));
+		pcn->setProcedureName(method_name);
 	} else {
 		pcn->setProcedureName(proc_name);
 	}
