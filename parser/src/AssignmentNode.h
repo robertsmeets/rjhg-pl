@@ -36,6 +36,7 @@ public:
 	ExpressionNode getRhs();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
+	void print();
 };
 
 #endif /* ASSIGNMENTNODE_H_ */

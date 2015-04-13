@@ -67,3 +67,9 @@ string IfNode::stype() {
 	return "if";
 }
 
+void IfNode::print()
+{
+	cout << "IfNode" << endl;
+}
+
+

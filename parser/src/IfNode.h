@@ -24,6 +24,7 @@ public:
 	virtual ~IfNode();
 	void emit(CodeGenerator*);
 	virtual string stype();
+	void print();
 };
 
 #endif /* IFNODE_H_ */

@@ -46,3 +46,8 @@ void ReturnNode::emit(CodeGenerator* cg) {
 string ReturnNode::stype() {
 	return "return";
 }
+
+void ReturnNode::print()
+{
+	cout << "ReturnNode" << endl;
+}

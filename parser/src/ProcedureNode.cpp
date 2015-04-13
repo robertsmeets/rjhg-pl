@@ -145,3 +145,10 @@ void ProcedureNode::fixReturn() {
 				new ReturnNode(this, en, linepos, charpos, abspos));
 	}
 }
+
+void ProcedureNode::print() {
+	cout << "ProcedureNode " << name << "("<<parameters->size()<<" params)"<< endl;
+	for (auto s : statements) {
+		s->print();
+	}
+}

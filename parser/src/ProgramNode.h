@@ -35,6 +35,7 @@ public:
 	ClassDefinition* getClass(string);
 	unsigned int assignMethodNumber(string);
 	unsigned int getMethodNumber(string);
+	void print();
 };
 
 #endif /* PROGRAMNODE_H_ */

@@ -21,6 +21,7 @@ public:
 	virtual ~PrintNode();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
+	void print();
 };
 
 #endif /* PRINTNODE_H_ */

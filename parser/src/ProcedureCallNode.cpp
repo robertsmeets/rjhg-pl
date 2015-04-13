@@ -45,16 +45,15 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 	//
 	for (vector<ExpressionNode>::iterator it = parameter_exps.begin();
 			it != parameter_exps.end(); ++it) {
+		cout << "ProcedureCallNode::emit " << " SOMETHING" << endl;
 		cg->emitRpn((*it).getRpn(), pn, this);
 	}
-	if (method)
-	{
-		cout << "ProcedureCallNode::emit hooray a method call to <"<<procedure_name<<">" << endl;
+	if (method) {
+		cout << "ProcedureCallNode::emit hooray a method call to <"
+				<< procedure_name << ">" << endl;
 		cg->emitRpn(LhsExpression.getRpn(), pn, this);
 		cg->addCallToMethod(procedure_name, this);
-	}
-	else
-	{
+	} else {
 		cg->addCallToProc(procedure_name, this);
 	}
 }
@@ -65,4 +64,19 @@ void ProcedureCallNode::addParametersExpression(ExpressionNode en) {
 
 string ProcedureCallNode::stype() {
 	return "procedure_call";
+}
+
+void ProcedureCallNode::print() {
+	if (method) {
+		cout << "method call " << procedure_name;
+	} else {
+		cout << "proc call " << procedure_name;
+	}
+	cout << " LHS = ";
+	LhsExpression.print();
+	cout << " RHS = ";
+	for (auto pe : parameter_exps) {
+		pe.print();
+	}
+	cout << endl;
 }

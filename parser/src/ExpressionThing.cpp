@@ -39,3 +39,7 @@ int ExpressionThing::getType() {
 string ExpressionThing::getValue() {
 	return value;
 }
+
+void ExpressionThing::print() {
+	cout << "[type=" << mytype << " value=" << value << "] ";
+}

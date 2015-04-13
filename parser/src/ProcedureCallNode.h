@@ -30,6 +30,7 @@ public:
 	void setProcedureName(string);
 	string getProcedureName();
 	virtual void emit(CodeGenerator*);
+	void print();
 	void addParametersExpression(ExpressionNode);
 	void setLhsExpression(ExpressionNode);
 	void setMethod(bool);

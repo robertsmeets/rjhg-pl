@@ -8,6 +8,7 @@
 #ifndef EXPRESSIONNODE_H_
 #define EXPRESSIONNODE_H_
 
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -23,6 +24,7 @@ public:
 	virtual ~ExpressionNode();
 	void setRpn(vector<ExpressionThing>);
 	vector<ExpressionThing> getRpn();
+	void print();
 };
 
 #endif /* EXPRESSIONNODE_H_ */

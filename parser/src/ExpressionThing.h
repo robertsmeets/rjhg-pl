@@ -9,7 +9,10 @@
 #define EXPRESSIONTHING_H_
 
 #include <string>
+#include <iostream>
+
 using namespace std;
+
 class ExpressionThing {
 	int mytype;
 	string value;
@@ -18,6 +21,7 @@ public:
 	virtual ~ExpressionThing();
 	int getType();
 	string getValue();
+	void print();
 };
 
 #endif /* EXPRESSIONTHING_H_ */

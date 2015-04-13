@@ -55,3 +55,8 @@ void WhileNode::emit(CodeGenerator* cg) {
 string WhileNode::stype() {
 	return "while";
 }
+
+void WhileNode::print()
+{
+	cout << "WhileNode" << endl;
+}

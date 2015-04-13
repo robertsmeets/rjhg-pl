@@ -57,3 +57,10 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 string AssignmentNode::stype() {
 	return "assignment";
 }
+
+void AssignmentNode::print()
+{
+	cout << "AssignmentNode" ;
+	rhs.print();
+	cout << endl;
+}

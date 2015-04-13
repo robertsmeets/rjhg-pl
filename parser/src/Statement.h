@@ -25,6 +25,7 @@ public:
 	virtual ~Statement();
 	virtual void emit(CodeGenerator*) = 0;
 	virtual string stype() = 0;
+	virtual void print()=0;
 	unsigned int getLinepos();
 	unsigned int getCharpos();
 	unsigned int getAbspos();

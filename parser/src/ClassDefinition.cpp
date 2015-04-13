@@ -40,14 +40,19 @@ vector<ProcedureNode*> ClassDefinition::getMethods() {
 	return methods;
 }
 
-ProcedureNode*  ClassDefinition::findMethod(string method_name)
-{
-	for (auto a_method:methods)
-	{
-		if (a_method->getName() == method_name)
-		{
+ProcedureNode* ClassDefinition::findMethod(string method_name) {
+	for (auto a_method : methods) {
+		if (a_method->getName() == method_name) {
 			return a_method;
 		}
 	}
 	return NULL;
+}
+
+void ClassDefinition::print() {
+	cout << "ClassDefinition " << name << endl;
+	for (auto m:methods)
+	{
+		m->print();
+	}
 }

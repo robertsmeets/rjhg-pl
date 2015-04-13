@@ -364,14 +364,16 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 	}
 	for (;;) {
 		get_something("),\r\n");
+		cout << "--- looping peek_string = " << peek_string << " found char = "
+				<< found_char << endl;
+
+		// parameter
+		string parameter_expression = peek_string;
+		ExpressionNode en = ep.parse(parameter_expression);
+		pcn->addParametersExpression(en);
 		if (found_char == ')') {
 			// done
 			break;
-		} else {
-			// parameter
-			string parameter_expression = peek_string;
-			ExpressionNode en = ep.parse(parameter_expression);
-			pcn->addParametersExpression(en);
 		}
 	}
 	return pcn;

@@ -65,3 +65,18 @@ unsigned int ProgramNode::getMethodNumber(string method_name) {
 			<< method_numbers[method_name] << endl;
 	return method_numbers[method_name];
 }
+
+
+void ProgramNode::print()
+{
+	cout << "ProgramNode" << endl;
+	for (auto cd:classes)
+	{
+		cd->print();
+	}
+	for (auto p:procedures)
+	{
+		p->print();
+	}
+
+}

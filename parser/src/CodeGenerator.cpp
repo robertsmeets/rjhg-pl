@@ -55,7 +55,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	emit2Byte(0);
 	//
-	// emit the method table
+	// count the number of methods
 	//
 	unsigned int amount_of_methods = 0;
 	for (auto const &a_class : a_pn->getClasses()) {
@@ -65,7 +65,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	// save the start address of the code
 	//
 	unsigned int offset = 6 * amount_of_methods + 8;
-	cout << "---> Calculated offset = " << offset << endl;
 	*((char*) codebuffer + 6) = offset & 255;
 	*((char*) codebuffer + 7) = offset >> 8;
 	here = offset;
@@ -104,8 +103,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			++it) {
 		ProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
-		cout << "-------------------> starting procedure " << pname << " at "
-				<< here << endl;
 		a_proc->setProcAddress(here);
 		procaddresses[pname] = a_proc;
 		start_proc(a_proc);
@@ -116,8 +113,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	for (auto const &a_class : a_pn->getClasses()) {
 		for (auto const &a_method : a_class->getMethods()) {
 			a_method->setProcAddress(here);
-			cout << "-------------------> starting method "
-					<< a_method->getFullMethodName() << " at " << here << endl;
 			start_proc(a_method);
 		}
 	}
@@ -130,13 +125,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	unsigned int the_index = 8;
 	for (auto const &a_class : a_pn->getClasses()) {
-		cout << "THE INDEX " << the_index << endl;
 		for (auto const &a_method : a_class->getMethods()) {
 			unsigned int cnum = a_class->getClassNum();
 			unsigned int mnum = a_method->getMethodNumber();
 			unsigned int address = a_method->getProcAddress();
-			cout << "Emitting method table " << a_method->getFullMethodName()
-					<< ": " << cnum << "," << mnum << "," << address << endl;
 			*((char*) codebuffer + the_index) = cnum & 255;
 			the_index++;
 			*((char*) codebuffer + the_index) = cnum >> 8;
@@ -150,7 +142,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			*((char*) codebuffer + the_index) = address >> 8;
 			the_index++;
 		}
-		cout << "THE INDEX AFT " << the_index << endl;
 	}
 }
 
@@ -221,6 +212,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 			emitOperation(avalue, s);
 			break;
 		case 2: // literal integer
+			cout << "==================> emitrpn emitting " << avalue << endl;
 			emit(1, 2, atoi(avalue.c_str()), s);
 			break;
 		case 3:  // variable name
@@ -388,13 +380,15 @@ void CodeGenerator::addCallToProc(string name, Statement* s) {
 void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
 	//
 	//
+	// emit an INT
+	//
+	emit(6, 0, 0, s);
 	unsigned int method_number = pn->getMethodNumber(method_name);
 	emit(12, method_number, 0, s);
 }
 
 void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
 		Statement* s) {
-	cout << "ClassConstructor " << endl;
 	unsigned int ivs = cd->getInstanceVariables().size();
 	unsigned int classnum = cd->getClassNum();
 	emit(11, classnum, ivs, s);
@@ -419,7 +413,6 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {
 		// emit a "cal"
 		// leave the call address 0, since this will be corrected in the fix stage
 		//
-
 		emit(5, 0, 0, s);
 		addCallAddress(here - 2, procedure_name);
 	} else {
