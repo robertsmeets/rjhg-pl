@@ -353,7 +353,6 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 		//
 		// it's a method call
 		//
-		cout << "-----------> DETECTED method call to " << proc_name << endl;
 		string expression = proc_name.substr(0, pos);
 		string method_name = proc_name.substr(pos + 1);
 		pcn->setMethod(true);
@@ -364,9 +363,6 @@ Statement* Parse::procedure_call(ProcedureNode* pd) {
 	}
 	for (;;) {
 		get_something("),\r\n");
-		cout << "--- looping peek_string = " << peek_string << " found char = "
-				<< found_char << endl;
-
 		// parameter
 		string parameter_expression = peek_string;
 		ExpressionNode en = ep.parse(parameter_expression);

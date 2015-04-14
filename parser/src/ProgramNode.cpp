@@ -22,7 +22,6 @@ ProgramNode::~ProgramNode() {
 }
 
 void ProgramNode::addProcedure(ProcedureNode* pn) {
-	cout << "--- ADDING PROCEDURE " << pn->getName() << endl;
 	procedures.push_back(pn);
 }
 
@@ -61,8 +60,6 @@ unsigned int ProgramNode::assignMethodNumber(string method_name) {
 }
 
 unsigned int ProgramNode::getMethodNumber(string method_name) {
-	cout << " getMethodNumber for <" << method_name << "> is "
-			<< method_numbers[method_name] << endl;
 	return method_numbers[method_name];
 }
 

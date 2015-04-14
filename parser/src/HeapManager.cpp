@@ -36,9 +36,7 @@ void HeapManager::setInterpreter(CInterpreter* ci) {
 char* HeapManager::allocate(unsigned int nbytes) {
 	unsigned int used = here - space;
 	unsigned int available = size - used;
- cout << "used=" << used << " available=" << available << " requested="
-	<< nbytes << endl;
-	char* ptr;
+ 	char* ptr;
 	if (available < nbytes) {
 		garbageCollect();
 	}
@@ -46,17 +44,9 @@ char* HeapManager::allocate(unsigned int nbytes) {
 	available = size - used;
 	if (available < nbytes) {
 		size = max(2 * size, used + 2 * nbytes);
-		cout << "--- Realloc " << size << endl;
 		space = (char*) realloc(space, size);
 		here = space + used;
 	}
-	/* else if (used + nbytes < size / 3)
-	{
-		size = size / 2;
-		cout << "--- Min Realloc " << size << endl;
-		space = (char*) realloc(space, size);
-		here = space + used;
-	} */
 	ptr = here;
 	here += nbytes;
 	return ptr;

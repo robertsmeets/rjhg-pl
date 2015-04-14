@@ -216,7 +216,6 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 			emitOperation(avalue, s);
 			break;
 		case 2: // literal integer
-			cout << "==================> emitrpn emitting " << avalue << endl;
 			emit(1, 2, atoi(avalue.c_str()), s);
 			break;
 		case 3:  // variable name
@@ -366,7 +365,6 @@ void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
 void CodeGenerator::addCallToProc(string name, Statement* s) {
 	//
 	//
-	cout << "-------------------------REACHED AddCallToProc()" << endl;
 	ClassDefinition* a_class = pn->getClass(name);
 	if (a_class != NULL) {
 		//

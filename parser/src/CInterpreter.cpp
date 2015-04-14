@@ -590,7 +590,6 @@ int CInterpreter::execute_next() {
 		free(ptr);
 		break;
 	case 11: // object creation
-		cout << "OBJ CREATION";
 		//
 		// l contains the classnum
 		// a contains the number of instance variables
@@ -609,10 +608,8 @@ int CInterpreter::execute_next() {
 		s[t].address = ptr - hm->getStart();
 		t++;
 		break;
-	case 12: // method call, the object is already on the stack.
-		// the string of the method to call is embedded in the bytecode.
-		//
-		cout << "METHOD CALL";
+	case 12:
+		// method call, the object is already on the stack.
 		//
 		// lookup the method by object type and name
 		// call the method

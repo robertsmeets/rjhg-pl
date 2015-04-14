@@ -26,12 +26,15 @@ int main(int argc, char* argv[]) {
 	DebugInfo di(cg.getCodeBuffer(),p.getBuffer());
 	try {
 		p.start(filename);
+#ifdef DEBUG
 		p.getPn()->print();
+#endif
 		cg.start(p.getPn(),&di);
-
 		Disassembler d;
+#ifdef DEBUG
 		d = Disassembler();
 		d.start(cg.getCodeBuffer(),cg.getHere(),&di);
+#endif
 		//
 		// start interpreting
 		//

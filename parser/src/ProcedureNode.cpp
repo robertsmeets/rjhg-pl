@@ -19,10 +19,6 @@ ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name,
 	name = method_name;
 	if (cd != NULL) {
 		method_number = pn->assignMethodNumber(method_name);
-		cout << "--- ASSIGNING " << method_number << " TO " << method_name
-				<< endl;
-	} else {
-		cout << "--- Defining plain procedure " << method_name << endl;
 	}
 	parameters = new vector<string>();
 	instance_variables = vector<string>();
@@ -147,7 +143,8 @@ void ProcedureNode::fixReturn() {
 }
 
 void ProcedureNode::print() {
-	cout << "ProcedureNode " << name << "("<<parameters->size()<<" params)"<< endl;
+	cout << "ProcedureNode " << name << "(" << parameters->size() << " params)"
+			<< endl;
 	for (auto s : statements) {
 		s->print();
 	}
