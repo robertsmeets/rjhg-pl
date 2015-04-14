@@ -37,7 +37,7 @@ void HeapManager::setInterpreter(CInterpreter* ci) {
 char* HeapManager::allocate(unsigned int nbytes) {
 	unsigned int used = here - space;
 	unsigned int available = size - used;
- 	char* ptr;
+	char* ptr;
 	if (available < nbytes) {
 		garbageCollect();
 	}
@@ -65,7 +65,9 @@ struct saddress {
 	unsigned int len;
 
 };
-bool acompare(saddress lhs, saddress rhs) { return lhs.address < rhs.address; }
+bool acompare(saddress lhs, saddress rhs) {
+	return lhs.address < rhs.address;
+}
 void HeapManager::garbageCollect() {
 	//
 	// loop over the stack
@@ -104,12 +106,22 @@ void HeapManager::garbageCollect() {
 			//
 			unsigned int address = an_element.address;
 			char* ptr = space + address;
-			unsigned int len = ((*ptr) & 255) + (*(ptr + 1) << 8) + 2;
+			unsigned int len = ((*ptr) & 255) + (*(ptr + 1) >> 8) + 2;
 			//
 			// store the address reference
 			//
 			addresses[address] = len;
 			references[address] = i;
+		} else if (t == 8) { // object
+			unsigned int address = an_element.address;
+			char* ptr = space + address;
+			unsigned int len = (*(ptr + 2) & 255) * 2 + 3;
+			//
+			// store the address reference
+			//
+			addresses[address] = len;
+			references[address] = i;
+
 		}
 		i++;
 	}
@@ -131,7 +143,7 @@ void HeapManager::garbageCollect() {
 	//
 	// sort them
 	//
-	sort(vaddresses.begin(), vaddresses.end(),acompare);
+	sort(vaddresses.begin(), vaddresses.end(), acompare);
 	//
 	// the references are gathered. Find the holes.
 	//

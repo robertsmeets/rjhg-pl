@@ -179,7 +179,7 @@ int CInterpreter::execute_next() {
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-		cout << "LIT " << l << "," << a;
+	cout << "LIT " << l << "," << a;
 #endif
 		switch (l) {
 		case 2: // Int
@@ -228,7 +228,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 2: // opr
 #ifdef DEBUG
-		cout << "OPR";
+	cout << "OPR";
 #endif
 
 		iiptr aiiptr;
@@ -479,7 +479,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 4:	// sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-		cout << "STO " << a << " ";
+	cout << "STO " << a << " ";
 #endif
 		t--;
 		s[b[tb - 1] + a] = s[t];
@@ -498,7 +498,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 6:			// int:
 #ifdef DEBUG
-		cout << "INT " << l << "," << a;
+	cout << "INT " << l << "," << a;
 #endif
 		//
 		// this creates a new block with depth a for local variables and parameters
@@ -515,13 +515,13 @@ int CInterpreter::execute_next() {
 		break;
 	case 7:			// jmp
 #ifdef DEBUG
-		cout << "JMP " << a;
+	cout << "JMP " << a;
 #endif
 		pc = a;
 		break;
 	case 8:			// jpc - jump when false
 #ifdef DEBUG
-		cout << "JPC " << a;
+	cout << "JPC " << a;
 #endif
 		fr1 = s[t - 1];
 		if (fr1.atype != 6) {
@@ -534,7 +534,7 @@ int CInterpreter::execute_next() {
 		break;
 	case 9: // print
 #ifdef DEBUG
-		cout << "PRINT " << a;
+	cout << "PRINT " << a;
 #endif
 		t--;
 		fr1 = s[t];
@@ -567,7 +567,7 @@ int CInterpreter::execute_next() {
 
 	case 10: // external function call
 #ifdef DEBUG
-		cout << "EXTCALL " << a;
+	cout << "EXTCALL " << a;
 #endif
 		// parameters should have already been pushed on the stack
 		//
@@ -588,17 +588,22 @@ int CInterpreter::execute_next() {
 		free(ptr);
 		break;
 	case 11: // object creation
+#ifdef DEBUG
+	cout << "OBJCREATE " << l<<"," << a;
+#endif
+
 		//
 		// l contains the classnum
 		// a contains the number of instance variables
 		//
-		ptr = hm->allocate(2 * a + 2);
+		ptr = hm->allocate(2 * a + 3);
 		//
 		// in the first 2 bytes, put in the class number
 		// the rest is left for the instance variables
 		//
 		*ptr = l & 255;
 		*(ptr + 1) = l >> 8;
+		*(ptr + 2) = a >> 8;
 		//
 		// leave the new object on the stack
 		//
@@ -654,16 +659,16 @@ int CInterpreter::execute_next() {
 		char* adr;
 		cout << "[";
 		switch (s[i].atype) {
-		case 2:
+			case 2:
 			cout << s[i].address;
 			break;
-		case 5:
+			case 5:
 			adr = hm->getStart() + s[i].address;
 			double d;
 			memcpy(&d, adr, 8);
 			cout << d;
 			break;
-		default:
+			default:
 			cout << "?" << s[i].atype;
 			break;
 		}
