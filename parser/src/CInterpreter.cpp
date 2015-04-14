@@ -493,7 +493,6 @@ int CInterpreter::execute_next() {
 #ifdef DEBUG
 		cout << "CAL " << a;
 #endif
-
 		r[tr] = pc;
 		tr++;
 		pc = a;
@@ -634,6 +633,10 @@ int CInterpreter::execute_next() {
 		// add room for the local vars
 		//
 		t += methodmap[l][classnum][2];
+		//
+		// add the program counter on the return stack
+		r[tr] = pc;
+		tr++;
 		pc = methodmap[l][classnum][0];
 		break;
 	default:

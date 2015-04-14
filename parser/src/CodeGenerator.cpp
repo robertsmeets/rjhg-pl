@@ -382,9 +382,6 @@ void CodeGenerator::addCallToProc(string name, Statement* s) {
 void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
 	//
 	//
-	// emit an INT
-	//
-	emit(6, 0, 0, s);
 	unsigned int method_number = pn->getMethodNumber(method_name);
 	emit(12, method_number, 0, s);
 }

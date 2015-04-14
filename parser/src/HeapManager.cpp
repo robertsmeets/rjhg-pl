@@ -116,7 +116,6 @@ void HeapManager::garbageCollect() {
 	// addresses must be sorted now
 	// transfer them to a vector
 	//
-
 	vector<saddress> vaddresses;
 	for (auto const &it : addresses) {
 		//
@@ -170,7 +169,7 @@ void HeapManager::garbageCollect() {
 #endif
 	here = space + last;
 #ifdef DEBUG
-	cout << "--- That were the addresses" << endl;
+	cout << "--- Those were the addresses" << endl;
 #endif
 	//
 	// all data is moved. Now fix up the addresses.
