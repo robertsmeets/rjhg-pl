@@ -56,7 +56,7 @@ class CInterpreter {
 
 	iiptr fptrs[14][8][8];
 
-	map<unsigned int,map<unsigned int, unsigned int>> methodmap;
+	map<unsigned int,map<unsigned int, unsigned int[3]>> methodmap;
 
 
 public:

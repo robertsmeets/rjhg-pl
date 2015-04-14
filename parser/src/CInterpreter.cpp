@@ -100,26 +100,26 @@ void CInterpreter::start() {
 	methodmap.clear();
 	check_magic_number();
 	pc = find_offset();
-	for (unsigned int j = 8; j < pc; j += 6) {
+	for (unsigned int j = 8; j < pc; j += 8) {
 		unsigned int classnum = (buffer[j] & 255)
 				+ ((buffer[j + 1] & 255) >> 8);
 		unsigned int methodnum = (buffer[j + 2] & 255)
 				+ ((buffer[j + 3] & 255) >> 8);
 		unsigned int address = (buffer[j + 4] & 255)
 				+ ((buffer[j + 5] & 255) >> 8);
-		cout << "plus 4 " << (unsigned int) buffer[j + 4] << endl;
-		cout << "plus 5 " << (unsigned int) buffer[j + 5] << endl;
-		cout << "--- CLASS=" << classnum << " METHOD=" << methodnum
-				<< " ADDRESS=" << address << endl;
-
+		unsigned int num_params = buffer[j + 6];
+		unsigned int num_local_vars = buffer[j + 7];
 		auto k = methodmap.find(methodnum);
 		if (k == methodmap.end()) {
 			//
 			// was not found
 			//
-			methodmap[methodnum] = map<unsigned int, unsigned int>();
+			methodmap[methodnum] = map<unsigned int, unsigned int[3]>();
 		}
-		methodmap[methodnum][classnum] = address;
+		methodmap[methodnum][classnum][0] = address;
+		methodmap[methodnum][classnum][1] = num_params;
+		methodmap[methodnum][classnum][2] = num_local_vars;
+
 	}
 	unsigned i = 0;
 	for (; !i;) {
@@ -177,9 +177,6 @@ int CInterpreter::execute_next() {
 	stack_element fr2;
 
 	unsigned int classnum;
-	unsigned int methodnum;
-	unsigned int address;
-
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
@@ -631,10 +628,16 @@ int CInterpreter::execute_next() {
 		}
 		ptr = hm->getStart() + s[t].address;
 		classnum = (*ptr & 255) + (*(ptr + 1) << 8);
-		cout << "--- methodnum = " << l << endl;
-		cout << "--- found classnum " << classnum << endl;
-		cout << "--- found address " << methodmap[l][classnum] << endl;
-		pc = methodmap[l][classnum];
+		//
+		// this creates a new block with depth a for local variables and parameters
+		//
+		b[tb] = t - methodmap[l][classnum][1];
+		tb++;
+		//
+		// add room for the local vars
+		//
+		t += methodmap[l][classnum][2];
+		pc = methodmap[l][classnum][0];
 		break;
 	default:
 		throw PException("unexpected F value");

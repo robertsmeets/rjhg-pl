@@ -33,7 +33,6 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 	//
 	hexdump(buffer, size);
 	i = buffer[6] + buffer[7] * 256;
-	cout << "i is now " << i << " size is now " << size << endl;
 	for (; i < size;) {
 		di->printLine(i);
 		cout << "i=" << i << " ";

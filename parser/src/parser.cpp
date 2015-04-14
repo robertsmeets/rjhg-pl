@@ -10,7 +10,6 @@
 #include "Disassembler.h"
 #include "CInterpreter.h"
 #include "DebugInfo.h"
-#include "AstPrinter.h"
 
 using namespace std;
 
@@ -24,11 +23,10 @@ int main(int argc, char* argv[]) {
 	cout << "Parsing... " << filename << " ... " << endl;
 	Parse p;
 	CodeGenerator cg;
-	AstPrinter ap;
 	DebugInfo di(cg.getCodeBuffer(),p.getBuffer());
 	try {
 		p.start(filename);
-		ap.start(p.getPn());
+		p.getPn()->print();
 		cg.start(p.getPn(),&di);
 
 		Disassembler d;

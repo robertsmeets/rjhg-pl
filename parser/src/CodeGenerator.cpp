@@ -64,7 +64,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	// save the start address of the code
 	//
-	unsigned int offset = 6 * amount_of_methods + 8;
+	unsigned int offset = 8 * amount_of_methods + 8;
 	*((char*) codebuffer + 6) = offset & 255;
 	*((char*) codebuffer + 7) = offset >> 8;
 	here = offset;
@@ -140,6 +140,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			*((char*) codebuffer + the_index) = address & 255;
 			the_index++;
 			*((char*) codebuffer + the_index) = address >> 8;
+			the_index++;
+			*((char*) codebuffer + the_index) = a_method->getParameters()->size();
+			the_index++;
+			*((char*) codebuffer + the_index) = a_method->getLocalVariables()->size();
 			the_index++;
 		}
 	}
