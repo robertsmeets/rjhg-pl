@@ -32,7 +32,6 @@ void DebugInfo::reset() {
 	lastprinted = 0;
 }
 
-
 /**
  * i is the compiled code location
  */
@@ -42,19 +41,16 @@ void DebugInfo::printLine(unsigned int i) {
 	// find the text location of i
 	//
 	for (auto it = code_location.begin(); it < code_location.end(); it++) {
-		//cout << "comparing "<<(*it).code_location << " and " <<  i << endl;
 		if ((*it).code_location == i) {
 			found = (*it).abspos;
-			//cout << "FOUND " << found << endl;
 			break;
 		}
 	}
 	//
 	// found is the abs location in the text
 	//
-	if ((found != 0) && (lastprinted != found))
-	{
-		/* cout << "==> " << i << ": ";
+	if ((found != 0) && (lastprinted != found)) {
+		cout << "==> " << hex << i << dec << ": ";
 		for (unsigned int j = found;; j++) {
 			char c = (*textbuffer)[j];
 			if (c == '\0' || c == '\n' || c == '\r') {
@@ -62,7 +58,7 @@ void DebugInfo::printLine(unsigned int i) {
 			}
 			cout << c;
 		}
-		cout << endl; */
+		cout << endl;
 		lastprinted = found;
 	}
 }

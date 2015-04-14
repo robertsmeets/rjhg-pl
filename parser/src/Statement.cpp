@@ -16,8 +16,8 @@ Statement::Statement() {
 }
 
 Statement::~Statement() {
-
 }
+
 unsigned int Statement::getLinepos() {
 	return linepos;
 }

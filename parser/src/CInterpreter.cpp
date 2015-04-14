@@ -102,11 +102,11 @@ void CInterpreter::start() {
 	pc = find_offset();
 	for (unsigned int j = 8; j < pc; j += 8) {
 		unsigned int classnum = (buffer[j] & 255)
-				+ ((buffer[j + 1] & 255) >> 8);
+				+ ((buffer[j + 1] & 255) << 8);
 		unsigned int methodnum = (buffer[j + 2] & 255)
-				+ ((buffer[j + 3] & 255) >> 8);
+				+ ((buffer[j + 3] & 255) << 8);
 		unsigned int address = (buffer[j + 4] & 255)
-				+ ((buffer[j + 5] & 255) >> 8);
+				+ ((buffer[j + 5] & 255) << 8);
 		unsigned int num_params = buffer[j + 6];
 		unsigned int num_local_vars = buffer[j + 7];
 		auto k = methodmap.find(methodnum);
@@ -119,7 +119,6 @@ void CInterpreter::start() {
 		methodmap[methodnum][classnum][0] = address;
 		methodmap[methodnum][classnum][1] = num_params;
 		methodmap[methodnum][classnum][2] = num_local_vars;
-
 	}
 	unsigned i = 0;
 	for (; !i;) {
@@ -152,7 +151,7 @@ int CInterpreter::execute_next() {
 	//
 #ifdef DEBUG
 	di->printLine(pc);
-	cout << "pc=" << pc << ": ";
+	cout << "pc=x" << hex << pc << dec << ": ";
 #endif
 	unsigned short int f = *((char*) buffer + pc) & 255;
 	pc++;
@@ -608,6 +607,9 @@ int CInterpreter::execute_next() {
 		t++;
 		break;
 	case 12:
+#ifdef DEBUG
+		cout << "METHODCALL " << l << " ";
+#endif
 		// method call, the object is already on the stack.
 		//
 		// lookup the method by object type and name
@@ -673,7 +675,7 @@ int CInterpreter::execute_next() {
 	}
 	cout << "      rstack: ";
 	for (unsigned int i = 0; i < tr; i++) {
-		cout << r[i] << " ";
+		cout << "x" << hex << r[i] << dec << " ";
 	}
 	cout << endl;
 #endif

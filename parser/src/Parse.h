@@ -30,11 +30,16 @@ using namespace std;
 class Parse {
 	unsigned int linepos;
 	unsigned int charpos;
+	unsigned int offset;
+
+	unsigned int last_linepos;
+	unsigned int last_charpos;
+	unsigned int last_offset;
+
 	unsigned int classnum;
 	vector<char, allocator<char> > buffer;
 	char found_char;
 	string peek_string;
-	unsigned int offset;
 	ExpressionParser ep;
 	ProgramNode pn;
 

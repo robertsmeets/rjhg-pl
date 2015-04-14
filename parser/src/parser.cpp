@@ -30,9 +30,8 @@ int main(int argc, char* argv[]) {
 		p.getPn()->print();
 #endif
 		cg.start(p.getPn(),&di);
-		Disassembler d;
 #ifdef DEBUG
-		d = Disassembler();
+		Disassembler d;
 		d.start(cg.getCodeBuffer(),cg.getHere(),&di);
 #endif
 		//

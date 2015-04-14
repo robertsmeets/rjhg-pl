@@ -16,6 +16,7 @@ HeapManager::HeapManager() {
 	size = 4096;
 	space = (char*) malloc(size);
 	here = space;
+	interpreter = NULL;
 }
 
 HeapManager::~HeapManager() {

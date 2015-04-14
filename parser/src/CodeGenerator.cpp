@@ -14,6 +14,7 @@ CodeGenerator::CodeGenerator() {
 	codebuffer = (char*) malloc(codesize);
 	here = 0;
 	pn = NULL;
+	di = NULL;
 	opr_mapping["+"] = 2;
 	opr_mapping["-"] = 3;
 	opr_mapping["*"] = 4;
@@ -141,9 +142,11 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 			the_index++;
 			*((char*) codebuffer + the_index) = address >> 8;
 			the_index++;
-			*((char*) codebuffer + the_index) = a_method->getParameters()->size();
+			*((char*) codebuffer + the_index) =
+					a_method->getParameters()->size();
 			the_index++;
-			*((char*) codebuffer + the_index) = a_method->getLocalVariables()->size();
+			*((char*) codebuffer + the_index) =
+					a_method->getLocalVariables()->size();
 			the_index++;
 		}
 	}
@@ -168,12 +171,12 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 		Statement* s) {
-	emitByte(f);
-	emit2Byte(l);
-	emit2Byte(a);
 	if (s != NULL) {
 		di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
 	}
+	emitByte(f);
+	emit2Byte(l);
+	emit2Byte(a);
 }
 
 void CodeGenerator::emitByte(char b) {
@@ -191,7 +194,6 @@ void CodeGenerator::emit2Byte(unsigned int val) {
 //
 void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 		Statement* s) {
-
 	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
 		//
