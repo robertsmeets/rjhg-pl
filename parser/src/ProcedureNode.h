@@ -57,6 +57,8 @@ public:
 	void fixReturn();
 	unsigned int getMethodNumber();
 	void print();
+	unsigned int getInstanceVarNum(string);
+
 };
 
 #endif /* PROCEDURENODE_H_ */

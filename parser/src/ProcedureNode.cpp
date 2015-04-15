@@ -21,7 +21,6 @@ ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name,
 		method_number = pn->assignMethodNumber(method_name);
 	}
 	parameters = new vector<string>();
-	instance_variables = vector<string>();
 	local_variables = new map<string, unsigned int>;
 	proc_address = 0;
 
@@ -148,4 +147,17 @@ void ProcedureNode::print() {
 	for (auto s : statements) {
 		s->print();
 	}
+}
+
+unsigned int ProcedureNode::getInstanceVarNum(string name) {
+	if (cd == NULL) {
+		throw PException("Variable " + name + " not found");
+	}
+	unsigned int i = 0;
+	for (auto it : cd->getInstanceVariables()) {
+		if (it == name) {
+			return i;
+		}
+	}
+	throw PException("instance var <" + name + "> not found");
 }

@@ -101,12 +101,12 @@ void CInterpreter::start() {
 	check_magic_number();
 	pc = find_offset();
 	for (unsigned int j = 8; j < pc; j += 8) {
-		unsigned int classnum = (buffer[j] & 255)
-				+ ((buffer[j + 1] & 255) << 8);
-		unsigned int methodnum = (buffer[j + 2] & 255)
-				+ ((buffer[j + 3] & 255) << 8);
-		unsigned int address = (buffer[j + 4] & 255)
-				+ ((buffer[j + 5] & 255) << 8);
+		unsigned int classnum = (buffer[j] & 0xff)
+				+ ((buffer[j + 1] & 0xff) << 8);
+		unsigned int methodnum = (buffer[j + 2] & 0xff)
+				+ ((buffer[j + 3] & 0xff) << 8);
+		unsigned int address = (buffer[j + 4] & 0xff)
+				+ ((buffer[j + 5] & 0xff) << 8);
 		unsigned int num_params = buffer[j + 6];
 		unsigned int num_local_vars = buffer[j + 7];
 		auto k = methodmap.find(methodnum);
@@ -153,16 +153,16 @@ int CInterpreter::execute_next() {
 	di->printLine(pc);
 	cout << "pc=x" << hex << pc << dec << ": ";
 #endif
-	unsigned short int f = *((char*) buffer + pc) & 255;
+	unsigned short int f = *((char*) buffer + pc) & 0xff;
 	pc++;
 	//
 	// using little endian
 	//
 	char* lptr = (char*) buffer + pc;
-	unsigned short int l = (*lptr & 255) + (*(lptr + 1) << 8);
+	unsigned short int l = (*lptr & 0xff) + (*(lptr + 1) << 8);
 	pc += 2;
 	lptr = (char*) buffer + pc;
-	unsigned short int a = (*lptr & 255) + (*(lptr + 1) << 8);
+	unsigned short int a = (*lptr & 0xff) + (*(lptr + 1) << 8);
 	pc += 2;
 	stack_element temp;
 	//
@@ -174,7 +174,7 @@ int CInterpreter::execute_next() {
 	double d3;
 	stack_element fr1;
 	stack_element fr2;
-
+	unsigned int adr;
 	unsigned int classnum;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
@@ -206,7 +206,7 @@ int CInterpreter::execute_next() {
 			//
 			// copy the string to the heap
 			//
-			*ptr = a & 255;
+			*ptr = a & 0xff;
 			*(ptr + 1) = a >> 8;
 			memcpy(ptr + 2, buffer + pc, a);
 			//
@@ -303,11 +303,11 @@ int CInterpreter::execute_next() {
 				//
 				char * ptr1 = hm->getStart() + fr1.address;
 				char * ptr2 = hm->getStart() + fr2.address;
-				unsigned int len1 = ((*ptr1) & 255) + (*(ptr1 + 1) << 8);
-				unsigned int len2 = ((*ptr2) & 255) + (*(ptr2 + 1) << 8);
+				unsigned int len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+				unsigned int len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
 				unsigned int newlen = len1 + len2;
 				ptr = hm->allocate(newlen + 2);
-				*ptr = newlen & 255;
+				*ptr = newlen & 0xff;
 				*(ptr + 1) = newlen >> 8;
 				memcpy(ptr + 2, ptr1 + 2, len1);
 				memcpy(ptr + len1 + 2, ptr2 + 2, len2);
@@ -574,7 +574,7 @@ int CInterpreter::execute_next() {
 		// first get the string that is the procedure name
 		// get some memory
 		//
-		ptr = (char*) malloc(255);
+		ptr = (char*) malloc(0xff);
 		//
 		// copy the string to a local variable
 		//
@@ -596,14 +596,14 @@ int CInterpreter::execute_next() {
 		// l contains the classnum
 		// a contains the number of instance variables
 		//
-		ptr = hm->allocate(2 * a + 3);
+		ptr = hm->allocate(3 * a + 3);
 		//
 		// in the first 2 bytes, put in the class number
 		// the rest is left for the instance variables
 		//
-		*ptr = l & 255;
+		*ptr = l & 0xff;
 		*(ptr + 1) = l >> 8;
-		*(ptr + 2) = a >> 8;
+		*(ptr + 2) = a;
 		//
 		// leave the new object on the stack
 		//
@@ -630,21 +630,63 @@ int CInterpreter::execute_next() {
 			throw PException("Performed a method call on a nonfancy object");
 		}
 		ptr = hm->getStart() + s[t].address;
-		classnum = (*ptr & 255) + (*(ptr + 1) << 8);
+		classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
 		//
-		// this creates a new block with depth a for local variables and parameters
+		// this creates a new block with depth for local variables and parameters
 		//
 		b[tb] = t - methodmap[l][classnum][1];
 		tb++;
 		//
-		// add room for the local vars
+		// add room for the this pointer and the local vars
 		//
-		t += methodmap[l][classnum][2];
+		t += methodmap[l][classnum][2] + 1;
 		//
 		// add the program counter on the return stack
+		//
 		r[tr] = pc;
 		tr++;
 		pc = methodmap[l][classnum][0];
+		break;
+	case 13:
+#ifdef DEBUG
+		cout << "LODI " << l << " ";
+#endif
+		// access an instance variable and put it on the stack
+		//
+		// l is the instance variable
+		// a is unused
+		//
+		// first get the this pointer
+		// then calculate the address of the inst. variable
+		adr = s[b[tb - 1]].address + 3 * l + 3;
+		//
+		// put the value on the stack
+		//
+		s[t].atype = *(hm->getStart() + adr) & 0xff;
+		s[t].address = (*(hm->getStart() + adr + 1) & 0xff)
+				+ (*(hm->getStart() + adr + 2) << 8);
+		t++;
+		break;
+	case 14:
+#ifdef DEBUG
+		cout << "STOI " << l << " ";
+#endif
+		// store a value inside an inst. variable
+		//
+		// l is the instance variable
+		// a is unused
+		//
+		// first get the this pointer
+		// then calculate the address of the inst. variable
+		//
+		adr = s[b[tb - 1]].address + 3 * l + 3;
+		//
+		// store the value on the heap
+		//
+		*(hm->getStart() + adr) = s[t].atype;
+		*(hm->getStart() + adr + 1) = s[t].address & 0xff;
+		*(hm->getStart() + adr + 2) = s[t].address >> 8;
+		t--;
 		break;
 	default:
 		throw PException("unexpected F value");
@@ -688,7 +730,7 @@ int CInterpreter::execute_next() {
 }
 
 void CInterpreter::print_a_string(char* ptr) {
-	unsigned int len = ((*ptr) & 255) + (*(ptr + 1) << 8);
+	unsigned int len = ((*ptr) & 0xff) + (*(ptr + 1) << 8);
 	print_a_string(ptr + 2, len);
 	cout << endl;
 
@@ -738,7 +780,7 @@ void CInterpreter::call_external(char* function_name,
 	 case 7: // string
 	 adr = hm.getStart() + f.address;
 	 memcpy(&arg_in, adr, 8);
-	 len = ((*adr) & 255) + (*(adr + 1) << 8);
+	 len = ((*adr) & 0xff) + (*(adr + 1) << 8);
 	 str = (char*) malloc(len + 1);
 	 memcpy(str, adr + 2, len);
 	 str[len] = '\0';

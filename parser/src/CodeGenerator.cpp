@@ -223,7 +223,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 		case 3:  // variable name
 			//
 			// now we have to look up the variable name.
-			// Can be either a local variable or a parameter name.
+			// Can be either a local variable, a parameter name or an instance variable
 			//
 			local_variables = pn->getLocalVariables();
 			foundIter = local_variables->find(avalue);
@@ -241,7 +241,12 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 					}
 				}
 				if (it2 == parameters->end()) {
-					throw PException("variable " + avalue + " not found");
+					//
+					// look for instance variable
+					//
+					cout << "LOOKING FOR " << avalue << endl;
+					unsigned int j = pn->getInstanceVarNum(avalue);
+					emit(13, j, 0, s); // INSTVAR
 				}
 			} else {
 				//

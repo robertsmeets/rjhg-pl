@@ -194,6 +194,10 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 		sf = "METHOD CALL";
 		i += 5;
 		break;
+	case 13:
+		sf = "INSTVAR";
+		i +=5;
+		break;
 	default:
 		sf = "-----------------------------------+> unexpected F value: "
 				+ int(f);
