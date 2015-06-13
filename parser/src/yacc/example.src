@@ -1,0 +1,10 @@
+class myclass
+{
+    a,b,c,d,e;
+}
+
+proc myproc()
+{
+   a = 1234 + 5678;
+   c = 5;
+}
