@@ -35,10 +35,10 @@ class ProcedureNode;
 class CodeGenerator {
 	ofstream myfile;
 	map<string, ProcedureNode*> procaddresses;
-	map<unsigned int, string> callpoints;
+	map<uint16_t, string> callpoints;
 	char* codebuffer;
-	unsigned int here;
-	unsigned int codesize;
+	uint16_t here;
+	uint16_t codesize;
 	ProgramNode* pn;
 	DebugInfo* di;
 	unordered_map<string, unsigned int> opr_mapping;
@@ -51,10 +51,10 @@ public:
 	void emitRpn(vector<ExpressionThing>, ProcedureNode*, Statement*);
 	void emitOperation(string, Statement*);
 	void fix_proc_addresses();
-	void addCallAddress(unsigned int, string);
-	unsigned int getHere();
+	void addCallAddress(uint16_t, string);
+	uint16_t getHere();
 	void emit_to_file();
-	void fix(unsigned int, unsigned int);
+	void fix(uint16_t, uint16_t);
 	char* getCodeBuffer();
 	void addCallTo(string, Statement*);
 	void addCallToClassConstructor(ClassDefinition*, Statement*);
@@ -63,7 +63,7 @@ public:
 	void addCallToProcedure(string, Statement*);
 	Statement* procDefined(string);
 	void emitByte(char);
-	void emit2Byte(unsigned int);
+	void emit2Byte(uint16_t);
 };
 
 #endif /* CODEGENERATOR_H_ */

@@ -48,10 +48,15 @@ ProcedureNode* ClassDefinition::findMethod(string method_name) {
 	return NULL;
 }
 
-void ClassDefinition::print() {
+void ClassDefinition::print(unsigned int level) {
+	for (unsigned int i=0;i<level;i++)
+		{
+			cout << "+" ;
+		}
+
 	cout << "ClassDefinition " << name << endl;
 	for (auto m:methods)
 	{
-		m->print();
+		m->print(level + 1);
 	}
 }

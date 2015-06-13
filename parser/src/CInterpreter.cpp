@@ -100,21 +100,21 @@ void CInterpreter::start() {
 	methodmap.clear();
 	check_magic_number();
 	pc = find_offset();
-	for (unsigned int j = 8; j < pc; j += 8) {
-		unsigned int classnum = (buffer[j] & 0xff)
+	for (uint16_t j = 8; j < pc; j += 8) {
+		uint16_t classnum = (buffer[j] & 0xff)
 				+ ((buffer[j + 1] & 0xff) << 8);
-		unsigned int methodnum = (buffer[j + 2] & 0xff)
+		uint16_t methodnum = (buffer[j + 2] & 0xff)
 				+ ((buffer[j + 3] & 0xff) << 8);
-		unsigned int address = (buffer[j + 4] & 0xff)
+		uint16_t address = (buffer[j + 4] & 0xff)
 				+ ((buffer[j + 5] & 0xff) << 8);
-		unsigned int num_params = buffer[j + 6];
-		unsigned int num_local_vars = buffer[j + 7];
+		uint16_t num_params = buffer[j + 6];
+		uint16_t num_local_vars = buffer[j + 7];
 		auto k = methodmap.find(methodnum);
 		if (k == methodmap.end()) {
 			//
 			// was not found
 			//
-			methodmap[methodnum] = map<unsigned int, unsigned int[3]>();
+			methodmap[methodnum] = map<uint16_t, uint16_t[3]>();
 		}
 		methodmap[methodnum][classnum][0] = address;
 		methodmap[methodnum][classnum][1] = num_params;
@@ -133,7 +133,7 @@ void CInterpreter::check_magic_number() {
 	}
 }
 
-unsigned int CInterpreter::find_offset() {
+uint16_t CInterpreter::find_offset() {
 	return buffer[6] + buffer[7] * 256;
 }
 
@@ -174,8 +174,8 @@ int CInterpreter::execute_next() {
 	double d3;
 	stack_element fr1;
 	stack_element fr2;
-	unsigned int adr;
-	unsigned int classnum;
+	uint16_t adr;
+	uint16_t classnum;
 	switch (f) {
 	case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
@@ -194,7 +194,7 @@ int CInterpreter::execute_next() {
 			// put the pointer and the type on the stack
 			//
 			s[t].atype = 5;
-			s[t].address = (short unsigned int) (ptr - hm->getStart());
+			s[t].address = (short uint16_t) (ptr - hm->getStart());
 			t++;
 			pc += a;
 			break;
@@ -213,7 +213,7 @@ int CInterpreter::execute_next() {
 			// put the pointer and the type on the stack
 			//
 			s[t].atype = 7;
-			s[t].address = (short unsigned int) (ptr - hm->getStart());
+			s[t].address = (short uint16_t) (ptr - hm->getStart());
 			t++;
 			pc += a;
 			break;
@@ -303,15 +303,15 @@ int CInterpreter::execute_next() {
 				//
 				char * ptr1 = hm->getStart() + fr1.address;
 				char * ptr2 = hm->getStart() + fr2.address;
-				unsigned int len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
-				unsigned int len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
-				unsigned int newlen = len1 + len2;
+				uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+				uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
+				uint16_t newlen = len1 + len2;
 				ptr = hm->allocate(newlen + 2);
 				*ptr = newlen & 0xff;
 				*(ptr + 1) = newlen >> 8;
 				memcpy(ptr + 2, ptr1 + 2, len1);
 				memcpy(ptr + len1 + 2, ptr2 + 2, len2);
-				fr1.address = (unsigned int) (ptr - hm->getStart());
+				fr1.address = (uint16_t) (ptr - hm->getStart());
 				s[t - 1] = fr1;
 			} else if ((fr1.atype == 2) && (fr2.atype == 5)) {
 				//
@@ -697,7 +697,7 @@ int CInterpreter::execute_next() {
 	//
 #ifdef DEBUG
 	cout << "      stack: ";
-	for (unsigned int i = 0; i < t; i++) {
+	for (uint16_t i = 0; i < t; i++) {
 		char* adr;
 		cout << "[";
 		switch (s[i].atype) {
@@ -717,11 +717,11 @@ int CInterpreter::execute_next() {
 		cout << "]";
 	}
 	cout << "      bstack: ";
-	for (unsigned int i = 0; i < tb; i++) {
+	for (uint16_t i = 0; i < tb; i++) {
 		cout << b[i] << " ";
 	}
 	cout << "      rstack: ";
-	for (unsigned int i = 0; i < tr; i++) {
+	for (uint16_t i = 0; i < tr; i++) {
 		cout << "x" << hex << r[i] << dec << " ";
 	}
 	cout << endl;
@@ -730,20 +730,20 @@ int CInterpreter::execute_next() {
 }
 
 void CInterpreter::print_a_string(char* ptr) {
-	unsigned int len = ((*ptr) & 0xff) + (*(ptr + 1) << 8);
+	uint16_t len = ((*ptr) & 0xff) + (*(ptr + 1) << 8);
 	print_a_string(ptr + 2, len);
 	cout << endl;
 
 }
 
-void CInterpreter::print_a_string(char* ptr, unsigned int len) {
+void CInterpreter::print_a_string(char* ptr, uint16_t len) {
 	for (char* i = ptr; i < ptr + len; i++) {
 		cout << *i;
 	}
 }
 
 void CInterpreter::call_external(char* function_name,
-		unsigned int nparameters) {
+		uint16_t nparameters) {
 	/* string libpath = "msvcrt.dll";
 	 const char* lp = libpath.c_str();
 	 DLLib* ll = dlLoadLibrary(lp);
@@ -766,11 +766,11 @@ void CInterpreter::call_external(char* function_name,
 	 // get the arguments
 	 //
 	 stack_element f = s[t - 1];
-	 unsigned int atype = f.atype;
+	 uint16_t atype = f.atype;
 	 double arg_in;
 	 char* adr;
 	 char* str;
-	 unsigned int len;
+	 uint16_t len;
 	 switch (atype) {
 	 case 5: // double
 	 adr = hm.getStart() + f.address;
@@ -802,7 +802,7 @@ void CInterpreter::call_external(char* function_name,
 	 t = b[tb] + 2;
 	 tb--;
 	 s[t].atype = 5;
-	 s[t].address = (short unsigned int) (ptr - hm.getStart());
+	 s[t].address = (short uint16_t) (ptr - hm.getStart());
 	 t++;
 	 */
 }

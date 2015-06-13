@@ -27,8 +27,9 @@ class AssignmentNode: public Statement {
 	ProcedureNode* pn;
 	unsigned int lhs;
 	ExpressionNode rhs;
+	bool is_iv;
 public:
-	AssignmentNode(ProcedureNode*,unsigned int, ExpressionNode,unsigned int, unsigned int,unsigned int);
+	AssignmentNode(ProcedureNode*,bool ,unsigned int, ExpressionNode,unsigned int, unsigned int,unsigned int);
 	virtual ~AssignmentNode();
 	void setLhs(unsigned int);
 	unsigned int getLhs();
@@ -36,7 +37,7 @@ public:
 	ExpressionNode getRhs();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
-	void print();
+	void print(unsigned int);
 };
 
 #endif /* ASSIGNMENTNODE_H_ */

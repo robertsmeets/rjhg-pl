@@ -21,7 +21,7 @@ public:
 	virtual ~ExpressionThing();
 	int getType();
 	string getValue();
-	void print();
+	void print(unsigned int);
 };
 
 #endif /* EXPRESSIONTHING_H_ */

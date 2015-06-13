@@ -21,8 +21,13 @@ vector<ExpressionThing> ExpressionNode::getRpn() {
 	return rpn;
 }
 
-void ExpressionNode::print() {
+void ExpressionNode::print(unsigned int level) {
+	for (unsigned int i=0;i<level;i++)
+	{
+		cout << "+" ;
+	}
+	cout << "ExpressionNode" << endl;
 	for (auto et : rpn) {
-		et.print();
+		et.print(level + 1);
 	}
 }

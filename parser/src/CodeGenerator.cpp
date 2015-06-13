@@ -10,7 +10,7 @@
 using namespace std;
 
 CodeGenerator::CodeGenerator() {
-	codesize = 100000;
+	codesize = 60000;
 	codebuffer = (char*) malloc(codesize);
 	here = 0;
 	pn = NULL;
@@ -32,7 +32,7 @@ CodeGenerator::~CodeGenerator() {
 	free(codebuffer);
 }
 
-unsigned int CodeGenerator::getHere() {
+uint16_t CodeGenerator::getHere() {
 	return here;
 }
 
@@ -58,14 +58,14 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	// count the number of methods
 	//
-	unsigned int amount_of_methods = 0;
+	uint16_t amount_of_methods = 0;
 	for (auto const &a_class : a_pn->getClasses()) {
 		amount_of_methods += a_class->getMethods().size();
 	}
 	//
 	// save the start address of the code
 	//
-	unsigned int offset = 8 * amount_of_methods + 8;
+	uint16_t offset = 8 * amount_of_methods + 8;
 	*((char*) codebuffer + 6) = offset & 255;
 	*((char*) codebuffer + 7) = offset >> 8;
 	here = offset;
@@ -124,12 +124,12 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	// emit the method table
 	//
-	unsigned int the_index = 8;
+	uint16_t the_index = 8;
 	for (auto const &a_class : a_pn->getClasses()) {
 		for (auto const &a_method : a_class->getMethods()) {
-			unsigned int cnum = a_class->getClassNum();
-			unsigned int mnum = a_method->getMethodNumber();
-			unsigned int address = a_method->getProcAddress();
+			uint16_t cnum = a_class->getClassNum();
+			uint16_t mnum = a_method->getMethodNumber();
+			uint16_t address = a_method->getProcAddress();
 			*((char*) codebuffer + the_index) = cnum & 255;
 			the_index++;
 			*((char*) codebuffer + the_index) = cnum >> 8;
@@ -184,7 +184,7 @@ void CodeGenerator::emitByte(char b) {
 	here++;
 }
 
-void CodeGenerator::emit2Byte(unsigned int val) {
+void CodeGenerator::emit2Byte(uint16_t val) {
 	emitByte(val & 255);
 	emitByte(val >> 8);
 }
@@ -204,14 +204,14 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 		//
 		int atype = (*it).getType();
 		string avalue = (*it).getValue();
-		map<string, unsigned int>* local_variables;
-		map<string, unsigned int>::iterator foundIter;
+		map<string, uint16_t>* local_variables;
+		map<string, uint16_t>::iterator foundIter;
 		vector<string>* parameters;
 		vector<string>::iterator it2;
 		double my_double;
-		unsigned int strlen;
-		unsigned int sz;
-		unsigned int bvalue;
+		uint16_t strlen;
+		uint16_t sz;
+		uint16_t bvalue;
 		string my_string;
 		switch (atype) {
 		case 1: // operation
@@ -232,7 +232,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 				for (it2 = parameters->begin(); it2 != parameters->end();
 						++it2) {
 					if ((*it2) == avalue) {
-						unsigned int number = it2 - parameters->begin();
+						uint16_t number = it2 - parameters->begin();
 						//
 						// it is a parameter
 						//
@@ -244,9 +244,8 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 					//
 					// look for instance variable
 					//
-					cout << "LOOKING FOR " << avalue << endl;
-					unsigned int j = pn->getInstanceVarNum(avalue);
-					emit(13, j, 0, s); // INSTVAR
+					uint16_t j = pn->getInstanceVarNum(avalue);
+					emit(13, j, 0, s); // LODI
 				}
 			} else {
 				//
@@ -261,6 +260,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 			//
 			// shorten the proc name (still has "(" at the end)
 			//
+			cout << "emitrpn " << avalue << endl;
 			addCallToProc(avalue.substr(0, avalue.size() - 1), s);
 			break;
 		case 5: // float
@@ -296,7 +296,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(string avalue, Statement* s) {
-	unsigned int atype = opr_mapping[avalue];
+	uint16_t atype = opr_mapping[avalue];
 	if (atype == 0) {
 		throw PException("Unexpected Operation" + avalue);
 	} else {
@@ -312,9 +312,9 @@ void CodeGenerator::fix_proc_addresses() {
 	//
 	// loop over the callpoints
 	//
-	for (map<unsigned int, string>::iterator it = callpoints.begin();
+	for (map<uint16_t, string>::iterator it = callpoints.begin();
 			it != callpoints.end(); ++it) {
-		unsigned int call_address = it->first;
+		uint16_t call_address = it->first;
 		string proc_name = it->second;
 		//
 		// look up the proc name
@@ -335,7 +335,7 @@ void CodeGenerator::fix_proc_addresses() {
 			*((char*) codebuffer + call_address - 7) = 1;
 
 		} else {
-			unsigned int proc_address = pn->getProcAddress();
+			uint16_t proc_address = pn->getProcAddress();
 			//
 			// found the address of the proc
 			//
@@ -357,7 +357,7 @@ void CodeGenerator::fix_proc_addresses() {
 	}
 }
 
-void CodeGenerator::fix(unsigned int call_address, unsigned int dest_address) {
+void CodeGenerator::fix(uint16_t call_address, uint16_t dest_address) {
 	*((char*) codebuffer + call_address) = dest_address & 255;
 	*((char*) codebuffer + call_address + 1) = dest_address >> 8;
 }
@@ -365,13 +365,14 @@ void CodeGenerator::fix(unsigned int call_address, unsigned int dest_address) {
 //
 // add a call address (starting point of a proc)
 //
-void CodeGenerator::addCallAddress(unsigned int address, string proc_name) {
+void CodeGenerator::addCallAddress(uint16_t address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
 void CodeGenerator::addCallToProc(string name, Statement* s) {
 	//
 	//
+	cout << "CodeGenerator::addCallToProc(string name, Statement* s) {" << name << endl;
 	ClassDefinition* a_class = pn->getClass(name);
 	if (a_class != NULL) {
 		//
@@ -379,29 +380,69 @@ void CodeGenerator::addCallToProc(string name, Statement* s) {
 		//
 		addCallToClassConstructor(a_class, s);
 	} else {
+
+		if (name.find('.') != string::npos)
+		{
+			//
+			// it's a method call
+			//
+
+
+
+		//			emitRpn(LhsExpression.getRpn(), pn, this);
+
+//			addCallToMethod(procedure_name, this);
+
+cout << "METHOD CALL " << endl;
+
+
+
+
+
+
+
+		}
+		else
+		{
 		//
 		// it's a procedure
 		//
 		addCallToProcedure(name, s);
+		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
 	//
 	//
-	unsigned int method_number = pn->getMethodNumber(method_name);
+	uint16_t method_number = pn->getMethodNumber(method_name);
 	emit(12, method_number, 0, s);
 }
 
 void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
 		Statement* s) {
-	unsigned int ivs = cd->getInstanceVariables().size();
-	unsigned int classnum = cd->getClassNum();
+	uint16_t ivs = cd->getInstanceVariables().size();
+	uint16_t classnum = cd->getClassNum();
 	emit(11, classnum, ivs, s);
 }
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {
-
+cout << "CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) " << procedure_name << endl;
 //
 // add room for the local variables.
 // emit an INT
@@ -426,7 +467,8 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {
 		// dealing with a dynamic call, to a library function
 		// The string is saved.
 		//
-		unsigned int strlen = procedure_name.length();
+		throw PException("Procedure not found <" +procedure_name + ">");
+		uint16_t strlen = procedure_name.length();
 		emit(10, 1, strlen, s);
 		addCallAddress(here - 2, procedure_name);
 		memcpy(codebuffer + here, procedure_name.c_str(), strlen);

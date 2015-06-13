@@ -7,7 +7,7 @@ all: parser.exe
 .PHONY: clean
 clean:
 	erase *.o
-   erase *.exe
+	erase *.exe
 
 parser.o: parser.cpp
 	g++ $(CFLAGS) -o parser.o parser.cpp

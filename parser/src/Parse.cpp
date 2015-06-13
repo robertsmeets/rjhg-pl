@@ -292,16 +292,20 @@ Statement* Parse::assignment(ProcedureNode* pd) {
 	last_charpos = charpos;
 	last_offset = offset;
 	get_something("=\n\r");
-	//
-	// look up the instance variable
-	//
-	unsigned int i = pd->assignLocalVariable(assignment_left);
 	string assignment_right = peek_string;
 	ExpressionNode en = ep.parse(assignment_right);
 	//
+	// look up the instance variable
+	//
+	int i = pd->getInstanceVarNum(assignment_left);
+	bool is_iv = (i >=0);
+	if (!is_iv) {
+		i = pd->assignLocalVariable(assignment_left);
+	}
+	//
 	// create assignment node with new, to avoid it going out of scope
 	//
-	AssignmentNode*an = new AssignmentNode(pd, i, en, last_linepos,
+	AssignmentNode* an = new AssignmentNode(pd, is_iv,i, en, last_linepos,
 			last_charpos, last_offset);
 	return an;
 }

@@ -40,6 +40,12 @@ string ExpressionThing::getValue() {
 	return value;
 }
 
-void ExpressionThing::print() {
+void ExpressionThing::print(unsigned int level) {
+	for (unsigned int i=0;i<level;i++)
+	{
+		cout << "+" ;
+	}
+	cout << "ExpressionThing ";
 	cout << "[type=" << mytype << " value=" << value << "] ";
+	cout << endl;
 }

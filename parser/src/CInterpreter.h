@@ -35,28 +35,28 @@ struct stack_element {
 class CInterpreter {
 	DebugInfo* di;
 	char* buffer;
-	unsigned int pc;
-	unsigned int t;
-	unsigned int tr;
-	unsigned int tb;
+	uint16_t pc;
+	uint16_t t;
+	uint16_t tr;
+	uint16_t tb;
 	vector<stack_element> s;
 	vector<unsigned short int> r;
 	vector<unsigned short int> b;
 	HeapManager* hm;
 
-	typedef unsigned int (*iiptr)(unsigned int, unsigned int);
+	typedef uint16_t (*iiptr)(uint16_t, uint16_t);
 	typedef double (*ddptr)(double, double);
-	typedef double (*idptr)(unsigned int, double);
-	typedef double (*diptr)(double, unsigned int);
+	typedef double (*idptr)(uint16_t, double);
+	typedef double (*diptr)(double, uint16_t);
 
-	typedef bool (*biiptr)(unsigned int, unsigned int);
+	typedef bool (*biiptr)(uint16_t, uint16_t);
 	typedef bool (*bddptr)(double, double);
-	typedef bool (*bidptr)(unsigned int, double);
-	typedef bool (*bdiptr)(double, unsigned int);
+	typedef bool (*bidptr)(uint16_t, double);
+	typedef bool (*bdiptr)(double, uint16_t);
 
 	iiptr fptrs[14][8][8];
 
-	map<unsigned int,map<unsigned int, unsigned int[3]>> methodmap;
+	map<uint16_t,map<uint16_t, uint16_t[3]>> methodmap;
 
 
 public:
@@ -65,11 +65,11 @@ public:
 	void start();
 	int execute_next();
 	void print_a_string(char*);
-	void print_a_string(char*, unsigned int);
-	void call_external(char*, unsigned int);
+	void print_a_string(char*, uint16_t);
+	void call_external(char*, uint16_t);
 	vector<stack_element>* getStack();
 	void check_magic_number();
-	unsigned int find_offset();
+	uint16_t find_offset();
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

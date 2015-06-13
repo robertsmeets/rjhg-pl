@@ -34,7 +34,7 @@ public:
 	unsigned int getClassNum();
 	vector<ProcedureNode*> getMethods();
 	ProcedureNode* findMethod(string);
-	void print();
+	void print(unsigned int);
 };
 
 #endif /* CLASSDEFINITION_H_ */

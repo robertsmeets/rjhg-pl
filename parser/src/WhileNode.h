@@ -25,7 +25,7 @@ public:
 	WhileNode(ProcedureNode*,ExpressionNode, vector<Statement*>,unsigned int,unsigned int,unsigned int);
 	virtual ~WhileNode();
 	void emit(CodeGenerator*);
-	void print();
+	void print(unsigned int);
 	virtual string stype();
 };
 

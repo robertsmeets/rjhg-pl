@@ -21,7 +21,7 @@ ProcedureNode::ProcedureNode(ClassDefinition* a_cd, string method_name,
 		method_number = pn->assignMethodNumber(method_name);
 	}
 	parameters = new vector<string>();
-	local_variables = new map<string, unsigned int>;
+	local_variables = new map<string, uint16_t>;
 	proc_address = 0;
 
 }
@@ -48,7 +48,7 @@ void ProcedureNode::setName(string a_name) {
 	name = a_name;
 }
 
-void ProcedureNode::setProcAddress(unsigned int a) {
+void ProcedureNode::setProcAddress(uint16_t a) {
 	proc_address = a;
 }
 
@@ -67,7 +67,7 @@ string ProcedureNode::getName() {
 	return name;
 }
 
-unsigned int ProcedureNode::getProcAddress() {
+uint16_t ProcedureNode::getProcAddress() {
 	return proc_address;
 }
 
@@ -75,7 +75,7 @@ vector<string>* ProcedureNode::getParameters() {
 	return parameters;
 }
 
-map<string, unsigned int>* ProcedureNode::getLocalVariables() {
+map<string, uint16_t>* ProcedureNode::getLocalVariables() {
 	return local_variables;
 }
 
@@ -83,7 +83,7 @@ vector<Statement*> ProcedureNode::getStatements() {
 	return statements;
 }
 
-unsigned int ProcedureNode::getMethodNumber() {
+uint16_t ProcedureNode::getMethodNumber() {
 	return method_number;
 }
 
@@ -95,9 +95,9 @@ string ProcedureNode::getFullMethodName() {
  * find the index of an index variable by string
  *
  */
-unsigned int ProcedureNode::assignLocalVariable(string s) {
+uint16_t ProcedureNode::assignLocalVariable(string s) {
 
-	map<string, unsigned int>::iterator foundIter = local_variables->find(s);
+	map<string, uint16_t>::iterator foundIter = local_variables->find(s);
 	if (foundIter != local_variables->end()) {
 		//
 		// the variable already exists.
@@ -107,8 +107,8 @@ unsigned int ProcedureNode::assignLocalVariable(string s) {
 		//
 		// the variable does not exist. add it.
 		//
-		unsigned int newval = local_variables->size();
-		local_variables->insert(pair<string, unsigned int>(s, newval));
+		uint16_t newval = local_variables->size();
+		local_variables->insert(pair<string, uint16_t>(s, newval));
 		return newval;
 	}
 }
@@ -120,11 +120,11 @@ void ProcedureNode::fixReturn() {
 	//
 	// if return is missing, add it
 	//
-	unsigned int sz = statements.size();
+	uint16_t sz = statements.size();
 	bool addreturn = false;
-	unsigned int linepos = 0;
-	unsigned int charpos = 0;
-	unsigned int abspos = 0;
+	uint16_t linepos = 0;
+	uint16_t charpos = 0;
+	uint16_t abspos = 0;
 	if ((sz == 0)) {
 		addreturn = true;
 	} else {
@@ -141,23 +141,28 @@ void ProcedureNode::fixReturn() {
 	}
 }
 
-void ProcedureNode::print() {
+void ProcedureNode::print(unsigned int level) {
+	for (unsigned int i=0;i<level;i++)
+	{
+		cout << "+" ;
+	}
 	cout << "ProcedureNode " << name << "(" << parameters->size() << " params)"
 			<< endl;
 	for (auto s : statements) {
-		s->print();
+		s->print(level + 1);
 	}
 }
 
-unsigned int ProcedureNode::getInstanceVarNum(string name) {
+int ProcedureNode::getInstanceVarNum(string name) {
 	if (cd == NULL) {
-		throw PException("Variable " + name + " not found");
+		return -1;
 	}
-	unsigned int i = 0;
+	int i = 0;
 	for (auto it : cd->getInstanceVariables()) {
 		if (it == name) {
 			return i;
 		}
+		i++;
 	}
-	throw PException("instance var <" + name + "> not found");
+	return -1;
 }

@@ -34,8 +34,11 @@ string PrintNode::stype() {
 	return "print";
 }
 
-void PrintNode::print() {
-	cout << "PrintNode ";
-	print_expression.print();
-	cout << endl;
+void PrintNode::print(unsigned int level) {
+	for (unsigned int i=0;i<level;i++)
+		{
+			cout << "+" ;
+		}
+	cout << "PrintNode" << endl;
+	print_expression.print(level + 1);
 }

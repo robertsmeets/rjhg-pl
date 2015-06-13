@@ -67,8 +67,12 @@ string IfNode::stype() {
 	return "if";
 }
 
-void IfNode::print()
+void IfNode::print(unsigned int level)
+{for (unsigned int i=0;i<level;i++)
 {
+	cout << "+" ;
+}
+
 	cout << "IfNode" << endl;
 }
 

@@ -56,7 +56,12 @@ string WhileNode::stype() {
 	return "while";
 }
 
-void WhileNode::print()
+void WhileNode::print(unsigned int level)
 {
+	for (unsigned int i=0;i<level;i++)
+		{
+			cout << "+" ;
+		}
+
 	cout << "WhileNode" << endl;
 }

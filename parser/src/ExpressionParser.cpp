@@ -366,6 +366,7 @@ vector<string> ExpressionParser::getExpressionTokens(string expression) {
 	// function call my_function(a,b,c)     -> recognizable by word + paren
 	// operator + / - * < > <= >= != == %   -> recognizable by full word
 	// variable name abc
+	// method call my_object.my_method(a,b,c)
 	//
 	tokens.clear();
 	string str = "";
@@ -445,12 +446,19 @@ string ExpressionParser::getBoolean(string expression, unsigned int i) {
 	return "";
 }
 
+/**
+ * if this is a function call, then add the function as a token
+ * and return a nonempty string.
+ *
+ * if this is not a function call, then return an empty string.
+ */
 string ExpressionParser::getFunction(string expression, unsigned int i) {
+	cout << "getFunction " << expression << " at " << i <<  endl;
 	string str = "";
 	bool whitespace = false;
 	for (unsigned int j = i; j < expression.length(); j++) {
 		char a_char = expression[j];
-		if ((a_char >= 'a') && (a_char <= 'z')) {
+		if (((a_char >= 'a') && (a_char <= 'z')) || a_char=='.') {
 			if (whitespace) {
 				return "";
 			}
@@ -511,6 +519,14 @@ ExpressionNode ExpressionParser::parse(string s) {
 // Tokenize input expression
 //
 	vector<string> tokens = getExpressionTokens(s);
+
+	cout << "ExpressionParser::parse(" << s << ")" << endl;
+	cout << "TOKENS: " ;
+for (auto a_token:tokens)
+{
+	cout << "[" << a_token << "]" ;
+}
+cout << endl;
 //
 // Evaluate feasible expressions
 //

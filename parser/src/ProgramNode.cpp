@@ -69,11 +69,11 @@ void ProgramNode::print()
 	cout << "ProgramNode" << endl;
 	for (auto cd:classes)
 	{
-		cd->print();
+		cd->print(1);
 	}
 	for (auto p:procedures)
 	{
-		p->print();
+		p->print(1);
 	}
 
 }

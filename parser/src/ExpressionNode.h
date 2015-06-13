@@ -24,7 +24,7 @@ public:
 	virtual ~ExpressionNode();
 	void setRpn(vector<ExpressionThing>);
 	vector<ExpressionThing> getRpn();
-	void print();
+	void print(unsigned int);
 };
 
 #endif /* EXPRESSIONNODE_H_ */

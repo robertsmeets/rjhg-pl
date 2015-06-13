@@ -34,9 +34,9 @@ class ProcedureNode {
 	vector<string>* parameters;
 	vector<string> instance_variables;
 	vector<Statement*> statements;
-	map<string, unsigned int>* local_variables;
-	unsigned int proc_address;
-	unsigned int method_number;
+	map<string, uint16_t>* local_variables;
+	uint16_t proc_address;
+	uint16_t method_number;
 	ProgramNode* pn;
 
 public:
@@ -44,20 +44,20 @@ public:
 	virtual ~ProcedureNode();
 	void setName(string);
 	string getName();
-	map<string, unsigned int>* getLocalVariables();
-	void setProcAddress(unsigned int);
-	unsigned int getProcAddress();
+	map<string, uint16_t>* getLocalVariables();
+	void setProcAddress(uint16_t);
+	uint16_t getProcAddress();
 	vector<string>* getParameters();
 	string getFullMethodName();
 	void addParameter(string);
-	unsigned int assignLocalVariable(string);
-	unsigned int get_proc_address();
+	uint16_t assignLocalVariable(string);
+	uint16_t get_proc_address();
 	vector<Statement*> getStatements();
 	void setStatements(vector<Statement*>);
 	void fixReturn();
-	unsigned int getMethodNumber();
-	void print();
-	unsigned int getInstanceVarNum(string);
+	uint16_t getMethodNumber();
+	void print(unsigned int);
+	int getInstanceVarNum(string);
 
 };
 
