@@ -14,11 +14,17 @@
     Statements *a_statementlist;
     Statement *a_statement;
     Assignment *an_assignment;
-    MethodCall *a_methodcall;
+    SingleMethodCall *a_single_methodcall;
+    CompositeMethodCall *a_composite_methodcall;
     ProcedureCall *a_procedurecall;
     ExpressionList *an_expressionlist;
     Expression *an_expression;
     CommaSeparated *a_comma_separated;
+    CompositeMethodCall *a_restmethodcall;
+    Literal *a_literal;
+    int Integer;
+    double Double;
+    bool Boolean;
 };
 %token <sval> IDENTIFIER
 %token PROCEDURE
@@ -58,11 +64,17 @@
 %type <a_statementlist> Statements
 %type <a_statement> Statement
 %type <an_assignment> Assignment
-%type <a_methodcall> MethodCall
+%type <a_single_methodcall> SingleMethodCall
+%type <a_composite_methodcall> CompositeMethodCall
 %type <a_procedurecall> ProcedureCall
 %type <an_expressionlist> ExpressionList
 %type <an_expression> Expression
 %type <a_comma_separated> CommaSeparated
+%type <a_restmethodcall> RestMethodCall
+%type <a_literal> Literal
+%type <Integer> INTEGER
+%type <Double> FLOAT
+%type <Boolean> BOOLEAN
 
 %token <sval> IDENTIFIER
 %token PROCEDURE
@@ -81,71 +93,71 @@ Highlevelblock:
 	; {$$=pproot;}
 
 Procedure:
-	PROCEDURE IDENTIFIER LPAREN RPAREN {$$=new pProcedureNode($2);}
+	PROCEDURE IDENTIFIER LPAREN RPAREN 
 	BLOCK 
 	Statements	
 	ENDBLOCK 
-	;
+	; {$$=new pProcedureNode($2);}
 
 Class:
-	CLASS IDENTIFIER BLOCK {  $$ = new pClassDefinition($2);}
+	CLASS IDENTIFIER BLOCK 
 	Instancevariables
 	ENDBLOCK
-	;
+	; {  $$ = new pClassDefinition($2);}
 
 Method:
-	METHOD IDENTIFIER POINT IDENTIFIER BLOCK {  $$ = new pMethodDefinition($2,$4);}
+	METHOD IDENTIFIER POINT IDENTIFIER BLOCK
 	Statements
 	ENDBLOCK
-	;
+	; {  $$ = new pMethodDefinition($2,$4);}
 
 Statements:
-	/* empty */
-	| Statements Statement {$$ = new Statements(); $$->addStatement($2);}
+	/* empty */ {$$ = new Statements();}
+	| Statements Statement {$$ = $1; $1->addStatement($2);}
 	;
 
 Statement:
-	Assignment;
-	ProcedureCall;
-	MethodCall;
+	 Assignment SEMICOL {$$ = $1;}
+	|ProcedureCall SEMICOL {$$ = $1;}
+	|CompositeMethodCall SEMICOL {$$ = $1;}
 	;
 
 Assignment:
-	IDENTIFIER EQUALS Expression SEMICOL { $$ = new Assignment();}
-	;
+	IDENTIFIER EQUALS Expression SEMICOL
+	; { $$ = new Assignment();}
 
 ProcedureCall:
-	IDENTIFIER LPAREN ExpressionList RPAREN;
+	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new ProcedureCall();}
 
 ExpressionList:
-	/* empty */
-	| ExpressionList COMMA Expression 
+	/* empty */ {$$ = new ExpressionList();}
+	| ExpressionList COMMA Expression  { $$=$1; $1->addExpression($3); }
 	;
 
-MethodCall:
-	IDENTIFIER RestMethodCall;
+CompositeMethodCall: {$$=new CompositeMethodCall();}
+	SingleMethodCall RestMethodCall;
+
+SingleMethodCall:
+	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new SingleMethodCall($1,$3);}
 
 RestMethodCall: 
-	/* empty */
-	RestMethodCall POINT IDENTIFIER LPAREN ExpressionList RPAREN;
+	/* empty */ {$$ = new CompositeMethodCall();}
+	|RestMethodCall POINT SingleMethodCall; {$$=$1;$1->addSingleMethodCall($3);}
 
 Expression:
-	Literal
-	|IDENTIFIER LPAREN Expression RPAREN
-	|Expression POINT IDENTIFIER LPAREN Expression RPAREN
-	|Expression PLUS Expression
-	|Expression MINUS Expression
-	|Expression MUL Expression
-	|Expression DIV Expression
-	|LPAREN Expression RPAREN
-	{ printf("EXPRESSION\n");};
+	 Literal {$$=$1;}
+	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
+	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
+	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
+	|Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
+	|LPAREN Expression RPAREN {$$=$2;}
+	|CompositeMethodCall {$$=$1;}
+	|ProcedureCall {$$=$1;}
 
 Literal:
-	INTEGER
-	|FLOAT
-	|STRING
-	|BOOLEAN
-	{ printf("LITERAL\n");};
+	 INTEGER {$$=new LitInt($1);}
+	|FLOAT {$$=new LitFloat($1);}
+	|BOOLEAN {$$=new LitBool($1);}
 
 Instancevariables:
 	/* empty */
@@ -158,7 +170,6 @@ CommaSeparated:
    
 %%
 #include <iostream>
-#include "classes.h"
 
 using namespace std;
 

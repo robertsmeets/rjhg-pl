@@ -60,4 +60,13 @@ void Statements::addStatement(Statement* s)
 {
 }
 
+void ExpressionList::addExpression(Expression* e)
+{
+}
 
+Val2Expression::Val2Expression(char c, Expression*, Expression*){};
+LitInt::LitInt(int){};
+LitFloat::LitFloat(double){};
+LitBool::LitBool(bool){};
+void CompositeMethodCall::addSingleMethodCall(SingleMethodCall*){};
+SingleMethodCall::SingleMethodCall(string,ExpressionList*){};

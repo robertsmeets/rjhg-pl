@@ -47,12 +47,34 @@ class CommaSeparated {};
 void addStatement(Statement*); };
 
 
-     class Assignment {};
-     class MethodCall {};
-     class ProcedureCall {};
-     class ExpressionList {};
+     class Assignment: public Statement {};
      class Expression {};
+     class ExpressionList {
+public:
+	void addExpression(Expression*);
 
+};
+class SingleMethodCall{
+public:
+   SingleMethodCall(string,ExpressionList*);};
+     class CompositeMethodCall : public Statement,public Expression {
+public:
+   void addSingleMethodCall(SingleMethodCall*);
+
+};
+     class ProcedureCall:public Statement,public Expression {};
+
+
+class Val2Expression:public Expression{
+public:
+   Val2Expression(char,Expression*, Expression*);
+};
+class Literal:public Expression{};
+class LitInt:public Literal{ public: LitInt(int);};
+class LitFloat:public Literal{public: LitFloat(double);};
+class LitBool:public Literal{public: LitBool(bool);};
+class LitString:public Literal{public: LitString(string);};
 
 #endif 
+
 
