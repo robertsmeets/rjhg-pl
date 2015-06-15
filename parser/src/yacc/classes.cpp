@@ -70,3 +70,4 @@ LitFloat::LitFloat(double){};
 LitBool::LitBool(bool){};
 void CompositeMethodCall::addSingleMethodCall(SingleMethodCall*){};
 SingleMethodCall::SingleMethodCall(string,ExpressionList*){};
+void CommaSeparated::addIdentifier(string){};

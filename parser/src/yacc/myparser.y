@@ -70,6 +70,7 @@
 %type <an_expressionlist> ExpressionList
 %type <an_expression> Expression
 %type <a_comma_separated> CommaSeparated
+%type <a_comma_separated> Instancevariables
 %type <a_restmethodcall> RestMethodCall
 %type <a_literal> Literal
 %type <Integer> INTEGER
@@ -160,13 +161,13 @@ Literal:
 	|BOOLEAN {$$=new LitBool($1);}
 
 Instancevariables:
-	/* empty */
-   | CommaSeparated SEMICOL
+	/* empty */ {$$=new CommaSeparated();}
+   | CommaSeparated SEMICOL {$$=$1;}
    ;
    
 CommaSeparated:
-	IDENTIFIER
-	|CommaSeparated COMMA IDENTIFIER
+	IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
+	|CommaSeparated COMMA IDENTIFIER {$$->addIdentifier($3);}
    
 %%
 #include <iostream>

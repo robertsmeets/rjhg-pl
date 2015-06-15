@@ -40,7 +40,10 @@ public:
 	virtual ~pMethodDefinition();
 };
 
-class CommaSeparated {};
+class CommaSeparated {
+public:
+  void addIdentifier(string);
+};
      class Statement {};
 
      class Statements { public:
