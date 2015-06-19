@@ -1,6 +1,23 @@
 %{
-#include "classes.h"
+#include "Assignment.h"
+#include "CommaSeparated.h"
+#include "CompositeMethodCall.h"
+#include "Expression.h"
+#include "ExpressionList.h"
+#include "LitBool.h"
+#include "Literal.h"
+#include "LitFloat.h"
+#include "LitInt.h"
+#include "LitString.h"
+#include "pClassDefinition.h"
+#include "pMethodDefinition.h"
+#include "pProcedureNode.h"
+#include "pProgramNode.h"
+#include "Statements.h"
+#include "ProcedureCall.h"
+
 #include "y.tab.h"
+
 extern "C" int yylex();
 %}
 
@@ -65,4 +82,4 @@ boolean        true|false
       }
 
 %%
-class pProgramNode;
+class pProgramNode ;

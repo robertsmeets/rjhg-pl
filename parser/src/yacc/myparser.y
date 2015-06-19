@@ -1,6 +1,25 @@
 %{
 #include <stdio.h>
-#include "classes.h"
+#include "Assignment.h"
+#include "CommaSeparated.h"
+#include "CompositeMethodCall.h"
+#include "Expression.h"
+#include "ExpressionList.h"
+#include "LitBool.h"
+#include "Literal.h"
+#include "LitFloat.h"
+#include "LitInt.h"
+#include "LitString.h"
+#include "pClassDefinition.h"
+#include "pMethodDefinition.h"
+#include "pProcedureNode.h"
+#include "pProgramNode.h"
+#include "ProcedureCall.h"
+#include "SingleMethodCall.h"
+#include "Statement.h"
+#include "Statements.h"
+#include "Val2Expression.h"
+
 %}
 
 // Symbols.
@@ -46,6 +65,9 @@
 %token STRING
 %token BOOLEAN
 %token INTEGER
+
+%nonassoc BLOCK
+%nonassoc IDENTIFIER
 
 %left PLUS MINUS
 %left MUL DIV
@@ -94,7 +116,7 @@ Highlevelblock:
 	; {$$=pproot;}
 
 Procedure:
-	PROCEDURE IDENTIFIER LPAREN RPAREN 
+	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN 
 	BLOCK 
 	Statements	
 	ENDBLOCK 

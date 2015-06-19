@@ -3,7 +3,7 @@ class myclass
     a,b,c,d,e;
 }
 
-proc myproc()
+proc myproc(e,f,g,h)
 {
    a = 1234 + 5678;
    c = 5;
