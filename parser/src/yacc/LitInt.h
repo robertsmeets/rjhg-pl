@@ -3,6 +3,10 @@
 
 #include "Literal.h"
 
-class LitInt:public Literal{ public: LitInt(int);};
+class LitInt: public Literal {
+public:
+	LitInt(int);
+	void print(int);
+};
 
 #endif

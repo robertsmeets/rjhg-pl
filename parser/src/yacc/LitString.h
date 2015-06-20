@@ -3,6 +3,14 @@
 
 #include "Literal.h"
 
-class LitString:public Literal{public: LitString(string);};
+#include <string>
+
+using namespace std;
+
+class LitString: public Literal {
+public:
+	LitString (string);
+	void print(int);
+};
 
 #endif

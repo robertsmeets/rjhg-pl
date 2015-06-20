@@ -6,8 +6,10 @@
 #include <string>
 
 using namespace std;
-class SingleMethodCall{
+class SingleMethodCall {
 public:
-   SingleMethodCall(string,ExpressionList*);};
-   
+	SingleMethodCall(string, ExpressionList*);
+	void print(int);
+};
+
 #endif

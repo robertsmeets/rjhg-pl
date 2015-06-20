@@ -7,6 +7,8 @@ using namespace std;
 
 class CommaSeparated {
 public:
-  void addIdentifier(string);
+	void addIdentifier(string);
+	void print(int);
+
 };
 #endif

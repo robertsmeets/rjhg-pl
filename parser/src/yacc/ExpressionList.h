@@ -6,7 +6,7 @@
      class ExpressionList {
 public:
 	void addExpression(Expression*);
-
+	void print(int);
 };
 
 #endif

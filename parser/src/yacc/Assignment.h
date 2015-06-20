@@ -3,7 +3,7 @@
 
 #include "Statement.h"
 
-
-     class Assignment: public Statement {};
-	 
+class Assignment: public Statement {
+	void print(int);
+};
 #endif

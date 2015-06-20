@@ -7,6 +7,7 @@ class pProcedureNode {
 public:
 	pProcedureNode(string);
 	virtual ~pProcedureNode();
+	void print(int);
 };
 
 #endif

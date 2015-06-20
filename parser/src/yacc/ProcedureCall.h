@@ -4,6 +4,8 @@
 #include "Statement.h"
 #include "Expression.h"
 
-     class ProcedureCall:public Statement,public Expression {};
+class ProcedureCall: public Statement, public Expression {
+	void print(int);
+};
 
 #endif

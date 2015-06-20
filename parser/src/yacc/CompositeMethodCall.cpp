@@ -1,3 +1,13 @@
 #include "CompositeMethodCall.h"
 
-void CompositeMethodCall::addSingleMethodCall(SingleMethodCall*){};
+#include <iostream>
+
+using namespace std;
+
+void CompositeMethodCall::addSingleMethodCall(SingleMethodCall*) {
+}
+;
+
+void CompositeMethodCall::print(int i) {
+	cout << "CompositeMethodCall" << endl;
+}

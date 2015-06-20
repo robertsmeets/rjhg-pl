@@ -8,6 +8,7 @@ class pMethodDefinition {
 public:
 	pMethodDefinition(string,string);
 	virtual ~pMethodDefinition();
+	void print(int);
 };
 
 #endif

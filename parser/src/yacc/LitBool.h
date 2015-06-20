@@ -3,6 +3,10 @@
 
 #include "Literal.h"
 
-class LitBool:public Literal{public: LitBool(bool);};
+class LitBool: public Literal {
+public:
+	LitBool(bool);
+	void print(int);
+};
 
 #endif

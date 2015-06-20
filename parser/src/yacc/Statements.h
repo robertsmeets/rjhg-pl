@@ -3,7 +3,10 @@
 
 #include "Statement.h"
 
-     class Statements { public:
-void addStatement(Statement*); };
+class Statements {
+public:
+	void addStatement(Statement*);
+	void print(int);
+};
 
 #endif

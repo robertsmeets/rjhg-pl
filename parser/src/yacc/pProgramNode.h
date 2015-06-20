@@ -14,6 +14,7 @@ public:
 	void addClass(pClassDefinition*);
 	void addClassByName(string);
 	void addMethodDefinition(pMethodDefinition*);
+	void print(int);
 };
 
 #endif

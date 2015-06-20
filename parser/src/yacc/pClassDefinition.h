@@ -10,6 +10,7 @@ class pClassDefinition {
 public:
 	pClassDefinition(string);
 	virtual ~pClassDefinition();
+	void print(int);
 };
 
 #endif

@@ -3,6 +3,8 @@
 
 #include "Expression.h"
 
-class Literal:public Expression{};
+class Literal: public Expression {
+	void print(int);
+};
 
 #endif

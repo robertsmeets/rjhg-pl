@@ -3,9 +3,10 @@
 
 #include "Expression.h"
 
-class Val2Expression:public Expression{
+class Val2Expression: public Expression {
 public:
-   Val2Expression(char,Expression*, Expression*);
+	Val2Expression(char, Expression*, Expression*);
+	void print(int);
 };
 
 #endif

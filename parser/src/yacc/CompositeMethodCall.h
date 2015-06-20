@@ -5,9 +5,10 @@
 #include "Expression.h"
 #include "SingleMethodCall.h"
 
-     class CompositeMethodCall : public Statement,public Expression {
+class CompositeMethodCall: public Statement, public Expression {
 public:
-   void addSingleMethodCall(SingleMethodCall*);
+	void addSingleMethodCall(SingleMethodCall*);
+	void print(int);
 
 };
 #endif
