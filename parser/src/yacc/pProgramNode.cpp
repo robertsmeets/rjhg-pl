@@ -25,3 +25,10 @@ void pProgramNode::addMethodDefinition(pMethodDefinition* c)
 cout << "adding method definition!!!!!!!!!!!!!!!!" << endl;
 }
 
+void pProgramNode::print(int level)
+
+{for (unsigned int i = 0; i < level; i++) {
+	 						cout << "+";
+	 					}
+	 cout << "pProgramNode" << endl; 			}
+

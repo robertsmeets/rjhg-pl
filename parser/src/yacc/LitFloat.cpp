@@ -6,7 +6,13 @@ using namespace std;
 
 LitFloat::LitFloat(double){};
 
-void LitFloat::print(int i)
+void LitFloat::print(int level)
 {
+
+	{for (unsigned int i = 0; i < level; i++) {
+		cout << "+";
+	}
 	cout << "LitFloat" << endl;
+	}
+
 }

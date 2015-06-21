@@ -3,6 +3,10 @@
 
 #include "Statement.h"
 
+#include <iostream>
+
+using namespace std;
+
 class Assignment: public Statement {
 	void print(int);
 };

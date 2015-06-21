@@ -12,6 +12,10 @@ using namespace std;
 {
 }
 
- void pProcedureNode::print(int i) {
- 	cout << "pProcedureNode" << endl;
+ void pProcedureNode::print(int level) {
+	 {for (unsigned int i = 0; i < level; i++) {
+	 						cout << "+";
+	 					}
+	 cout << "pProcedureNode" << endl; 			}
+
  }

@@ -6,7 +6,12 @@ using namespace std;
 
 LitInt::LitInt(int){};
 
-void LitInt::print(int i)
+void LitInt::print(int level)
 {
-	cout << "LitInt" << endl;
+	{for (unsigned int i = 0; i < level; i++) {
+				cout << "+";
+			}
+		cout << "LitInt" << endl;
+			}
+
 }

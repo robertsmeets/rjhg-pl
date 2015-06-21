@@ -4,7 +4,13 @@
 
 using namespace std;
 
-void Literal::print(int i)
+void Literal::print(int level)
 {
-	cout << "LitBool" << endl;
+
+	{for (unsigned int i = 0; i < level; i++) {
+		cout << "+";
+	}
+	cout << "Literal" << endl;
+	}
+
 }

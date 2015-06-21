@@ -3,6 +3,10 @@
 
 #include "Expression.h"
 
+#include <iostream>
+
+using namespace std;
+
 class Val2Expression: public Expression {
 public:
 	Val2Expression(char, Expression*, Expression*);

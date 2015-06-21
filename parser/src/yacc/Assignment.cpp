@@ -1,10 +1,8 @@
 #include "Assignment.h"
 
-#include <iostream>
-
-using namespace std;
-
-void Assignment::print(int)
-{
+void Assignment::print(int level) {
+	for (unsigned int i = 0; i < level; i++) {
+		cout << "+";
+	}
 	cout << "Assignment" << endl;
 }

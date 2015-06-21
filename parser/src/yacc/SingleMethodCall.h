@@ -4,8 +4,10 @@
 #include "ExpressionList.h"
 
 #include <string>
+#include <iostream>
 
 using namespace std;
+
 class SingleMethodCall {
 public:
 	SingleMethodCall(string, ExpressionList*);

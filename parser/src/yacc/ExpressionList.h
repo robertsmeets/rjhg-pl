@@ -3,7 +3,13 @@
 
 #include "Expression.h"
 
-     class ExpressionList {
+#include <vector>
+
+using namespace std;
+
+class ExpressionList {
+
+	vector<Expression> expressions;
 public:
 	void addExpression(Expression*);
 	void print(int);
