@@ -110,9 +110,9 @@ Program:
 	;
 
 Highlevelblock:
-	 Class {$$->addClass($1);}
-	|Procedure {$$->addProcedure($1);}
-	|Method {$$->addMethodDefinition($1);}
+	 Class {glob->addClass($1);}
+	|Procedure {glob->addProcedure($1);}
+	|Method {glob->addMethodDefinition($1);}
 	; {$$=pproot;}
 
 Procedure:
@@ -209,9 +209,11 @@ int yyerror(pProgramNode*s,char**x,char*y) {
   printf("yyerror : %s\n",s);
 }
 
+pProgramNode* glob;
+
 int main(void) {
-  pProgramNode p;
+   glob = new pProgramNode();
    char* errmsg;
-  int result = yyparse(&p,&errmsg);
+   int result = yyparse(glob,&errmsg);
 }
 

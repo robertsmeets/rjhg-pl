@@ -4,9 +4,17 @@
 #include "pProcedureNode.h"
 #include "pClassDefinition.h"
 #include "pMethodDefinition.h"
+
 #include <string>
+#include <vector>
+
 using namespace std;
 class pProgramNode {
+private:
+	vector<pProcedureNode*> procedures;
+	vector<pClassDefinition*> my_classes;
+	vector<pMethodDefinition*> methods;
+
 public:
 	pProgramNode();
 	virtual ~pProgramNode();

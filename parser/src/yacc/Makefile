@@ -21,61 +21,61 @@ myparser.lex.c: myparser.lex
 	cat lex.yy.c | sed s/malloc\(strlen/\(char*\)malloc\(strlen/g >myparser.lex.c
 
 Assignment.o: Assignment.h Assignment.cpp
-	g++ -g -o Assignment.o -c Assignment.cpp
+	g++ -std=c++11 -g -o Assignment.o -c Assignment.cpp
 
 CommaSeparated.o: CommaSeparated.h CommaSeparated.cpp
-	g++ -g -o CommaSeparated.o -c CommaSeparated.cpp
+	g++ -std=c++11 -g -o CommaSeparated.o -c CommaSeparated.cpp
 
 CompositeMethodCall.o: CompositeMethodCall.h CompositeMethodCall.cpp
-	g++ -g -o CompositeMethodCall.o -c CompositeMethodCall.cpp
+	g++ -std=c++11 -g -o CompositeMethodCall.o -c CompositeMethodCall.cpp
 
 Expression.o: Expression.h Expression.cpp
-	g++ -g -o Expression.o -c Expression.cpp
+	g++ -std=c++11 -g -o Expression.o -c Expression.cpp
 
 ExpressionList.o: ExpressionList.h ExpressionList.cpp
-	g++ -g -o ExpressionList.o -c ExpressionList.cpp
+	g++ -std=c++11 -g -o ExpressionList.o -c ExpressionList.cpp
 
 LitBool.o: LitBool.h LitBool.cpp
-	g++ -g -o LitBool.o -c LitBool.cpp
+	g++ -std=c++11 -g -o LitBool.o -c LitBool.cpp
 
 Literal.o: Literal.h Literal.cpp
-	g++ -g -o Literal.o -c Literal.cpp
+	g++ -std=c++11 -g -o Literal.o -c Literal.cpp
 
 LitFloat.o: LitFloat.h LitFloat.cpp
-	g++ -g -o LitFloat.o -c LitFloat.cpp
+	g++ -std=c++11 -g -o LitFloat.o -c LitFloat.cpp
 
 LitInt.o: LitInt.h LitInt.cpp
-	g++ -g -o LitInt.o -c LitInt.cpp
+	g++ -std=c++11 -g -o LitInt.o -c LitInt.cpp
 
 LitString.o: LitString.h LitString.cpp
-	g++ -g -o LitString.o -c LitString.cpp
+	g++ -std=c++11 -g -o LitString.o -c LitString.cpp
 
 pClassDefinition.o: pClassDefinition.h pClassDefinition.cpp
-	g++ -g -o pClassDefinition.o -c pClassDefinition.cpp
+	g++ -std=c++11 -g -o pClassDefinition.o -c pClassDefinition.cpp
 
 pMethodDefinition.o: pMethodDefinition.h pMethodDefinition.cpp
-	g++ -g -o pMethodDefinition.o -c pMethodDefinition.cpp
+	g++ -std=c++11 -g -o pMethodDefinition.o -c pMethodDefinition.cpp
 
 pProcedureNode.o: pProcedureNode.h pProcedureNode.cpp
-	g++ -g -o pProcedureNode.o -c pProcedureNode.cpp
+	g++ -std=c++11 -g -o pProcedureNode.o -c pProcedureNode.cpp
 
 pProgramNode.o: pProgramNode.h pProgramNode.cpp
-	g++ -g -o pProgramNode.o -c pProgramNode.cpp
+	g++ -std=c++11 -g -o pProgramNode.o -c pProgramNode.cpp
 
 ProcedureCall.o: ProcedureCall.h ProcedureCall.cpp
-	g++ -g -o ProcedureCall.o -c ProcedureCall.cpp
+	g++ -std=c++11 -g -o ProcedureCall.o -c ProcedureCall.cpp
 
 SingleMethodCall.o: SingleMethodCall.h SingleMethodCall.cpp
-	g++ -g -o SingleMethodCall.o -c SingleMethodCall.cpp
+	g++ -std=c++11 -g -o SingleMethodCall.o -c SingleMethodCall.cpp
 
 Statement.o: Statement.h Statement.cpp
-	g++ -g -o Statement.o -c Statement.cpp
+	g++ -std=c++11 -g -o Statement.o -c Statement.cpp
 
 Statements.o: Statements.h Statements.cpp
-	g++ -g -o Statements.o -c Statements.cpp
+	g++ -std=c++11 -g -o Statements.o -c Statements.cpp
 
 Val2Expression.o: Val2Expression.h Val2Expression.cpp
-	g++ -g -o Val2Expression.o -c Val2Expression.cpp
+	g++ -std=c++11 -g -o Val2Expression.o -c Val2Expression.cpp
 
 clean:
 	rm -f Assignment.o
