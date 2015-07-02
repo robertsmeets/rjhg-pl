@@ -5,6 +5,10 @@ class myclass
 
 proc myproc(e,f,g,h)
 {
-   a = 1234 + 5678;
-   c = 5;
+   a = 1234 + 12345 + z;
 }
+
+method myclass.mymethod(x,y,z)
+{
+}
+

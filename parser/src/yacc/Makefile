@@ -1,14 +1,14 @@
 .PHONY: clean
 .PHONY: test
 
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
 
 y.tab.h: myparser.y
-	byacc -d -v myparser.y
+	byacc -d -v -t myparser.y
 
 y.tab.c: myparser.y
-	byacc -d -v myparser.y
+	byacc -d -v -t myparser.y
 	
 myparser.lex.o: myparser.lex.c y.tab.h
 	g++ -g -c myparser.lex.c -o myparser.lex.o
@@ -77,6 +77,9 @@ Statements.o: Statements.h Statements.cpp
 Val2Expression.o: Val2Expression.h Val2Expression.cpp
 	g++ -std=c++11 -g -o Val2Expression.o -c Val2Expression.cpp
 
+VariableValue.o: VariableValue.h VariableValue.cpp
+	g++ -std=c++11 -g -o VariableValue.o -c VariableValue.cpp
+
 clean:
 	rm -f Assignment.o
 	rm -f CommaSeparated.o
@@ -97,6 +100,7 @@ clean:
 	rm -f Statement.o
 	rm -f Statements.o
 	rm -f Val2Expression.o
+	rm -f VariableValue.o
 	rm -f myparser.lex.o
 	rm -f myparser.y.o
 	rm -f yywrap.o

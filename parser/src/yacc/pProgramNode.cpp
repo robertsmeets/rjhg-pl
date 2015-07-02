@@ -1,38 +1,25 @@
 #include "pProgramNode.h"
 
-
-
 pProgramNode::pProgramNode() {
-cout << "pProgramNode initialized: " << this << endl;
-
+	cout << "pProgramNode initialized: " << this << endl;
 }
 
 pProgramNode::~pProgramNode() {
 }
 
 void pProgramNode::addClass(pClassDefinition* c) {
-	cout << "hello I am pProgramNode " << this << endl;
-	cout << "adding class" << endl;
-	cout << "received a class with name " << c->getName() << endl;
-	cout << "classes size = " << my_classes.size() << endl;
-
 	my_classes.push_back(c);
-	cout << "after adding class" << endl;
-
 }
 
 void pProgramNode::addProcedure(pProcedureNode* c) {
-	cout << "adding procedure" << endl;
+	cout << "adding a procedure" << endl;
 	procedures.push_back(c);
-	cout << "after adding procedure" << endl;
-
 }
 
 void pProgramNode::addMethodDefinition(pMethodDefinition* c) {
-	cout << "adding method" << endl;
+	cout << "in addMethodDefinition()" << endl;
 	methods.push_back(c);
-	cout << "after adding method" << endl;
-
+	cout << "now there are " << methods.size() << " methods" << endl;
 }
 
 void pProgramNode::print(int level) {

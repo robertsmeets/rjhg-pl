@@ -19,6 +19,10 @@
 #include "Statement.h"
 #include "Statements.h"
 #include "Val2Expression.h"
+#include "VariableValue.h"
+
+extern char *yytext;
+#define YYDEBUG_LEXER_TEXT yytext
 
 %}
 
@@ -102,6 +106,8 @@
 %token <sval> IDENTIFIER
 %token PROCEDURE
 %start Program
+
+
 %%
 
 Program:
@@ -110,9 +116,9 @@ Program:
 	;
 
 Highlevelblock:
-	 Class {glob->addClass($1);}
-	|Procedure {glob->addProcedure($1);}
-	|Method {glob->addMethodDefinition($1);}
+	 Class {cout << "add class!" << endl; glob->addClass($1);}
+	|Procedure {cout << "add proc!" << endl;glob->addProcedure($1);}
+	|Method {cout << "add method!" << endl; glob->addMethodDefinition($1);}
 	; {$$=pproot;}
 
 Procedure:
@@ -129,7 +135,7 @@ Class:
 	; {  $$ = new pClassDefinition($2);}
 
 Method:
-	METHOD IDENTIFIER POINT IDENTIFIER BLOCK
+	METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BLOCK { cout << "step 1" << endl; }
 	Statements
 	ENDBLOCK
 	; {  $$ = new pMethodDefinition($2,$4);}
@@ -140,9 +146,9 @@ Statements:
 	;
 
 Statement:
-	 Assignment SEMICOL {$$ = $1;}
-	|ProcedureCall SEMICOL {$$ = $1;}
-	|CompositeMethodCall SEMICOL {$$ = $1;}
+	 Assignment {$$ = $1;}
+	|ProcedureCall {$$ = $1;}
+	|CompositeMethodCall {$$ = $1;}
 	;
 
 Assignment:
@@ -169,6 +175,7 @@ RestMethodCall:
 
 Expression:
 	 Literal {$$=$1;}
+        |IDENTIFIER {$$=new VariableValue($1);}
 	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
@@ -194,8 +201,10 @@ CommaSeparated:
 %%
 #include <iostream>
 
-using namespace std;
 
+
+
+using namespace std;
 extern "C"
 {
         int yylex(void);  
@@ -206,14 +215,16 @@ extern "C"
 }
 
 int yyerror(pProgramNode*s,char**x,char*y) {
-  printf("yyerror : %s\n",s);
+   printf("yyerror : %s\n",y);
 }
 
 pProgramNode* glob;
 
 int main(void) {
+yydebug = 1;
    glob = new pProgramNode();
-   char* errmsg;
+   char* errmsg = "BLA";
    int result = yyparse(glob,&errmsg);
+   glob->print(0);
 }
 
