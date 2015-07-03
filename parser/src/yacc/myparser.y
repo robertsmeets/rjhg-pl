@@ -135,10 +135,10 @@ Class:
 	; {  $$ = new pClassDefinition($2);}
 
 Method:
-	METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BLOCK { cout << "step 1" << endl; }
+	METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BLOCK 
 	Statements
 	ENDBLOCK
-	; {  $$ = new pMethodDefinition($2,$4);}
+	; {  $$ = new pMethodDefinition($2,$4,$9);}
 
 Statements:
 	/* empty */ {$$ = new Statements();}

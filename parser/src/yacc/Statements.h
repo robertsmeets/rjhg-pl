@@ -3,7 +3,11 @@
 
 #include "Statement.h"
 
+#include <vector>
+
 class Statements {
+private:
+	vector<Statement*> statements;
 public:
 	void addStatement(Statement*);
 	void print(int);
