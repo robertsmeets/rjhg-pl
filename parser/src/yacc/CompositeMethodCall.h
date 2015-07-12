@@ -7,8 +7,9 @@
 
 class CompositeMethodCall: public Statement, public Expression {
 public:
+	virtual ~CompositeMethodCall();
 	void addSingleMethodCall(SingleMethodCall*);
-	void print(int);
+	virtual void print(int);
 
 };
 #endif

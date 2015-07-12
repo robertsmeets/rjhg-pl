@@ -7,7 +7,8 @@ using namespace std;
 
 class Statement {
 public:
-	void print(int);
+	virtual ~Statement();
+	virtual void print(int) = 0;
 };
 
 #endif

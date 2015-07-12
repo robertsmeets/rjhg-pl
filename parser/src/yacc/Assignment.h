@@ -8,6 +8,7 @@
 using namespace std;
 
 class Assignment: public Statement {
-	void print(int);
+	virtual ~Assignment();
+	virtual void print(int);
 };
 #endif

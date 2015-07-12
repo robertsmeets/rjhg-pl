@@ -5,7 +5,8 @@
 #include "Expression.h"
 
 class ProcedureCall: public Statement, public Expression {
-	void print(int);
+	virtual ~ProcedureCall();
+	virtual void print(int);
 };
 
 #endif
