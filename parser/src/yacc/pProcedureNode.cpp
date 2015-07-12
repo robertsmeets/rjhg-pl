@@ -4,8 +4,9 @@
 
 using namespace std;
 
- pProcedureNode::pProcedureNode(string name)
+pProcedureNode::pProcedureNode(string name,Statements* some_statements)
 {
+	 statements = some_statements;
 }
 
  pProcedureNode::~pProcedureNode()
@@ -17,5 +18,6 @@ using namespace std;
 	 						cout << "+";
 	 					}
 	 cout << "pProcedureNode" << endl; 			}
+	 statements->print(level+1);
 
  }

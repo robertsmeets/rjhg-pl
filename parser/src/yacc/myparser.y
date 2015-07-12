@@ -126,7 +126,7 @@ Procedure:
 	BLOCK 
 	Statements	
 	ENDBLOCK 
-	; {$$=new pProcedureNode($2);}
+	; {$$=new pProcedureNode($2,$7);}
 
 Class:
 	CLASS IDENTIFIER BLOCK 
@@ -141,9 +141,9 @@ Method:
 	; {  $$ = new pMethodDefinition($2,$4,$9);}
 
 Statements:
-	/* empty */ {$$ = new Statements();}
-	| Statements Statement {$$ = $1; $1->addStatement($2);}
-	;
+	/* empty */ {printf("new statements\n");$$ = new Statements();}
+	| Statements Statement {printf("statements 1\n");$$ = $1; $1->addStatement($2);}
+	; {printf("statements2\n");}
 
 Statement:
 	 Assignment {$$ = $1;}
