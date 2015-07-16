@@ -5,7 +5,7 @@
 class LitFloat: public Literal {
 public:
 	LitFloat(double);
-	void print(int);
+	virtual void print(int);
 };
 
 #endif

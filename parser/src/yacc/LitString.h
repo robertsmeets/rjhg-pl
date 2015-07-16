@@ -10,7 +10,7 @@ using namespace std;
 class LitString: public Literal {
 public:
 	LitString (string);
-	void print(int);
+	virtual void print(int);
 };
 
 #endif

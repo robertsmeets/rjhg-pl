@@ -9,7 +9,7 @@ using namespace std;
 
 class ExpressionList {
 
-	vector<Expression> expressions;
+	vector<Expression*> expressions;
 public:
 	void addExpression(Expression*);
 	void print(int);

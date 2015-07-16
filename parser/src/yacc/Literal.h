@@ -4,7 +4,7 @@
 #include "Expression.h"
 
 class Literal: public Expression {
-	void print(int);
+	virtual void print(int);
 };
 
 #endif

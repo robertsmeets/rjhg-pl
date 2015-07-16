@@ -6,7 +6,7 @@
 class LitInt: public Literal {
 public:
 	LitInt(int);
-	void print(int);
+	virtual void print(int);
 };
 
 #endif

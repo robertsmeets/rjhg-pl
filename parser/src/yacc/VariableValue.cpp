@@ -8,11 +8,16 @@
 #include "VariableValue.h"
 
 VariableValue::VariableValue(string s) {
-
-
+	value = s;
 }
 
 VariableValue::~VariableValue() {
 
 }
 
+void VariableValue::print(int level) {
+	for (int i = 0; i < level; i++) {
+		cout << "+";
+	}
+	cout << "VariableValue " + value << endl;
+}

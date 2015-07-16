@@ -15,9 +15,12 @@
 using namespace std;
 
 class VariableValue : public Expression {
+private:
+	string value;
 public:
 	VariableValue(string);
 	virtual ~VariableValue();
+	virtual void print(int);
 };
 
 #endif /* VARIABLEVALUE_H_ */

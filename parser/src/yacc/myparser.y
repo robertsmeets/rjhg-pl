@@ -153,7 +153,7 @@ Statement:
 
 Assignment:
 	IDENTIFIER EQUALS Expression SEMICOL
-	; { $$ = new Assignment();}
+	; { $$ = new Assignment(new VariableValue($1),$3);}
 
 ProcedureCall:
 	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new ProcedureCall();}
@@ -175,7 +175,7 @@ RestMethodCall:
 
 Expression:
 	 Literal {$$=$1;}
-        |IDENTIFIER {$$=new VariableValue($1);}
+    |IDENTIFIER {$$=new VariableValue($1);}
 	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}

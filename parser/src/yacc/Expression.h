@@ -2,6 +2,7 @@
 #define EXPRESSION_H_ 
 
 class Expression {
-	void print(int);
+public:
+	virtual void print(int) =0;
 };
 #endif
