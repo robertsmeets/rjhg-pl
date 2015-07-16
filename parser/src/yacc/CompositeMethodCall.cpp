@@ -4,6 +4,10 @@
 
 using namespace std;
 
+CompositeMethodCall::~CompositeMethodCall()
+{
+
+}
 void CompositeMethodCall::addSingleMethodCall(SingleMethodCall*) {
 }
 ;
