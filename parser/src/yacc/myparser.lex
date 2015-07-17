@@ -49,35 +49,35 @@ boolean        true|false
 "/"         return(DIV);
 
 {identifier}   {
-            yylval.sval = malloc(strlen(yytext));
-            strncpy(yylval.sval, yytext, strlen(yytext));
+	    yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(IDENTIFIER);
       }
 
 
 {float}   {
-            yylval.sval = malloc(strlen(yytext));
-            strncpy(yylval.sval, yytext, strlen(yytext));
+            yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(FLOAT);
       }
 
 
 {integer}   {
-            yylval.sval = malloc(strlen(yytext));
-            strncpy(yylval.sval, yytext, strlen(yytext));
+            yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(INTEGER);
       }
 
 
 {string} {
-            yylval.sval = malloc(strlen(yytext));
-            strncpy(yylval.sval, yytext, strlen(yytext));
+            yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(STRING);
       }
 
 {boolean} {
-            yylval.sval = malloc(strlen(yytext));
-            strncpy(yylval.sval, yytext, strlen(yytext));
+            yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(BOOLEAN);
       }
 
