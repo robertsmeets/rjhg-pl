@@ -8,6 +8,10 @@
 using namespace std;
 
 class Val2Expression: public Expression {
+private:
+	char operation;
+	Expression* lhs;
+	Expression* rhs;
 public:
 	Val2Expression(char, Expression*, Expression*);
 	void print(int);

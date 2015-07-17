@@ -5,7 +5,7 @@ class myclass
 
 proc myproc(e,f,g,h)
 {
-   aaaaaaaaaaaaaaaaaaaaaa = 1234 + 12345 + z;
+   aaaaaaaaaaaaaaaaaaaaaa = (1234 + 12345) * (a + b + c + d + e + f + z);
 }
 
 method myclass.mymethod(x,y,z)

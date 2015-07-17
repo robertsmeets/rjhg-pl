@@ -29,7 +29,7 @@ extern char *yytext;
 // Symbols.
 %union
 {
-    char	*sval;
+    char* sval;
     pProgramNode *a_program;
     pClassDefinition *a_class;
     pProcedureNode *a_procedure;
@@ -50,7 +50,8 @@ extern char *yytext;
     double Double;
     bool Boolean;
 };
-%token <sval> IDENTIFIER
+// %token <sval> IDENTIFIER
+%token IDENTIFIER
 %token PROCEDURE
 %token BLOCK
 %token ENDBLOCK
@@ -104,8 +105,9 @@ extern char *yytext;
 %type <Integer> INTEGER
 %type <Double> FLOAT
 %type <Boolean> BOOLEAN
+%type <sval> IDENTIFIER
 
-%token <sval> IDENTIFIER
+//%token <sval> IDENTIFIER
 %token PROCEDURE
 %start Program
 
@@ -158,7 +160,7 @@ Assignment:
 	; { $$ = new Assignment($1,$3);}
 
 Lhs:
-	IDENTIFIER ; {$$ = new VariableValue($1);}
+	IDENTIFIER ; {cout << "IT IS ["<< $1<<"]" << endl;$$ = new VariableValue($1);}
 
 ProcedureCall:
 	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new ProcedureCall();}
@@ -180,7 +182,7 @@ RestMethodCall:
 
 Expression:
 	 Literal {$$=$1;}
-        |IDENTIFIER {$$=new VariableValue($1);}
+        |IDENTIFIER {cout << "HET IS ["<<$1<<"]" ;$$=new VariableValue($1);}
 	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
@@ -226,9 +228,9 @@ int yyerror(pProgramNode*s,char**x,char*y) {
 pProgramNode* glob;
 
 int main(void) {
-yydebug = 1;
+   yydebug = 1;
    glob = new pProgramNode();
-   char* errmsg = "BLA";
+   char* errmsg = "BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
    int result = yyparse(glob,&errmsg);
    glob->print(0);
 }
