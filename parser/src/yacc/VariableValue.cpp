@@ -7,8 +7,10 @@
 
 #include "VariableValue.h"
 
-VariableValue::VariableValue(string s) {
-	value = s;
+VariableValue::VariableValue(string c) {
+
+	cout << "Variablevalue incoming string <"<< c<< ">" << endl;
+	value = c;
 }
 
 VariableValue::~VariableValue() {

@@ -45,6 +45,7 @@ extern char *yytext;
     CommaSeparated *a_comma_separated;
     CompositeMethodCall *a_restmethodcall;
     Literal *a_literal;
+    VariableValue *a_variablevalue;
     int Integer;
     double Double;
     bool Boolean;
@@ -99,6 +100,7 @@ extern char *yytext;
 %type <a_comma_separated> Instancevariables
 %type <a_restmethodcall> RestMethodCall
 %type <a_literal> Literal
+%type <a_variablevalue> Lhs
 %type <Integer> INTEGER
 %type <Double> FLOAT
 %type <Boolean> BOOLEAN
@@ -152,8 +154,11 @@ Statement:
 	;
 
 Assignment:
-	IDENTIFIER EQUALS Expression SEMICOL
-	; { $$ = new Assignment(new VariableValue($1),$3);}
+	Lhs EQUALS Expression SEMICOL
+	; { $$ = new Assignment($1,$3);}
+
+Lhs:
+	IDENTIFIER ; {$$ = new VariableValue($1);}
 
 ProcedureCall:
 	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new ProcedureCall();}
@@ -175,7 +180,7 @@ RestMethodCall:
 
 Expression:
 	 Literal {$$=$1;}
-    |IDENTIFIER {$$=new VariableValue($1);}
+        |IDENTIFIER {$$=new VariableValue($1);}
 	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}

@@ -1,7 +1,6 @@
 #include "pProgramNode.h"
 
 pProgramNode::pProgramNode() {
-	cout << "pProgramNode initialized: " << this << endl;
 }
 
 pProgramNode::~pProgramNode() {
@@ -12,14 +11,11 @@ void pProgramNode::addClass(pClassDefinition* c) {
 }
 
 void pProgramNode::addProcedure(pProcedureNode* c) {
-	cout << "adding a procedure" << endl;
 	procedures.push_back(c);
 }
 
 void pProgramNode::addMethodDefinition(pMethodDefinition* c) {
-	cout << "in addMethodDefinition()" << endl;
 	methods.push_back(c);
-	cout << "now there are " << methods.size() << " methods" << endl;
 }
 
 void pProgramNode::print(int level) {
