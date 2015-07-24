@@ -1,6 +1,7 @@
 %{
 #include "Assignment.h"
 #include "Return.h"
+#include "While.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
 #include "Expression.h"
@@ -41,6 +42,12 @@ boolean        true|false
 "."         return(POINT);
 ","         return(COMMA);
 "="         return(EQUALS);
+"=="        return(SEQUALS);
+">"         return(GT);
+"<"         return(LT);
+">="        return(GE);
+"<="        return(LE);
+"!="        return(NE);
 ";"         return(SEMICOL);
 "("         return(LPAREN);
 ")"         return(RPAREN);
@@ -49,6 +56,7 @@ boolean        true|false
 "*"         return(MUL);
 "/"         return(DIV);
 "return"    return(RETURN);
+"while"     return(WHILE);
 
 {identifier}   {
 	    yylval.sval = malloc(strlen(yytext)+1);

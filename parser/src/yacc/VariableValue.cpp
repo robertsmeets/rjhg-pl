@@ -8,8 +8,6 @@
 #include "VariableValue.h"
 
 VariableValue::VariableValue(string c) {
-
-	cout << "Variablevalue incoming string <"<< c<< ">" << endl;
 	value = c;
 }
 

@@ -5,7 +5,15 @@ class myclass
 
 proc myproc(e,f,g,h)
 {
-   aaaaaaaaaaaaaaaaaaaaaa = (1234 + 12345) * (a + b + c + d + e + f + z);
+   a=1;
+   b=2;
+   c=3;
+   while (a > 10)
+   {
+      a=a+1;
+      b=b*2;
+   }
+   return a;
 }
 
 method myclass.mymethod(x,y,z)

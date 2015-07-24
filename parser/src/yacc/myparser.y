@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "Assignment.h"
 #include "Return.h"
+#include "While.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
 #include "Expression.h"
@@ -38,6 +39,7 @@ extern char *yytext;
     Statement *a_statement;
     Assignment *an_assignment;
     Return* a_return;
+    While* a_while;
     SingleMethodCall *a_single_methodcall;
     CompositeMethodCall *a_composite_methodcall;
     ProcedureCall *a_procedurecall;
@@ -61,6 +63,12 @@ extern char *yytext;
 %token POINT
 %token COMMA
 %token EQUALS
+%token SEQUALS
+%token GT
+%token LT
+%token GE
+%token LE
+%token NE
 %token LPAREN
 %token RPAREN
 %token SEMICOL
@@ -73,6 +81,7 @@ extern char *yytext;
 %token BOOLEAN
 %token INTEGER
 %token RETURN
+%token WHILE
 
 %nonassoc BLOCK
 %nonassoc IDENTIFIER
@@ -95,6 +104,7 @@ extern char *yytext;
 %type <a_statement> Statement
 %type <an_assignment> Assignment
 %type <a_return> Return
+%type <a_while> While
 %type <a_single_methodcall> SingleMethodCall
 %type <a_composite_methodcall> CompositeMethodCall
 %type <a_procedurecall> ProcedureCall
@@ -147,15 +157,16 @@ Method:
 	; {  $$ = new pMethodDefinition($2,$4,$9);}
 
 Statements:
-	/* empty */ {printf("new statements\n");$$ = new Statements();}
-	| Statements Statement {printf("statements 1\n");$$ = $1; $1->addStatement($2);}
-	; {printf("statements2\n");}
+	/* empty */ { $$ = new Statements(); }
+	| Statements Statement { $$ = $1; $1->addStatement($2);}
+	; 
 
 Statement:
 	 Assignment {$$ = $1;}
 	|ProcedureCall {$$ = $1;}
 	|CompositeMethodCall {$$ = $1;}
         |Return {$$ = $1;}
+        |While {$$ = $1;}
 	;
 
 Assignment:
@@ -165,6 +176,10 @@ Assignment:
 Return:
 	RETURN Expression SEMICOL 
         ; { $$ = new Return($2); }
+
+While:
+	WHILE Expression BLOCK Statements ENDBLOCK 
+        ; { $$ = new While($2,$4); }
 
 Lhs:
 	IDENTIFIER ; { $$ = new VariableValue($1);}
@@ -194,6 +209,12 @@ Expression:
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
 	|Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
+	|Expression GE Expression {$$=new Val2Expression('L',$1,$3);}
+	|Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
+	|Expression LE Expression {$$=new Val2Expression('G',$1,$3);}
+	|Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
+	|Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
+	|Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
 	|LPAREN Expression RPAREN {$$=$2;}
 	|CompositeMethodCall {$$=$1;}
 	|ProcedureCall {$$=$1;}
@@ -229,7 +250,7 @@ extern "C"
 }
 
 int yyerror(pProgramNode*s,char**x,char*y) {
-   printf("yyerror : %s\n",y);
+   printf("yyerror : %s %s\n",y,*x);
 }
 
 pProgramNode* glob;
