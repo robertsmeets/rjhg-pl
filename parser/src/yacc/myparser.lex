@@ -1,5 +1,6 @@
 %{
 #include "Assignment.h"
+#include "Return.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
 #include "Expression.h"
@@ -47,6 +48,7 @@ boolean        true|false
 "-"         return(MINUS);
 "*"         return(MUL);
 "/"         return(DIV);
+"return"    return(RETURN);
 
 {identifier}   {
 	    yylval.sval = malloc(strlen(yytext)+1);

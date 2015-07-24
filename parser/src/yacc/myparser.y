@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include "Assignment.h"
+#include "Return.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
 #include "Expression.h"
@@ -26,7 +27,6 @@ extern char *yytext;
 
 %}
 
-// Symbols.
 %union
 {
     char* sval;
@@ -37,6 +37,7 @@ extern char *yytext;
     Statements *a_statementlist;
     Statement *a_statement;
     Assignment *an_assignment;
+    Return* a_return;
     SingleMethodCall *a_single_methodcall;
     CompositeMethodCall *a_composite_methodcall;
     ProcedureCall *a_procedurecall;
@@ -50,7 +51,7 @@ extern char *yytext;
     double Double;
     bool Boolean;
 };
-// %token <sval> IDENTIFIER
+
 %token IDENTIFIER
 %token PROCEDURE
 %token BLOCK
@@ -71,6 +72,7 @@ extern char *yytext;
 %token STRING
 %token BOOLEAN
 %token INTEGER
+%token RETURN
 
 %nonassoc BLOCK
 %nonassoc IDENTIFIER
@@ -92,6 +94,7 @@ extern char *yytext;
 %type <a_statementlist> Statements
 %type <a_statement> Statement
 %type <an_assignment> Assignment
+%type <a_return> Return
 %type <a_single_methodcall> SingleMethodCall
 %type <a_composite_methodcall> CompositeMethodCall
 %type <a_procedurecall> ProcedureCall
@@ -107,7 +110,6 @@ extern char *yytext;
 %type <Boolean> BOOLEAN
 %type <sval> IDENTIFIER
 
-//%token <sval> IDENTIFIER
 %token PROCEDURE
 %start Program
 
@@ -120,9 +122,9 @@ Program:
 	;
 
 Highlevelblock:
-	 Class {cout << "add class!" << endl; glob->addClass($1);}
-	|Procedure {cout << "add proc!" << endl;glob->addProcedure($1);}
-	|Method {cout << "add method!" << endl; glob->addMethodDefinition($1);}
+	 Class { glob->addClass($1);}
+	|Procedure { glob->addProcedure($1);}
+	|Method { glob->addMethodDefinition($1);}
 	; {$$=pproot;}
 
 Procedure:
@@ -153,14 +155,19 @@ Statement:
 	 Assignment {$$ = $1;}
 	|ProcedureCall {$$ = $1;}
 	|CompositeMethodCall {$$ = $1;}
+        |Return {$$ = $1;}
 	;
 
 Assignment:
 	Lhs EQUALS Expression SEMICOL
 	; { $$ = new Assignment($1,$3);}
 
+Return:
+	RETURN Expression SEMICOL 
+        ; { $$ = new Return($2); }
+
 Lhs:
-	IDENTIFIER ; {cout << "IT IS ["<< $1<<"]" << endl;$$ = new VariableValue($1);}
+	IDENTIFIER ; { $$ = new VariableValue($1);}
 
 ProcedureCall:
 	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new ProcedureCall();}
@@ -182,7 +189,7 @@ RestMethodCall:
 
 Expression:
 	 Literal {$$=$1;}
-        |IDENTIFIER {cout << "HET IS ["<<$1<<"]" ;$$=new VariableValue($1);}
+        |IDENTIFIER { $$=new VariableValue($1);}
 	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
@@ -230,7 +237,7 @@ pProgramNode* glob;
 int main(void) {
    yydebug = 1;
    glob = new pProgramNode();
-   char* errmsg = "BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+   char* errmsg = "error";
    int result = yyparse(glob,&errmsg);
    glob->print(0);
 }

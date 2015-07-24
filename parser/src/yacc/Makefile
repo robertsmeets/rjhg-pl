@@ -1,8 +1,8 @@
 .PHONY: clean
 .PHONY: test
 
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o Return.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o Return.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
 
 # add -v -t for debug
 y.tab.h: myparser.y
@@ -23,6 +23,9 @@ myparser.lex.c: myparser.lex
 
 Assignment.o: Assignment.h Assignment.cpp
 	g++ -std=c++11 -g -o Assignment.o -c Assignment.cpp
+
+Return.o: Return.h Return.cpp
+	g++ -std=c++11 -g -o Return.o -c Return.cpp
 
 CommaSeparated.o: CommaSeparated.h CommaSeparated.cpp
 	g++ -std=c++11 -g -o CommaSeparated.o -c CommaSeparated.cpp
@@ -83,6 +86,7 @@ VariableValue.o: VariableValue.h VariableValue.cpp
 
 clean:
 	rm -f Assignment.o
+	rm -f Return.o
 	rm -f CommaSeparated.o
 	rm -f CompositeMethodCall.o
 	rm -f Expression.o
