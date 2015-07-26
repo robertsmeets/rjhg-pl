@@ -2,6 +2,7 @@
 #include "Assignment.h"
 #include "Return.h"
 #include "While.h"
+#include "If.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
 #include "Expression.h"
@@ -56,6 +57,8 @@ boolean        true|false
 "*"         return(MUL);
 "/"         return(DIV);
 "return"    return(RETURN);
+"if"        return(IF);
+"else"      return(ELSE);
 "while"     return(WHILE);
 
 {identifier}   {

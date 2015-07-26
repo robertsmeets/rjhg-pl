@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include "Assignment.h"
+#include "If.h"
 #include "Return.h"
 #include "While.h"
 #include "CommaSeparated.h"
@@ -38,6 +39,7 @@ extern char *yytext;
     Statements *a_statementlist;
     Statement *a_statement;
     Assignment *an_assignment;
+    If *an_if;
     Return* a_return;
     While* a_while;
     SingleMethodCall *a_single_methodcall;
@@ -82,6 +84,8 @@ extern char *yytext;
 %token INTEGER
 %token RETURN
 %token WHILE
+%token IF
+%token ELSE
 
 %nonassoc BLOCK
 %nonassoc IDENTIFIER
@@ -103,6 +107,7 @@ extern char *yytext;
 %type <a_statementlist> Statements
 %type <a_statement> Statement
 %type <an_assignment> Assignment
+%type <an_if> If 
 %type <a_return> Return
 %type <a_while> While
 %type <a_single_methodcall> SingleMethodCall
@@ -167,6 +172,7 @@ Statement:
 	|CompositeMethodCall {$$ = $1;}
         |Return {$$ = $1;}
         |While {$$ = $1;}
+        |If {$$ = $1;}
 	;
 
 Assignment:
@@ -180,6 +186,11 @@ Return:
 While:
 	WHILE Expression BLOCK Statements ENDBLOCK 
         ; { $$ = new While($2,$4); }
+
+If:
+	IF Expression BLOCK Statements ENDBLOCK { $$ = new If($2,$4,NULL); }
+       |IF Expression BLOCK Statements ENDBLOCK ELSE BLOCK Statements ENDBLOCK { $$ = new If($2,$4,$8); }
+       ;
 
 Lhs:
 	IDENTIFIER ; { $$ = new VariableValue($1);}
