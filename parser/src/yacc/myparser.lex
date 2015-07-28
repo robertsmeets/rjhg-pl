@@ -95,4 +95,3 @@ boolean        true|false
       }
 
 %%
-class pProgramNode ;
