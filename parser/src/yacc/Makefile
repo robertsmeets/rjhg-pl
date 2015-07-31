@@ -7,11 +7,9 @@ myparser.exe: myparser.lex.o myparser.y.o Assignment.o Return.o While.o If.o Com
 	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o Return.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
 
 # add -v -t for debug
-y.tab.h: myparser.y
-	byacc -d myparser.y
 
-y.tab.c: myparser.y
-	byacc -d myparser.y
+y.tab.c y.tab.h: myparser.y
+	byacc -d -v -t myparser.y
 	
 myparser.lex.o: myparser.lex.c y.tab.h
 	g++ -g -c myparser.lex.c -o myparser.lex.o

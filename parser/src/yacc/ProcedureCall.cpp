@@ -1,13 +1,21 @@
 #include "ProcedureCall.h"
 
-ProcedureCall::~ProcedureCall()
+ProcedureCall::ProcedureCall(string s,ExpressionList* el)
 {
-
+   name = s;
+   expressionlist = el;
 }
 
-void ProcedureCall::print(int level)
+ProcedureCall::~ProcedureCall()
+{
+}
 
-{for (unsigned int i = 0; i < level; i++) {
+
+void ProcedureCall::print(int level)
+{
+   for (unsigned int i = 0; i < level; i++) {
 	 						cout << "+";
 	 					}
-	 cout << "ProcedureCall" << endl; 			}
+   cout << "ProcedureCall("<<name<<")" << endl; 
+   expressionlist->print(level+1);
+}
