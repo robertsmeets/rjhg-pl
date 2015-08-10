@@ -16,7 +16,6 @@
 #include "pMethodDefinition.h"
 #include "pProcedureNode.h"
 #include "pProgramNode.h"
-#include "Statements.h"
 #include "ProcedureCall.h"
 
 #include "y.tab.h"
@@ -25,11 +24,11 @@ extern "C" int yylex();
 %}
 
 blanks          [ \t\n]+
-identifier   [_a-zA-Z]+
+identifier   	[_a-zA-Z]+
 integer		[0-9]+
-string        "[a-z]*"
+boolean        	true|false
+string        	"[a-zA-Z0-9]*"
 float 		[0-9]+.[0-9]*[e[0-9]+]
-boolean        true|false
 
 %%
 
@@ -64,9 +63,9 @@ boolean        true|false
 {identifier}   {
 	    yylval.sval = malloc(strlen(yytext)+1);
             strncpy(yylval.sval, yytext, strlen(yytext)+1);
+	    printf("ID<%s>\n",yytext);
             return(IDENTIFIER);
       }
-
 
 {float}   {
             yylval.sval = malloc(strlen(yytext)+1);

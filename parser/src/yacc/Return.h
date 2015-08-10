@@ -1,14 +1,13 @@
 #ifndef RETURN_H_
 #define RETURN_H_ 
 
-#include "Statement.h"
 #include "Expression.h"
 
 #include <iostream>
 
 using namespace std;
 
-class Return: public Statement {
+class Return: public Expression {
 
 private:
 	Expression* expression;

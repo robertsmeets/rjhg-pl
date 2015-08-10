@@ -3,8 +3,8 @@
 
 CFLAGS=-std=c++11 -g
 
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o Return.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o Return.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statement.o Statements.o Val2Expression.o VariableValue.o
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o Return.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o Return.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o
 
 # add -v -t for debug
 
@@ -78,9 +78,6 @@ ProcedureCall.o: ProcedureCall.h ProcedureCall.cpp
 SingleMethodCall.o: SingleMethodCall.h SingleMethodCall.cpp
 	g++ $(CFLAGS) -o SingleMethodCall.o -c SingleMethodCall.cpp
 
-Statement.o: Statement.h Statement.cpp
-	g++ $(CFLAGS) -o Statement.o -c Statement.cpp
-
 Statements.o: Statements.h Statements.cpp
 	g++ $(CFLAGS) -o Statements.o -c Statements.cpp
 
@@ -110,7 +107,6 @@ clean:
 	rm -f pProgramNode.o
 	rm -f ProcedureCall.o
 	rm -f SingleMethodCall.o
-	rm -f Statement.o
 	rm -f Statements.o
 	rm -f Val2Expression.o
 	rm -f VariableValue.o

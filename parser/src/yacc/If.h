@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class If: public Statement {
+class If: public Expression {
 
 private:
 	Expression* expression;

@@ -1,15 +1,18 @@
 #ifndef STATEMENTS_H_
 #define STATEMENTS_H_
 
-#include "Statement.h"
+#include "Expression.h"
 
 #include <vector>
+#include <iostream>
+
+using namespace std;
 
 class Statements {
 private:
-	vector<Statement*> statements;
+	vector<Expression*> statements;
 public:
-	void addStatement(Statement*);
+	void addStatement(Expression*);
 	void print(int);
 };
 

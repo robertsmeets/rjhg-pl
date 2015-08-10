@@ -5,10 +5,11 @@
 #include "Expression.h"
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-class While: public Statement {
+class While: public Expression {
 
 private:
 	Expression* expression;

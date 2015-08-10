@@ -1,7 +1,6 @@
 #ifndef ASSIGNMENT_H_
 #define ASSIGNMENT_H_ 
 
-#include "Statement.h"
 #include "VariableValue.h"
 #include "Expression.h"
 
@@ -9,7 +8,7 @@
 
 using namespace std;
 
-class Assignment: public Statement {
+class Assignment: public Expression {
 private:
 	VariableValue* variable;
 	Expression* expression;
