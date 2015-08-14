@@ -181,10 +181,11 @@ Lhs:
 	IDENTIFIER ; { $$ = new VariableValue($1);}
 
 ProcedureCall:
-	IDENTIFIER LPAREN ExpressionList RPAREN SEMICOL; { $$=new ProcedureCall($1,$3); }
+	IDENTIFIER LPAREN ExpressionList RPAREN ; { $$=new ProcedureCall($1,$3); }
 
 ExpressionList:
-	 /* emtpy */ {$$ = new ExpressionList();}
+	 /* empty */ {$$ = new ExpressionList();}
+        | Expression { $$ = new ExpressionList();$$->addExpression($1);}
 	| ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
 	;
 
