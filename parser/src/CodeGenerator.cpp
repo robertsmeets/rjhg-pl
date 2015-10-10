@@ -40,7 +40,7 @@ char* CodeGenerator::getCodeBuffer() {
 	return codebuffer;
 }
 
-void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
+void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
 	cout << "Code generation..." << endl;
 	//
 	// emit a magic number
@@ -95,14 +95,14 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	//
 	// generate all the procedures
 	//
-	vector<ProcedureNode*> procs;
+	vector<pProcedureNode*> procs;
 	procs = pn->getProcedures();
 	//
 	// generate the code for all the procedures
 	//
-	for (vector<ProcedureNode*>::iterator it = procs.begin(); it != procs.end();
+	for (vector<pProcedureNode*>::iterator it = procs.begin(); it != procs.end();
 			++it) {
-		ProcedureNode* a_proc = *it;
+		pProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
 		a_proc->setProcAddress(here);
 		procaddresses[pname] = a_proc;
@@ -114,7 +114,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 	for (auto const &a_class : a_pn->getClasses()) {
 		for (auto const &a_method : a_class->getMethods()) {
 			a_method->setProcAddress(here);
-			start_proc(a_method);
+			start_method(a_method);
 		}
 	}
 	//
@@ -155,15 +155,15 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
 /**
  * generate the code for a procedure
  */
-void CodeGenerator::start_proc(ProcedureNode* a_proc) {
+void CodeGenerator::start_proc(pProcedureNode* a_proc) {
 	//
 	// emit all the statements for a procedure
 	//
-	vector<Statement*> statements = a_proc->getStatements();
-	for (vector<Statement*>::iterator it = statements.begin();
+	Statements* statements = a_proc->getStatements();
+	/* for (vector<Statement*>::iterator it = statements.begin();
 			it != statements.end(); ++it) {
 		(*it)->emit(this);
-	}
+	} */
 }
 
 //
@@ -172,7 +172,7 @@ void CodeGenerator::start_proc(ProcedureNode* a_proc) {
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
 		Statement* s) {
 	if (s != NULL) {
-		di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
+		 // di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
 	}
 	emitByte(f);
 	emit2Byte(l);
@@ -192,9 +192,9 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 //
 // emit the code for an expression
 //
-void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
+void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
 		Statement* s) {
-	for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
+	/* for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
 		//
 		// type 1: operation
@@ -289,7 +289,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
 			throw PException("Unexpected ExpressionThing type");
 			break;
 		}
-	}
+	}  */
 }
 
 //
@@ -319,7 +319,7 @@ void CodeGenerator::fix_proc_addresses() {
 		//
 		// look up the proc name
 		//
-		ProcedureNode* pn = procaddresses[proc_name];
+		pProcedureNode* pn = procaddresses[proc_name];
 		if (pn == NULL) {
 			//
 			// external function
@@ -373,7 +373,7 @@ void CodeGenerator::addCallToProc(string name, Statement* s) {
 	//
 	//
 	cout << "CodeGenerator::addCallToProc(string name, Statement* s) {" << name << endl;
-	ClassDefinition* a_class = pn->getClass(name);
+	pClassDefinition* a_class = pn->getClass(name);
 	if (a_class != NULL) {
 		//
 		// it's a class constructor
@@ -434,7 +434,7 @@ void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
 	emit(12, method_number, 0, s);
 }
 
-void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd,
+void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd,
 		Statement* s) {
 	uint16_t ivs = cd->getInstanceVariables().size();
 	uint16_t classnum = cd->getClassNum();
@@ -477,10 +477,10 @@ cout << "CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) 
 }
 
 Statement* CodeGenerator::procDefined(string procedure_name) {
-	vector<ProcedureNode*> procedures = pn->getProcedures();
-	for (vector<ProcedureNode*>::iterator it = procedures.begin();
+	vector<pProcedureNode*> procedures = pn->getProcedures();
+	for (vector<pProcedureNode*>::iterator it = procedures.begin();
 			it != procedures.end(); ++it) {
-		ProcedureNode* a_proc = *it;
+		pProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
 		if (pname == procedure_name) {
 			return (Statement*) a_proc;
@@ -488,3 +488,9 @@ Statement* CodeGenerator::procDefined(string procedure_name) {
 	}
 	return NULL;
 }
+
+
+void CodeGenerator::start_method(pMethodDefinition* md)
+{
+}
+

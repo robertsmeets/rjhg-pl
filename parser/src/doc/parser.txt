@@ -1,0 +1,125 @@
+
+Contents - Back to the main page
+Bison and Flex Example
+(May 2006)
+Bison is a replacement for Yacc.
+Flex is a replacement for Lex.
+These are used for syntactic and grammatical parsing.
+Example with blocks and identifiers
+Example of the file we want to parse:
+sample.txt
+
+procedure Validate {
+        begin {
+                DoThis
+                Dothat
+        }
+        end {
+                CleanUp
+        }
+}
+
+Parser.y
+
+%{
+#include <stdio.h>
+%}
+
+// Symbols.
+%union
+{
+	char	*sval;
+};
+%token <sval> IDENTIFIER
+%token PROCEDURE
+%token BLOCK
+%token ENDBLOCK
+
+%start Procedure
+%%
+
+Procedure:
+	PROCEDURE IDENTIFIER BLOCK { printf("Procedure : %s\n", $2); }
+	Parts
+	ENDBLOCK
+	;
+
+Parts:
+	/* empty */
+	| Parts Part
+	;
+
+Part:
+	IDENTIFIER BLOCK { printf("\tPart : %s\n", $1); }
+		Keywords
+	ENDBLOCK
+	;
+
+Keywords:
+	/* empty */
+	| Keywords Keyword
+	;
+
+Keyword:
+	IDENTIFIER { printf("\t\tKeyword : %s\n", $1); }
+	;
+%%
+
+int yyerror(char *s) {
+  printf("yyerror : %s\n",s);
+}
+
+int main(void) {
+  yyparse();
+}
+
+Parser.lex
+
+%{
+#include "Parser.h"
+%}
+
+blanks          [ \t\n]+
+identifier		[_a-zA-Z0-9]+
+
+%%
+
+{blanks}        { /* ignore */ }
+
+"procedure"		return(PROCEDURE);
+"{"				return(BLOCK);
+"}"				return(ENDBLOCK);
+
+{identifier}	{
+				yylval.sval = malloc(strlen(yytext));
+				strncpy(yylval.sval, yytext, strlen(yytext));
+				return(IDENTIFIER);
+}
+
+
+Compilation commands:
+
+bison -d Parser.y
+mv Parser.tab.h Parser.h
+mv Parser.tab.c Parser.y.c
+flex Parser.lex
+mv lex.yy.c Parser.lex.c
+gcc -g -c Parser.lex.c -o Parser.lex.o
+gcc -g -c Parser.y.c -o Parser.y.o
+gcc -g -o Parser Parser.lex.o Parser.y.o -lfl
+
+Note: on some Unix computers, one needs to use -ll instead of -lfl.
+Execution of the parser:
+
+Parser < sample.txt
+
+
+Result:
+
+Procedure : Validate
+	Part : begin
+		Keyword : DoThis
+		Keyword : Dothat
+	Part : end
+		Keyword : CleanUp
+

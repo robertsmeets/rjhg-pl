@@ -10,10 +10,13 @@
 #include "Disassembler.h"
 #include "CInterpreter.h"
 #include "DebugInfo.h"
+#include "pProgramNode.h"
+
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+
+int pmain(int argc, char* argv[]) {
 	if (argc != 2) {
 		cout << "Must provide filename as an argument, example " << argv[0]
 				<< " c:\\\\test\\\\test.src" << endl;
@@ -25,7 +28,12 @@ int main(int argc, char* argv[]) {
 	CodeGenerator cg;
 	DebugInfo di(cg.getCodeBuffer(),p.getBuffer());
 	try {
+		//
+		// start the parser
+		//
 		p.start(filename);
+
+
 #ifdef DEBUG
 		p.getPn()->print();
 #endif

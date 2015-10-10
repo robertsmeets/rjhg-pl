@@ -77,3 +77,9 @@ void ProgramNode::print()
 	}
 
 }
+
+vector<ProcedureNode*> pProgramNode::getProcedures()
+{
+   return procedures;
+}
+
