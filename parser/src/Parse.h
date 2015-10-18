@@ -15,9 +15,9 @@
 #include <fstream>
 
 #include "ExpressionParser.h"
-#include "ProgramNode.h"
+#include "pProgramNode.h"
 #include "PException.h"
-#include "ProcedureNode.h"
+#include "pProcedureNode.h"
 #include "ProcedureCallNode.h"
 #include "ReturnNode.h"
 #include "IfNode.h"
@@ -59,13 +59,13 @@ public:
 	void procedure_definition();
 	void trim(string&);
 	void lookahead();
-	vector<Statement*> block(ProcedureNode*);
-	Statement* procedure_call(ProcedureNode*);
-	Statement* assignment(ProcedureNode*);
-	Statement* return_statement(ProcedureNode*);
-	Statement* if_statement(ProcedureNode*);
-	Statement* while_statement(ProcedureNode*);
-	Statement* print_statement(ProcedureNode*);
+	vector<Statement*> block(pProcedureNode*);
+	Statement* procedure_call(pProcedureNode*);
+	Statement* assignment(pProcedureNode*);
+	Statement* return_statement(pProcedureNode*);
+	Statement* if_statement(pProcedureNode*);
+	Statement* while_statement(pProcedureNode*);
+	Statement* print_statement(pProcedureNode*);
 	vector<char, allocator<char> >* getBuffer();
 };
 

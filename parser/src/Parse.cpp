@@ -25,7 +25,7 @@ Parse::~Parse() {
 
 }
 
-ProgramNode* Parse::getPn() {
+pProgramNode* Parse::getPn() {
 	return &pn;
 }
 
