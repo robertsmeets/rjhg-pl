@@ -164,4 +164,7 @@ clean:
 	rm -f WhileNode.o
 
 test: myparser.exe
-	./myparser.exe < example.src	
+	./myparser.exe example.src
+	
+all: myparser.exe
+

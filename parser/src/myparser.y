@@ -254,13 +254,24 @@ int yyerror(pProgramNode*s,char**x,char*y) {
 
 pProgramNode* glob;
 
-int main(void) {
+int main(int argc, char* argv[]) {
+   extern FILE * yyin;
+   if (argc != 2) {
+      cout << "Must provide filename as an argument, example " << argv[0]
+				<< " c:\\\\test\\\\test.src" << endl;
+		return -1;
+	}
+   cout << "Parsing... " << argv[1] << " ... " << endl;
+   yyin = fopen(argv[1],"r");
    yydebug = 1;
    glob = new pProgramNode();
    char* errmsg = "error";
    int result = yyparse(glob,&errmsg);
+   fclose(yyin);
    glob->print(0);
    CodeGenerator cg;
    cg.start(glob,NULL);
 }
+
+
 
