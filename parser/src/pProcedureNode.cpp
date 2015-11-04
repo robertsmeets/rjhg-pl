@@ -20,6 +20,7 @@ pProcedureNode::pProcedureNode(string a_name,Statements* some_statements)
 {
    name = a_name;
 	 statements = some_statements;
+	 parameters = new vector<string>();
 }
 
 

@@ -94,7 +94,7 @@ extern char *yytext;
 
 %right POINT
 
-%parse-param {pProgramNode *pproot}
+%parse-param {pProgramNode *glob}
 %parse-param {char **errmsg}
 
 %type <a_program> Program
@@ -129,15 +129,15 @@ extern char *yytext;
 %%
 
 Program:
-	/* empty */  {$$ =pproot;}
-	|Program Highlevelblock {$$=pproot;}
+	/* empty */  {$$ =glob;}
+	|Program Highlevelblock {$$=glob;}
 	;
 
 Highlevelblock:
 	 Class { glob->addClass($1);}
 	|Procedure { glob->addProcedure($1);}
 	|Method { glob->addMethodDefinition($1);}
-	; {$$=pproot;}
+	; {$$=glob;}
 
 Procedure:
 	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN 
@@ -255,6 +255,10 @@ int yyerror(pProgramNode*s,char**x,char*y) {
 pProgramNode* glob;
 
 int main(int argc, char* argv[]) {
+//
+// workaround for a bug in the Eclipse console
+//
+setvbuf(stdout, NULL, _IONBF, 0);
    extern FILE * yyin;
    if (argc != 2) {
       cout << "Must provide filename as an argument, example " << argv[0]
