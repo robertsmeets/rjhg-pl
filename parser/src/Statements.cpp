@@ -13,3 +13,8 @@ void Statements::print(int level) {
 		a_statement->print(level+1);
 	}
 }
+
+vector<Expression*> Statements::getStatements()
+{
+	return statements;
+}

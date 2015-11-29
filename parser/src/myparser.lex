@@ -17,6 +17,7 @@
 #include "pProcedureNode.h"
 #include "pProgramNode.h"
 #include "ProcedureCall.h"
+#include "PrintNode.h"
 
 #include "y.tab.h"
 
@@ -59,6 +60,7 @@ float 		[0-9]+.[0-9]*[e[0-9]+]
 "if"        return(IF);
 "else"      return(ELSE);
 "while"     return(WHILE);
+"print"     return(PRINT);
 
 {identifier}   {
 	    yylval.sval = malloc(strlen(yytext)+1);

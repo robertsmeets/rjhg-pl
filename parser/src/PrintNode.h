@@ -1,5 +1,5 @@
 /*
- * PrintStatement.h
+ * PrintNode.h
  *
  *  Created on: Jan 24, 2015
  *      Author: robert
@@ -8,20 +8,23 @@
 #ifndef PRINTNODE_H_
 #define PRINTNODE_H_
 
-#include "ExpressionNode.h"
+#include "Expression.h"
 #include "CodeGenerator.h"
-#include "ExpressionNode.h"
+#include <iostream>
 
+using namespace std;
 
-class PrintNode : public Statement{
+class PrintNode : public Expression
+{
+private:
 	ProcedureNode* pn;
-	ExpressionNode print_expression;
+	Expression* expression;
 public:
-	PrintNode(ProcedureNode*,ExpressionNode,unsigned int,unsigned int,unsigned int);
+	PrintNode(Expression*);
 	virtual ~PrintNode();
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
-	void print(unsigned int);
+	virtual void print(int);
 };
 
 #endif /* PRINTNODE_H_ */

@@ -1,5 +1,5 @@
 /*
- * PrintStatement.cpp
+ * PrintNode.cpp
  *
  *  Created on: Jan 24, 2015
  *      Author: robert
@@ -7,13 +7,9 @@
 
 #include "PrintNode.h"
 
-PrintNode::PrintNode(ProcedureNode* p, ExpressionNode en, unsigned int linep,
-		unsigned int charp, unsigned int absp) {
-	linepos = linep;
-	charpos = charp;
-	abspos = absp;
-	pn = p;
-	print_expression = en;
+PrintNode::PrintNode(Expression* e)
+{
+	expression = e;
 }
 
 PrintNode::~PrintNode() {
@@ -23,7 +19,7 @@ void PrintNode::emit(CodeGenerator* cg) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	cg->emitRpn(print_expression.getRpn(), pn, this);
+	expression->emit(cg);
 	//
 	// return
 	//
@@ -34,11 +30,11 @@ string PrintNode::stype() {
 	return "print";
 }
 
-void PrintNode::print(unsigned int level) {
-	for (unsigned int i=0;i<level;i++)
+void PrintNode::print(int level) {
+	for (int i=0;i<level;i++)
 		{
 			cout << "+" ;
 		}
 	cout << "PrintNode" << endl;
-	print_expression.print(level + 1);
+	// print_expression.print(level + 1);
 }

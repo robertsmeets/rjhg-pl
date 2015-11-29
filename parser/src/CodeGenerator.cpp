@@ -150,6 +150,7 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
 			the_index++;
 		}
 	}
+	cout << "Generated " << here << " bytes of code " << endl;
 }
 
 /**
@@ -160,17 +161,18 @@ void CodeGenerator::start_proc(pProcedureNode* a_proc) {
 	// emit all the statements for a procedure
 	//
 	Statements* statements = a_proc->getStatements();
-	/* for (vector<Statement*>::iterator it = statements.begin();
-			it != statements.end(); ++it) {
-		(*it)->emit(this);
-	} */
+//	Statements* expressions =statements->getExpressions();
+	//for (auto it = expressions.begin();
+			//it != expressions.end(); ++it) {
+	//	it.emit(this);
+	//}
 }
 
 //
 // emit a f,l,a combination
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
-		Statement* s) {
+		Expression* s) {
 	if (s != NULL) {
 		 // di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
 	}
@@ -193,7 +195,7 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 // emit the code for an expression
 //
 void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
-		Statement* s) {
+		Expression* s) {
 	/* for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
 			++it) {
 		//
@@ -295,7 +297,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
 //
 // emit the code for an operation
 //
-void CodeGenerator::emitOperation(string avalue, Statement* s) {
+void CodeGenerator::emitOperation(string avalue, Expression* s) {
 	uint16_t atype = opr_mapping[avalue];
 	if (atype == 0) {
 		throw PException("Unexpected Operation" + avalue);
@@ -369,10 +371,10 @@ void CodeGenerator::addCallAddress(uint16_t address, string proc_name) {
 	callpoints[address] = proc_name;
 }
 
-void CodeGenerator::addCallToProc(string name, Statement* s) {
+void CodeGenerator::addCallToProc(string name, Expression* s) {
 	//
 	//
-	cout << "CodeGenerator::addCallToProc(string name, Statement* s) {" << name << endl;
+	cout << "CodeGenerator::addCallToProc(string name, Expression* s) {" << name << endl;
 	pClassDefinition* a_class = pn->getClass(name);
 	if (a_class != NULL) {
 		//
@@ -427,7 +429,7 @@ cout << "METHOD CALL " << endl;
 
 }
 
-void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
+void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
 	//
 	//
 	uint16_t method_number = pn->getMethodNumber(method_name);
@@ -435,14 +437,14 @@ void CodeGenerator::addCallToMethod(string method_name, Statement* s) {
 }
 
 void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd,
-		Statement* s) {
+		Expression* s) {
 	uint16_t ivs = cd->getInstanceVariables().size();
 	uint16_t classnum = cd->getClassNum();
 	emit(11, classnum, ivs, s);
 }
 
-void CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) {
-cout << "CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) " << procedure_name << endl;
+void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s) {
+cout << "CodeGenerator::addCallToProcedure(string procedure_name, Expression* s) " << procedure_name << endl;
 //
 // add room for the local variables.
 // emit an INT
@@ -454,7 +456,7 @@ cout << "CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) 
 // determine if procedure_name was defined
 // in the program code, if not it's a dynamic call
 //
-	Statement* proc = procDefined(procedure_name);
+	Expression* proc = procDefined(procedure_name);
 	if (proc != NULL) {
 		//
 		// emit a "cal"
@@ -476,14 +478,14 @@ cout << "CodeGenerator::addCallToProcedure(string procedure_name, Statement* s) 
 	}
 }
 
-Statement* CodeGenerator::procDefined(string procedure_name) {
+Expression* CodeGenerator::procDefined(string procedure_name) {
 	vector<pProcedureNode*> procedures = pn->getProcedures();
 	for (vector<pProcedureNode*>::iterator it = procedures.begin();
 			it != procedures.end(); ++it) {
 		pProcedureNode* a_proc = *it;
 		string pname = a_proc->getName();
 		if (pname == procedure_name) {
-			return (Statement*) a_proc;
+			return (Expression*) a_proc;
 		}
 	}
 	return NULL;

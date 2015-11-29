@@ -24,6 +24,7 @@
 #include "DebugInfo.h"
 #include "pClassDefinition.h"
 #include "pMethodDefinition.h"
+#include "Expression.h"
 
 using namespace std;
 
@@ -34,6 +35,8 @@ class pProcedureNode; // forward declaration
 class pMethodDefinition; // forward declaration
 
 class pClassDefinition; // forward declaration
+
+class Expression; // forward declaration
 
 class CodeGenerator {
 	ofstream myfile;
@@ -51,21 +54,21 @@ public:
 	void start(pProgramNode*, DebugInfo*);
 	void start_proc(pProcedureNode*);
 	void start_method(pMethodDefinition*);
-	void emit(char, unsigned short int, unsigned short int, Statement*);
-	void emitRpn(vector<ExpressionThing>, pProcedureNode*, Statement*);
-	void emitOperation(string, Statement*);
+	void emit(char, unsigned short int, unsigned short int, Expression*);
+	void emitRpn(vector<ExpressionThing>, pProcedureNode*, Expression*);
+	void emitOperation(string, Expression*);
 	void fix_proc_addresses();
 	void addCallAddress(uint16_t, string);
 	uint16_t getHere();
 	void emit_to_file();
 	void fix(uint16_t, uint16_t);
 	char* getCodeBuffer();
-	void addCallTo(string, Statement*);
-	void addCallToClassConstructor(pClassDefinition*, Statement*);
-	void addCallToMethod(string, Statement*);
-	void addCallToProc(string, Statement*);
-	void addCallToProcedure(string, Statement*);
-	Statement* procDefined(string);
+	void addCallTo(string, Expression*);
+	void addCallToClassConstructor(pClassDefinition*, Expression*);
+	void addCallToMethod(string, Expression*);
+	void addCallToProc(string, Expression*);
+	void addCallToProcedure(string, Expression*);
+	Expression* procDefined(string);
 	void emitByte(char);
 	void emit2Byte(uint16_t);
 };

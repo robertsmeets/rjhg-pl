@@ -16,7 +16,11 @@
 
 using namespace std;
 
+class pClassDefinition; // forward declaration
+
 class pProcedureNode; // forward declaration
+
+class pMethodDefinition; // forward declaration
 
 class pProgramNode {
 private:

@@ -25,6 +25,8 @@
 
 using namespace std;
 
+class Statements; // forward declaration
+
 class pProgramNode;
 // forward declaration
 

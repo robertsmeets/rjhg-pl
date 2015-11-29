@@ -8,12 +8,15 @@
 
 using namespace std;
 
+class Expression; //forward declaration
+
 class Statements {
 private:
 	vector<Expression*> statements;
 public:
 	void addStatement(Expression*);
 	void print(int);
+	vector<Expression*> getStatements();
 };
 
 #endif

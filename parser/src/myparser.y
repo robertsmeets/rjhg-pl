@@ -22,6 +22,8 @@
 #include "Val2Expression.h"
 #include "VariableValue.h"
 #include "CodeGenerator.h"
+#include "Disassembler.h"
+#include "PrintNode.h"
 
 extern char *yytext;
 #define YYDEBUG_LEXER_TEXT yytext
@@ -52,6 +54,7 @@ extern char *yytext;
     int Integer;
     double Double;
     bool Boolean;
+    PrintNode *a_printnode;
 };
 
 %token IDENTIFIER
@@ -84,6 +87,7 @@ extern char *yytext;
 %token WHILE
 %token IF
 %token ELSE
+%token PRINT
 
 %nonassoc BLOCK
 %nonassoc IDENTIFIER
@@ -121,6 +125,7 @@ extern char *yytext;
 %type <Double> FLOAT
 %type <Boolean> BOOLEAN
 %type <sval> IDENTIFIER
+%type <a_printnode> Print
 
 %token PROCEDURE
 %start Program
@@ -220,6 +225,11 @@ Expression:
         |Return {$$ = $1;}
         |While {$$ = $1;}
         |If {$$ = $1;}
+	|Print {$$ = $1;}
+	;
+
+Print:
+	PRINT Expression SEMICOL {$$=new PrintNode($2);}
 	;
 
 Literal:
@@ -275,6 +285,8 @@ setvbuf(stdout, NULL, _IONBF, 0);
    glob->print(0);
    CodeGenerator cg;
    cg.start(glob,NULL);
+   Disassembler d; 
+   d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
 }
 
 
