@@ -6,6 +6,6 @@
 class Expression {
 public:
 	virtual void print(int) =0;
-	void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*)=0;
 };
 #endif

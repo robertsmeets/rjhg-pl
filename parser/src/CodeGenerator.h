@@ -25,6 +25,7 @@
 #include "pClassDefinition.h"
 #include "pMethodDefinition.h"
 #include "Expression.h"
+#include "Statements.h"
 
 using namespace std;
 

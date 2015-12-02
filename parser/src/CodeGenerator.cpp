@@ -161,11 +161,10 @@ void CodeGenerator::start_proc(pProcedureNode* a_proc) {
 	// emit all the statements for a procedure
 	//
 	Statements* statements = a_proc->getStatements();
-//	Statements* expressions =statements->getExpressions();
-	//for (auto it = expressions.begin();
-			//it != expressions.end(); ++it) {
-	//	it.emit(this);
-	//}
+	vector<Expression*> expressions =statements->getStatements();
+	for (auto const &it :expressions) {
+		it->emit(this);
+	}
 }
 
 //
@@ -347,13 +346,13 @@ void CodeGenerator::fix_proc_addresses() {
 			//
 			// size of the local variables
 			//
-			*((char*) codebuffer + call_address - 5) =
-					pn->getLocalVariables()->size();
+		//	*((char*) codebuffer + call_address - 5) =
+			//		pn->getLocalVariables()->size();
 			//
 			// size of the parameters
 			//
-			*((char*) codebuffer + call_address - 7) =
-					pn->getParameters()->size();
+		//	*((char*) codebuffer + call_address - 7) =
+			//		pn->getParameters()->size();
 		}
 
 	}

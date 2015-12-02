@@ -139,9 +139,7 @@ void pProcedureNode::print(unsigned int level) {
 	}
 	cout << "pProcedureNode " << name << "(" << parameters->size() << " params)"
 			<< endl;
-	/* for (auto s : statements) {
-		s->print(level + 1);
-	} */
+	statements->print(level+1);
 }
 
 int pProcedureNode::getInstanceVarNum(string name) {

@@ -38,7 +38,6 @@ class pProcedureNode {
 	ClassDefinition* cd;
 	vector<string>* parameters;
 	vector<string> instance_variables;
-	//vector<Statement*> statements;
 	Statements* statements;
 	map<string, uint16_t>* local_variables;
 	uint16_t proc_address;
