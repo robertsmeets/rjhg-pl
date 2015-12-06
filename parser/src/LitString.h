@@ -8,9 +8,12 @@
 using namespace std;
 
 class LitString: public Literal {
+private:
+	string value;
 public:
 	LitString (string);
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 
 #endif

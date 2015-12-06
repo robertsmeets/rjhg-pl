@@ -4,7 +4,7 @@
 
 using namespace std;
 
-LitBool::LitBool(bool){};
+LitBool::LitBool(bool b){value = b;};
 
 void LitBool::print(int level)
 {
@@ -18,5 +18,5 @@ void LitBool::print(int level)
 
 void LitBool::emit(CodeGenerator* cg)
 {
-
+	cg->emit(1, 6, value, NULL);
 }

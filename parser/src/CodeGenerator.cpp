@@ -351,8 +351,8 @@ void CodeGenerator::fix_proc_addresses() {
 			//
 			// size of the parameters
 			//
-		//	*((char*) codebuffer + call_address - 7) =
-			//		pn->getParameters()->size();
+			*((char*) codebuffer + call_address - 7) =
+					pn->getParameters()->size();
 		}
 
 	}
@@ -493,5 +493,12 @@ Expression* CodeGenerator::procDefined(string procedure_name) {
 
 void CodeGenerator::start_method(pMethodDefinition* md)
 {
+}
+
+char* CodeGenerator::allot(int size)
+{
+	uint16_t loc = here;
+	here += size;
+	return codebuffer + loc;
 }
 

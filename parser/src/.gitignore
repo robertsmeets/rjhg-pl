@@ -1,1 +1,8 @@
 .project
+*.o
+lex.yy.c
+myparser.exe
+myparser.lex.c
+y.output
+y.tab.c
+y.tab.h

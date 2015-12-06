@@ -4,7 +4,7 @@
 
 using namespace std;
 
-LitFloat::LitFloat(double){};
+LitFloat::LitFloat(double d){value = d;};
 
 void LitFloat::print(int level)
 {
@@ -19,5 +19,8 @@ void LitFloat::print(int level)
 
 void LitFloat::emit(CodeGenerator* cg)
 {
-
+	int sz = sizeof(value);
+	cg -> emit(1, 5, sz, NULL);
+	void* loc= cg->allot(sz);
+	memcpy(loc, &value, sz);
 }

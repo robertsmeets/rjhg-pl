@@ -3,6 +3,8 @@
 #include "Literal.h"
 
 class LitFloat: public Literal {
+private:
+	double value;
 public:
 	LitFloat(double);
 	virtual void print(int);

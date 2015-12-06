@@ -4,6 +4,8 @@
 #include "Literal.h"
 
 class LitBool: public Literal {
+private:
+	bool value;
 public:
 	LitBool(bool);
 	void print(int);

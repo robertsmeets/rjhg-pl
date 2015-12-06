@@ -72,6 +72,7 @@ public:
 	Expression* procDefined(string);
 	void emitByte(char);
 	void emit2Byte(uint16_t);
+	char* allot(int size);
 };
 
 #endif /* CODEGENERATOR_H_ */
