@@ -167,6 +167,7 @@ clean:
 	rm -f ReturnNode.o
 	rm -f Statement.o
 	rm -f WhileNode.o
+	rm -f myparser.exe.stackdump
 
 test: myparser.exe
 	./myparser.exe example.src

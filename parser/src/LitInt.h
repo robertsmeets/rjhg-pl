@@ -4,6 +4,8 @@
 #include "Literal.h"
 
 class LitInt: public Literal {
+private:
+	int value;
 public:
 	LitInt(int);
 	virtual void print(int);
