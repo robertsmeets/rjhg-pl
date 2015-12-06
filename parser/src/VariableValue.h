@@ -21,6 +21,7 @@ public:
 	VariableValue(string);
 	virtual ~VariableValue();
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 
 #endif /* VARIABLEVALUE_H_ */

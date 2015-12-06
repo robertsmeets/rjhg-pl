@@ -16,3 +16,7 @@ void LitBool::print(int level)
 
 }
 
+void LitBool::emit(CodeGenerator* cg)
+{
+
+}

@@ -7,13 +7,14 @@
 
 using namespace std;
 
-class Return: public Expression {
+class pReturn: public Expression {
 
 private:
 	Expression* expression;
 public:
-	Return(Expression*);
-	virtual ~Return();
+	pReturn(Expression*);
+	virtual ~pReturn();
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 #endif

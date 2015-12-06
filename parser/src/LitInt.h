@@ -7,6 +7,7 @@ class LitInt: public Literal {
 public:
 	LitInt(int);
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 
 #endif

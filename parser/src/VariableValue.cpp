@@ -21,3 +21,9 @@ void VariableValue::print(int level) {
 	}
 	cout << "VariableValue " + value << endl;
 }
+
+
+void VariableValue::emit(CodeGenerator* cg)
+{
+
+}

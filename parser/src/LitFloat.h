@@ -6,6 +6,7 @@ class LitFloat: public Literal {
 public:
 	LitFloat(double);
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 
 #endif

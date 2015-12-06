@@ -7,6 +7,7 @@ class LitBool: public Literal {
 public:
 	LitBool(bool);
 	void print(int);
+	virtual void emit(CodeGenerator*);
 };
 
 #endif

@@ -22,3 +22,10 @@ void If::print(int level) {
            statements2->print(level+1);
         }
 }
+
+
+void If::emit(CodeGenerator* cg)
+{
+
+}
+

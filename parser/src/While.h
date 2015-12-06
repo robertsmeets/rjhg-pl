@@ -18,5 +18,6 @@ public:
 	While(Expression*,Statements*);
 	virtual ~While();
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 #endif

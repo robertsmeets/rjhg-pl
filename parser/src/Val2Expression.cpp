@@ -14,3 +14,9 @@ void Val2Expression::print(int level) {
 	lhs->print(level + 1);
 	rhs->print(level + 1);
 }
+
+
+void Val2Expression::emit(CodeGenerator* cg)
+{
+
+}

@@ -18,5 +18,6 @@ public:
 	If(Expression*, Statements*, Statements*);
 	virtual ~If();
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 #endif

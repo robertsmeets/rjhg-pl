@@ -19,3 +19,9 @@ void ProcedureCall::print(int level)
    cout << "ProcedureCall("<<name<<")" << endl; 
    expressionlist->print(level+1);
 }
+
+
+void ProcedureCall::emit(CodeGenerator* cg)
+{
+
+}

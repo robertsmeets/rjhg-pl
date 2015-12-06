@@ -9,6 +9,7 @@ public:
 	virtual ~CompositeMethodCall();
 	void addSingleMethodCall(SingleMethodCall*);
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 
 };
 #endif

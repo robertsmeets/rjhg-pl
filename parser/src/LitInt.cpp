@@ -15,3 +15,9 @@ void LitInt::print(int level)
 			}
 
 }
+
+
+void LitInt::emit(CodeGenerator* cg)
+{
+
+}

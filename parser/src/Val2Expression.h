@@ -15,6 +15,7 @@ private:
 public:
 	Val2Expression(char, Expression*, Expression*);
 	void print(int);
+	virtual void emit(CodeGenerator*);
 };
 
 #endif

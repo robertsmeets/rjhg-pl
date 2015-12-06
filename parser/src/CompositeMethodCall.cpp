@@ -19,3 +19,9 @@ void CompositeMethodCall::print(int level) {
 	cout << "CompositeMethodCall" << endl;
 	}
 }
+
+void CompositeMethodCall::emit(CodeGenerator* cg)
+{
+
+}
+

@@ -346,8 +346,8 @@ void CodeGenerator::fix_proc_addresses() {
 			//
 			// size of the local variables
 			//
-		//	*((char*) codebuffer + call_address - 5) =
-			//		pn->getLocalVariables()->size();
+			*((char*) codebuffer + call_address - 5) =
+					pn->getLocalVariables()->size();
 			//
 			// size of the parameters
 			//

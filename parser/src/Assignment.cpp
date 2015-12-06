@@ -17,3 +17,8 @@ void Assignment::print(int level) {
 	variable->print(level+1);
 	expression->print(level+1);
 }
+
+void Assignment::emit(CodeGenerator* cg)
+{
+
+}

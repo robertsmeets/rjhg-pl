@@ -17,3 +17,8 @@ void While::print(int level) {
 	expression->print(level+1);
         statements->print(level+1);
 }
+
+void While::emit(CodeGenerator* cg)
+{
+
+}

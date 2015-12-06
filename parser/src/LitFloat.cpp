@@ -16,3 +16,8 @@ void LitFloat::print(int level)
 	}
 
 }
+
+void LitFloat::emit(CodeGenerator* cg)
+{
+
+}

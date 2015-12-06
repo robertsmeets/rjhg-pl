@@ -16,5 +16,6 @@ public:
 	Assignment(VariableValue*,Expression*);
 	virtual ~Assignment();
 	virtual void print(int);
+	virtual void emit(CodeGenerator*);
 };
 #endif

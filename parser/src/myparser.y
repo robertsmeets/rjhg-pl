@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "Assignment.h"
 #include "If.h"
-#include "Return.h"
+#include "pReturn.h"
 #include "While.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
@@ -39,7 +39,7 @@ extern char *yytext;
     pMethodDefinition *a_method;
     Assignment *an_assignment;
     If *an_if;
-    Return* a_return;
+    pReturn* a_return;
     While* a_while;
     SingleMethodCall *a_single_methodcall;
     CompositeMethodCall *a_composite_methodcall;
@@ -172,7 +172,7 @@ Assignment:
 
 Return:
 	RETURN Expression SEMICOL 
-        ; { $$ = new Return($2); }
+        ; { $$ = new pReturn($2); }
 
 While:
 	WHILE Expression BSB
