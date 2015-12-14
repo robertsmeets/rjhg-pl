@@ -21,6 +21,7 @@ pProcedureNode::pProcedureNode(string a_name,Statements* some_statements)
    name = a_name;
 	 statements = some_statements;
 	 parameters = new vector<string>();
+     local_variables = new map<string, uint16_t>();
 }
 
 

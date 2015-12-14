@@ -6,3 +6,4 @@ myparser.lex.c
 y.output
 y.tab.c
 y.tab.h
+myparser.exe.stackdump
