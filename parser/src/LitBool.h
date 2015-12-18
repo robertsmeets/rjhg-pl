@@ -2,6 +2,7 @@
 #define LITBOOL_H_ 
 
 #include "Literal.h"
+#include "CodeGenerator.h"
 
 class LitBool: public Literal {
 private:
@@ -10,6 +11,7 @@ public:
 	LitBool(bool);
 	void print(int);
 	virtual void emit(CodeGenerator*);
+	virtual string stype();
 };
 
 #endif

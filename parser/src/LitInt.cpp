@@ -24,3 +24,5 @@ void LitInt::emit(CodeGenerator* cg)
 {
 	cg -> emit(1, 2, value, NULL);
 }
+
+string LitInt::stype() { return "LitInt"; }

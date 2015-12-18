@@ -16,6 +16,7 @@ public:
 	Val2Expression(char, Expression*, Expression*);
 	void print(int);
 	virtual void emit(CodeGenerator*);
+	virtual string stype();
 };
 
 #endif

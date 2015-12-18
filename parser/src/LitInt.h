@@ -2,6 +2,7 @@
 #define LITINT_H_
 
 #include "Literal.h"
+#include "CodeGenerator.h"
 
 class LitInt: public Literal {
 private:
@@ -10,6 +11,7 @@ public:
 	LitInt(int);
 	virtual void print(int);
 	virtual void emit(CodeGenerator*);
+	virtual string stype();
 };
 
 #endif

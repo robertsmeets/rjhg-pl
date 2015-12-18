@@ -24,3 +24,5 @@ void LitFloat::emit(CodeGenerator* cg)
 	void* loc= cg->allot(sz);
 	memcpy(loc, &value, sz);
 }
+
+string LitFloat::stype() { return "LitFloat" ;}

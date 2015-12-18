@@ -29,3 +29,4 @@ void If::emit(CodeGenerator* cg)
 
 }
 
+string If::stype() { return "If" ; }

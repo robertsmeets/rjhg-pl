@@ -25,3 +25,5 @@ void ProcedureCall::emit(CodeGenerator* cg)
 {
 
 }
+
+string ProcedureCall::stype() { return "ProcedureCall" ; }

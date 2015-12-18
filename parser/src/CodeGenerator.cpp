@@ -165,6 +165,7 @@ void CodeGenerator::start_proc(pProcedureNode* a_proc) {
 	for (auto const &it :expressions) {
 		it->emit(this);
 	}
+	a_proc->fixReturn();
 }
 
 //

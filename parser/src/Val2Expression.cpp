@@ -20,3 +20,5 @@ void Val2Expression::emit(CodeGenerator* cg)
 {
 
 }
+
+string Val2Expression::stype() { return "Val2Expression";}

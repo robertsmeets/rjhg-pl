@@ -20,3 +20,5 @@ void LitBool::emit(CodeGenerator* cg)
 {
 	cg->emit(1, 6, value, NULL);
 }
+
+string LitBool::stype() { return "LitBool"; }

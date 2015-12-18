@@ -22,3 +22,7 @@ void While::emit(CodeGenerator* cg)
 {
 
 }
+
+
+string While::stype() { return "While";} 
+

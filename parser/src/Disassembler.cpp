@@ -26,15 +26,15 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 			&& buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
 		throw new PException("Magic number does not match, invalid bytecode");
 	}
-	di = a_di;
-	di->reset();
+	//di = a_di;
+	//di->reset();
 	//
 	// hexdump
 	//
 	hexdump(buffer, size);
 	i = buffer[6] + buffer[7] * 256;
 	for (; i < size;) {
-		di->printLine(i);
+		// di->printLine(i);
 		cout << "i=x" << hex << i << dec<< " ";
 		char f = buffer[i];
 		cout << "f=" << (unsigned int) f << " ";

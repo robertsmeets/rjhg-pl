@@ -20,3 +20,5 @@ void pReturn::emit(CodeGenerator* cg)
 {
 
 }
+
+string pReturn::stype() {return "pReturn";}

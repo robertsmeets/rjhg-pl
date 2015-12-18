@@ -22,3 +22,8 @@ void Assignment::emit(CodeGenerator* cg)
 {
 
 }
+
+string Assignment::stype()
+{
+   return "Assignment";
+}

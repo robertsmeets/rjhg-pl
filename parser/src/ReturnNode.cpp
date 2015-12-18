@@ -7,7 +7,7 @@
 
 #include "ReturnNode.h"
 
-ReturnNode::ReturnNode(ProcedureNode* p, ExpressionNode en, unsigned int linep,
+ReturnNode::ReturnNode(pProcedureNode* p, ExpressionNode en, unsigned int linep,
 		unsigned int charp, unsigned int absp) {
 	//
 	// it's valid to have an empty return node, in which case en = NULL

@@ -2,6 +2,7 @@
 #define LITSTRING_H_
 
 #include "Literal.h"
+#include "CodeGenerator.h"
 
 #include <string>
 

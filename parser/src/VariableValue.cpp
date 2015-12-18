@@ -27,3 +27,5 @@ void VariableValue::emit(CodeGenerator* cg)
 {
 
 }
+
+string VariableValue::stype() { return "VariableValue" ; }

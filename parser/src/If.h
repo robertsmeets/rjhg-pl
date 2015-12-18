@@ -19,5 +19,6 @@ public:
 	virtual ~If();
 	virtual void print(int);
 	virtual void emit(CodeGenerator*);
+	virtual string stype();
 };
 #endif

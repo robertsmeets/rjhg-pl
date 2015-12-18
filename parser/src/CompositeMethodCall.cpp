@@ -25,3 +25,5 @@ void CompositeMethodCall::emit(CodeGenerator* cg)
 
 }
 
+string CompositeMethodCall::stype() { return "CompositeMethodCall"; }
+

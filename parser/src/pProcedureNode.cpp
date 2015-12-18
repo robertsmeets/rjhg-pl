@@ -109,28 +109,29 @@ uint16_t pProcedureNode::assignLocalVariable(string s) {
  * add a return statement if the procedure does not define one
  */
 void pProcedureNode::fixReturn() {
+
 	//
 	// if return is missing, add it
 	//
-	/*uint16_t sz = statements.size();
+	vector<Expression*> sm = statements->getStatements();
+	uint16_t sz = sm.size();
 	bool addreturn = false;
 	uint16_t linepos = 0;
 	uint16_t charpos = 0;
 	uint16_t abspos = 0;
-	if ((sz == 0)) {
+	 if ((sz == 0)) {
 		addreturn = true;
 	} else {
-		Statement* last = statements.at(sz - 1);
-		linepos = last->linepos;
+		Expression* last = sm.at(sz - 1);
+	/* linepos = last->linepos;
 		charpos = last->charpos;
-		abspos = last->abspos;
+		abspos = last->abspos; */
 		addreturn = (last->stype() != "return");
 	}
 	if (addreturn) {
-		ExpressionNode en;
-		statements.push_back(
-				new ReturnNode(this, en, linepos, charpos, abspos));
-	} */
+		pReturn* r = new pReturn(NULL);
+		sm.push_back((Expression*)r);
+	}
 }
 
 void pProcedureNode::print(unsigned int level) {
