@@ -4,9 +4,10 @@
 
 using namespace std;
 
-LitInt::LitInt(int i)
+LitInt::LitInt(char* a_string)
 {
-	value = i;
+	value = atoi(a_string);
+
 };
 
 void LitInt::print(int level)

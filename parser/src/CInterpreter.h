@@ -13,9 +13,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
-#include <dyncall.h>
-#include <dyncall_callf.h>
-#include <dynload.h>
+//#include <dyncall.h>
+//#include <dyncall_callf.h>
+//#include <dynload.h>
 #include <math.h>
 
 #include "HeapManager.h"

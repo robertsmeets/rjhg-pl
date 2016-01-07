@@ -8,7 +8,7 @@ class LitInt: public Literal {
 private:
 	int value;
 public:
-	LitInt(int);
+	LitInt(char*);
 	virtual void print(int);
 	virtual void emit(CodeGenerator*);
 	virtual string stype();
