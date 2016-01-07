@@ -48,7 +48,7 @@ class CodeGenerator {
 	uint16_t codesize;
 	pProgramNode* pn;
 	DebugInfo* di;
-	unordered_map<string, unsigned int> opr_mapping;
+	unordered_map<char, unsigned int> opr_mapping;
 public:
 	CodeGenerator();
 	virtual ~CodeGenerator();
@@ -57,7 +57,7 @@ public:
 	void start_method(pMethodDefinition*);
 	void emit(char, unsigned short int, unsigned short int, Expression*);
 	void emitRpn(vector<ExpressionThing>, pProcedureNode*, Expression*);
-	void emitOperation(string, Expression*);
+	void emitOperation(char, Expression*);
 	void fix_proc_addresses();
 	void addCallAddress(uint16_t, string);
 	uint16_t getHere();

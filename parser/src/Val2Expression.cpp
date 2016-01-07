@@ -18,7 +18,10 @@ void Val2Expression::print(int level) {
 
 void Val2Expression::emit(CodeGenerator* cg)
 {
-
+   lhs->emit(cg);
+   rhs->emit(cg);
+   cg->emitOperation(operation,NULL);
+   
 }
 
 string Val2Expression::stype() { return "Val2Expression";}

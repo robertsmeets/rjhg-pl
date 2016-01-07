@@ -2,6 +2,7 @@
 #define VAL2EXPRESSION_H_
 
 #include "Expression.h"
+#include "CodeGenerator.h"
 
 #include <iostream>
 
