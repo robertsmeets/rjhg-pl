@@ -20,7 +20,8 @@ void Assignment::print(int level) {
 
 void Assignment::emit(CodeGenerator* cg)
 {
-
+   expression->emit(cg);
+   variable->emit(cg);
 }
 
 string Assignment::stype()

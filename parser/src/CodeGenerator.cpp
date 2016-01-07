@@ -15,17 +15,17 @@ CodeGenerator::CodeGenerator() {
 	here = 0;
 	pn = NULL;
 	di = NULL;
-	opr_mapping["+"] = 2;
-	opr_mapping["-"] = 3;
-	opr_mapping["*"] = 4;
-	opr_mapping["/"] = 5;
-	opr_mapping["%"] = 6;
-	opr_mapping["=="] = 7;
-	opr_mapping["!="] = 8;
-	opr_mapping["<"] = 10;
-	opr_mapping[">="] = 11;
-	opr_mapping[">"] = 12;
-	opr_mapping["<="] = 13;
+	opr_mapping['+'] = 2;
+	opr_mapping['-'] = 3;
+	opr_mapping['*'] = 4;
+	opr_mapping['/'] = 5;
+	opr_mapping['%'] = 6;
+	opr_mapping['='] = 7;
+	opr_mapping['N'] = 8;
+	opr_mapping['<'] = 10;
+	opr_mapping['G'] = 11;
+	opr_mapping['>'] = 12;
+	opr_mapping['L'] = 13;
 }
 
 CodeGenerator::~CodeGenerator() {
@@ -297,7 +297,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
 //
 // emit the code for an operation
 //
-void CodeGenerator::emitOperation(string avalue, Expression* s) {
+void CodeGenerator::emitOperation(char avalue, Expression* s) {
 	uint16_t atype = opr_mapping[avalue];
 	if (atype == 0) {
 		throw PException("Unexpected Operation" + avalue);

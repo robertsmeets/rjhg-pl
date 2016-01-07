@@ -1,7 +1,7 @@
 proc main()
 {
-   print 123; 
-   print 456;
+   x=123+456/789*5;
+   print x;
    return 0;
 }
 
