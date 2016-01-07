@@ -1,5 +1,7 @@
 proc main()
 {
-   print 5; 
+   print 123; 
+   print 456;
+   return 0;
 }
 

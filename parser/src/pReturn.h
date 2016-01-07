@@ -2,6 +2,7 @@
 #define RETURN_H_ 
 
 #include "Expression.h"
+#include "CodeGenerator.h"
 
 #include <iostream>
 

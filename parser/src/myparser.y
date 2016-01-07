@@ -24,6 +24,7 @@
 #include "CodeGenerator.h"
 #include "Disassembler.h"
 #include "PrintNode.h"
+#include "CInterpreter.h"
 
 extern char *yytext;
 #define YYDEBUG_LEXER_TEXT yytext
@@ -51,7 +52,7 @@ extern char *yytext;
     CompositeMethodCall *a_restmethodcall;
     Literal *a_literal;
     VariableValue *a_variablevalue;
-    int Integer;
+    char* Integer;
     double Double;
     bool Boolean;
     PrintNode *a_printnode;
@@ -287,6 +288,12 @@ setvbuf(stdout, NULL, _IONBF, 0);
    cg.start(glob,NULL);
    Disassembler d; 
    d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
+   //
+   // start interpreting
+   //
+	CInterpreter i(cg.getCodeBuffer(),NULL);
+	i.start();
+     
 }
 
 

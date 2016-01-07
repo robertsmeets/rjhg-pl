@@ -18,7 +18,10 @@ void pReturn::print(int level) {
 
 void pReturn::emit(CodeGenerator* cg)
 {
-
+	//
+		// emit RET
+		//
+		cg->emit(2, 0, 0, NULL);
 }
 
 string pReturn::stype() {return "pReturn";}
