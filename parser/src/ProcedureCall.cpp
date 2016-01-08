@@ -21,7 +21,7 @@ void ProcedureCall::print(int level)
 }
 
 
-void ProcedureCall::emit(CodeGenerator* cg)
+void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 
 }

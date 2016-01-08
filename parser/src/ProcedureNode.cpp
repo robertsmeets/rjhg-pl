@@ -141,8 +141,8 @@ void ProcedureNode::fixReturn() {
 	}
 }
 
-void ProcedureNode::print(unsigned int level) {
-	for (unsigned int i=0;i<level;i++)
+void ProcedureNode::print( int level) {
+	for (int i=0;i<level;i++)
 	{
 		cout << "+" ;
 	}

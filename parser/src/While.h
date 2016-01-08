@@ -18,7 +18,7 @@ public:
 	While(Expression*,Statements*);
 	virtual ~While();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
 };
 #endif

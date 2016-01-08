@@ -134,8 +134,8 @@ void pProcedureNode::fixReturn() {
 	}
 }
 
-void pProcedureNode::print(unsigned int level) {
-	for (unsigned int i=0;i<level;i++)
+void pProcedureNode::print(int level) {
+	for (int i=0;i<level;i++)
 	{
 		cout << "+" ;
 	}
@@ -161,5 +161,22 @@ int pProcedureNode::getInstanceVarNum(string name) {
 Statements* pProcedureNode::getStatements()
 {
 	return statements;
+}
+
+
+
+
+
+/**
+ * generate the code for a procedure
+ */
+void pProcedureNode::emit(CodeGenerator* cg) {
+	//
+	// emit all the statements for a procedure
+	//
+	vector<Expression*> expressions =statements->getStatements();
+	for (auto const &it :expressions) {
+           it->emit(cg,this);
+}
 }
 

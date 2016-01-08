@@ -1,6 +1,6 @@
 proc main()
 {
-   x=123+456/789*5;
+   x="HOEBA" + "HOP" + "BLA" + "HOORAY" +"IT" + "WORKS";
    print x;
    return 0;
 }

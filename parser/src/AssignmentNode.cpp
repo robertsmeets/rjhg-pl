@@ -67,7 +67,7 @@ string AssignmentNode::stype() {
 	return "assignment";
 }
 
-void AssignmentNode::print(unsigned int level) {
+void AssignmentNode::print(int level) {
 	for (unsigned int i=0;i<level;i++)
 		{
 			cout << "+" ;

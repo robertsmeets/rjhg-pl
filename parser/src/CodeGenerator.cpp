@@ -106,7 +106,7 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
 		string pname = a_proc->getName();
 		a_proc->setProcAddress(here);
 		procaddresses[pname] = a_proc;
-		start_proc(a_proc);
+		a_proc->emit(this);
 	}
 	//
 	// also the methods
@@ -151,21 +151,6 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
 		}
 	}
 	cout << "Generated " << here << " bytes of code " << endl;
-}
-
-/**
- * generate the code for a procedure
- */
-void CodeGenerator::start_proc(pProcedureNode* a_proc) {
-	//
-	// emit all the statements for a procedure
-	//
-	Statements* statements = a_proc->getStatements();
-	vector<Expression*> expressions =statements->getStatements();
-	for (auto const &it :expressions) {
-		it->emit(this);
-	}
-	a_proc->fixReturn();
 }
 
 //

@@ -64,8 +64,8 @@ string ProcedureCallNode::stype() {
 	return "procedure_call";
 }
 
-void ProcedureCallNode::print(unsigned int level) {
-	for (unsigned int i = 0; i < level; i++) {
+void ProcedureCallNode::print( int level) {
+	for ( int i = 0; i < level; i++) {
 		cout << "+";
 	}
 	cout << "ProcedureCallNode ";

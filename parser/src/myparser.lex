@@ -1,6 +1,6 @@
 %{
+#include "Expression.h"
 #include "Assignment.h"
-#include "pReturn.h"
 #include "While.h"
 #include "If.h"
 #include "CommaSeparated.h"
@@ -28,7 +28,7 @@ blanks          [ \t\n]+
 identifier   	[_a-zA-Z]+
 integer		[0-9]+
 boolean        	true|false
-string        	"[a-zA-Z0-9]*"
+string        	\"[a-zA-Z0-9]*\"
 float 		[0-9]+.[0-9]*[e[0-9]+]
 
 %%
@@ -62,10 +62,15 @@ float 		[0-9]+.[0-9]*[e[0-9]+]
 "while"     return(WHILE);
 "print"     return(PRINT);
 
+{string} {
+            yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            return(STRING);
+      }
+
 {identifier}   {
 	    yylval.sval = malloc(strlen(yytext)+1);
             strncpy(yylval.sval, yytext, strlen(yytext)+1);
-	    printf("ID<%s>\n",yytext);
             return(IDENTIFIER);
       }
 
@@ -83,11 +88,6 @@ float 		[0-9]+.[0-9]*[e[0-9]+]
       }
 
 
-{string} {
-            yylval.sval = malloc(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
-            return(STRING);
-      }
 
 {boolean} {
             yylval.sval = malloc(strlen(yytext)+1);

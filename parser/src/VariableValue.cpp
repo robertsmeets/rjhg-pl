@@ -23,9 +23,15 @@ void VariableValue::print(int level) {
 }
 
 
-void VariableValue::emit(CodeGenerator* cg)
+void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 
 }
 
 string VariableValue::stype() { return "VariableValue" ; }
+
+
+string VariableValue::getName()
+{
+   return value;
+}

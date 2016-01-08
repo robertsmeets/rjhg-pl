@@ -17,7 +17,7 @@ void LitFloat::print(int level)
 
 }
 
-void LitFloat::emit(CodeGenerator* cg)
+void LitFloat::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 	int sz = sizeof(value);
 	cg -> emit(1, 5, sz, NULL);

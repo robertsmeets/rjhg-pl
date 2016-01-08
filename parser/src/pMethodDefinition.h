@@ -44,7 +44,6 @@ public:
 	void setStatements(vector<Statement*>);
 	void fixReturn();
 	uint16_t getMethodNumber();
-	void print(unsigned int);
 	int getInstanceVarNum(string);
 
 };

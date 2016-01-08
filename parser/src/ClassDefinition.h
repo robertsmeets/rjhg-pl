@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "ProcedureNode.h"
+#include "pProcedureNode.h"
 
 using namespace std;
 
@@ -34,7 +34,7 @@ public:
 	unsigned int getClassNum();
 	vector<ProcedureNode*> getMethods();
 	ProcedureNode* findMethod(string);
-	void print(unsigned int);
+	void print(int);
 };
 
 #endif /* CLASSDEFINITION_H_ */

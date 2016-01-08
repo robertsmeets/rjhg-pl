@@ -20,7 +20,7 @@ void CompositeMethodCall::print(int level) {
 	}
 }
 
-void CompositeMethodCall::emit(CodeGenerator* cg)
+void CompositeMethodCall::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 
 }

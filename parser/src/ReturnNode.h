@@ -28,7 +28,7 @@ public:
 
 	virtual ~ReturnNode();
 	virtual void emit(CodeGenerator*);
-	void print(unsigned int);
+	void print(int);
 	virtual string stype();
 };
 
