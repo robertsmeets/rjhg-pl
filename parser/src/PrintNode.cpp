@@ -15,11 +15,11 @@ PrintNode::PrintNode(Expression* e)
 PrintNode::~PrintNode() {
 }
 
-void PrintNode::emit(CodeGenerator* cg) {
+void PrintNode::emit(CodeGenerator* cg, pProcedureNode* pn) {
 	//
 	// emit the instructions to calculate the value and put it on the stack
 	//
-	expression->emit(cg);
+	expression->emit(cg, pn);
 	//
 	// return
 	//

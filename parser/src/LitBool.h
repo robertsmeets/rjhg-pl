@@ -10,7 +10,7 @@ private:
 public:
 	LitBool(bool);
 	void print(int);
-	virtual void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
 };
 

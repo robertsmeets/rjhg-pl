@@ -7,7 +7,7 @@
 
 #include "WhileNode.h"
 
-WhileNode::WhileNode(ProcedureNode* p, ExpressionNode en, vector<Statement*> s,
+WhileNode::WhileNode(pProcedureNode* p, ExpressionNode en, vector<Statement*> s,
 		unsigned int linep, unsigned int charp,unsigned int absp) {
 	linepos = linep;
 	charpos = charp;
@@ -56,9 +56,9 @@ string WhileNode::stype() {
 	return "while";
 }
 
-void WhileNode::print(unsigned int level)
+void WhileNode::print(int level)
 {
-	for (unsigned int i=0;i<level;i++)
+	for (int i=0;i<level;i++)
 		{
 			cout << "+" ;
 		}

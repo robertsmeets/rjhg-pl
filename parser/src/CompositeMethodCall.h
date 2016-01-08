@@ -9,7 +9,7 @@ public:
 	virtual ~CompositeMethodCall();
 	void addSingleMethodCall(SingleMethodCall*);
 	virtual void print(int);
-	virtual void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
 
 };

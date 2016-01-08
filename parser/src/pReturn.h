@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 class pReturn: public Expression {
 
 private:
@@ -16,7 +17,7 @@ public:
 	pReturn(Expression*);
 	virtual ~pReturn();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
 };
 #endif

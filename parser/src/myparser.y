@@ -1,12 +1,11 @@
 %{
-#include <stdio.h>
+#include "Expression.h"
 #include "Assignment.h"
 #include "If.h"
 #include "pReturn.h"
 #include "While.h"
 #include "CommaSeparated.h"
 #include "CompositeMethodCall.h"
-#include "Expression.h"
 #include "ExpressionList.h"
 #include "LitBool.h"
 #include "Literal.h"
@@ -25,6 +24,8 @@
 #include "Disassembler.h"
 #include "PrintNode.h"
 #include "CInterpreter.h"
+
+#include <stdio.h>
 
 extern char *yytext;
 #define YYDEBUG_LEXER_TEXT yytext
@@ -55,6 +56,7 @@ extern char *yytext;
     char* Integer;
     double Double;
     bool Boolean;
+    char* String;
     PrintNode *a_printnode;
 };
 
@@ -125,6 +127,7 @@ extern char *yytext;
 %type <Integer> INTEGER
 %type <Double> FLOAT
 %type <Boolean> BOOLEAN
+%type <String> STRING
 %type <sval> IDENTIFIER
 %type <a_printnode> Print
 
@@ -237,6 +240,7 @@ Literal:
 	 INTEGER {$$=new LitInt($1);}
 	|FLOAT {$$=new LitFloat($1);}
 	|BOOLEAN {$$=new LitBool($1);}
+	|STRING {$$=new LitString($1);}
 	;
 
 CommaSeparated:

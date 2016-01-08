@@ -18,7 +18,7 @@ void LitString::print(int level)
 			}
 }
 
-void LitString::emit(CodeGenerator* cg)
+void LitString::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 	int strlen = value.length() - 2;
 	string my_string = value.substr(1, strlen);
@@ -27,3 +27,7 @@ void LitString::emit(CodeGenerator* cg)
 	memcpy(loc, my_string.c_str(), strlen);
 }
 
+string LitString::stype()
+{
+   return "LitString";
+}

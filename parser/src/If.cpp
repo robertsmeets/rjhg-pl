@@ -24,7 +24,7 @@ void If::print(int level) {
 }
 
 
-void If::emit(CodeGenerator* cg)
+void If::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 
 }

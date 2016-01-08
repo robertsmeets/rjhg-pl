@@ -16,7 +16,6 @@
 #include "Statement.h"
 #include "AssignmentNode.h"
 #include "PException.h"
-#include "ReturnNode.h"
 #include "CFunctions.h"
 #include "ClassDefinition.h"
 
@@ -56,7 +55,7 @@ public:
 	void setStatements(vector<Statement*>);
 	void fixReturn();
 	uint16_t getMethodNumber();
-	void print(unsigned int);
+	void print(int);
 	int getInstanceVarNum(string);
 
 };

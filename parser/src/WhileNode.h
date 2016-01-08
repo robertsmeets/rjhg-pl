@@ -18,14 +18,14 @@
 using namespace std;
 
 class WhileNode: public Statement {
-	ProcedureNode* pn;
+	pProcedureNode* pn;
 	vector<Statement*> statements;
 	ExpressionNode expression;
 public:
 	WhileNode(ProcedureNode*,ExpressionNode, vector<Statement*>,unsigned int,unsigned int,unsigned int);
 	virtual ~WhileNode();
 	void emit(CodeGenerator*);
-	void print(unsigned int);
+	void print(int);
 	virtual string stype();
 };
 

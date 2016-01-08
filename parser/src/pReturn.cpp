@@ -16,7 +16,7 @@ void pReturn::print(int level) {
 	expression->print(level+1);
 }
 
-void pReturn::emit(CodeGenerator* cg)
+void pReturn::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
 	//
 		// emit RET

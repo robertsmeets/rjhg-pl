@@ -1,8 +1,9 @@
 #ifndef ASSIGNMENT_H_
 #define ASSIGNMENT_H_ 
 
-#include "VariableValue.h"
 #include "Expression.h"
+#include "VariableValue.h"
+#include "pProcedureNode.h"
 
 #include <iostream>
 
@@ -16,7 +17,7 @@ public:
 	Assignment(VariableValue*,Expression*);
 	virtual ~Assignment();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
 };
 #endif

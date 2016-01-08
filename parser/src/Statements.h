@@ -1,14 +1,12 @@
 #ifndef STATEMENTS_H_
 #define STATEMENTS_H_
 
-#include "Expression.h"
-
 #include <vector>
 #include <iostream>
 
-using namespace std;
+#include "Expression.h"
 
-class Expression; //forward declaration
+using namespace std;
 
 class Statements {
 private:

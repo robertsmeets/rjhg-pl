@@ -123,14 +123,6 @@ void pMethodDefinition::fixReturn() {
 	} */
 }
 
-void pMethodDefinition::print(unsigned int level) {
-	for (unsigned int i=0;i<level;i++)
-	{
-		cout << "+" ;
-	}
-	cout << "pMethodDefinition " << name << "(" << parameters->size() << " params)"
-			<< endl;
-}
 
 int pMethodDefinition::getInstanceVarNum(string name) {
 	if (cd == NULL) {

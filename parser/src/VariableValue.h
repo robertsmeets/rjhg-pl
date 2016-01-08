@@ -21,8 +21,9 @@ public:
 	VariableValue(string);
 	virtual ~VariableValue();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*);
+	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
+	string getName();
 };
 
 #endif /* VARIABLEVALUE_H_ */
