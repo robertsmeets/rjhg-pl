@@ -25,7 +25,7 @@ void VariableValue::print(int level) {
 
 void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
-
+   cg->emit(3,0,0,NULL);
 }
 
 string VariableValue::stype() { return "VariableValue" ; }
