@@ -3,6 +3,7 @@
 
 #include "Statements.h"
 #include "Expression.h"
+#include "CodeGenerator.h"
 
 #include <iostream>
 
