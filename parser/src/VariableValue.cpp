@@ -25,7 +25,9 @@ void VariableValue::print(int level) {
 
 void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
-   cg->emit(3,0,0,NULL);
+   int index = pn->assignLocalVariable(value);
+   cout << "VariableValue " << value << " index=" << index << endl;
+   cg->emit(3,0,index,NULL);
 }
 
 string VariableValue::stype() { return "VariableValue" ; }
