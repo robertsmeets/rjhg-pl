@@ -175,7 +175,6 @@ clean:
 	rm -f ProgramNode.o
 	rm -f ReturnNode.o
 	rm -f Statement.o
-	rm -f WhileNode.o
 	rm -f myparser.exe.stackdump
 
 test: myparser.exe
