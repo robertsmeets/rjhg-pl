@@ -4,15 +4,17 @@
 
 using namespace std;
 
-LitFloat::LitFloat(double d){value = d;};
+LitFloat::LitFloat(char* s)
+{
+   value = atof(s);
+}
 
 void LitFloat::print(int level)
 {
-
 	{for (unsigned int i = 0; i < level; i++) {
 		cout << "+";
 	}
-	cout << "LitFloat" << endl;
+	cout << "LitFloat " << value << endl;
 	}
 
 }

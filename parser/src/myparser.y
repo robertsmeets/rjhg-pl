@@ -125,7 +125,7 @@ extern char *yytext;
 %type <a_literal> Literal
 %type <a_variablevalue> Lhs
 %type <Integer> INTEGER
-%type <Double> FLOAT
+%type <String> FLOAT
 %type <Boolean> BOOLEAN
 %type <String> STRING
 %type <sval> IDENTIFIER
@@ -237,8 +237,8 @@ Print:
 	;
 
 Literal:
-	 INTEGER {$$=new LitInt($1);}
-	|FLOAT {$$=new LitFloat($1);}
+	 FLOAT {$$=new LitFloat($1);}
+	|INTEGER {$$=new LitInt($1);}
 	|BOOLEAN {$$=new LitBool($1);}
 	|STRING {$$=new LitString($1);}
 	;

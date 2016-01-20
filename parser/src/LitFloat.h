@@ -9,7 +9,7 @@ class LitFloat: public Literal {
 private:
 	double value;
 public:
-	LitFloat(double);
+	LitFloat(char*);
 	virtual void print(int);
 	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();

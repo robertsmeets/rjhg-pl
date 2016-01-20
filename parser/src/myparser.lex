@@ -26,10 +26,10 @@ extern "C" int yylex();
 
 blanks          [ \t\n]+
 identifier   	[_a-zA-Z]+
+float 		[0-9]+\.[0-9]*
 integer		[0-9]+
 boolean        	true|false
 string        	\"[a-zA-Z0-9]*\"
-float 		[0-9]+.[0-9]*[e[0-9]+]
 
 %%
 
@@ -80,12 +80,12 @@ float 		[0-9]+.[0-9]*[e[0-9]+]
             return(FLOAT);
       }
 
-
 {integer}   {
             yylval.sval = malloc(strlen(yytext)+1);
             strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(INTEGER);
       }
+
 
 
 
