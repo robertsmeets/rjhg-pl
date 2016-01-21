@@ -1,17 +1,13 @@
 proc main()
 {
-   x=true;
-   y=false;
-   print x;
-   print y;
-   if x
-   {
-      print "good";
-   }
-   if y
-   {
-      print "bad";
-   }
+   print "mainbeforecall";
+   another();
+   print "mainaftercall";
    return 0;
 }
 
+proc another()
+{ 
+   print "another";
+   return 0;
+}

@@ -191,7 +191,7 @@ Lhs:
 	IDENTIFIER ; { $$ = new VariableValue($1);}
 
 ProcedureCall:
-	IDENTIFIER LPAREN ExpressionList RPAREN ; { $$=new ProcedureCall($1,$3); }
+	IDENTIFIER LPAREN ExpressionList RPAREN SEMICOL; { $$=new ProcedureCall($1,$3); }
 
 ExpressionList:
 	 /* empty */ {$$ = new ExpressionList();}
