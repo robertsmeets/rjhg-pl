@@ -55,7 +55,7 @@ extern char *yytext;
     VariableValue *a_variablevalue;
     char* Integer;
     double Double;
-    bool Boolean;
+    char* Boolean;
     char* String;
     PrintNode *a_printnode;
 };
@@ -191,7 +191,7 @@ Lhs:
 	IDENTIFIER ; { $$ = new VariableValue($1);}
 
 ProcedureCall:
-	IDENTIFIER LPAREN ExpressionList RPAREN ; { $$=new ProcedureCall($1,$3); }
+	IDENTIFIER LPAREN ExpressionList RPAREN SEMICOL; { $$=new ProcedureCall($1,$3); }
 
 ExpressionList:
 	 /* empty */ {$$ = new ExpressionList();}

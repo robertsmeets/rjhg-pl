@@ -1,18 +1,13 @@
 proc main()
 {
-   x=1;
-   while x < 10
-   {
-   if x > 5
-   {
-     print "true";
-   }
-   else
-   {
-     print "false";
-   }
-   x = x+1;
-   }
+   print "mainbeforecall";
+   another();
+   print "mainaftercall";
    return 0;
 }
 
+proc another()
+{ 
+   print "another";
+   return 0;
+}

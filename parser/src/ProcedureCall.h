@@ -3,6 +3,7 @@
 
 #include "ExpressionList.h"
 #include "Expression.h"
+#include "CodeGenerator.h"
 
 #include <string>
 #include <iostream>

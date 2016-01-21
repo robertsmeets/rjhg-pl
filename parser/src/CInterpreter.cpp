@@ -129,7 +129,7 @@ void CInterpreter::start() {
 void CInterpreter::check_magic_number() {
 	if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
 			&& buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
-		throw new PException("Magic number does not match, invalid bytecode");
+		throw PException("Magic number does not match, invalid bytecode");
 	}
 }
 
@@ -561,7 +561,7 @@ int CInterpreter::execute_next() {
 		} else {
 			stringstream out;
 			out << "Cannot print something of type " << fr1.atype << endl;
-			throw new PException(out.str());
+			throw PException(out.str());
 		}
 		break;
 

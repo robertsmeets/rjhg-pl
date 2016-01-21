@@ -62,6 +62,12 @@ string        	\"[a-zA-Z0-9]*\"
 "while"     return(WHILE);
 "print"     return(PRINT);
 
+{boolean} {
+            yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            return(BOOLEAN);
+      }
+
 {string} {
             yylval.sval = malloc(strlen(yytext)+1);
             strncpy(yylval.sval, yytext, strlen(yytext)+1);
@@ -86,13 +92,5 @@ string        	\"[a-zA-Z0-9]*\"
             return(INTEGER);
       }
 
-
-
-
-{boolean} {
-            yylval.sval = malloc(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
-            return(BOOLEAN);
-      }
 
 %%
