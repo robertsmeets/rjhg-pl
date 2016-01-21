@@ -55,7 +55,7 @@ extern char *yytext;
     VariableValue *a_variablevalue;
     char* Integer;
     double Double;
-    bool Boolean;
+    char* Boolean;
     char* String;
     PrintNode *a_printnode;
 };

@@ -4,15 +4,32 @@
 
 using namespace std;
 
-LitBool::LitBool(bool b){value = b;};
+LitBool::LitBool(char* s)
+{
+   if (strcmp(s,"true")==0 )
+   {
+      value = true;
+   }
+   else
+   {
+      if (strcmp(s,"false")==0 )
+      {
+          value = false;
+      }
+      else
+      {
+          throw PException("boolean must be true or false");
+      }
+   }
+}
 
 void LitBool::print(int level)
 {
-	{for (unsigned int i = 0; i < level; i++) {
+	for (int i = 0; i < level; i++) {
 		cout << "+";
 	}
 	cout << "LitBool" << endl;
-	}
+	
 
 }
 

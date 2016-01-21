@@ -1,17 +1,16 @@
 proc main()
 {
-   x=1;
-   while x < 10
+   x=true;
+   y=false;
+   print x;
+   print y;
+   if x
    {
-   if x > 5
-   {
-     print "true";
+      print "good";
    }
-   else
+   if y
    {
-     print "false";
-   }
-   x = x+1;
+      print "bad";
    }
    return 0;
 }

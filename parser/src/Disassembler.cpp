@@ -24,7 +24,7 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 	cout << "Starting disassembler..." << endl;
 	if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
 			&& buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
-		throw new PException("Magic number does not match, invalid bytecode");
+		throw PException("Magic number does not match, invalid bytecode");
 	}
 	//
 	// hexdump

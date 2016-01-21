@@ -8,7 +8,7 @@ class LitBool: public Literal {
 private:
 	bool value;
 public:
-	LitBool(bool);
+	LitBool(char*);
 	void print(int);
 	virtual void emit(CodeGenerator*,pProcedureNode*);
 	virtual string stype();
