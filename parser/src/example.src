@@ -1,13 +1,28 @@
-proc main()
+proc another()
 {
-   print "mainbeforecall";
-   another();
-   print "mainaftercall";
+   x = 0;
+   s = "n" ;
+   while x <= 14
+   {  
+      s= s+s;
+      x = x +1;
+   }
    return 0;
 }
 
-proc another()
+proc main()
 { 
-   print "another";
+   x = 0;
+   y=0;
+   while y <= 10000
+   {
+      while x<=10000
+      { 
+         another();
+         x= x+1;
+      }
+      y = y +1;
+      print y;
+   }
    return 0;
 }

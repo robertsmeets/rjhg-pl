@@ -216,9 +216,9 @@ Expression:
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
 	|Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
-	|Expression GE Expression {$$=new Val2Expression('L',$1,$3);}
+	|Expression GE Expression {$$=new Val2Expression('G',$1,$3);}
 	|Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
-	|Expression LE Expression {$$=new Val2Expression('G',$1,$3);}
+	|Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
 	|Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
 	|Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
 	|Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
