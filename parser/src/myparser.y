@@ -149,8 +149,7 @@ Highlevelblock:
 	; {$$=glob;}
 
 Procedure:
-	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN 
-	BSB ; {$$=new pProcedureNode($2,$6);}
+	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode($2,$4,$6);}
 
 Class:
 	CLASS IDENTIFIER BLOCK CommaSeparated SEMICOL ENDBLOCK
@@ -216,9 +215,9 @@ Expression:
 	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
 	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
 	|Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
-	|Expression GE Expression {$$=new Val2Expression('L',$1,$3);}
+	|Expression GE Expression {$$=new Val2Expression('G',$1,$3);}
 	|Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
-	|Expression LE Expression {$$=new Val2Expression('G',$1,$3);}
+	|Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
 	|Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
 	|Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
 	|Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
@@ -245,8 +244,8 @@ Literal:
 
 CommaSeparated:
          /* empty */ {$$=new CommaSeparated();}
-	|IDENTIFIER {$$=new CommaSeparated(); $$->addIdentifier($1);}
-	|CommaSeparated COMMA IDENTIFIER {$$->addIdentifier($3);}
+	|IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
+	|CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
   	; 
 
 %%

@@ -1,13 +1,13 @@
-proc main()
+proc another(a,b,c)
 {
-   print "mainbeforecall";
-   another();
-   print "mainaftercall";
+   print a;
+   print b;
+   print c;
    return 0;
 }
 
-proc another()
+proc main()
 { 
-   print "another";
+   another(12,13,14);
    return 0;
 }

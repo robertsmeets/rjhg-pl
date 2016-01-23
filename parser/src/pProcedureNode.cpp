@@ -16,12 +16,12 @@ using namespace std;
 /**
  * constructor
  */
-pProcedureNode::pProcedureNode(string a_name,Statements* some_statements)
+pProcedureNode::pProcedureNode(string a_name, CommaSeparated* identifiers, Statements* some_statements)
 {
    name = a_name;
-	 statements = some_statements;
-	 parameters = new vector<string>();
-     local_variables = new map<string, uint16_t>();
+   parameters = identifiers;
+   statements = some_statements;
+   local_variables = new map<string, uint16_t>();
 }
 
 
@@ -62,7 +62,7 @@ void pProcedureNode::setProcAddress(uint16_t a) {
 }
 
 void pProcedureNode::addParameter(string a_parameter) {
-	parameters->push_back(a_parameter);
+	// parameters->push_back(a_parameter);
 }
 
 void pProcedureNode::setStatements(vector<Statement*> some_statements) {
@@ -75,7 +75,7 @@ uint16_t pProcedureNode::getProcAddress() {
 }
 
 vector<string>* pProcedureNode::getParameters() {
-	return parameters;
+	// return parameters;
 }
 
 map<string, uint16_t>* pProcedureNode::getLocalVariables() {
@@ -135,13 +135,12 @@ void pProcedureNode::fixReturn() {
 }
 
 void pProcedureNode::print(int level) {
-	for (int i=0;i<level;i++)
-	{
-		cout << "+" ;
-	}
-	cout << "pProcedureNode " << name << "(" << parameters->size() << " params)"
-			<< endl;
-	statements->print(level+1);
+   for (int i=0;i<level;i++)
+   {
+      cout << "+" ;
+   }
+   cout << "pProcedureNode " << name << "(" << parameters->getIdentifiers()->size() << " params)" << endl;
+   statements->print(level+1);
 }
 
 int pProcedureNode::getInstanceVarNum(string name) {

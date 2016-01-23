@@ -8,6 +8,7 @@ void Statements::print(int level) {
 	for (int i = 0; i < level; i++) {
 		cout << "+";
 	}
+   cout << "Statements" << endl;
 	for (Expression* a_statement:statements)
 	{
 		a_statement->print(level+1);

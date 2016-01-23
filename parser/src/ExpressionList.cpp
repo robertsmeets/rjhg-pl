@@ -1,12 +1,15 @@
 #include "ExpressionList.h"
 
-#include <iostream>
 
 using namespace std;
 
+ExpressionList::ExpressionList()
+{
+}
+
 void ExpressionList::addExpression(Expression* e)
 {
-
+   expressions.push_back(e);
 }
 
 void ExpressionList::print(int level)
@@ -16,5 +19,10 @@ void ExpressionList::print(int level)
 	}
 	cout << "ExpressionList" << endl;
 	}
+}
+
+vector<Expression*> ExpressionList::getExpressions()
+{
+   return expressions;
 }
 

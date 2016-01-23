@@ -36,5 +36,5 @@ void PrintNode::print(int level) {
 			cout << "+" ;
 		}
 	cout << "PrintNode" << endl;
-	// print_expression.print(level + 1);
+	expression->print(level + 1);
 }
