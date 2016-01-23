@@ -2,13 +2,17 @@
 #define COMMASEPARATED_H_ 
 
 #include <string> 
+#include <vector>
 
 using namespace std;
 
 class CommaSeparated {
+private:
+   vector<string>* identifiers;
 public:
-	void addIdentifier(string);
-	void print(int);
-
+   CommaSeparated();
+   void addIdentifier(char*);
+   void print(int);
+   vector<string>* getIdentifiers();
 };
 #endif

@@ -21,6 +21,7 @@
 #include "ClassDefinition.h"
 #include "pProgramNode.h"
 #include "Statements.h"
+#include "CommaSeparated.h"
 
 using namespace std;
 
@@ -35,7 +36,7 @@ class Statement;
 class pProcedureNode {
 	string name;
 	ClassDefinition* cd;
-	vector<string>* parameters;
+	CommaSeparated* parameters;
 	vector<string> instance_variables;
 	Statements* statements;
 	map<string, uint16_t>* local_variables;
@@ -44,7 +45,7 @@ class pProcedureNode {
 	pProgramNode* pn;
 
 public:
-	pProcedureNode(string, Statements*);
+	pProcedureNode(string, CommaSeparated*, Statements*);
 	virtual ~pProcedureNode();
 	void setName(string);
 	string getName();

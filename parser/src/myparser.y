@@ -149,8 +149,7 @@ Highlevelblock:
 	; {$$=glob;}
 
 Procedure:
-	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN 
-	BSB ; {$$=new pProcedureNode($2,$6);}
+	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode($2,$4,$6);}
 
 Class:
 	CLASS IDENTIFIER BLOCK CommaSeparated SEMICOL ENDBLOCK
@@ -245,8 +244,8 @@ Literal:
 
 CommaSeparated:
          /* empty */ {$$=new CommaSeparated();}
-	|IDENTIFIER {$$=new CommaSeparated(); $$->addIdentifier($1);}
-	|CommaSeparated COMMA IDENTIFIER {$$->addIdentifier($3);}
+	|IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
+	|CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
   	; 
 
 %%

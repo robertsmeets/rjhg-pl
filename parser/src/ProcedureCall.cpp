@@ -23,20 +23,22 @@ void ProcedureCall::print(int level)
 
 void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
-	//
-	// put the parameters on the stack
-	//
-	/* for (vector<ExpressionNode>::iterator it = parameter_exps.begin();
-			it != parameter_exps.end(); ++it) {
-		cg->emitRpn((*it).getRpn(), pn, this);
-	}
-	if (method) {
-		cg->emitRpn(LhsExpression.getRpn(), pn, this);
-		cg->addCallToMethod(procedure_name, this);
-	}
-        else { */
-		cout << "ProcedureCall::emit(" << name << endl;
-		cg->addCallToProc(name, this);
+   //
+   // put the parameters on the stack
+   //
+   vector<Expression*> expressions = expressionlist->getExpressions();
+   for (auto it=expressions.begin();it != expressions.end();++it)
+   {
+      (*it)->emit(cg,pn);
+   }
+
+   /* 
+
+   if (method) {
+      cg->emitRpn(LhsExpression.getRpn(), pn, this);
+      cg->addCallToMethod(procedure_name, this);
+   } */
+      cg->addCallToProc(name, this);
 }
 
 
