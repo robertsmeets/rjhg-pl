@@ -75,7 +75,7 @@ uint16_t pProcedureNode::getProcAddress() {
 }
 
 vector<string>* pProcedureNode::getParameters() {
-	// return parameters;
+	 return parameters->getIdentifiers();
 }
 
 map<string, uint16_t>* pProcedureNode::getLocalVariables() {

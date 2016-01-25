@@ -38,7 +38,7 @@ void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
       cg->emitRpn(LhsExpression.getRpn(), pn, this);
       cg->addCallToMethod(procedure_name, this);
    } */
-      cg->addCallToProc(name, this);
+      cg->addCallToProcedure(name,NULL);
 }
 
 
