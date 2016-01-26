@@ -29,8 +29,6 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
 	//
 	// The result is a function
 	//
-	//int (*foo)(int, int);
-	//		foo = (int (*)(int, int))(&func_plus_ii);}
 
 	//
 	// fill up for OPR 2 (PLUS);
@@ -149,8 +147,8 @@ int CInterpreter::execute_next() {
 	// l is the 2nd param
 	// a is the 3rd param
 	//
+	// di->printLine(pc);
 #ifdef DEBUG
-	di->printLine(pc);
 	cout << "pc=x" << hex << pc << dec << ": ";
 #endif
 	unsigned short int f = *((char*) buffer + pc) & 0xff;
@@ -696,7 +694,7 @@ int CInterpreter::execute_next() {
 	// print the stack
 	//
 #ifdef DEBUG
-	cout << "      stack: ";
+        cout << "      stack: ";
 	for (uint16_t i = 0; i < t; i++) {
 		char* adr;
 		cout << "[";

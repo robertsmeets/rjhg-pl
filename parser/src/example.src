@@ -1,13 +1,15 @@
-proc another(a,b,c)
+proc another()
 {
-   print a;
-   print b;
-   print c;
-   return 0;
+   return ; 
 }
 
 proc main()
 { 
-   another(12,13,14);
+    another();
    return 0;
+}
+
+proc somethingelse()
+{
+   return;
 }

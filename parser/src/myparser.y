@@ -174,8 +174,9 @@ Assignment:
 	; { $$ = new Assignment($1,$3);}
 
 Return:
-	RETURN Expression SEMICOL 
-        ; { $$ = new pReturn($2); }
+	RETURN Expression SEMICOL { $$ = new pReturn($2); }
+	RETURN SEMICOL { $$ = new pReturn(NULL); }
+        ;
 
 While:
 	WHILE Expression BSB
