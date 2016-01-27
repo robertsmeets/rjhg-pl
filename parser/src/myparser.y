@@ -138,116 +138,117 @@ extern char *yytext;
 %%
 
 Program:
-	/* empty */  {$$ =glob;}
-	|Program Highlevelblock {$$=glob;}
-	;
+   /* empty */  {$$ =glob;}
+   |Program Highlevelblock {$$=glob;}
+   ;
 
 Highlevelblock:
-	 Class { glob->addClass($1);}
-	|Procedure { glob->addProcedure($1);}
-	|Method { glob->addMethodDefinition($1);}
-	; {$$=glob;}
+    Class { glob->addClass($1);}
+   |Procedure { glob->addProcedure($1);}
+   |Method { glob->addMethodDefinition($1);}
+   ; {$$=glob;}
 
 Procedure:
-	PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode($2,$4,$6);}
+   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode($2,$4,$6);}
 
 Class:
-	CLASS IDENTIFIER BLOCK CommaSeparated SEMICOL ENDBLOCK
-	; {  $$ = new pClassDefinition($2);}
+   CLASS IDENTIFIER BLOCK CommaSeparated SEMICOL ENDBLOCK
+   ; {  $$ = new pClassDefinition($2);}
 
 Method:
-	METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN
-	BSB
-	; {  $$ = new pMethodDefinition($2,$4,$8);}
+   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN
+   BSB
+   ; {  $$ = new pMethodDefinition($2,$4,$8);}
 
 Statements:
-	/* empty */ { $$ = new Statements(); }
-	| Statements Expression { $$ = $1; $1->addStatement($2);}
-	; 
+    /* empty */ { $$=new Statements();} 
+   |Expression { $$ = new Statements(); $$->addStatement($1); }
+   |Statements SEMICOL Expression { $$=$1;$1->addStatement($3); }
+   ;
 
 BSB:
-	BLOCK Statements ENDBLOCK {$$ = $2;}
-	;
+   BLOCK Statements ENDBLOCK {$$ = $2;}
+   ;
 
 Assignment:
-	Lhs EQUALS Expression SEMICOL
-	; { $$ = new Assignment($1,$3);}
+   Lhs EQUALS Expression 
+   ; { $$ = new Assignment($1,$3);}
 
 Return:
-	RETURN Expression SEMICOL { $$ = new pReturn($2); }
-	RETURN SEMICOL { $$ = new pReturn(NULL); }
+   RETURN Expression { $$ = new pReturn($2); }
+       |RETURN { $$ = new pReturn(NULL); }
         ;
 
 While:
-	WHILE Expression BSB
+   WHILE Expression BSB
         ; { $$ = new While($2,$3); }
 
 If:
-	IF Expression BSB { $$ = new If($2,$3,NULL); }
+   IF Expression BSB { $$ = new If($2,$3,NULL); }
        |IF Expression BSB ELSE BSB { $$ = new If($2,$3,$5); }
        ;
 
 Lhs:
-	IDENTIFIER ; { $$ = new VariableValue($1);}
+   IDENTIFIER ; { $$ = new VariableValue($1);}
 
 ProcedureCall:
-	IDENTIFIER LPAREN ExpressionList RPAREN SEMICOL; { $$=new ProcedureCall($1,$3); }
+   IDENTIFIER LPAREN ExpressionList RPAREN ; { $$=new ProcedureCall($1,$3); }
 
 ExpressionList:
-	 /* empty */ {$$ = new ExpressionList();}
+    /* empty */ {$$ = new ExpressionList();}
         | Expression { $$ = new ExpressionList();$$->addExpression($1);}
-	| ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
-	;
+   | ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
+   ;
 
 CompositeMethodCall: {$$=new CompositeMethodCall();}
-	SingleMethodCall RestMethodCall;
+   SingleMethodCall RestMethodCall;
 
 SingleMethodCall:
-	IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new SingleMethodCall($1,$3);}
+   IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new SingleMethodCall($1,$3);}
 
 RestMethodCall: 
-	/* empty */ {$$ = new CompositeMethodCall();}
-	|RestMethodCall POINT SingleMethodCall; {$$=$1;$1->addSingleMethodCall($3);}
+   /* empty */ {$$ = new CompositeMethodCall();}
+   |RestMethodCall POINT SingleMethodCall; {$$=$1;$1->addSingleMethodCall($3);}
 
 Expression:
-	 Literal {$$=$1;}
+    Literal {$$=$1;}
         |IDENTIFIER { $$=new VariableValue($1);}
-	|Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
-	|Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
-	|Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
-	|Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
-	|Expression GE Expression {$$=new Val2Expression('G',$1,$3);}
-	|Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
-	|Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
-	|Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
-	|Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
-	|Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
-	|LPAREN Expression RPAREN {$$=$2;}
-	|CompositeMethodCall {$$=$1;}
-	|ProcedureCall {$$=$1;}
-	|Assignment {$$ = $1;}
+   |Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
+   |Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
+   |Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
+   |Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
+   |Expression GE Expression {$$=new Val2Expression('G',$1,$3);}
+   |Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
+   |Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
+   |Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
+   |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
+   |Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
+   |LPAREN Expression RPAREN {$$=$2;}
+   |CompositeMethodCall {$$=$1;}
+   |ProcedureCall {$$=$1;}
+   |Assignment {$$ = $1;}
         |Return {$$ = $1;}
         |While {$$ = $1;}
         |If {$$ = $1;}
-	|Print {$$ = $1;}
-	;
+   |Print {$$ = $1;}
+   ;
 
 Print:
-	PRINT Expression SEMICOL {$$=new PrintNode($2);}
-	;
+   PRINT Expression {$$=new PrintNode($2);}
+   ;
 
 Literal:
-	 FLOAT {$$=new LitFloat($1);}
-	|INTEGER {$$=new LitInt($1);}
-	|BOOLEAN {$$=new LitBool($1);}
-	|STRING {$$=new LitString($1);}
-	;
+    FLOAT {$$=new LitFloat($1);}
+   |INTEGER {$$=new LitInt($1);}
+   |BOOLEAN {$$=new LitBool($1);}
+   |STRING {$$=new LitString($1);}
+   ;
 
 CommaSeparated:
          /* empty */ {$$=new CommaSeparated();}
-	|IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
-	|CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
-  	; 
+   |IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
+   |CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
+     ; 
 
 %%
 #include <iostream>
@@ -277,9 +278,9 @@ setvbuf(stdout, NULL, _IONBF, 0);
    extern FILE * yyin;
    if (argc != 2) {
       cout << "Must provide filename as an argument, example " << argv[0]
-				<< " c:\\\\test\\\\test.src" << endl;
-		return -1;
-	}
+            << " c:\\\\test\\\\test.src" << endl;
+      return -1;
+   }
    cout << "Parsing... " << argv[1] << " ... " << endl;
    yyin = fopen(argv[1],"r");
    yydebug = 1;
@@ -295,8 +296,8 @@ setvbuf(stdout, NULL, _IONBF, 0);
    //
    // start interpreting
    //
-	CInterpreter i(cg.getCodeBuffer(),NULL);
-	i.start();
+   CInterpreter i(cg.getCodeBuffer(),NULL);
+   i.start();
      
 }
 

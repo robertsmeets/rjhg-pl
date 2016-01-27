@@ -1,7 +1,10 @@
 #include "Statements.h"
 
 void Statements::addStatement(Expression* s) {
-	statements.push_back(s);
+	if (s!=NULL)
+        {
+           statements.push_back(s);
+        }
 }
 
 void Statements::print(int level) {
