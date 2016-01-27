@@ -161,21 +161,22 @@ Method:
    ; {  $$ = new pMethodDefinition($2,$4,$8);}
 
 Statements:
-   /* empty */ { $$ = new Statements(); }
-   | Statements Expression { $$ = $1; $1->addStatement($2);}
-   ; 
+    /* empty */ { $$=new Statements();} 
+   |Expression { $$ = new Statements(); $$->addStatement($1); }
+   |Statements SEMICOL Expression { $$=$1;$1->addStatement($3); }
+   ;
 
 BSB:
    BLOCK Statements ENDBLOCK {$$ = $2;}
    ;
 
 Assignment:
-   Lhs EQUALS Expression SEMICOL
+   Lhs EQUALS Expression 
    ; { $$ = new Assignment($1,$3);}
 
 Return:
-   RETURN Expression SEMICOL { $$ = new pReturn($2); }
-       |RETURN SEMICOL { $$ = new pReturn(NULL); }
+   RETURN Expression { $$ = new pReturn($2); }
+       |RETURN { $$ = new pReturn(NULL); }
         ;
 
 While:
@@ -191,7 +192,7 @@ Lhs:
    IDENTIFIER ; { $$ = new VariableValue($1);}
 
 ProcedureCall:
-   IDENTIFIER LPAREN ExpressionList RPAREN SEMICOL; { $$=new ProcedureCall($1,$3); }
+   IDENTIFIER LPAREN ExpressionList RPAREN ; { $$=new ProcedureCall($1,$3); }
 
 ExpressionList:
     /* empty */ {$$ = new ExpressionList();}
@@ -233,7 +234,7 @@ Expression:
    ;
 
 Print:
-   PRINT Expression SEMICOL {$$=new PrintNode($2);}
+   PRINT Expression {$$=new PrintNode($2);}
    ;
 
 Literal:
