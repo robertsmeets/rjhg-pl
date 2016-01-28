@@ -164,6 +164,7 @@ Statements:
     /* empty */ { $$=new Statements();} 
    |Expression { $$ = new Statements(); $$->addStatement($1); }
    |Statements SEMICOL Expression { $$=$1;$1->addStatement($3); }
+   |Statements SEMICOL { $$=$1; }
    ;
 
 BSB:
