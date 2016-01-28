@@ -106,6 +106,7 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
       string pname = a_proc->getName();
       a_proc->setProcAddress(here);
       procaddresses[pname] = a_proc;
+      a_proc->fixReturn();
       a_proc->emit(this);
    }
    //
