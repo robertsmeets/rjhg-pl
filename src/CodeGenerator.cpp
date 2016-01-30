@@ -63,6 +63,10 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
       amount_of_methods += a_class->getMethods().size();
    }
    //
+   // generate the class numbers
+   //
+   a_pn->assignClassNumbers();
+   //
    // save the start address of the code
    //
    uint16_t offset = 8 * amount_of_methods + 8;
@@ -396,10 +400,10 @@ void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
    emit(12, method_number, 0, s);
 }
 
-void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd,
-      Expression* s) {
+void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd, Expression* s) {
    uint16_t ivs = cd->getInstanceVariables().size();
    uint16_t classnum = cd->getClassNum();
+   cout << "classnum=" << classnum << "   ivs=" << ivs << endl;
    emit(11, classnum, ivs, s);
 }
 
@@ -464,3 +468,7 @@ char* CodeGenerator::allot(int size)
    return codebuffer + loc;
 }
 
+pClassDefinition* CodeGenerator::getClassDefinition(string name)
+{
+   return pn->getClass(name);
+}

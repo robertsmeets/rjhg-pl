@@ -13,22 +13,23 @@ class pMethodDefinition; // forward declaration
 
 class pClassDefinition {
 private:
-	string name;
-	unsigned int classnum;
-	vector<string> instance_variables;
+   string name;
+   unsigned int classnum;
+   vector<string> instance_variables;
    vector <pMethodDefinition*> methods;
    
 public:
-	pClassDefinition(string);
-	virtual ~pClassDefinition();
-	void print(int);
-	string getName();
+   pClassDefinition(string);
+   virtual ~pClassDefinition();
+   void print(int);
+   string getName();
    vector <pMethodDefinition*> getMethods();
-	void add_instance_variable(string);
-	void add_method(pMethodDefinition*);
-	vector<string> getInstanceVariables();
-	unsigned int getClassNum();
-	pMethodDefinition* findMethod(string);
+   void add_instance_variable(string);
+   void add_method(pMethodDefinition*);
+   vector<string> getInstanceVariables();
+   unsigned int getClassNum();
+   pMethodDefinition* findMethod(string);
+   void setClassNum(int);
 };
 
 #endif

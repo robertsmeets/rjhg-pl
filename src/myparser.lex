@@ -4,7 +4,7 @@
 #include "While.h"
 #include "If.h"
 #include "CommaSeparated.h"
-#include "CompositeMethodCall.h"
+#include "MethodCall.h"
 #include "Expression.h"
 #include "ExpressionList.h"
 #include "LitBool.h"

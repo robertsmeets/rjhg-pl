@@ -15,11 +15,11 @@ private:
      string name;
      ExpressionList* expressionlist;
 public:
-	ProcedureCall(string,ExpressionList*);
-	virtual ~ProcedureCall();
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,pProcedureNode*);
-	virtual string stype();
+   ProcedureCall(string,ExpressionList*);
+   virtual ~ProcedureCall();
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,pProcedureNode*);
+   virtual string stype();
 };
 
 #endif

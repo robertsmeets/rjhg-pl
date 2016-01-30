@@ -9,73 +9,83 @@
 #include "ClassDefinition.h"
 
 ProgramNode::ProgramNode() {
-	next_methodnumber = 1;
+   next_methodnumber = 1;
 }
 
 ProgramNode::~ProgramNode() {
-	for (auto a_procedure : procedures) {
-		delete a_procedure;
-	}
-	for (auto a_class : classes) {
-		delete a_class;
-	}
+   for (auto a_procedure : procedures) {
+      delete a_procedure;
+   }
+   for (auto a_class : classes) {
+      delete a_class;
+   }
 }
 
 void ProgramNode::addProcedure(ProcedureNode* pn) {
-	procedures.push_back(pn);
+   procedures.push_back(pn);
 }
 
 vector<ProcedureNode*> ProgramNode::getProcedures() {
-	return procedures;
+   return procedures;
 }
 
 void ProgramNode::addClass(ClassDefinition* cd) {
-	classes.push_back(cd);
+   classes.push_back(cd);
 }
 
 vector<ClassDefinition*> ProgramNode::getClasses() {
-	return classes;
+   return classes;
 }
 
 ClassDefinition* ProgramNode::getClass(string class_name) {
-	for (auto a_class : classes) {
-		if (a_class->getName() == class_name) {
-			return a_class;
-		}
-	}
-	return NULL;
+   for (auto a_class : classes) {
+      if (a_class->getName() == class_name) {
+         return a_class;
+      }
+   }
+   return NULL;
 }
 
 unsigned int ProgramNode::assignMethodNumber(string method_name) {
-	auto it = method_numbers.find(method_name);
-	unsigned int i;
-	if (it == method_numbers.end()) {
-		method_numbers[method_name] = next_methodnumber;
-		i = next_methodnumber;
-		next_methodnumber++;
-	} else {
-		i = it->second;
-	}
-	return i;
+   auto it = method_numbers.find(method_name);
+   unsigned int i;
+   if (it == method_numbers.end()) {
+      method_numbers[method_name] = next_methodnumber;
+      i = next_methodnumber;
+      next_methodnumber++;
+   } else {
+      i = it->second;
+   }
+   return i;
 }
 
 unsigned int ProgramNode::getMethodNumber(string method_name) {
-	return method_numbers[method_name];
+   return method_numbers[method_name];
 }
 
 
 void ProgramNode::print()
 {
-	cout << "ProgramNode" << endl;
-	for (auto cd:classes)
-	{
-		cd->print(1);
-	}
-	for (auto p:procedures)
-	{
-		p->print(1);
-	}
+   cout << "ProgramNode" << endl;
+   for (auto cd:classes)
+   {
+      cd->print(1);
+   }
+   for (auto p:procedures)
+   {
+      p->print(1);
+   }
 
+}
+
+void ProgramNode::assignClassNums()
+{
+   int num = 1;
+   for (auto a_class:classes)
+   {
+      a_class->setClassNum(num);
+      num++;
+   } 
 }
 
 vector<ProcedureNode*> pProgramNode::getProcedures()

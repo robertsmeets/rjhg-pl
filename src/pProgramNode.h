@@ -1,5 +1,5 @@
 /*
- * ProgramNode.h
+ * pProgramNode.h
  *
  *  Created on: Dec 18, 2014
  *      Author: robert
@@ -24,26 +24,26 @@ class pMethodDefinition; // forward declaration
 
 class pProgramNode {
 private:
-	vector<pProcedureNode*> procedures;
-	vector<pClassDefinition*> my_classes;
-	vector<pMethodDefinition*> methods;
-	map<string, unsigned int> method_numbers;
-	unsigned int next_methodnumber;
+   vector<pProcedureNode*> procedures;
+   vector<pClassDefinition*> my_classes;
+   vector<pMethodDefinition*> methods;
+   map<string, unsigned int> method_numbers;
+   unsigned int next_methodnumber;
 
 public:
-	pProgramNode();
-	virtual ~pProgramNode();
-	pClassDefinition* getClass(string);
-	unsigned int assignMethodNumber(string);
-	unsigned int getMethodNumber(string);
-	void addProcedure(pProcedureNode*);
-	void addClass(pClassDefinition*);
-	void addClassByName(string);
-	void addMethodDefinition(pMethodDefinition*);
-	void print(int);
+   pProgramNode();
+   virtual ~pProgramNode();
+   pClassDefinition* getClass(string);
+   unsigned int assignMethodNumber(string);
+   unsigned int getMethodNumber(string);
+   void addProcedure(pProcedureNode*);
+   void addClass(pClassDefinition*);
+   void addClassByName(string);
+   void addMethodDefinition(pMethodDefinition*);
+   void print(int);
    vector<pClassDefinition*> getClasses();
    vector<pProcedureNode*> getProcedures();
-
+   void assignClassNumbers();
 };
 
 #endif

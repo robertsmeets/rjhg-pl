@@ -1,12 +1,19 @@
-proc another(a,b,c)
+class myclass
 {
-   return a+b+c
+    a,b,c,d,e;
 }
 
-proc main()
-{ 
-   x = another(1,2,3);
-   print x;
-   return 0
+method myclass.something()
+{
+   print "method";
 }
+
+
+proc main(a)
+{
+   print "hello";
+   x = myclass();
+}
+
+
 
