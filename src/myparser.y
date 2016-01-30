@@ -5,7 +5,7 @@
 #include "pReturn.h"
 #include "While.h"
 #include "CommaSeparated.h"
-#include "CompositeMethodCall.h"
+#include "MethodCall.h"
 #include "ExpressionList.h"
 #include "LitBool.h"
 #include "Literal.h"
@@ -17,7 +17,6 @@
 #include "pProcedureNode.h"
 #include "pProgramNode.h"
 #include "ProcedureCall.h"
-#include "SingleMethodCall.h"
 #include "Val2Expression.h"
 #include "VariableValue.h"
 #include "CodeGenerator.h"
@@ -43,14 +42,12 @@ extern char *yytext;
     If *an_if;
     pReturn* a_return;
     While* a_while;
-    SingleMethodCall *a_single_methodcall;
-    CompositeMethodCall *a_composite_methodcall;
+    MethodCall *a_methodcall;
     ProcedureCall *a_procedurecall;
     ExpressionList *an_expressionlist;
     Expression *an_expression;
     Statements *a_statements;
     CommaSeparated *a_comma_separated;
-    CompositeMethodCall *a_restmethodcall;
     Literal *a_literal;
     VariableValue *a_variablevalue;
     char* Integer;
@@ -113,15 +110,13 @@ extern char *yytext;
 %type <an_if> If 
 %type <a_return> Return
 %type <a_while> While
-%type <a_single_methodcall> SingleMethodCall
-%type <a_composite_methodcall> CompositeMethodCall
+%type <a_methodcall> MethodCall
 %type <a_procedurecall> ProcedureCall
 %type <an_expressionlist> ExpressionList
 %type <an_expression> Expression
 %type <a_statements> BSB
 %type <a_statements> Statements
 %type <a_comma_separated> CommaSeparated
-%type <a_restmethodcall> RestMethodCall
 %type <a_literal> Literal
 %type <a_variablevalue> Lhs
 %type <Integer> INTEGER
@@ -164,6 +159,7 @@ Statements:
     /* empty */ { $$=new Statements();} 
    |Expression { $$ = new Statements(); $$->addStatement($1); }
    |Statements SEMICOL Expression { $$=$1;$1->addStatement($3); }
+   |Statements SEMICOL { $$=$1; }
    ;
 
 BSB:
@@ -176,17 +172,17 @@ Assignment:
 
 Return:
    RETURN Expression { $$ = new pReturn($2); }
-       |RETURN { $$ = new pReturn(NULL); }
-        ;
+  |RETURN { $$ = new pReturn(NULL); }
+   ;
 
 While:
-   WHILE Expression BSB
-        ; { $$ = new While($2,$3); }
+   WHILE Expression BSB { $$ = new While($2,$3); }
+   ;
 
 If:
    IF Expression BSB { $$ = new If($2,$3,NULL); }
-       |IF Expression BSB ELSE BSB { $$ = new If($2,$3,$5); }
-       ;
+  |IF Expression BSB ELSE BSB { $$ = new If($2,$3,$5); }
+   ;
 
 Lhs:
    IDENTIFIER ; { $$ = new VariableValue($1);}
@@ -196,23 +192,16 @@ ProcedureCall:
 
 ExpressionList:
     /* empty */ {$$ = new ExpressionList();}
-        | Expression { $$ = new ExpressionList();$$->addExpression($1);}
+   | Expression { $$ = new ExpressionList();$$->addExpression($1);}
    | ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
    ;
 
-CompositeMethodCall: {$$=new CompositeMethodCall();}
-   SingleMethodCall RestMethodCall;
-
-SingleMethodCall:
-   IDENTIFIER LPAREN ExpressionList RPAREN; {$$=new SingleMethodCall($1,$3);}
-
-RestMethodCall: 
-   /* empty */ {$$ = new CompositeMethodCall();}
-   |RestMethodCall POINT SingleMethodCall; {$$=$1;$1->addSingleMethodCall($3);}
+MethodCall: 
+   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN; { $$ = new MethodCall($1,$3,$5);}
 
 Expression:
-    Literal {$$=$1;}
-        |IDENTIFIER { $$=new VariableValue($1);}
+    Literal { $$=$1; }
+   |IDENTIFIER { $$=new VariableValue($1);}
    |Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
    |Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
    |Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
@@ -224,12 +213,12 @@ Expression:
    |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
    |Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
    |LPAREN Expression RPAREN {$$=$2;}
-   |CompositeMethodCall {$$=$1;}
+   |MethodCall {$$=$1;}
    |ProcedureCall {$$=$1;}
    |Assignment {$$ = $1;}
-        |Return {$$ = $1;}
-        |While {$$ = $1;}
-        |If {$$ = $1;}
+   |Return {$$ = $1;}
+   |While {$$ = $1;}
+   |If {$$ = $1;}
    |Print {$$ = $1;}
    ;
 

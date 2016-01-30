@@ -1,10 +1,10 @@
 .PHONY: clean
 .PHONY: test
 
-CFLAGS=-std=c++11 -g
+CFLAGS=-std=c++11 -g -DDEBUG
 
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o CompositeMethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
 
 # add -v -t for debug
 
@@ -54,8 +54,8 @@ If.o: If.h If.cpp
 CommaSeparated.o: CommaSeparated.h CommaSeparated.cpp
 	g++ $(CFLAGS) -o CommaSeparated.o -c CommaSeparated.cpp
 
-CompositeMethodCall.o: CompositeMethodCall.h CompositeMethodCall.cpp
-	g++ $(CFLAGS) -o CompositeMethodCall.o -c CompositeMethodCall.cpp
+MethodCall.o: MethodCall.h MethodCall.cpp
+	g++ $(CFLAGS) -o MethodCall.o -c MethodCall.cpp
 
 Expression.o: Expression.h Expression.cpp
 	g++ $(CFLAGS) -o Expression.o -c Expression.cpp
@@ -124,7 +124,7 @@ clean:
 	rm -f While.o
 	rm -f If.o
 	rm -f CommaSeparated.o
-	rm -f CompositeMethodCall.o
+	rm -f MethodCall.o
 	rm -f Expression.o
 	rm -f ExpressionList.o
 	rm -f LitBool.o

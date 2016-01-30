@@ -1,0 +1,19 @@
+class myclass
+{
+    a,b,c,d,e;
+}
+
+method myclass.something()
+{
+   print "method";
+}
+
+
+proc main(a)
+{
+   print "hello";
+   x = myclass();
+}
+
+
+

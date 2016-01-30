@@ -32,4 +32,4 @@ void pReturn::emit(CodeGenerator* cg, pProcedureNode* pn)
    }
 }
 
-string pReturn::stype() {return "pReturn";}
+string pReturn::stype() {return "return";}
