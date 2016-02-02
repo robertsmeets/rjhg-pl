@@ -12,7 +12,6 @@ pProgramNode::pProgramNode() {
 }
 
 pProgramNode::~pProgramNode() {
-   cout << "--- pProgramNode DESTRUCTOR" << endl;
    for (auto a_procedure : procedures) {
       delete a_procedure;
    }
@@ -30,7 +29,14 @@ void pProgramNode::addProcedure(pProcedureNode* c) {
 }
 
 void pProgramNode::addMethodDefinition(pMethodDefinition* c) {
+   cout << "addMethodDefinition(" << c->getName() << ")" << endl;
+   assignMethodNumber(c->getName());
    methods.push_back(c);
+   cout << "------------- table "<< endl;
+   for (auto it = method_numbers.begin(); it != method_numbers.end(); it++)
+   {
+      cout << it->first <<  it->second << endl;
+   }
 }
 
 void pProgramNode::print(int level) {
@@ -70,14 +76,17 @@ pClassDefinition* pProgramNode::getClass(string class_name) {
 }
 
 unsigned int pProgramNode::assignMethodNumber(string method_name) {
+   cout << "assignMethodNumber("<<method_name<<") " << endl;
    auto it = method_numbers.find(method_name);
    unsigned int i;
    if (it == method_numbers.end()) {
       method_numbers[method_name] = next_methodnumber;
       i = next_methodnumber;
+      cout << "new number = " << i << endl;
       next_methodnumber++;
    } else {
       i = it->second;
+      cout << "already existing " << i << endl;
    }
    return i;
 }
@@ -94,10 +103,8 @@ unsigned int pProgramNode::getMethodNumber(string method_name) {
 void pProgramNode::assignClassNumbers()
 {
    int num = 1;
-   cout << "interesting" << endl;
    for (auto a_class:my_classes)
    {
-      cout << "setting class " << a_class->getName() << " to " << num << endl;
       a_class->setClassNum(num);
       num++;
    } 

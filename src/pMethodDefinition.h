@@ -18,7 +18,6 @@ class pMethodDefinition {
 	string class_name;
 	string method_name;
 	Statements* statements;
-	string name;
 	pClassDefinition* cd;
 	vector<string>* parameters;
 	vector<string> instance_variables;
