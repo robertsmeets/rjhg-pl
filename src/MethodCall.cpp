@@ -25,10 +25,33 @@ void MethodCall::print(int level) {
    }
 }
 
+string MethodCall::stype() { return "MethodCall"; }
+
+/**
+ * 
+ * emit bytecode for this
+ *
+ * It may be a procedurecall, or a class instigation, or a method call
+ *
+ **/
 void MethodCall::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
-
+   //
+   // put the parameters on the stack
+   //
+   vector<Expression*> expressions = arguments->getExpressions();
+   for (auto it=expressions.begin();it != expressions.end();++it)
+   {
+      (*it)->emit(cg,pn);
+   }
+   //
+   // emit the expression
+   //
+   expression->emit(cg,pn);
+   //
+   // add a call
+   //
+   cg->addCallToMethod(name, NULL);
 }
 
-string MethodCall::stype() { return "MethodCall"; }
 

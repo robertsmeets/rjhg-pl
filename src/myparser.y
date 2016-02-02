@@ -151,9 +151,7 @@ Class:
    ; {  $$ = new pClassDefinition($2);}
 
 Method:
-   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN
-   BSB
-   ; {  $$ = new pMethodDefinition($2,$4,$8);}
+   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new pMethodDefinition($2,$4,$8);}
 
 Statements:
     /* empty */ { $$=new Statements();} 
@@ -279,15 +277,20 @@ setvbuf(stdout, NULL, _IONBF, 0);
    fclose(yyin);
    glob->print(0);
    CodeGenerator cg;
-   cg.start(glob,NULL);
-   Disassembler d; 
-   d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
-   //
-   // start interpreting
-   //
-   CInterpreter i(cg.getCodeBuffer(),NULL);
-   i.start();
-     
+   try
+   {
+      cg.start(glob,NULL);
+      Disassembler d; 
+      d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
+      //
+      // start interpreting
+      //
+      CInterpreter i(cg.getCodeBuffer(),NULL);
+      i.start();
+   } catch (PException & E) {
+      cout << "Exception: " << E.ShowReason() << endl;
+      return -1;
+   }
 }
 
 

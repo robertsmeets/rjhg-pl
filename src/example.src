@@ -11,8 +11,7 @@ method myclass.something()
 
 proc main(a)
 {
-   print "hello";
-   x = myclass();
+   myclass().something();
 }
 
 

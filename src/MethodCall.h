@@ -3,6 +3,7 @@
 
 #include "Expression.h"
 #include "SingleMethodCall.h"
+#include "CodeGenerator.h"
 
 class MethodCall: public Expression {
 private:

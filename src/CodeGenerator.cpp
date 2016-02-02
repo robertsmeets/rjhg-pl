@@ -42,6 +42,7 @@ char* CodeGenerator::getCodeBuffer() {
 
 void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    cout << "Code generation..." << endl;
+   pn=a_pn;
    //
    // emit a magic number
    //
@@ -396,6 +397,7 @@ cout << "METHOD CALL " << endl;
 void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
    //
    //
+   cout << "addCallToMethod(" << method_name << ") pn=" << pn << endl;;
    uint16_t method_number = pn->getMethodNumber(method_name);
    emit(12, method_number, 0, s);
 }
