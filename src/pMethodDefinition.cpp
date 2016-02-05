@@ -8,6 +8,8 @@ pMethodDefinition::pMethodDefinition(string a_class_name, string a_method_name, 
    class_name = a_class_name;
    method_name = a_method_name;
    statements = a_statements;
+   parameters = new vector<string>();
+   local_variables = new map<string, uint16_t>();
 }
 
 pMethodDefinition::~pMethodDefinition() {
@@ -44,6 +46,11 @@ void pMethodDefinition::setStatements(vector<Statement*> some_statements) {
 /**
  * getter methods
  */
+string pMethodDefinition::getClassName()
+{
+   return class_name;
+}
+
 string pMethodDefinition::getName() {
    return method_name;
 }
@@ -62,6 +69,11 @@ map<string, uint16_t>* pMethodDefinition::getLocalVariables() {
 
 vector<Statement*> pMethodDefinition::getStatements() {
 //   return statements;
+}
+
+void pMethodDefinition::setMethodNumber(uint16_t num)
+{
+   method_number = num;
 }
 
 uint16_t pMethodDefinition::getMethodNumber() {
@@ -136,3 +148,23 @@ int pMethodDefinition::getInstanceVarNum(string name) {
    }
    return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -130,12 +130,17 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // emit the method table
    //
+   cout << "Generating method table" << endl;
    uint16_t the_index = 8;
    for (auto const &a_class : a_pn->getClasses()) {
+      cout << "for class " << a_class->getName() << endl;
       for (auto const &a_method : a_class->getMethods()) {
+         cout << "for method " << a_method->getName() << endl;
          uint16_t cnum = a_class->getClassNum();
          uint16_t mnum = a_method->getMethodNumber();
          uint16_t address = a_method->getProcAddress();
+         cout << cnum << "," << mnum << ","<< address << endl;
+         cout << codebuffer<< "," << the_index << endl;
          *((char*) codebuffer + the_index) = cnum & 255;
          the_index++;
          *((char*) codebuffer + the_index) = cnum >> 8;
@@ -148,11 +153,9 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
          the_index++;
          *((char*) codebuffer + the_index) = address >> 8;
          the_index++;
-         *((char*) codebuffer + the_index) =
-               a_method->getParameters()->size();
+         *((char*) codebuffer + the_index) = a_method->getParameters()->size();
          the_index++;
-         *((char*) codebuffer + the_index) =
-               a_method->getLocalVariables()->size();
+         *((char*) codebuffer + the_index) = a_method->getLocalVariables()->size();
          the_index++;
       }
    }
