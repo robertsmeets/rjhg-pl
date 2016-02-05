@@ -3,8 +3,8 @@
 
 CFLAGS=-std=c++11 -g -DDEBUG
 
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pMethodDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
 
 # add -v -t for debug
 
@@ -81,9 +81,6 @@ LitString.o: LitString.h LitString.cpp
 pClassDefinition.o: pClassDefinition.h pClassDefinition.cpp
 	g++ $(CFLAGS) -o pClassDefinition.o -c pClassDefinition.cpp
 
-pMethodDefinition.o: pMethodDefinition.h pMethodDefinition.cpp
-	g++ $(CFLAGS) -o pMethodDefinition.o -c pMethodDefinition.cpp
-
 pProcedureNode.o: pProcedureNode.h pProcedureNode.cpp
 	g++ $(CFLAGS) -o pProcedureNode.o -c pProcedureNode.cpp
 
@@ -133,7 +130,6 @@ clean:
 	rm -f LitInt.o
 	rm -f LitString.o
 	rm -f pClassDefinition.o
-	rm -f pMethodDefinition.o
 	rm -f pProcedureNode.o
 	rm -f pProgramNode.o
 	rm -f ProcedureCall.o

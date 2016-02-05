@@ -16,8 +16,9 @@ using namespace std;
 /**
  * constructor
  */
-pProcedureNode::pProcedureNode(string a_name, CommaSeparated* identifiers, Statements* some_statements)
+pProcedureNode::pProcedureNode(string cname, string a_name, CommaSeparated* identifiers, Statements* some_statements)
 {
+   class_name = cname;
    name = a_name;
    parameters = identifiers;
    statements = some_statements;
@@ -49,6 +50,10 @@ pProcedureNode::~pProcedureNode() {
     return name;
  }
  
+ string pProcedureNode::getClassName()
+ {
+    return class_name;
+ }
 
 /**
  * setter methods
@@ -69,6 +74,10 @@ void pProcedureNode::setStatements(vector<Statement*> some_statements) {
    // statements = some_statements;
 }
 
+void pProcedureNode::setMethodNumber(int mn)
+{
+   method_number = mn;
+}
 
 uint16_t pProcedureNode::getProcAddress() {
    return proc_address;
@@ -172,6 +181,12 @@ void pProcedureNode::emit(CodeGenerator* cg) {
    vector<Expression*> expressions =statements->getStatements();
    for (auto const &it :expressions) {
            it->emit(cg,this);
+   }
 }
-}
+
+uint16_t pProcedureNode::getMethodNumber() {
+      return method_number;
+   }
+
+
 

@@ -28,11 +28,15 @@ void pProgramNode::addProcedure(pProcedureNode* c) {
    procedures.push_back(c);
 }
 
-void pProgramNode::addMethodDefinition(pMethodDefinition* c) {
-   cout << "addMethodDefinition(" << c->getName() << ")" << endl;
-   assignMethodNumber(c->getName());
-   methods.push_back(c);
-   cout << "------------- table "<< endl;
+void pProgramNode::addMethodDefinition(pProcedureNode* m) {
+   pClassDefinition* c = getClass(m->getClassName());
+   if (c==NULL)
+   {
+      throw new PException("Class " + m->getClassName() + " does not exist");
+   }
+   m->setMethodNumber(assignMethodNumber(m->getName()));
+   c->add_method(m);
+   methods.push_back(m);
    for (auto it = method_numbers.begin(); it != method_numbers.end(); it++)
    {
       cout << it->first <<  it->second << endl;
@@ -47,7 +51,7 @@ void pProgramNode::print(int level) {
    for (pClassDefinition* a_class : my_classes) {
       a_class->print(level + 1);
    }
-   for (pMethodDefinition* a_method : methods) {
+   for (pProcedureNode* a_method : methods) {
       a_method->print(level + 1);
    }
    for (pProcedureNode* a_proc : procedures) {
