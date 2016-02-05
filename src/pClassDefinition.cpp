@@ -25,7 +25,7 @@ void pClassDefinition::print(int level) {
 
 }
 
-vector <pMethodDefinition*> pClassDefinition::getMethods()
+vector <pProcedureNode*> pClassDefinition::getMethods()
 {
    return methods;
 }
@@ -38,7 +38,7 @@ void pClassDefinition::add_instance_variable(string i) {
    instance_variables.push_back(i);
 }
 
-void pClassDefinition::add_method(pMethodDefinition* m) {
+void pClassDefinition::add_method(pProcedureNode* m) {
    methods.push_back(m);
 }
 
@@ -51,7 +51,7 @@ void pClassDefinition::setClassNum(int n)
    classnum = n;
 }
 
-pMethodDefinition* pClassDefinition::findMethod(string method_name) {
+pProcedureNode* pClassDefinition::findMethod(string method_name) {
    for (auto a_method : methods) {
       if (a_method->getName() == method_name) {
          return a_method;

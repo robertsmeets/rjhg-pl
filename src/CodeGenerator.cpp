@@ -120,7 +120,8 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
          a_method->setProcAddress(here);
-         start_method(a_method);
+         a_method->fixReturn();
+         a_method->emit(this);
       }
    }
    //
@@ -461,10 +462,6 @@ Expression* CodeGenerator::procDefined(string procedure_name) {
    return NULL;
 }
 
-
-void CodeGenerator::start_method(pMethodDefinition* md)
-{
-}
 
 char* CodeGenerator::allot(int size)
 {

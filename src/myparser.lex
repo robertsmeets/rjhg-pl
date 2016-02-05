@@ -13,7 +13,6 @@
 #include "LitInt.h"
 #include "LitString.h"
 #include "pClassDefinition.h"
-#include "pMethodDefinition.h"
 #include "pProcedureNode.h"
 #include "pProgramNode.h"
 #include "ProcedureCall.h"

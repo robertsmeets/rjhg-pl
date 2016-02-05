@@ -9,7 +9,6 @@
 
 #include "pProcedureNode.h"
 #include "pClassDefinition.h"
-#include "pMethodDefinition.h"
 
 #include <string>
 #include <vector>
@@ -20,13 +19,11 @@ class pClassDefinition; // forward declaration
 
 class pProcedureNode; // forward declaration
 
-class pMethodDefinition; // forward declaration
-
 class pProgramNode {
 private:
    vector<pProcedureNode*> procedures;
    vector<pClassDefinition*> my_classes;
-   vector<pMethodDefinition*> methods;
+   vector<pProcedureNode*> methods;
    map<string, unsigned int> method_numbers;
    unsigned int next_methodnumber;
 
@@ -39,7 +36,7 @@ public:
    void addProcedure(pProcedureNode*);
    void addClass(pClassDefinition*);
    void addClassByName(string);
-   void addMethodDefinition(pMethodDefinition*);
+   void addMethodDefinition(pProcedureNode*);
    void print(int);
    vector<pClassDefinition*> getClasses();
    vector<pProcedureNode*> getProcedures();

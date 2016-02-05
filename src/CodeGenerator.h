@@ -23,7 +23,6 @@
 #include "PException.h"
 #include "DebugInfo.h"
 #include "pClassDefinition.h"
-#include "pMethodDefinition.h"
 #include "Expression.h"
 #include "Statements.h"
 
@@ -32,8 +31,6 @@ using namespace std;
 class pProgramNode; // forward declaration
 
 class pProcedureNode; // forward declaration
-
-class pMethodDefinition; // forward declaration
 
 class pClassDefinition; // forward declaration
 
@@ -54,7 +51,6 @@ public:
   virtual ~CodeGenerator();
   void start(pProgramNode*, DebugInfo*);
   void start_proc(pProcedureNode*);
-  void start_method(pMethodDefinition*);
   void emit(char, unsigned short int, unsigned short int, Expression*);
   void emitRpn(vector<ExpressionThing>, pProcedureNode*, Expression*);
   void emitOperation(char, Expression*);

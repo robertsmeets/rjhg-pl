@@ -28,7 +28,7 @@ void pProgramNode::addProcedure(pProcedureNode* c) {
    procedures.push_back(c);
 }
 
-void pProgramNode::addMethodDefinition(pMethodDefinition* m) {
+void pProgramNode::addMethodDefinition(pProcedureNode* m) {
    pClassDefinition* c = getClass(m->getClassName());
    if (c==NULL)
    {
@@ -51,7 +51,7 @@ void pProgramNode::print(int level) {
    for (pClassDefinition* a_class : my_classes) {
       a_class->print(level + 1);
    }
-   for (pMethodDefinition* a_method : methods) {
+   for (pProcedureNode* a_method : methods) {
       a_method->print(level + 1);
    }
    for (pProcedureNode* a_proc : procedures) {

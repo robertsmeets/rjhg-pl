@@ -13,7 +13,6 @@
 #include "LitInt.h"
 #include "LitString.h"
 #include "pClassDefinition.h"
-#include "pMethodDefinition.h"
 #include "pProcedureNode.h"
 #include "pProgramNode.h"
 #include "ProcedureCall.h"
@@ -37,7 +36,7 @@ extern char *yytext;
     pProgramNode *a_program;
     pClassDefinition *a_class;
     pProcedureNode *a_procedure;
-    pMethodDefinition *a_method;
+    pProcedureNode *a_method;
     Assignment *an_assignment;
     If *an_if;
     pReturn* a_return;
@@ -144,14 +143,14 @@ Highlevelblock:
    ; {$$=glob;}
 
 Procedure:
-   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode($2,$4,$6);}
+   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode("",$2,$4,$6);}
 
 Class:
    CLASS IDENTIFIER BLOCK CommaSeparated SEMICOL ENDBLOCK
    ; {  $$ = new pClassDefinition($2);}
 
 Method:
-   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new pMethodDefinition($2,$4,$8);}
+   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new pProcedureNode($2,$4,$6,$8);}
 
 Statements:
     /* empty */ { $$=new Statements();} 
