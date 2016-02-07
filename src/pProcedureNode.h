@@ -13,6 +13,7 @@
 #include <iostream>
 #include <map>
 #include <algorithm>
+#include "stdint.h"
 
 #include "Statement.h"
 #include "PException.h"

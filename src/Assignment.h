@@ -11,13 +11,13 @@ using namespace std;
 
 class Assignment: public Expression {
 private:
-	VariableValue* variable;
-	Expression* expression;
+   VariableValue* variable;
+   Expression* expression;
 public:
-	Assignment(VariableValue*,Expression*);
-	virtual ~Assignment();
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,pProcedureNode*);
-	virtual string stype();
+   Assignment(VariableValue*,Expression*);
+   virtual ~Assignment();
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,pProcedureNode*);
+   virtual string stype();
 };
 #endif

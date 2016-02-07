@@ -6,6 +6,7 @@
  */
 
 #include "CInterpreter.h"
+#include "stdint.h"
 
 using namespace std;
 
@@ -204,7 +205,7 @@ int CInterpreter::execute_next() {
          // put the pointer and the type on the stack
          //
          s[t].atype = 5;
-         s[t].address = (short uint16_t) (ptr - hm->getStart());
+         s[t].address = (uint16_t) (ptr - hm->getStart());
          t++;
          pc += a;
          break;
@@ -223,7 +224,7 @@ int CInterpreter::execute_next() {
          // put the pointer and the type on the stack
          //
          s[t].atype = 7;
-         s[t].address = (short uint16_t) (ptr - hm->getStart());
+         s[t].address = (uint16_t) (ptr - hm->getStart());
          t++;
          pc += a;
          break;
@@ -550,7 +551,7 @@ int CInterpreter::execute_next() {
       fr1 = s[t];
       if (fr1.atype == 7) {
          char* ptr = hm->getStart() + fr1.address;
-         print_a_string(ptr);
+         print_a_string(ptr,true);
       } else if (fr1.atype == 5) {
          //
          // float
@@ -709,23 +710,28 @@ int CInterpreter::execute_next() {
    // print the stack
    //
 #ifdef DEBUG
-        cout << "      stack: ";
+   cout << "      stack: ";
    for (uint16_t i = 0; i < t; i++) {
       char* adr;
       cout << "[";
       switch (s[i].atype) {
          case 2:
-         cout << s[i].address;
-         break;
+            cout << s[i].address;
+            break;
          case 5:
-         adr = hm->getStart() + s[i].address;
-         double d;
-         memcpy(&d, adr, 8);
-         cout << d;
-         break;
+            adr = hm->getStart() + s[i].address;
+            double d;
+            memcpy(&d, adr, 8);
+            cout << d;
+            break;
+         case 7: // string
+            adr = hm->getStart() + s[i].address;
+            print_a_string(adr,false);
+            cout << "]";
+            break;
          default:
-         cout << "?" << s[i].atype;
-         break;
+            cout << "?" << s[i].atype;
+            break;
       }
       cout << "]";
    }
@@ -742,10 +748,13 @@ int CInterpreter::execute_next() {
    return 0;
 }
 
-void CInterpreter::print_a_string(char* ptr) {
+void CInterpreter::print_a_string(char* ptr,bool b) {
    uint16_t len = ((*ptr) & 0xff) + (*(ptr + 1) << 8);
    print_a_string(ptr + 2, len);
-   cout << endl;
+   if (b)
+   {
+      cout << endl;
+   }
 
 }
 

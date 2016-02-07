@@ -1,17 +1,20 @@
-class myclass
+
+class bla
+{n,m}
+
+method bla.one(x)
 {
-    a,b,c,d,e;
+   print "one";
+   print x;
 }
 
-method myclass.something()
-{
-   print "method";
-}
 
-
-proc main(a)
+proc main()
 {
-   myclass().something();
+   x = "hello";
+   print x;
+   b = bla();
+   b.one(x);
 }
 
 

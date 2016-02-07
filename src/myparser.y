@@ -146,7 +146,7 @@ Procedure:
    PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode("",$2,$4,$6);}
 
 Class:
-   CLASS IDENTIFIER BLOCK CommaSeparated SEMICOL ENDBLOCK
+   CLASS IDENTIFIER BLOCK CommaSeparated ENDBLOCK
    ; {  $$ = new pClassDefinition($2);}
 
 Method:

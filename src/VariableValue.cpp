@@ -8,7 +8,7 @@
 #include "VariableValue.h"
 
 VariableValue::VariableValue(string c) {
-	value = c;
+   value = c;
 }
 
 VariableValue::~VariableValue() {
@@ -16,10 +16,10 @@ VariableValue::~VariableValue() {
 }
 
 void VariableValue::print(int level) {
-	for (int i = 0; i < level; i++) {
-		cout << "+";
-	}
-	cout << "VariableValue " + value << endl;
+   for (int i = 0; i < level; i++) {
+      cout << "+";
+   }
+   cout << "VariableValue " + value << endl;
 }
 
 
@@ -27,7 +27,7 @@ void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
    int index = pn->assignLocalVariable(value);
    cout << "VariableValue " << value << " index=" << index << endl;
-   cg->emit(3,0,index,NULL);
+   cg->emit(3,0,pn->getParameters()->size() + index,NULL);
 }
 
 string VariableValue::stype() { return "VariableValue" ; }
