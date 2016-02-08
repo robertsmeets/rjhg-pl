@@ -25,9 +25,52 @@ void VariableValue::print(int level) {
 
 void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
 {
-   int index = pn->assignLocalVariable(value);
-   cout << "VariableValue " << value << " index=" << index << endl;
-   cg->emit(3,0,pn->getParameters()->size() + index,NULL);
+      map<string, uint16_t>* local_variables;
+      map<string, uint16_t>::iterator foundIter;
+      vector<string>* parameters;
+      vector<string>::iterator it2;
+         //
+         // now we have to look up the variable name.
+
+
+
+
+//
+   // now we have to look up the variable name.
+   // Can be either a local variable, a parameter name or an instance variable
+   //
+   local_variables = pn->getLocalVariables();
+   foundIter = local_variables->find(value);
+   if (foundIter == local_variables->end()) 
+   {
+      parameters = pn->getParameters();
+      for (it2 = parameters->begin(); it2 != parameters->end(); ++it2) 
+      {
+         if ((*it2) == value) {
+         uint16_t number = it2 - parameters->begin();
+         //
+         // it is a parameter
+         //
+         cg->emit(3, 0, number, NULL); // LOD
+         break;
+      }
+   }
+   if (it2 == parameters->end()) 
+   {
+      //
+      // look for instance variable
+      //
+      uint16_t j = pn->getInstanceVarNum(value);
+      cg->emit(13, j, 0, NULL); // LODI
+   }
+     } else {
+      //
+      // it is a local variable
+      //
+      cg->emit(3, 0, pn->getParameters()->size()
+            + local_variables->at(value), NULL); // LOD
+         }
+
 }
 
 string VariableValue::stype() { return "VariableValue" ; }
