@@ -1,80 +1,183 @@
-CFLAGS=-std=c++0x -I../../../dyncall-0.8_win/include -O0 -g3 -Wall -c -fmessage-length=0
-LDFLAGS=-L"/c/MinGW/lib/gcc/mingw32/4.8.1/debug" -L"../../../dyncall-0.8_win/lib" -Xlinker -static
-
-.PHONY: all
-all: parser.exe
-
 .PHONY: clean
-clean:
-	erase *.o
-	erase *.exe
+.PHONY: test
 
-parser.o: parser.cpp
-	g++ $(CFLAGS) -o parser.o parser.cpp
+#
+# add -DDEBUG for debug
+#
+CFLAGS=-std=c++11 -g -DDEBUG
 
-ProcedureNode.o: ProcedureNode.cpp 
-	g++ $(CFLAGS) -o ProcedureNode.o ProcedureNode.cpp
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
 
-CFunctions.o: CFunctions.cpp 
-	g++ $(CFLAGS) -o CFunctions.o CFunctions.cpp
+# add -v -t for debug
 
-ExpressionNode.o: ExpressionNode.cpp 
-	g++ $(CFLAGS) -o ExpressionNode.o ExpressionNode.cpp
+y.tab.c y.tab.h: myparser.y
+	byacc -d -v -t myparser.y
 
-PrintNode.o: PrintNode.cpp 
-	g++ $(CFLAGS) -o PrintNode.o PrintNode.cpp
- 
-IfNode.o: IfNode.cpp 
-	g++ $(CFLAGS) -o IfNode.o IfNode.cpp
- 
-CodeGenerator.o: CodeGenerator.cpp 
-	g++ $(CFLAGS) -o CodeGenerator.o CodeGenerator.cpp 
- 
-ExpressionParser.o: ExpressionParser.cpp 
-	g++ $(CFLAGS) -o ExpressionParser.o ExpressionParser.cpp 
- 
-AssignmentNode.o: AssignmentNode.cpp 
-	g++ $(CFLAGS) -o AssignmentNode.o AssignmentNode.cpp 
- 
-ProgramNode.o: ProgramNode.cpp 
-	g++ $(CFLAGS) -o ProgramNode.o ProgramNode.cpp 
- 
-DebugInfo.o: DebugInfo.cpp 
-	g++ $(CFLAGS) -o DebugInfo.o DebugInfo.cpp 
- 
-Statement.o: Statement.cpp 
-	g++ $(CFLAGS) -o Statement.o Statement.cpp 
- 
-HeapManager.o: HeapManager.cpp 
-	g++ $(CFLAGS) -o HeapManager.o HeapManager.cpp 
- 
-WhileNode.o: WhileNode.cpp 
-	g++ $(CFLAGS) -o WhileNode.o WhileNode.cpp 
- 
-CInterpreter.o: CInterpreter.cpp 
-	g++ $(CFLAGS) -o CInterpreter.o CInterpreter.cpp 
- 
-PException.o: PException.cpp 
-	g++ $(CFLAGS) -o PException.o PException.cpp 
- 
-ProcedureCallNode.o: ProcedureCallNode.cpp 
-	g++ $(CFLAGS) -o ProcedureCallNode.o ProcedureCallNode.cpp 
- 
-Disassembler.o: Disassembler.cpp 
-	g++ $(CFLAGS) -o Disassembler.o Disassembler.cpp 
- 
-ExpressionThing.o: ExpressionThing.cpp 
-	g++ $(CFLAGS) -o ExpressionThing.o ExpressionThing.cpp 
- 
-Parse.o: Parse.cpp 
-	g++ $(CFLAGS) -o Parse.o Parse.cpp 
- 
-ReturnNode.o: ReturnNode.cpp 
-	g++ $(CFLAGS) -o ReturnNode.o ReturnNode.cpp 
-
-ClassDefinition.o: ClassDefinition.cpp 
-	g++ $(CFLAGS) -o ClassDefinition.o ClassDefinition.cpp 
- 
-parser.exe: Statement.o ReturnNode.o ProgramNode.o ProcedureNode.o ProcedureCallNode.o PrintNode.o Parse.o PException.o IfNode.o HeapManager.o ExpressionThing.o ExpressionParser.o ExpressionNode.o Disassembler.o DebugInfo.o CodeGenerator.o CInterpreter.o CFunctions.o AssignmentNode.o WhileNode.o ClassDefinition.o parser.o
-	g++ $(LDFLAGS) -o parser.exe Statement.o ReturnNode.o ProgramNode.o ProcedureNode.o ProcedureCallNode.o PrintNode.o Parse.o PException.o IfNode.o HeapManager.o ExpressionThing.o ExpressionParser.o ExpressionNode.o Disassembler.o DebugInfo.o CodeGenerator.o CInterpreter.o CFunctions.o AssignmentNode.o WhileNode.o ClassDefinition.o parser.o
+# 
+# Some functions go beyond the ANSI standard. These are disabled when you use std=c++11 (or std=c++0x).
+# 
+# Among them are fdopen, fileno and strdup. There are two possibilities to use them:
+# 
+#     Use the GNU dialect (std=gnu++11).
+#    If you want to compile without dialect and make a local exception, you can include stdio.h with the __STRICT_ANSI__ undefined. (see: Error "'fdopen' was not declared" found with g++ 4 that compiled with g++3)
+#
 	
+myparser.lex.o: myparser.lex.c y.tab.h
+	g++ -std=gnu++11 -g -o myparser.lex.o -c myparser.lex.c
+
+myparser.y.o: y.tab.c
+	g++ -Wno-write-strings $(CFLAGS) -c y.tab.c -o myparser.y.o
+
+myparser.lex.c: myparser.lex
+	flex myparser.lex
+	cat lex.yy.c | sed s/malloc\(strlen/\(char*\)malloc\(strlen/g >myparser.lex.c
+
+PrintNode.o: PrintNode.h PrintNode.cpp
+	g++ $(CFLAGS) -o PrintNode.o -c PrintNode.cpp
+
+DebugInfo.o: DebugInfo.h DebugInfo.cpp
+	g++ $(CFLAGS) -o DebugInfo.o -c DebugInfo.cpp
+
+PException.o: PException.h PException.cpp
+	g++ $(CFLAGS) -o PException.o -c PException.cpp
+
+Assignment.o: Assignment.h Assignment.cpp
+	g++ $(CFLAGS) -o Assignment.o -c Assignment.cpp
+
+pReturn.o: pReturn.h pReturn.cpp
+	g++ $(CFLAGS) -o pReturn.o -c pReturn.cpp
+
+While.o: While.h While.cpp
+	g++ $(CFLAGS) -o While.o -c While.cpp
+
+If.o: If.h If.cpp
+	g++ $(CFLAGS) -o If.o -c If.cpp
+
+CommaSeparated.o: CommaSeparated.h CommaSeparated.cpp
+	g++ $(CFLAGS) -o CommaSeparated.o -c CommaSeparated.cpp
+
+MethodCall.o: MethodCall.h MethodCall.cpp
+	g++ $(CFLAGS) -o MethodCall.o -c MethodCall.cpp
+
+Expression.o: Expression.h Expression.cpp
+	g++ $(CFLAGS) -o Expression.o -c Expression.cpp
+
+ExpressionList.o: ExpressionList.h ExpressionList.cpp
+	g++ $(CFLAGS) -o ExpressionList.o -c ExpressionList.cpp
+
+LitBool.o: LitBool.h LitBool.cpp
+	g++ $(CFLAGS) -o LitBool.o -c LitBool.cpp
+
+Literal.o: Literal.h Literal.cpp
+	g++ $(CFLAGS) -o Literal.o -c Literal.cpp
+
+LitFloat.o: LitFloat.h LitFloat.cpp
+	g++ $(CFLAGS) -o LitFloat.o -c LitFloat.cpp
+
+LitInt.o: LitInt.h LitInt.cpp
+	g++ $(CFLAGS) -o LitInt.o -c LitInt.cpp
+
+LitString.o: LitString.h LitString.cpp
+	g++ $(CFLAGS) -o LitString.o -c LitString.cpp
+
+pClassDefinition.o: pClassDefinition.h pClassDefinition.cpp
+	g++ $(CFLAGS) -o pClassDefinition.o -c pClassDefinition.cpp
+
+pProcedureNode.o: pProcedureNode.h pProcedureNode.cpp
+	g++ $(CFLAGS) -o pProcedureNode.o -c pProcedureNode.cpp
+
+pProgramNode.o: pProgramNode.h pProgramNode.cpp
+	g++ $(CFLAGS) -o pProgramNode.o -c pProgramNode.cpp
+
+ProcedureCall.o: ProcedureCall.h ProcedureCall.cpp
+	g++ $(CFLAGS) -o ProcedureCall.o -c ProcedureCall.cpp
+
+SingleMethodCall.o: SingleMethodCall.h SingleMethodCall.cpp
+	g++ $(CFLAGS) -o SingleMethodCall.o -c SingleMethodCall.cpp
+
+Statements.o: Statements.h Statements.cpp
+	g++ $(CFLAGS) -o Statements.o -c Statements.cpp
+
+Val2Expression.o: Val2Expression.h Val2Expression.cpp
+	g++ $(CFLAGS) -o Val2Expression.o -c Val2Expression.cpp
+
+VariableValue.o: VariableValue.h VariableValue.cpp
+	g++ $(CFLAGS) -o VariableValue.o -c VariableValue.cpp
+
+CodeGenerator.o: CodeGenerator.h CodeGenerator.cpp
+	g++ $(CFLAGS) -o CodeGenerator.o -c CodeGenerator.cpp
+
+CInterpreter.o: CInterpreter.h CInterpreter.cpp
+	g++ $(CFLAGS) -o CInterpreter.o -c CInterpreter.cpp
+
+HeapManager.o: HeapManager.h HeapManager.cpp
+	g++ $(CFLAGS) -o HeapManager.o -c HeapManager.cpp
+
+CFunctions.o: CFunctions.h CFunctions.cpp
+	g++ $(CFLAGS) -o CFunctions.o -c CFunctions.cpp
+
+clean:
+	erase -f CodeGenerator.o
+	erase -f Assignment.o
+	erase -f pReturn.o
+	erase -f While.o
+	erase -f If.o
+	erase -f CommaSeparated.o
+	erase -f MethodCall.o
+	erase -f Expression.o
+	erase -f ExpressionList.o
+	erase -f LitBool.o
+	erase -f Literal.o
+	erase -f LitFloat.o
+	erase -f LitInt.o
+	erase -f LitString.o
+	erase -f pClassDefinition.o
+	erase -f pProcedureNode.o
+	erase -f pProgramNode.o
+	erase -f ProcedureCall.o
+	erase -f SingleMethodCall.o
+	erase -f Statements.o
+	erase -f Val2Expression.o
+	erase -f VariableValue.o
+	erase -f myparser.lex.o
+	erase -f myparser.y.o
+	erase -f yywrap.o
+	erase -f y.tab.h
+	erase -f y.tab.c
+	erase -f myparser.tab.h
+	erase -f myparser.tab.c
+	erase -f myparser.h
+	erase -f myparser.y.c
+	erase -f myparser.exe
+	erase -f myparser.lex.c
+	erase -f myparser.c
+	erase -f y.output
+	erase -f lex.yy.c
+	erase -f AssignmentNode.o
+	erase -f CFunctions.o
+	erase -f CInterpreter.o
+	erase -f ClassDefinition.o
+	erase -f DebugInfo.o
+	erase -f Disassembler.o
+	erase -f ExpressionNode.o
+	erase -f ExpressionParser.o
+	erase -f ExpressionThing.o
+	erase -f HeapManager.o
+	erase -f IfNode.o
+	erase -f Parse.o
+	erase -f parser.o
+	erase -f PException.o
+	erase -f PrintNode.o
+	erase -f ProcedureCallNode.o
+	erase -f ProcedureNode.o
+	erase -f ProgramNode.o
+	erase -f ReturnNode.o
+	erase -f Statement.o
+	erase -f myparser.exe.stackdump
+
+test: myparser.exe
+	./myparser.exe example.src
+	
+all: myparser.exe
+

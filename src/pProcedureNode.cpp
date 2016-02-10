@@ -23,6 +23,7 @@ pProcedureNode::pProcedureNode(string cname, string a_name, CommaSeparated* iden
    parameters = identifiers;
    statements = some_statements;
    local_variables = new map<string, uint16_t>();
+   cd = NULL;
 }
 
 
@@ -152,8 +153,8 @@ void pProcedureNode::print(int level) {
 }
 
 int pProcedureNode::getInstanceVarNum(string name) {
-   /* if (cd == NULL) {
-      return -1;
+   if (cd == NULL) {
+      return 0;
    }
    int i = 0;
    for (auto it : cd->getInstanceVariables()) {
@@ -162,7 +163,7 @@ int pProcedureNode::getInstanceVarNum(string name) {
       }
       i++;
    }
-   return -1; */
+   return 0; 
 }
 
 Statements* pProcedureNode::getStatements()
