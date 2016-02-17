@@ -16,7 +16,7 @@ private:
 public:
    Assignment(VariableValue*,Expression*);
    virtual ~Assignment();
-   virtual void print(int);
+   void print(int);
    virtual void emit(CodeGenerator*,pProcedureNode*);
    virtual string stype();
 };

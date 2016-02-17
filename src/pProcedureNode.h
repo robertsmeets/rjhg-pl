@@ -19,7 +19,7 @@
 #include "PException.h"
 #include "pReturn.h"
 #include "CFunctions.h"
-#include "ClassDefinition.h"
+#include "pClassDefinition.h"
 #include "pProgramNode.h"
 #include "Statements.h"
 #include "CommaSeparated.h"
@@ -37,14 +37,13 @@ class Statement;
 class pProcedureNode {
    string class_name;
    string name;
-   ClassDefinition* cd;
+   pClassDefinition* cd;
    CommaSeparated* parameters;
    vector<string> instance_variables;
    Statements* statements;
    map<string, uint16_t>* local_variables;
    uint16_t proc_address;
    uint16_t method_number;
-   pProgramNode* pn;
 
 public:
    pProcedureNode(string, string, CommaSeparated*, Statements*);

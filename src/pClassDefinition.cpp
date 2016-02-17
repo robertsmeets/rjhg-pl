@@ -1,10 +1,10 @@
 #include "pClassDefinition.h"
 
-#include <iostream>
 
 using namespace std;
 
 pClassDefinition::pClassDefinition(string class_name) {
+   classnum = 0;
    name = class_name;
 }
 
@@ -16,17 +16,13 @@ string pClassDefinition::getName() {
 }
 
 void pClassDefinition::print(int level) {
-   {
-      for (unsigned int i = 0; i < level; i++) {
-         cout << "+";
-      }
-      cout << "pClassDefinition" << endl;
-   }
-
+   for (int i = 0; i < level; i++) {
+      cout << "+";
+   } 
+   cout << "pClassDefinition " << name << endl;
 }
 
-vector <pProcedureNode*> pClassDefinition::getMethods()
-{
+vector<pProcedureNode*> pClassDefinition::getMethods() {
    return methods;
 }
 
@@ -46,8 +42,7 @@ unsigned int pClassDefinition::getClassNum() {
    return classnum;
 }
 
-void pClassDefinition::setClassNum(int n)
-{
+void pClassDefinition::setClassNum(int n) {
    classnum = n;
 }
 

@@ -17,7 +17,6 @@ using namespace std;
 class PrintNode : public Expression
 {
 private:
-	ProcedureNode* pn;
 	Expression* expression;
 public:
 	PrintNode(Expression*);
