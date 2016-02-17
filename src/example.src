@@ -11,7 +11,7 @@ method bla.one(x)
 proc main()
 {
    b = bla();
-   print b.one("hello");
+   print b.one(b.one("hello"));
 }
 
 

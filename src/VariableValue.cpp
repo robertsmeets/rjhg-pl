@@ -17,14 +17,12 @@ VariableValue::~VariableValue() {
 
 void VariableValue::print(int level) {
    for (int i = 0; i < level; i++) {
-   cout << "+";
+      cout << "+";
    }
    cout << "VariableValue " + value << endl;
 }
 
-
-void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
-{
+void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn) {
    map<string, uint16_t>* local_variables;
    map<string, uint16_t>::iterator foundIter;
    vector<string>* parameters;
@@ -35,49 +33,44 @@ void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn)
    //
    local_variables = pn->getLocalVariables();
    foundIter = local_variables->find(value);
-   if (foundIter == local_variables->end()) 
-   {
+   if (foundIter == local_variables->end()) {
       parameters = pn->getParameters();
-      for (it2 = parameters->begin(); it2 != parameters->end(); ++it2) 
-      {
-        if ((*it2) == value) {
-        uint16_t number = it2 - parameters->begin();
-//
-     // it is a parameter
-     //
-     cg->emit(3, 0, number, NULL); // LOD
-     break;
-   }
-   }
-   if (it2 == parameters->end()) 
-   {
-      //
-      // look for instance variable
-      //
-      uint16_t j = pn->getInstanceVarNum(value);
-      if (j != 0)
-      {
-       cg->emit(13, j, 0, NULL); // LODI
-       return;
+      for (it2 = parameters->begin(); it2 != parameters->end(); ++it2) {
+         if ((*it2) == value) {
+            uint16_t number = it2 - parameters->begin();
+            //
+            // it is a parameter
+            //
+            cg->emit(3, 0, number, NULL); // LOD
+            break;
+         }
       }
-      else {
+      if (it2 == parameters->end()) {
          //
-         // it is a local variable
+         // look for instance variable
          //
-    	  cout << "local variable" ;
-    	  int sz1 = pn->getParameters()->size();
-    	  int av = local_variables->at(value);
-         cg->emit(3, 0, sz1 + av, NULL); // LOD
+         uint16_t j = pn->getInstanceVarNum(value);
+         if (j != 0) {
+            cg->emit(13, j, 0, NULL); // LODI
+            return;
+         }
       }
-    }
-  }
+   } else {
+      //
+      // it is a local variable
+      //
+      cout << "local variable";
+      int sz1 = pn->getParameters()->size();
+      int av = local_variables->at(value);
+      cg->emit(3, 0, sz1 + av, NULL); // LOD
+   }
 
 }
 
-string VariableValue::stype() { return "VariableValue" ; }
+string VariableValue::stype() {
+   return "VariableValue";
+}
 
-
-string VariableValue::getName()
-{
+string VariableValue::getName() {
    return value;
 }

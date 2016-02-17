@@ -44,7 +44,6 @@ class pProcedureNode {
    map<string, uint16_t>* local_variables;
    uint16_t proc_address;
    uint16_t method_number;
-   pProgramNode* pn;
 
 public:
    pProcedureNode(string, string, CommaSeparated*, Statements*);

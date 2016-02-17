@@ -18,6 +18,8 @@ using namespace std;
  */
 pProcedureNode::pProcedureNode(string cname, string a_name, CommaSeparated* identifiers, Statements* some_statements)
 {
+   method_number =0;
+   proc_address = 0;
    class_name = cname;
    name = a_name;
    parameters = identifiers;
@@ -147,7 +149,7 @@ void pProcedureNode::print(int level) {
    for (int i=0;i<level;i++)
    {
       cout << "+" ;
-   }
+   } 
    cout << "pProcedureNode " << name << "(" << parameters->getIdentifiers()->size() << " params)" << endl;
    statements->print(level+1);
 }
