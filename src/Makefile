@@ -4,10 +4,15 @@
 #
 # add -DDEBUG for debug
 #
-CFLAGS=-std=c++11 -g 
-
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+#CFLAGS=-std=c++11 -g 
+CFLAGS=-std=c++11 -s -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections  -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,-z,norelro -Wl,--hash-style=gnu -Wl,--build-id=none
+#-fshort-double -fsingle-precision-constant 
+#-mfpmath=387 -mfancy-math-387
+#-ffast-math 
+ 
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
+	strip myparser.exe
 
 # add -v -t for debug
 
@@ -38,9 +43,6 @@ PrintNode.o: PrintNode.h PrintNode.cpp
 
 DebugInfo.o: DebugInfo.h DebugInfo.cpp
 	g++ $(CFLAGS) -o DebugInfo.o -c DebugInfo.cpp
-
-PException.o: PException.h PException.cpp
-	g++ $(CFLAGS) -o PException.o -c PException.cpp
 
 Assignment.o: Assignment.h Assignment.cpp
 	g++ $(CFLAGS) -o Assignment.o -c Assignment.cpp
@@ -167,7 +169,6 @@ clean:
 	rm -f IfNode.o
 	rm -f Parse.o
 	rm -f parser.o
-	rm -f PException.o
 	rm -f PrintNode.o
 	rm -f ProcedureCallNode.o
 	rm -f ProcedureNode.o

@@ -284,7 +284,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 			//
 			for (;;) {
 				if (stack.empty()) {
-					throw PException(
+					puts(
 							"stack was empty when looking for '(' after a function call");
 				}
 				string value = stack.top();
@@ -502,7 +502,7 @@ unsigned int ExpressionParser::getString(string expression, unsigned int i) {
 			return j + 1;
 		}
 	}
-	throw new PException("found unmatched double quote in " + expression);
+	puts("found unmatched double quote in " + expression);
 }
 
 //
@@ -513,7 +513,7 @@ ExpressionNode ExpressionParser::parse(string s) {
 // Example: string s = "( 1 + 2) * ( 3 / 4 )-(5+6)";
 //
 	if (s.size() == 0) {
-		throw PException("empty expression [" + s + "]");
+		puts("empty expression [" + s + "]");
 	}
 //
 // Tokenize input expression
@@ -532,7 +532,7 @@ printf(endl;
 //
 	vector<ExpressionThing> rpn;
 	if (!infixToRPN(tokens, tokens.size(), rpn)) {
-		throw PException("Mis-match in parentheses: " + s);
+		puts("Mis-match in parentheses: " + s);
 	}
 	ExpressionNode en;
 	en.setRpn(rpn);

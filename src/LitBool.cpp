@@ -18,7 +18,7 @@ LitBool::LitBool(char* s)
       }
       else
       {
-          throw PException("boolean must be true or false");
+          puts("boolean must be true or false");
       }
    }
 }

@@ -32,7 +32,7 @@ void pProgramNode::addMethodDefinition(pProcedureNode* m) {
    pClassDefinition* c = getClass(m->getClassName());
    if (c==NULL)
    {
-      throw new PException("Class " + m->getClassName() + " does not exist");
+     puts("Class does not exist");
    }
    m->setMethodNumber(assignMethodNumber(m->getName()));
    c->add_method(m);
