@@ -289,7 +289,7 @@ bool ExpressionParser::infixToRPN(const vector<string>& inputTokens,
 				}
 				string value = stack.top();
 #ifdef DEBUG
-				cout << "VALUE is [" << value << "]" << endl;
+				printf("VALUE is [" << value << "]" );
 #endif
 				if ((value == "(") || isFunction(value)) {
 					break;
@@ -453,7 +453,7 @@ string ExpressionParser::getBoolean(string expression, unsigned int i) {
  * if this is not a function call, then return an empty string.
  */
 string ExpressionParser::getFunction(string expression, unsigned int i) {
-	cout << "getFunction " << expression << " at " << i <<  endl;
+	printf("getFunction " << expression << " at " << i <<  endl;
 	string str = "";
 	bool whitespace = false;
 	for (unsigned int j = i; j < expression.length(); j++) {
@@ -520,13 +520,13 @@ ExpressionNode ExpressionParser::parse(string s) {
 //
 	vector<string> tokens = getExpressionTokens(s);
 
-	cout << "ExpressionParser::parse(" << s << ")" << endl;
-	cout << "TOKENS: " ;
+	printf("ExpressionParser::parse(" << s << ")" );
+	printf("TOKENS: " ;
 for (auto a_token:tokens)
 {
-	cout << "[" << a_token << "]" ;
+	printf("[" << a_token << "]" ;
 }
-cout << endl;
+printf(endl;
 //
 // Evaluate feasible expressions
 //

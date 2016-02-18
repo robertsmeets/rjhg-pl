@@ -8,7 +8,7 @@
 #ifndef EXPRESSIONNODE_H_
 #define EXPRESSIONNODE_H_
 
-#include <iostream>
+#include "stdio.h"
 #include <vector>
 #include <string>
 

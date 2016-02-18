@@ -148,7 +148,7 @@ void HeapManager::garbageCollect() {
 	// the references are gathered. Find the holes.
 	//
 #ifdef DEBUG
-	cout << "--- Here come the addresses" << endl;
+	printf("--- Here come the addresses" );
 #endif
 	unsigned int last = 0;
 	for (auto const &it : vaddresses) {
@@ -157,7 +157,7 @@ void HeapManager::garbageCollect() {
 		// it.second is the length
 		//
 #ifdef DEBUG
-		cout << "address " << it.address << " length " << it.len << endl;
+		printf("address " << it.address << " length " << it.len );
 #endif
 		if (it.address > last) {
 			//
@@ -168,7 +168,7 @@ void HeapManager::garbageCollect() {
 			//
 			memmove(space + last, space + it.address, it.len);
 #ifdef DEBUG
-			cout << "Moved " << it.len << " bytes from " << it.address << " to " << last << endl;
+			printf("Moved " << it.len << " bytes from " << it.address << " to " << last );
 #endif
 			movetable[it.address] = last;
 		}
@@ -178,11 +178,11 @@ void HeapManager::garbageCollect() {
 	// set here to the new value
 	//
 #ifdef DEBUG
-	cout << "reclaimed " << here - space - last << " bytes" << endl;
+	printf("reclaimed " << here - space - last << " bytes" );
 #endif
 	here = space + last;
 #ifdef DEBUG
-	cout << "--- Those were the addresses" << endl;
+	printf("--- Those were the addresses" );
 #endif
 	//
 	// all data is moved. Now fix up the addresses.
@@ -192,7 +192,7 @@ void HeapManager::garbageCollect() {
 		if (movetable.find(it.first) != movetable.end()) {
 			unsigned int new_address = movetable[it.first];
 #ifdef DEBUG
-			cout << "fixing stack entry "<< (*s)[it.second].address <<" to " << new_address << endl;
+			printf("fixing stack entry "<< (*s)[it.second].address <<" to " << new_address );
 #endif
 			(*s)[it.second].address = new_address;
 		}

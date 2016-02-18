@@ -12,9 +12,9 @@ LitString::LitString(string s)
 void LitString::print(int level)
 {
 	{for (unsigned int i = 0; i < level; i++) {
-				cout << "+";
+				printf("+");
 			}
-	cout << "LitString" << endl;
+	printf("LitString\n" );
 			}
 }
 

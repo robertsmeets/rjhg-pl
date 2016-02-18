@@ -9,7 +9,7 @@
 #define EXPRESSIONTHING_H_
 
 #include <string>
-#include <iostream>
+#include "stdio.h"
 
 using namespace std;
 

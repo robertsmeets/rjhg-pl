@@ -9,7 +9,7 @@
 #define EXPRESSIONPARSER_H_
 
 #include <stdlib.h>
-#include <iostream>
+#include "stdio.h"
 #include <sstream>
 #include <list>
 #include <stack>

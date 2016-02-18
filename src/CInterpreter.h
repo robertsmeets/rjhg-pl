@@ -9,7 +9,7 @@
 #define INTERPRETER_SRC_INTERPRETER_H_
 
 #include <vector>
-#include <iostream>
+#include "stdio.h"
 #include <cstdlib>
 #include <cstring>
 #include <sstream>

@@ -17,9 +17,9 @@ string pClassDefinition::getName() {
 
 void pClassDefinition::print(int level) {
    for (int i = 0; i < level; i++) {
-      cout << "+";
+      printf("+");
    } 
-   cout << "pClassDefinition " << name << endl;
+   printf("pClassDefinition \n" );
 }
 
 vector<pProcedureNode*> pClassDefinition::getMethods() {

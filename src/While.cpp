@@ -11,9 +11,9 @@ While::~While() {
 
 void While::print(int level) {
 	for (unsigned int i = 0; i < level; i++) {
-		cout << "+";
+		printf("+");
 	}
-	cout << "While " << endl;
+	printf("While\n" );
 	expression->print(level+1);
         statements->print(level+1);
 }

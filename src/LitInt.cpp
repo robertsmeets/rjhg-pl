@@ -13,9 +13,9 @@ LitInt::LitInt(char* a_string)
 void LitInt::print(int level)
 {
 	{for (unsigned int i = 0; i < level; i++) {
-				cout << "+";
+				printf("+");
 			}
-		cout << "LitInt " << value << endl;
+		printf("LitInt %f\n" , value );
 			}
 
 }

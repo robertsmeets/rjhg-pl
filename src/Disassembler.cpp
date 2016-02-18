@@ -21,7 +21,7 @@ Disassembler::~Disassembler() {
 }
 
 void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
-	cout << "Starting disassembler..." << endl;
+	printf("Starting disassembler..." );
 	if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
 			&& buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
 		throw PException("Magic number does not match, invalid bytecode");
@@ -32,13 +32,13 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 	hexdump(buffer, size);
 	i = buffer[6] + buffer[7] * 256;
 	for (; i < size;) {
-		cout << i << " ";
+		printf("%d ",i );
 		char f = buffer[i];
-		cout << "f=" << (unsigned int) f << " ";
+		printf("f= %d ", (unsigned int) f);
 		unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
 		unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
 		string s = decode(f, l, a);
-		cout << s << endl;
+		printf("%s",s.c_str() );
 	}
 }
 
@@ -88,7 +88,7 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 			i += 5;
 			break;
 		default:
-			cout << "unexpected LIT value" << endl;
+			printf("unexpected LIT value" );
 			i += 5;
 			break;
 		}
@@ -198,7 +198,7 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
 	default:
 		sf = "-----------------------------------+> unexpected F value: "
 				+ int(f);
-		cout << " F=" << (unsigned int) f << " L=" << l << " A=" << a << endl;
+		printf(" F=%d L=%d A=%d" , (unsigned int) f , l , a );
 		i += 5;
 		break;
 	}

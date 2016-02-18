@@ -144,10 +144,10 @@ void ProcedureNode::fixReturn() {
 void ProcedureNode::print( int level) {
 	for (int i=0;i<level;i++)
 	{
-		cout << "+" ;
+		printf("+" ;
 	}
-	cout << "ProcedureNode " << name << "(" << parameters->size() << " params)"
-			<< endl;
+	printf("ProcedureNode " << name << "(" << parameters->size() << " params)"
+			);
 	for (auto s : statements) {
 		s->print(level + 1);
 	}

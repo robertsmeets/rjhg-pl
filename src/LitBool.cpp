@@ -26,9 +26,9 @@ LitBool::LitBool(char* s)
 void LitBool::print(int level)
 {
 	for (int i = 0; i < level; i++) {
-		cout << "+";
+		printf("+");
 	}
-	cout << "LitBool" << endl;
+	printf("LitBool\n" );
 	
 
 }

@@ -17,9 +17,9 @@ VariableValue::~VariableValue() {
 
 void VariableValue::print(int level) {
    for (int i = 0; i < level; i++) {
-      cout << "+";
+      printf("+");
    }
-   cout << "VariableValue " + value << endl;
+   printf("VariableValue\n");
 }
 
 void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn) {
@@ -59,7 +59,7 @@ void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn) {
       //
       // it is a local variable
       //
-      cout << "local variable";
+      printf("local variable");
       int sz1 = pn->getParameters()->size();
       int av = local_variables->at(value);
       cg->emit(3, 0, sz1 + av, NULL); // LOD

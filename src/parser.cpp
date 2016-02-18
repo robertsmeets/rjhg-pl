@@ -18,12 +18,12 @@ using namespace std;
 
 int pmain(int argc, char* argv[]) {
 	if (argc != 2) {
-		cout << "Must provide filename as an argument, example " << argv[0]
-				<< " c:\\\\test\\\\test.src" << endl;
+		printf("Must provide filename as an argument, example " << argv[0]
+				<< " c:\\\\test\\\\test.src" );
 		return -1;
 	}
 	string filename = argv[1];
-	cout << "Parsing... " << filename << " ... " << endl;
+	printf("Parsing... " << filename << " ... " );
 	Parse p;
 	CodeGenerator cg;
 	DebugInfo di(cg.getCodeBuffer(),p.getBuffer());
@@ -48,7 +48,7 @@ int pmain(int argc, char* argv[]) {
 		CInterpreter i(cg.getCodeBuffer(),&di);
 		i.start();
 	} catch (PException & E) {
-		cout << "Exception: " << E.ShowReason() << endl;
+		printf("Exception: " << E.ShowReason() );
 		return -1;
 	}
 	return 0;

@@ -148,9 +148,9 @@ void pProcedureNode::fixReturn() {
 void pProcedureNode::print(int level) {
    for (int i=0;i<level;i++)
    {
-      cout << "+" ;
+      printf("+") ;
    } 
-   cout << "pProcedureNode " << name << "(" << parameters->getIdentifiers()->size() << " params)" << endl;
+   printf("pProcedureNode \n" );
    statements->print(level+1);
 }
 

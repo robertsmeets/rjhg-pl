@@ -2,16 +2,17 @@
 class bla
 {}
 
-method bla.one(x)
+method bla.one()
 {
-   return x+x;
+   print "HI";
+   return bla();
 }
 
 
 proc main()
 {
    b = bla();
-   print b.one(b.one("hello"));
+   print b.one().one().one().one();
 }
 
 

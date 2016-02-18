@@ -9,9 +9,9 @@ void Statements::addStatement(Expression* s) {
 
 void Statements::print(int level) {
 	for (int i = 0; i < level; i++) {
-		cout << "+";
+		printf("+");
 	}
-   cout << "Statements" << endl;
+   printf("Statements\n" );
 	for (Expression* a_statement:statements)
 	{
 		a_statement->print(level+1);

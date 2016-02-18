@@ -46,7 +46,7 @@ void Parse::start(string filename) {
 	myfile.clear();
 	myfile.seekg(0, ios::beg);
 	if (!myfile.read(buffer.data(), size)) {
-		cout << "File " << filename << " could not be opened" << endl;
+		printf("File " << filename << " could not be opened" );
 		return;
 	}
 	//
@@ -55,7 +55,7 @@ void Parse::start(string filename) {
 	myfile.close();
 
 #ifdef DEBUG
-	cout << "Just read " << size << " bytes into memory" << endl;
+	printf("Just read " << size << " bytes into memory" );
 #endif
 
 	parse_from_memory();

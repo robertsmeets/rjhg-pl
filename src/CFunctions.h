@@ -8,7 +8,7 @@
 #ifndef CFUNCTIONS_H_
 #define CFUNCTIONS_H_
 
-#include <iostream>
+#include "stdio.h"
 using namespace std;
 
 unsigned int func_plus_ii(unsigned int, unsigned int);

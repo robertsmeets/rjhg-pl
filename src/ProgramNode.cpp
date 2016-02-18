@@ -66,7 +66,7 @@ unsigned int ProgramNode::getMethodNumber(string method_name) {
 
 void ProgramNode::print()
 {
-   cout << "ProgramNode" << endl;
+   printf("ProgramNode" );
    for (auto cd:classes)
    {
       cd->print(1);

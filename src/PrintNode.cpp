@@ -33,8 +33,8 @@ string PrintNode::stype() {
 void PrintNode::print(int level) {
 	for (int i=0;i<level;i++)
 		{
-			cout << "+" ;
+			printf("+" );
 		}
-	cout << "PrintNode" << endl;
+	printf("PrintNode" );
 	expression->print(level + 1);
 }

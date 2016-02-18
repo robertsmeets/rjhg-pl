@@ -37,17 +37,13 @@ void pProgramNode::addMethodDefinition(pProcedureNode* m) {
    m->setMethodNumber(assignMethodNumber(m->getName()));
    c->add_method(m);
    methods.push_back(m);
-   for (auto it = method_numbers.begin(); it != method_numbers.end(); it++)
-   {
-      cout << it->first <<  it->second << endl;
-   }
 }
 
 void pProgramNode::print(int level) {
    for (int i = 0; i < level; i++) {
-      cout << "+";
+      printf("+");
    }
-   cout << "pProgramNode" << endl;
+   printf("pProgramNode\n" );
    for (pClassDefinition* a_class : my_classes) {
       a_class->print(level + 1);
    }
@@ -80,17 +76,14 @@ pClassDefinition* pProgramNode::getClass(string class_name) {
 }
 
 unsigned int pProgramNode::assignMethodNumber(string method_name) {
-   cout << "assignMethodNumber("<<method_name<<") " << endl;
    auto it = method_numbers.find(method_name);
    unsigned int i;
    if (it == method_numbers.end()) {
       method_numbers[method_name] = next_methodnumber;
       i = next_methodnumber;
-      cout << "new number = " << i << endl;
       next_methodnumber++;
    } else {
       i = it->second;
-      cout << "already existing " << i << endl;
    }
    return i;
 }
