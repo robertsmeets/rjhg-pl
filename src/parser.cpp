@@ -6,7 +6,6 @@
 
 #include "Parse.h"
 #include "CodeGenerator.h"
-#include "PException.h"
 #include "Disassembler.h"
 #include "CInterpreter.h"
 #include "DebugInfo.h"
@@ -27,7 +26,6 @@ int pmain(int argc, char* argv[]) {
 	Parse p;
 	CodeGenerator cg;
 	DebugInfo di(cg.getCodeBuffer(),p.getBuffer());
-	try {
 		//
 		// start the parser
 		//
@@ -47,9 +45,5 @@ int pmain(int argc, char* argv[]) {
 		//
 		CInterpreter i(cg.getCodeBuffer(),&di);
 		i.start();
-	} catch (PException & E) {
-		printf("Exception: " << E.ShowReason() );
-		return -1;
-	}
 	return 0;
 }

@@ -280,7 +280,7 @@ vector<Statement*> Parse::block(ProcedureNode* pd) {
 			//
 			statements.push_back(procedure_call(pd));
 		} else {
-			throw PException("Unknown statement [" + peek_string + "]");
+			puts("Unknown statement [" + peek_string + "]");
 		}
 	}
 	return statements;
@@ -322,7 +322,7 @@ void Parse::instance_variable_definition() {
 }
 
 void Parse::immediate_code() {
-	throw PException("unexpected string [" + peek_string + "]");
+	puts("unexpected string [" + peek_string + "]");
 }
 
 /**
@@ -389,7 +389,7 @@ Statement* Parse::if_statement(ProcedureNode* pd) {
 		s_false = block(pd);
 	}
 	if (peek_string != "endif") {
-		throw PException("missing endif, instead " + peek_string);
+		puts("missing endif, instead " + peek_string);
 	}
 	IfNode* in = new IfNode(pd, en, s_true, s_false, last_linepos, last_charpos,
 			last_offset);
@@ -405,7 +405,7 @@ Statement* Parse::while_statement(ProcedureNode* pd) {
 	ExpressionNode en = ep.parse(expression);
 	vector<Statement*> statements = block(pd);
 	if (peek_string != "endwhile") {
-		throw PException("missing endwhile, instead " + peek_string);
+		puts("missing endwhile, instead " + peek_string);
 	}
 	WhileNode* wn = new WhileNode(pd, en, statements, last_linepos,
 			last_charpos, last_offset);

@@ -20,7 +20,7 @@
 #include "ProcedureNode.h"
 #include "ExpressionThing.h"
 #include "AssignmentNode.h"
-#include "PException.h"
+
 #include "DebugInfo.h"
 #include "pClassDefinition.h"
 #include "Expression.h"

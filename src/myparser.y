@@ -276,8 +276,6 @@ setvbuf(stdout, NULL, _IONBF, 0);
    fclose(yyin);
    glob->print(0);
    CodeGenerator cg;
-   try
-   {
       cg.start(glob,NULL);
       Disassembler d; 
       d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
@@ -286,10 +284,6 @@ setvbuf(stdout, NULL, _IONBF, 0);
       //
       CInterpreter i(cg.getCodeBuffer(),NULL);
       i.start();
-   } catch (PException & E) {
-      cout << "Exception: " << E.ShowReason() << endl;
-      return -1;
-   }
 }
 
 

@@ -278,7 +278,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
          here += strlen;
          break;
       default:
-         throw PException("Unexpected ExpressionThing type");
+         puts("Unexpected ExpressionThing type");
          break;
       }
    }  */
@@ -290,7 +290,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
 void CodeGenerator::emitOperation(char avalue, Expression* s) {
    uint16_t atype = opr_mapping[avalue];
    if (atype == 0) {
-      throw PException("Unexpected Operation" + avalue);
+      puts("Unexpected Operation" + avalue);
    } else {
       emit(2, 0, atype, s);
    }
@@ -432,7 +432,7 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s)
       // dealing with a dynamic call, to a library function
       // The string is saved.
       //
-      throw PException("Procedure not found <" +procedure_name + ">");
+      puts("Procedure not found" );
       uint16_t strlen = procedure_name.length();
       emit(10, 1, strlen, s);
       addCallAddress(here - 2, procedure_name);

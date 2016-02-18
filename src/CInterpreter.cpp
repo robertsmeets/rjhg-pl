@@ -140,7 +140,7 @@ void CInterpreter::start() {
 void CInterpreter::check_magic_number() {
    if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
          && buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
-      throw PException("Magic number does not match, invalid bytecode");
+      puts("Magic number does not match, invalid bytecode");
    }
 }
 
@@ -234,7 +234,7 @@ int CInterpreter::execute_next() {
          t++;
          break;
       default:
-         throw PException("unexpected LIT value " + s[t].atype);
+         puts("unexpected LIT value " + s[t].atype);
       }
       break;
    case 2: // opr
@@ -286,7 +286,7 @@ int CInterpreter::execute_next() {
 #endif
          fr1 = s[t - 1];
          if (fr1.atype != 2) {
-            throw PException("type must be integer");
+            puts("type must be integer");
          }
          fr1.address = -fr1.address;
          s[t - 1] = fr1;
@@ -377,10 +377,7 @@ int CInterpreter::execute_next() {
             memcpy(st + fr3->address, &d3, 8);
             s[t - 1] = *fr3;
          } else {
-            ostringstream oss;
-            oss << "operation " << a << ": incompatible types " << fr1.atype
-                  << " and " << fr2.atype;
-            throw PException(oss.str());
+            printf("incompatible types %d and %d\n",fr1.atype,fr2.atype);
          }
          break;
       case 5:
@@ -391,7 +388,7 @@ int CInterpreter::execute_next() {
          fr1 = s[t - 1];
          fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
-            throw PException("division both types must be integer");
+            puts("division both types must be integer");
          }
          fr1.atype = 2;
          fr1.address = fr1.address / fr2.address;
@@ -405,7 +402,7 @@ int CInterpreter::execute_next() {
          fr1 = s[t - 1];
          fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
-            throw PException("modulo both types must be integer");
+            puts("modulo both types must be integer");
          }
          fr1.atype = 2;
          fr1.address = fr1.address % fr2.address;
@@ -464,16 +461,13 @@ int CInterpreter::execute_next() {
             fr1.address = eq;
             s[t - 1] = fr1;
          } else {
-            ostringstream oss;
-            oss << "operation " << a << ": incompatible types " << fr1.atype
-                  << " and " << fr2.atype;
-            throw PException(oss.str());
+            printf( "operation %d: incompatible types %d and %d\n",fr1.atype,fr2.atype);
          }
 
          break;
 
       default:
-         throw PException("unexpected A value");
+         puts("unexpected A value");
          return -1;
          break;
       }
@@ -536,7 +530,7 @@ int CInterpreter::execute_next() {
 #endif
       fr1 = s[t - 1];
       if (fr1.atype != 6) {
-         throw PException("JPC value is not boolean");
+         puts("JPC value is not boolean");
       }
       if (fr1.address == 0) {
          pc = a;
@@ -570,9 +564,7 @@ int CInterpreter::execute_next() {
       } else if (fr1.atype == 8) {
          printf("A fancy object" );
       } else {
-         stringstream out;
          printf( "Cannot print something of type %d\n", fr1.atype );
-         throw PException(out.str());
       }
       break;
 
@@ -638,7 +630,7 @@ int CInterpreter::execute_next() {
       //
       t--;
       if (s[t].atype != 8) {
-         throw PException("Performed a method call on a nonfancy object");
+         puts("Performed a method call on a nonfancy object");
       }
       ptr = hm->getStart() + s[t].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
@@ -703,7 +695,7 @@ int CInterpreter::execute_next() {
       t--;
       break;
    default:
-      throw PException("unexpected F value");
+      puts("unexpected F value");
       break;
    }
    //
@@ -770,7 +762,7 @@ void CInterpreter::call_external(char* function_name,
     const char* lp = libpath.c_str();
     DLLib* ll = dlLoadLibrary(lp);
     if (ll == NULL) {
-    throw PException("could not find library " + libpath);
+    puts("could not find library " + libpath);
     }
     //
     // dlLoadLibrary loads a dynamic library at libpath and returns a handle
@@ -779,7 +771,7 @@ void CInterpreter::call_external(char* function_name,
     //
     DCpointer sym = dlFindSymbol(ll, function_name);
     if (sym == NULL) {
-    throw PException("could not find external symbol");
+    puts("could not find external symbol");
     }
     DCCallVM* vm = dcNewCallVM(4096);
     dcMode(vm, DC_CALL_C_DEFAULT);
@@ -810,7 +802,7 @@ void CInterpreter::call_external(char* function_name,
     free(str);
     break;
     default:
-    throw PException("unexpected type in external call");
+    puts("unexpected type in external call");
     }
     double r = dcCallDouble(vm, sym);
     // dcCallPointer(vm,sym);

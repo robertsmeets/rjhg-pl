@@ -94,7 +94,7 @@ void Expression::emit(CodeGenerator*, pProcedureNode* pn) {
 		here += strlen;
 		break;
 	default:
-		throw PException("Unexpected ExpressionThing type");
+		puts("Unexpected ExpressionThing type");
 		break;
 	}
 */
