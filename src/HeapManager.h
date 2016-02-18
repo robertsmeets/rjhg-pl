@@ -9,7 +9,7 @@
 #define HEAPMANAGER_H_
 
 #include <cstdlib>
-#include <iostream>
+#include "stdio.h"
 #include <algorithm>
 #include <map>
 #include <cstring>

@@ -95,7 +95,7 @@ vector<stack_element>* CInterpreter::getStack() {
 }
 
 void CInterpreter::start() {
-   cout << "Starting interpreter..." << endl;
+   printf("Starting interpreter...\n" );
    methodmap.clear();
    check_magic_number();
    pc = find_offset();
@@ -103,7 +103,7 @@ void CInterpreter::start() {
    // fill the methodmap
    //
 #ifdef DEBUG
-       cout << "start filling methodmap" << endl; 
+       printf("start filling methodmap" ); 
 #endif
    for (uint16_t j = 8; j < pc; j += 8) {
       uint16_t classnum = (buffer[j] & 0xff)
@@ -122,14 +122,14 @@ void CInterpreter::start() {
          methodmap[methodnum] = map<uint16_t, uint16_t[3]>();
       }
 #ifdef DEBUG
-       cout << "adding a method to the methodmap address = " << address << " num_params = " << num_params << " num_local_vars = " << num_local_vars << endl; 
+       printf("adding a method to the methodmap address = " << address << " num_params = " << num_params << " num_local_vars = " << num_local_vars ); 
 #endif
       methodmap[methodnum][classnum][0] = address;
       methodmap[methodnum][classnum][1] = num_params;
       methodmap[methodnum][classnum][2] = num_local_vars;
    }
 #ifdef DEBUG
-       cout << "end filling methodmap" << endl; 
+       printf("end filling methodmap" ); 
 #endif
    unsigned i = 0;
    for (; !i;) {
@@ -162,7 +162,7 @@ int CInterpreter::execute_next() {
    //
    // di->printLine(pc);
 #ifdef DEBUG
-   cout << "pc=x" << hex << pc << dec << ": ";
+   printf("pc=x" << hex << pc << dec << ": ";
 #endif
    unsigned short int f = *((char*) buffer + pc) & 0xff;
    pc++;
@@ -190,7 +190,7 @@ int CInterpreter::execute_next() {
    switch (f) {
    case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-   cout << "LIT " << l << "," << a;
+   printf("LIT " << l << "," << a;
 #endif
       switch (l) {
       case 2: // Int
@@ -239,7 +239,7 @@ int CInterpreter::execute_next() {
       break;
    case 2: // opr
 #ifdef DEBUG
-   cout << "OPR";
+   printf("OPR";
 #endif
 
       iiptr aiiptr;
@@ -255,11 +255,11 @@ int CInterpreter::execute_next() {
       switch (a) {
       case 0:
 #ifdef DEBUG
-         cout << " RET l= " << l;
+         printf(" RET l= " << l;
 #endif
          // return
          if (tr <= 0) {
-            cout << "Exiting program..." << endl;
+            printf("Exiting program..." );
             // exit
             return -1;
          }
@@ -282,7 +282,7 @@ int CInterpreter::execute_next() {
          break;
       case 1:
 #ifdef DEBUG
-         cout << " UNARY MINUS";
+         printf(" UNARY MINUS";
 #endif
          fr1 = s[t - 1];
          if (fr1.atype != 2) {
@@ -295,7 +295,7 @@ int CInterpreter::execute_next() {
       case 3:
       case 4:
 #ifdef DEBUG
-         cout << " PLUS, MINUS oR MUL";
+         printf(" PLUS, MINUS oR MUL";
 #endif
          t--;
          fr1 = s[t - 1];
@@ -385,7 +385,7 @@ int CInterpreter::execute_next() {
          break;
       case 5:
 #ifdef DEBUG
-         cout << " DIV";
+         printf(" DIV";
 #endif
          t--;
          fr1 = s[t - 1];
@@ -399,7 +399,7 @@ int CInterpreter::execute_next() {
          break;
       case 6:
 #ifdef DEBUG
-         cout << " MOD";
+         printf(" MOD";
 #endif
          t--;
          fr1 = s[t - 1];
@@ -480,7 +480,7 @@ int CInterpreter::execute_next() {
       break;
    case 3:
 #ifdef DEBUG
-      cout << "LOD " << a << " ";
+      printf("LOD " << a << " ";
 #endif
       //
       // lod: copy a local variable or parameter on top of the stack
@@ -490,7 +490,7 @@ int CInterpreter::execute_next() {
       break;
    case 4:   // sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-   cout << "STO " << a << " ";
+   printf("STO " << a << " ";
 #endif
       t--;
       s[b[tb - 1] + a] = s[t];
@@ -501,7 +501,7 @@ int CInterpreter::execute_next() {
       // call the procedure
       //
 #ifdef DEBUG
-      cout << "CAL " << a;
+      printf("CAL " << a;
 #endif
       r[tr] = pc;
       tr++;
@@ -509,7 +509,7 @@ int CInterpreter::execute_next() {
       break;
    case 6:         // int:
 #ifdef DEBUG
-   cout << "INT " << l << "," << a;
+   printf("INT " << l << "," << a;
 #endif
       //
       // this creates a new block with depth a for local variables and parameters
@@ -526,13 +526,13 @@ int CInterpreter::execute_next() {
       break;
    case 7:         // jmp
 #ifdef DEBUG
-   cout << "JMP " << a;
+   printf("JMP " << a;
 #endif
       pc = a;
       break;
    case 8:         // jpc - jump when false
 #ifdef DEBUG
-   cout << "JPC " << a;
+   printf("JPC " << a;
 #endif
       fr1 = s[t - 1];
       if (fr1.atype != 6) {
@@ -545,7 +545,7 @@ int CInterpreter::execute_next() {
       break;
    case 9: // print
 #ifdef DEBUG
-   cout << "PRINT " << a;
+   printf("PRINT " << a;
 #endif
       t--;
       fr1 = s[t];
@@ -558,27 +558,27 @@ int CInterpreter::execute_next() {
          //
          char* ptr = hm->getStart() + fr1.address;
          memcpy(&d1, ptr, 8);
-         cout << d1 << endl;
+         printf("%f",d1 );
       } else if (fr1.atype == 2) {
-         cout << fr1.address << endl;
+         printf("%d",fr1.address );
       } else if (fr1.atype == 6) { // boolean
          if (fr1.address) {
-            cout << "true" << endl;
+            printf("true" );
          } else {
-            cout << "false" << endl;
+            printf("false" );
          }
       } else if (fr1.atype == 8) {
-         cout << "A fancy object" << endl;
+         printf("A fancy object" );
       } else {
          stringstream out;
-         out << "Cannot print something of type " << fr1.atype << endl;
+         printf( "Cannot print something of type %d\n", fr1.atype );
          throw PException(out.str());
       }
       break;
 
    case 10: // external function call
 #ifdef DEBUG
-   cout << "EXTCALL " << a;
+   printf("EXTCALL " << a;
 #endif
       // parameters should have already been pushed on the stack
       //
@@ -600,7 +600,7 @@ int CInterpreter::execute_next() {
       break;
    case 11: // object creation
 #ifdef DEBUG
-   cout << "OBJCREATE " << l<<"," << a;
+   printf("OBJCREATE " << l<<"," << a;
 #endif
 
       //
@@ -624,7 +624,7 @@ int CInterpreter::execute_next() {
       break;
    case 12:
 #ifdef DEBUG
-      cout << "METHODCALL " << l << " ";
+      printf("METHODCALL " << l << " ";
 #endif
       // method call, the object is already on the stack.
       //
@@ -643,7 +643,7 @@ int CInterpreter::execute_next() {
       ptr = hm->getStart() + s[t].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
 #ifdef DEBUG
-                cout << "classnum = " << classnum << " ";
+                printf("classnum = " << classnum << " ";
 #endif
       //
       // this creates a new block with depth for local variables and parameters
@@ -663,7 +663,7 @@ int CInterpreter::execute_next() {
       break;
    case 13:
 #ifdef DEBUG
-      cout << "LODI " << l << " ";
+      printf("LODI " << l << " ";
 #endif
       // access an instance variable and put it on the stack
       //
@@ -683,7 +683,7 @@ int CInterpreter::execute_next() {
       break;
    case 14:
 #ifdef DEBUG
-      cout << "STOI " << l << " ";
+      printf("STOI " << l << " ";
 #endif
       // store a value inside an inst. variable
       //
@@ -710,40 +710,40 @@ int CInterpreter::execute_next() {
    // print the stack
    //
 #ifdef DEBUG
-   cout << "      stack: ";
+   printf("      stack: ";
    for (uint16_t i = 0; i < t; i++) {
       char* adr;
-      cout << "[";
+      printf("[";
       switch (s[i].atype) {
          case 2:
-            cout << s[i].address;
+            printf(s[i].address;
             break;
          case 5:
             adr = hm->getStart() + s[i].address;
             double d;
             memcpy(&d, adr, 8);
-            cout << d;
+            printf(d;
             break;
          case 7: // string
             adr = hm->getStart() + s[i].address;
             print_a_string(adr,false);
-            cout << "]";
+            printf("]";
             break;
          default:
-            cout << "?" << s[i].atype;
+            printf("?" << s[i].atype;
             break;
       }
-      cout << "]";
+      printf("]";
    }
-   cout << "      bstack: ";
+   printf("      bstack: ";
    for (uint16_t i = 0; i < tb; i++) {
-      cout << b[i] << " ";
+      printf(b[i] << " ";
    }
-   cout << "      rstack: ";
+   printf("      rstack: ";
    for (uint16_t i = 0; i < tr; i++) {
-      cout << "x" << hex << r[i] << dec << " ";
+      printf("x" << hex << r[i] << dec << " ";
    }
-   cout << endl;
+   printf(endl;
 #endif
    return 0;
 }
@@ -753,14 +753,14 @@ void CInterpreter::print_a_string(char* ptr,bool b) {
    print_a_string(ptr + 2, len);
    if (b)
    {
-      cout << endl;
+      printf("\n");
    }
 
 }
 
 void CInterpreter::print_a_string(char* ptr, uint16_t len) {
    for (char* i = ptr; i < ptr + len; i++) {
-      cout << *i;
+      printf("%c",*i);
    }
 }
 

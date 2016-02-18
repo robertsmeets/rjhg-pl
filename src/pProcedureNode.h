@@ -10,7 +10,7 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
+#include "stdio.h"
 #include <map>
 #include <algorithm>
 #include "stdint.h"

@@ -51,8 +51,8 @@ void ReturnNode::print(int level)
 {
 	for ( int i=0;i<level;i++)
 		{
-			cout << "+" ;
+			printf("+" ;
 		}
 
-	cout << "ReturnNode" << endl;
+	printf("ReturnNode" );
 }

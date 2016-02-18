@@ -48,7 +48,7 @@ void AssignmentNode::emit(CodeGenerator* cg) {
 		//
 		// emit a STOI
 		//
-		cout << "void AssignmentNode::emit(CodeGenerator* cg) STOI " << lhs << endl;
+		printf("void AssignmentNode::emit(CodeGenerator* cg) STOI " << lhs );
 		cg->emit(14, lhs, 0, this);
 	} else {
 		//
@@ -70,9 +70,9 @@ string AssignmentNode::stype() {
 void AssignmentNode::print(int level) {
 	for (unsigned int i=0;i<level;i++)
 		{
-			cout << "+" ;
+			printf("+" ;
 		}
-	cout << "AssignmentNode" << endl;
+	printf("AssignmentNode" );
 	rhs.print(level + 1);
-	cout << endl;
+	printf(endl;
 }

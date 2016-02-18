@@ -11,7 +11,7 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <iostream>
+#include "stdio.h"
 #include <fstream>
 
 #include "ExpressionParser.h"

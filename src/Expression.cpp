@@ -68,7 +68,7 @@ void Expression::emit(CodeGenerator*, pProcedureNode* pn) {
 		//
 		// shorten the proc name (still has "(" at the end)
 		//
-		cout << "emitrpn " << avalue << endl;
+		printf("emitrpn " << avalue );
 		addCallToProc(avalue.substr(0, avalue.size() - 1), s);
 		break;
 	case 5: // float

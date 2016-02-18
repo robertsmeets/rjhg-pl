@@ -14,9 +14,9 @@ ProcedureCall::~ProcedureCall()
 void ProcedureCall::print(int level)
 {
    for (int i = 0; i < level; i++) {
-      cout << "+";
+      printf("+");
    }
-   cout << "ProcedureCall("<<name<<")" << endl; 
+   printf("ProcedureCall\n" );
    expressionlist->print(level+1);
 }
 

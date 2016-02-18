@@ -41,7 +41,7 @@ char* CodeGenerator::getCodeBuffer() {
 }
 
 void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
-   cout << "Code generation..." << endl;
+   printf("Code generation..." );
    pn=a_pn;
    //
    // emit a magic number
@@ -131,17 +131,12 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // emit the method table
    //
-   cout << "Generating method table" << endl;
    uint16_t the_index = 8;
    for (auto const &a_class : a_pn->getClasses()) {
-      cout << "for class " << a_class->getName() << endl;
       for (auto const &a_method : a_class->getMethods()) {
-         cout << "for method " << a_method->getName() << endl;
          uint16_t cnum = a_class->getClassNum();
          uint16_t mnum = a_method->getMethodNumber();
          uint16_t address = a_method->getProcAddress();
-         cout << cnum << "," << mnum << ","<< address << endl;
-         cout << codebuffer<< "," << the_index << endl;
          *((char*) codebuffer + the_index) = cnum & 255;
          the_index++;
          *((char*) codebuffer + the_index) = cnum >> 8;
@@ -160,7 +155,7 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
          the_index++;
       }
    }
-   cout << "Generated " << here << " bytes of code " << endl;
+   printf("Generated %d bytes of code ",here );
 }
 
 //
@@ -257,7 +252,7 @@ void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
          //
          // shorten the proc name (still has "(" at the end)
          //
-         cout << "emitrpn " << avalue << endl;
+         printf("emitrpn " << avalue );
          addCallToProc(avalue.substr(0, avalue.size() - 1), s);
          break;
       case 5: // float
@@ -384,7 +379,7 @@ void CodeGenerator::addCallToProc(string name, Expression* s) {
          //
       //         emitRpn(LhsExpression.getRpn(), pn, this);
 //         addCallToMethod(procedure_name, this);
-cout << "METHOD CALL " << endl;
+printf("METHOD CALL " );
       }
       else
       {
@@ -401,7 +396,6 @@ cout << "METHOD CALL " << endl;
 void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
    //
    //
-   cout << "addCallToMethod(" << method_name << ") pn=" << pn << endl;;
    uint16_t method_number = pn->getMethodNumber(method_name);
    emit(12, method_number, 0, s);
 }
@@ -409,13 +403,11 @@ void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
 void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd, Expression* s) {
    uint16_t ivs = cd->getInstanceVariables().size();
    uint16_t classnum = cd->getClassNum();
-   cout << "classnum=" << classnum << "   ivs=" << ivs << endl;
    emit(11, classnum, ivs, s);
 }
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s) 
 {
-   cout << "CodeGenerator::addCallToProcedure(string procedure_name, Expression* s) " << procedure_name << endl;
 //
 // add room for the local variables.
 // emit an INT

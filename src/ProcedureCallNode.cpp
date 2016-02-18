@@ -51,7 +51,7 @@ void ProcedureCallNode::emit(CodeGenerator* cg) {
 		cg->emitRpn(LhsExpression.getRpn(), pn, this);
 		cg->addCallToMethod(procedure_name, this);
 	} else {
-		cout << "ProcedureCallNode::emit(" << procedure_name << endl;
+		printf("ProcedureCallNode::emit(" << procedure_name );
 		cg->addCallToProc(procedure_name, this);
 	}
 }
@@ -66,18 +66,18 @@ string ProcedureCallNode::stype() {
 
 void ProcedureCallNode::print( int level) {
 	for ( int i = 0; i < level; i++) {
-		cout << "+";
+		printf("+";
 	}
-	cout << "ProcedureCallNode ";
+	printf("ProcedureCallNode ";
 	if (method) {
-		cout << "method " << procedure_name;
+		printf("method " << procedure_name;
 	} else {
-		cout << "proc " << procedure_name;
+		printf("proc " << procedure_name;
 	}
-	cout << endl;
-	cout << " LHS = " << endl;
+	printf(endl;
+	printf(" LHS = " );
 	LhsExpression.print(level + 1);
-	cout << " RHS = " << endl;
+	printf(" RHS = " );
 	for (auto pe : parameter_exps) {
 		pe.print(level + 1);
 	}

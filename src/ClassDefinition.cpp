@@ -51,10 +51,10 @@ ProcedureNode* ClassDefinition::findMethod(string method_name) {
 void ClassDefinition::print( int level) {
 	for ( int i=0;i<level;i++)
 		{
-			cout << "+" ;
+			printf("+" ;
 		}
 
-	cout << "ClassDefinition " << name << endl;
+	printf("ClassDefinition " << name );
 	for (auto m:methods)
 	{
 		m->print(level + 1);

@@ -43,9 +43,9 @@ string ExpressionThing::getValue() {
 void ExpressionThing::print( int level) {
 	for ( int i=0;i<level;i++)
 	{
-		cout << "+" ;
+		printf("+" ;
 	}
-	cout << "ExpressionThing ";
-	cout << "[type=" << mytype << " value=" << value << "] ";
-	cout << endl;
+	printf("ExpressionThing ";
+	printf("[type=" << mytype << " value=" << value << "] ";
+	printf(endl;
 }

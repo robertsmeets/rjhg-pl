@@ -24,9 +24,9 @@ vector<ExpressionThing> ExpressionNode::getRpn() {
 void ExpressionNode::print( int level) {
 	for ( int i=0;i<level;i++)
 	{
-		cout << "+" ;
+		printf("+" ;
 	}
-	cout << "ExpressionNode" << endl;
+	printf("ExpressionNode" );
 	for (auto et : rpn) {
 		et.print(level + 1);
 	}

@@ -70,10 +70,10 @@ string IfNode::stype() {
 void IfNode::print(int level)
 {for ( int i=0;i<level;i++)
 {
-	cout << "+" ;
+	printf("+" ;
 }
 
-	cout << "IfNode" << endl;
+	printf("IfNode" );
 }
 
 

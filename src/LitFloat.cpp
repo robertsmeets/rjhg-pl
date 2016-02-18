@@ -12,9 +12,9 @@ LitFloat::LitFloat(char* s)
 void LitFloat::print(int level)
 {
 	{for (unsigned int i = 0; i < level; i++) {
-		cout << "+";
+		printf("+");
 	}
-	cout << "LitFloat " << value << endl;
+	printf("LitFloat %f\n" , value );
 	}
 
 }

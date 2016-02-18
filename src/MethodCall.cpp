@@ -19,9 +19,9 @@ void MethodCall::addSingleMethodCall(SingleMethodCall*) {
 
 void MethodCall::print(int level) {
    {for (unsigned int i = 0; i < level; i++) {
-      cout << "+";
+      printf("+");
    }
-   cout << "MethodCall" << endl;
+   printf("MethodCall\n" );
    }
 }
 

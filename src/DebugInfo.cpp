@@ -50,15 +50,15 @@ void DebugInfo::printLine(unsigned int i) {
 	// found is the abs location in the text
 	//
 	if ((found != 0) && (lastprinted != found)) {
-		cout << "==> " << hex << i << dec << ": ";
+		printf("==>  %d : ",  i  );
 		for (unsigned int j = found;; j++) {
 			char c = (*textbuffer)[j];
 			if (c == '\0' || c == '\n' || c == '\r') {
 				break;
 			}
-			cout << c;
+			printf("%c",c);
 		}
-		cout << endl;
+		printf("\n");
 		lastprinted = found;
 	}
 }

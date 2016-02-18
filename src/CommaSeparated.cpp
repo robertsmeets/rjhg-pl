@@ -1,6 +1,6 @@
 #include "CommaSeparated.h"
 
-#include <iostream>
+#include "stdio.h"
 
 using namespace std;
 
@@ -18,9 +18,9 @@ void CommaSeparated::addIdentifier(char* s)
 void CommaSeparated::print(int level)
 {
    for (int i = 0; i < level; i++) {
-	cout << "+";
+	printf("+");
    }
-   cout << "CommaSeparated" << endl;
+   printf("CommaSeparated\n" );
 }
 
 vector<string>* CommaSeparated::getIdentifiers()

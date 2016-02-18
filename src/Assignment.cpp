@@ -11,9 +11,9 @@ Assignment::~Assignment() {
 
 void Assignment::print(int level) {
    for (int i = 0; i < level; i++) {
-      cout << "+";
+      printf("+");
    }
-   cout << "Assignment " << endl;
+   printf("Assignment\n" );
    variable->print(level+1);
    expression->print(level+1);
 }
@@ -28,7 +28,7 @@ void Assignment::emit(CodeGenerator* cg, pProcedureNode* pn) {
       //
       // instance variable.  emit a STOI
       //
-      //cout << "void AssignmentNode::emit(CodeGenerator* cg) STOI " << lhs << endl;
+      //printf("void AssignmentNode::emit(CodeGenerator* cg) STOI " << lhs );
       //cg->emit(14, lhs, 0, this);
    } else {
       //

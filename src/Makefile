@@ -4,7 +4,7 @@
 #
 # add -DDEBUG for debug
 #
-CFLAGS=-std=c++11 -g -DDEBUG
+CFLAGS=-std=c++11 -g 
 
 myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
 	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o PException.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
