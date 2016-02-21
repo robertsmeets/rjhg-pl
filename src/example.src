@@ -1,18 +1,8 @@
-
-class bla
-{}
-
-method bla.one()
-{
-   print "HI";
-   return bla();
-}
-
+extern sqrt D)D 
 
 proc main()
 {
-   b = bla();
-   print b.one().one().one().one();
+   print sqrt(2.0); 
 }
 
 

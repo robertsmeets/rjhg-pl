@@ -17,6 +17,7 @@
 #include "pProgramNode.h"
 #include "ProcedureCall.h"
 #include "PrintNode.h"
+#include "Extern.h"
 
 #include "y.tab.h"
 
@@ -29,6 +30,7 @@ float 		[0-9]+\.[0-9]*
 integer		[0-9]+
 boolean        	true|false
 string        	\"[a-zA-Z0-9]*\"
+estring         [A-Z]*\)[A-Z]*
 
 %%
 
@@ -60,6 +62,7 @@ string        	\"[a-zA-Z0-9]*\"
 "else"      return(ELSE);
 "while"     return(WHILE);
 "print"     return(PRINT);
+"extern"    return(EXTERN);
 
 {boolean} {
             yylval.sval = malloc(strlen(yytext)+1);
@@ -77,6 +80,12 @@ string        	\"[a-zA-Z0-9]*\"
 	    yylval.sval = malloc(strlen(yytext)+1);
             strncpy(yylval.sval, yytext, strlen(yytext)+1);
             return(IDENTIFIER);
+      }
+
+{estring}   {
+	    yylval.sval = malloc(strlen(yytext)+1);
+            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            return(ESTRING);
       }
 
 {float}   {

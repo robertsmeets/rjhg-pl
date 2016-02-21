@@ -35,6 +35,6 @@ void PrintNode::print(int level) {
 		{
 			printf("+" );
 		}
-	printf("PrintNode" );
+	printf("PrintNode\n" );
 	expression->print(level + 1);
 }

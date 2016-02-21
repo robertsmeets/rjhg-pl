@@ -99,19 +99,15 @@ void CInterpreter::start() {
    methodmap.clear();
    check_magic_number();
    pc = find_offset();
+   printf("PC is now %d\n",pc);
+   uint16_t start_ext_proc_table = find_ext_proc_table();
    //
    // fill the methodmap
    //
-#ifdef DEBUG
-       printf("start filling methodmap" ); 
-#endif
-   for (uint16_t j = 8; j < pc; j += 8) {
-      uint16_t classnum = (buffer[j] & 0xff)
-            + ((buffer[j + 1] & 0xff) << 8);
-      uint16_t methodnum = (buffer[j + 2] & 0xff)
-            + ((buffer[j + 3] & 0xff) << 8);
-      uint16_t address = (buffer[j + 4] & 0xff)
-            + ((buffer[j + 5] & 0xff) << 8);
+   for (uint16_t j = 8; j < start_ext_proc_table ; j += 8) {
+      uint16_t classnum = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8);
+      uint16_t methodnum = (buffer[j + 2] & 0xff) + ((buffer[j + 3] & 0xff) << 8);
+      uint16_t address = (buffer[j + 4] & 0xff) + ((buffer[j + 5] & 0xff) << 8);
       uint16_t num_params = buffer[j + 6];
       uint16_t num_local_vars = buffer[j + 7];
       auto k = methodmap.find(methodnum);
@@ -121,13 +117,20 @@ void CInterpreter::start() {
          //
          methodmap[methodnum] = map<uint16_t, uint16_t[3]>();
       }
-#ifdef DEBUG
-       printf("adding a method to the methodmap address = " << address << " num_params = " << num_params << " num_local_vars = " << num_local_vars ); 
-#endif
       methodmap[methodnum][classnum][0] = address;
       methodmap[methodnum][classnum][1] = num_params;
       methodmap[methodnum][classnum][2] = num_local_vars;
    }
+   //
+   // get the external symbols
+   //
+   externs.clear();
+   for (uint16_t j = start_ext_proc_table; j < pc; j += 4) {
+      unsigned long ptr = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8); + ((buffer[j + 2] & 0xff) << 16); + ((buffer[j + 3] & 0xff) << 24);
+      printf("Pushing external pointer 0x%x\n",ptr);
+      externs.push_back(ptr);
+   }
+
 #ifdef DEBUG
        printf("end filling methodmap" ); 
 #endif
@@ -145,7 +148,15 @@ void CInterpreter::check_magic_number() {
 }
 
 uint16_t CInterpreter::find_offset() {
-   return buffer[6] + buffer[7] * 256;
+   return buffer[6] + (buffer[7] >> 8);
+}
+
+uint16_t CInterpreter::find_ext_proc_table() {
+   printf("buffer[8] = %d\n",buffer[8]);
+   printf("buffer[9] = %d\n",buffer[9]);
+   printf("result %d\n",buffer[8] + (buffer[9] >> 8));
+
+   return buffer[8] + (buffer[9] >> 8);
 }
 
 /*
@@ -160,7 +171,6 @@ int CInterpreter::execute_next() {
    // l is the 2nd param
    // a is the 3rd param
    //
-   // di->printLine(pc);
 #ifdef DEBUG
    printf("pc=x" << hex << pc << dec << ": ";
 #endif
@@ -259,7 +269,7 @@ int CInterpreter::execute_next() {
 #endif
          // return
          if (tr <= 0) {
-            printf("Exiting program..." );
+            printf("Exiting program...\n" );
             // exit
             return -1;
          }
@@ -552,17 +562,17 @@ int CInterpreter::execute_next() {
          //
          char* ptr = hm->getStart() + fr1.address;
          memcpy(&d1, ptr, 8);
-         printf("%f",d1 );
+         printf("%f\n",d1 );
       } else if (fr1.atype == 2) {
-         printf("%d",fr1.address );
+         printf("%d\n",fr1.address );
       } else if (fr1.atype == 6) { // boolean
          if (fr1.address) {
-            printf("true" );
+            printf("true\n" );
          } else {
-            printf("false" );
+            printf("false\n" );
          }
       } else if (fr1.atype == 8) {
-         printf("A fancy object" );
+         printf("A fancy object\n" );
       } else {
          printf( "Cannot print something of type %d\n", fr1.atype );
       }
