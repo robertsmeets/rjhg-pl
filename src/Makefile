@@ -4,15 +4,16 @@
 #
 # add -DDEBUG for debug
 #
-#CFLAGS=-std=c++11 -g 
-CFLAGS=-std=c++11 -s -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections  -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,-z,norelro -Wl,--hash-style=gnu -Wl,--build-id=none
+CFLAGS=-std=c++11 -g -I../dyncall-0.8_win/include
+#CFLAGS=-std=c++11 -s -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections  -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,-z,norelro -Wl,--hash-style=gnu -Wl,--build-id=none 
 #-fshort-double -fsingle-precision-constant 
-#-mfpmath=387 -mfancy-math-387
+#-mfpmath=387 -mfancy-math-387 
 #-ffast-math 
  
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
-	g++ -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o
-	strip myparser.exe
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o Extern.o
+	g++ -L"../dyncall-0.8_win/lib" -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o Extern.o -llibdyncall_s -llibdynload_s 
+#	strip myparser.exe
+#	/cygdrive/d/upx391w/upx.exe myparser.exe
 
 # add -v -t for debug
 
@@ -37,6 +38,9 @@ myparser.y.o: y.tab.c
 myparser.lex.c: myparser.lex
 	flex myparser.lex
 	cat lex.yy.c | sed s/malloc\(strlen/\(char*\)malloc\(strlen/g >myparser.lex.c
+
+Disassembler.o: Disassembler.h Disassembler.cpp
+	g++ $(CFLAGS) -o Disassembler.o -c Disassembler.cpp
 
 PrintNode.o: PrintNode.h PrintNode.cpp
 	g++ $(CFLAGS) -o PrintNode.o -c PrintNode.cpp
@@ -119,7 +123,12 @@ HeapManager.o: HeapManager.h HeapManager.cpp
 CFunctions.o: CFunctions.h CFunctions.cpp
 	g++ $(CFLAGS) -o CFunctions.o -c CFunctions.cpp
 
+Extern.o: Extern.h Extern.cpp
+	g++ $(CFLAGS) -o Extern.o -c Extern.cpp
+
+
 clean:
+	rm -f Extern.o
 	rm -f CodeGenerator.o
 	rm -f Assignment.o
 	rm -f pReturn.o

@@ -24,7 +24,7 @@ void ProcedureCall::print(int level)
  * 
  * emit bytecode for this
  *
- * It may be a procedurecall, or a class instigation, or a method call
+ * It may be a procedurecall, or a class instigation
  *
  **/
 void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
@@ -38,20 +38,13 @@ void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
       (*it)->emit(cg,pn);
    }
    pClassDefinition* cd = cg->getClassDefinition(name);
-   if (cg != NULL)
+   if (cd != NULL)
    {
       cg->addCallToClassConstructor(cd,NULL);
    }
    else
    {
-      if (false) {
-         //cg->emitRpn(LhsExpression.getRpn(), pn, this);
-         //cg->addCallToMethod(procedure_name, this);
-      }
-      else
-      { 
-         cg->addCallToProcedure(name,NULL);
-      }
+      cg->addCallToProcedure(name,NULL);
    }
 }
 

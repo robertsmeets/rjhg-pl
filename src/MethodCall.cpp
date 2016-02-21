@@ -31,8 +31,6 @@ string MethodCall::stype() { return "MethodCall"; }
  * 
  * emit bytecode for this
  *
- * It may be a procedurecall, or a class instigation, or a method call
- *
  **/
 void MethodCall::emit(CodeGenerator* cg, pProcedureNode* pn)
 {

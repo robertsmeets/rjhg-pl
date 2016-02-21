@@ -1,6 +1,6 @@
 class myclass
 {
-    a,b,c,d,e;
+    a,b,c,d,e
 }
 
 proc myproc(e,f,g,h)
@@ -12,15 +12,15 @@ proc myproc(e,f,g,h)
    {
       z=z+1;
       b=b*2;
-   }
+   };
    if (z > b)
    {
-     c = p + b(x);
+     c = p + b;
    }
    else
    {
-     a = a * a;
-   }
+     a = b*b;
+   };
    return z;
 }
 
@@ -37,7 +37,7 @@ method myclass.mymethod(x,y,z)
    if (a > b)
    {
      c = a + b;
-   }
+   };
    return c;
 }
 

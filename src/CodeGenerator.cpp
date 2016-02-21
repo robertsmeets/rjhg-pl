@@ -41,7 +41,7 @@ char* CodeGenerator::getCodeBuffer() {
 }
 
 void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
-   printf("Code generation..." );
+   printf("Code generation...\n" );
    pn=a_pn;
    //
    // emit a magic number
@@ -70,10 +70,17 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // save the start address of the code
    //
-   uint16_t offset = 8 * amount_of_methods + 8;
+   uint16_t start_ext_proc_table = 8 * amount_of_methods + 10;
+   uint16_t offset = start_ext_proc_table + 4 * a_pn->getExterns().size();
    *((char*) codebuffer + 6) = offset & 255;
    *((char*) codebuffer + 7) = offset >> 8;
    here = offset;
+   //
+   // save the start address of the proc table
+   // 
+   *((char*) codebuffer + 8) = start_ext_proc_table & 255;
+   *((char*) codebuffer + 9) = start_ext_proc_table >> 8;
+   printf("here = %d offset = %d start_ext_proc_table = %d\n",here,offset,start_ext_proc_table);
    //
    //
    di = a_di;
@@ -105,8 +112,7 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // generate the code for all the procedures
    //
-   for (vector<pProcedureNode*>::iterator it = procs.begin(); it != procs.end();
-         ++it) {
+   for (vector<pProcedureNode*>::iterator it = procs.begin(); it != procs.end(); ++it) {
       pProcedureNode* a_proc = *it;
       string pname = a_proc->getName();
       a_proc->setProcAddress(here);
@@ -131,7 +137,7 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // emit the method table
    //
-   uint16_t the_index = 8;
+   uint16_t the_index = 10;
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
          uint16_t cnum = a_class->getClassNum();
@@ -155,7 +161,31 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
          the_index++;
       }
    }
-   printf("Generated %d bytes of code ",here );
+   //
+   // emit the ext procedure table
+   //
+   int i = 1;
+   for (auto an_extern:a_pn->getExterns())
+   {
+      an_extern->setNumber(i);
+      void* ptr = an_extern->address();
+      printf("the address of %s is 0x%x\n" ,an_extern->getName().c_str(),ptr); 
+      unsigned long a = (unsigned long)ptr;  
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      i++;
+   }
+   printf("Generated %d bytes of code\n",here );
 }
 
 //
@@ -408,17 +438,17 @@ void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd, Expression* 
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s) 
 {
-//
-// add room for the local variables.
-// emit an INT
-// Since we don't know how many, leave 0 for the INT parameter
-// this will be corrected in the fix stage
-//
+   //
+   // add room for the local variables.
+   // emit an INT
+   // Since we don't know how many, leave 0 for the INT parameter
+   // this will be corrected in the fix stage
+   //
    emit(6, 0, 0, s);
-//
-// determine if procedure_name was defined
-// in the program code, if not it's a dynamic call
-//
+   //
+   // determine if procedure_name was defined
+   // in the program code, if not it's a dynamic call
+   //
    Expression* proc = procDefined(procedure_name);
    if (proc != NULL) {
       //
@@ -432,7 +462,6 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s)
       // dealing with a dynamic call, to a library function
       // The string is saved.
       //
-      puts("Procedure not found" );
       uint16_t strlen = procedure_name.length();
       emit(10, 1, strlen, s);
       addCallAddress(here - 2, procedure_name);

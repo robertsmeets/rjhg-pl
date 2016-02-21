@@ -22,6 +22,7 @@
 #include "Disassembler.h"
 #include "PrintNode.h"
 #include "CInterpreter.h"
+#include "Extern.h"
 
 #include <stdio.h>
 
@@ -54,6 +55,8 @@ extern char *yytext;
     char* Boolean;
     char* String;
     PrintNode *a_printnode;
+    Extern *an_extern;
+    char* an_estring;
 };
 
 %token IDENTIFIER
@@ -87,6 +90,8 @@ extern char *yytext;
 %token IF
 %token ELSE
 %token PRINT
+%token EXTERN
+%token ESTRING
 
 %nonassoc BLOCK
 %nonassoc IDENTIFIER
@@ -101,6 +106,7 @@ extern char *yytext;
 %parse-param {char **errmsg}
 
 %type <a_program> Program
+%type <an_extern> Extern
 %type <a_class> Class
 %type <a_procedure> Procedure
 %type <a_method> Method
@@ -124,10 +130,10 @@ extern char *yytext;
 %type <String> STRING
 %type <sval> IDENTIFIER
 %type <a_printnode> Print
+%type <an_estring> ESTRING
 
 %token PROCEDURE
 %start Program
-
 
 %%
 
@@ -140,6 +146,7 @@ Highlevelblock:
     Class { glob->addClass($1);}
    |Procedure { glob->addProcedure($1);}
    |Method { glob->addMethodDefinition($1);}
+   |Extern { glob->addExtern($1); }
    ; {$$=glob;}
 
 Procedure:
@@ -148,6 +155,10 @@ Procedure:
 Class:
    CLASS IDENTIFIER BLOCK CommaSeparated ENDBLOCK
    ; {  $$ = new pClassDefinition($2);}
+
+Extern:
+   EXTERN IDENTIFIER ESTRING
+   ; { $$ = new Extern($2,$3); }
 
 Method:
    METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new pProcedureNode($2,$4,$6,$8);}
@@ -276,14 +287,14 @@ setvbuf(stdout, NULL, _IONBF, 0);
    fclose(yyin);
    glob->print(0);
    CodeGenerator cg;
-      cg.start(glob,NULL);
-      Disassembler d; 
-      d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
-      //
-      // start interpreting
-      //
-      CInterpreter i(cg.getCodeBuffer(),NULL);
-      i.start();
+   cg.start(glob,NULL);
+   Disassembler d; 
+   d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
+   //
+   // start interpreting
+   //
+   CInterpreter i(cg.getCodeBuffer(),NULL);
+   i.start();
 }
 
 

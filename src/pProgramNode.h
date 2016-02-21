@@ -9,6 +9,7 @@
 
 #include "pProcedureNode.h"
 #include "pClassDefinition.h"
+#include "Extern.h"
 
 #include <string>
 #include <vector>
@@ -24,6 +25,7 @@ private:
    vector<pProcedureNode*> procedures;
    vector<pClassDefinition*> my_classes;
    vector<pProcedureNode*> methods;
+   vector<Extern*> externs;
    map<string, unsigned int> method_numbers;
    unsigned int next_methodnumber;
 
@@ -37,10 +39,12 @@ public:
    void addClass(pClassDefinition*);
    void addClassByName(string);
    void addMethodDefinition(pProcedureNode*);
+   void addExtern(Extern*);
    void print(int);
    vector<pClassDefinition*> getClasses();
    vector<pProcedureNode*> getProcedures();
    void assignClassNumbers();
+   vector<Extern*> getExterns();
 };
 
 #endif

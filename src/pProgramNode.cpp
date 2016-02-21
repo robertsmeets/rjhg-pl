@@ -18,6 +18,9 @@ pProgramNode::~pProgramNode() {
    for (auto a_class : my_classes) {
       delete a_class;
    }
+   for (auto an_extern : externs) {
+      delete an_extern;
+   }
 }
 
 void pProgramNode::addClass(pClassDefinition* c) {
@@ -39,11 +42,25 @@ void pProgramNode::addMethodDefinition(pProcedureNode* m) {
    methods.push_back(m);
 }
 
+void pProgramNode::addExtern(Extern* e)
+{
+   externs.push_back(e);
+}
+
+vector<Extern*> pProgramNode::getExterns()
+{
+   return externs;
+}
+
 void pProgramNode::print(int level) {
    for (int i = 0; i < level; i++) {
       printf("+");
    }
    printf("pProgramNode\n" );
+   for (Extern* an_extern:externs)
+   {
+      an_extern->print(level+1);
+   }
    for (pClassDefinition* a_class : my_classes) {
       a_class->print(level + 1);
    }

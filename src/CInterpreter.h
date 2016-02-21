@@ -58,8 +58,10 @@ class CInterpreter {
    iiptr fptrs[14][8][8];
 
    map<uint16_t,map<uint16_t, uint16_t[3]>> methodmap;
-
-
+   vector<unsigned long> externs;
+   uint16_t find_ext_proc_table(); 
+   void check_magic_number();
+   uint16_t find_offset();
 public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
@@ -69,8 +71,6 @@ public:
    void print_a_string(char*, uint16_t);
    void call_external(char*, uint16_t);
    vector<stack_element>* getStack();
-   void check_magic_number();
-   uint16_t find_offset();
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */
