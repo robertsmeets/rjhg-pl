@@ -19,6 +19,7 @@ public:
    Extern(string,string);
    virtual ~Extern();
    void print(int);
+   string getEstring();
    string getName();
    void setNumber(int);
    int getNumber();

@@ -40,6 +40,11 @@ char* CodeGenerator::getCodeBuffer() {
    return codebuffer;
 }
 
+pProgramNode* CodeGenerator::getProgramNode()
+{
+   return pn;
+}
+
 void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    printf("Code generation...\n" );
    pn=a_pn;
@@ -68,10 +73,42 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    a_pn->assignClassNumbers();
    //
-   // save the start address of the code
+   // save the start address of the ext procedure table
    //
    uint16_t start_ext_proc_table = 8 * amount_of_methods + 10;
-   uint16_t offset = start_ext_proc_table + 4 * a_pn->getExterns().size();
+   //
+   // emit the ext procedure table
+   //
+   int i = 1;
+   uint16_t the_index = 10;
+   for (auto an_extern:a_pn->getExterns())
+   {
+      an_extern->setNumber(i);
+      void* ptr = an_extern->address();
+      printf("the address of %s is 0x%x\n" ,an_extern->getName().c_str(),ptr); 
+      unsigned long a = (unsigned long)ptr;  
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      *((char*) codebuffer + the_index) = a & 255;
+      a = a >> 8;
+      the_index++;
+      //
+      // now save the signature as as string
+      //
+      const char* signature = an_extern->getEstring().c_str();
+      int len = strlen(signature);
+      memcpy((char*) codebuffer + the_index,signature,len+1);
+      the_index += len + 1;
+      i++;
+   }
+   uint16_t offset = the_index;
    *((char*) codebuffer + 6) = offset & 255;
    *((char*) codebuffer + 7) = offset >> 8;
    here = offset;
@@ -137,7 +174,6 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // emit the method table
    //
-   uint16_t the_index = 10;
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
          uint16_t cnum = a_class->getClassNum();
@@ -160,30 +196,6 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
          *((char*) codebuffer + the_index) = a_method->getLocalVariables()->size();
          the_index++;
       }
-   }
-   //
-   // emit the ext procedure table
-   //
-   int i = 1;
-   for (auto an_extern:a_pn->getExterns())
-   {
-      an_extern->setNumber(i);
-      void* ptr = an_extern->address();
-      printf("the address of %s is 0x%x\n" ,an_extern->getName().c_str(),ptr); 
-      unsigned long a = (unsigned long)ptr;  
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      i++;
    }
    printf("Generated %d bytes of code\n",here );
 }

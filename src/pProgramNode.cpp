@@ -124,3 +124,14 @@ void pProgramNode::assignClassNumbers()
    } 
 }
 
+Extern* pProgramNode::lookupExternal(string name)
+{
+   for (auto an_extern:externs)
+   {
+        if (an_extern->getName() == name)
+        {
+            return an_extern;
+        }
+   }
+}
+

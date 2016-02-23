@@ -13,9 +13,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
-//#include <dyncall.h>
-//#include <dyncall_callf.h>
-//#include <dynload.h>
+#include <dyncall.h>
+#include <dyncall_callf.h>
+#include <dynload.h>
 #include <math.h>
 #include "stdint.h"
 
@@ -31,7 +31,12 @@ class HeapManager; // forward declaration
 struct stack_element {
       unsigned short int atype;
       unsigned short int address;
-   };
+};
+
+struct extern_record {
+   unsigned long address;
+   string signature;
+};
 
 class CInterpreter {
    DebugInfo* di;
@@ -54,14 +59,14 @@ class CInterpreter {
    typedef bool (*bddptr)(double, double);
    typedef bool (*bidptr)(uint16_t, double);
    typedef bool (*bdiptr)(double, uint16_t);
-
    iiptr fptrs[14][8][8];
 
    map<uint16_t,map<uint16_t, uint16_t[3]>> methodmap;
-   vector<unsigned long> externs;
+   vector<extern_record> externs;
    uint16_t find_ext_proc_table(); 
    void check_magic_number();
    uint16_t find_offset();
+   void call_external(short unsigned int) ;
 public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
@@ -69,7 +74,6 @@ public:
    int execute_next();
    void print_a_string(char*,bool);
    void print_a_string(char*, uint16_t);
-   void call_external(char*, uint16_t);
    vector<stack_element>* getStack();
 };
 
