@@ -777,50 +777,75 @@ void CInterpreter::call_external(short unsigned int function_number) {
    extern_record e = externs[function_number-1];
    void* sym = (void*)(e.address);
    string signature = e.signature;
-    DCCallVM* vm = dcNewCallVM(4096);
-    dcMode(vm, DC_CALL_C_DEFAULT);
-    dcReset(vm);
-    //
-    // get the arguments
-    //
-    stack_element f = s[t - 1];
-    uint16_t atype = f.atype;
-    double arg_in;
-    char* adr;
-    char* str;
-    uint16_t len;
-    switch (atype) 
-   {
-      case 5: // double
+   size_t pos = signature.find(")");
+   string ingoing =  signature.substr(0,pos);
+   string outgoing = signature.substr(pos+1); 
+   DCCallVM* vm = dcNewCallVM(4096);
+   dcMode(vm, DC_CALL_C_DEFAULT);
+   dcReset(vm);
+   //
+   // loop over the signature
+   //
+   for(char& c : ingoing) {
+      stack_element f = s[t - 1];
+      uint16_t atype = f.atype;
+      switch (c)
+      {
+          case 'D':
+             if (atype != 5)
+             {
+                printf("expected double in external call but got %d\n",atype);
+                exit(-1);
+             }
+             double arg_in;
+             char* adr;
+             adr = hm->getStart() + f.address;
+             memcpy(&arg_in, adr, 8);
+             dcArgDouble(vm, arg_in);
+             break;
+          default:
+             puts("unexpected type in external call");
+             exit(-1);
+      } 
+   } 
+
+/*
+
+      case 7: // string
          adr = hm->getStart() + f.address;
          memcpy(&arg_in, adr, 8);
-         dcArgDouble(vm, arg_in);
-      break;
-    case 7: // string
-    adr = hm->getStart() + f.address;
-    memcpy(&arg_in, adr, 8);
-    len = ((*adr) & 0xff) + (*(adr + 1) << 8);
-    str = (char*) malloc(len + 1);
-    memcpy(str, adr + 2, len);
-    str[len] = '\0';
-    dcArgChar(vm, *str);
-    free(str);
-    break;
-    default:
-    puts("unexpected type in external call");
-    }
-    double r = dcCallDouble(vm, sym);
-    // dcCallPointer(vm,sym);
-    dcFree(vm);
-    //dlFreeLibrary(ll);
-    //
-    // put the result on the stack
-    //
-    char* ptr = hm->allocate(8);
-    memcpy(ptr, &r, 8);
-    t = b[tb] + 2;
-    tb--;
-    s[t].atype = 5;
-    s[t].address = (short uint16_t) (ptr - hm->getStart());
-    t++;
+         len = ((*adr) & 0xff) + (*(adr + 1) << 8);
+         str = (char*) malloc(len + 1);
+         memcpy(str, adr + 2, len);
+         str[len] = '\0';
+         dcArgChar(vm, *str);
+         free(str);
+         break;
+
+*/
+
+   char c = outgoing[0];
+   switch (c)
+   {
+      case 'D':
+     {
+         double r = dcCallDouble(vm, sym);
+         //
+         // put the result on the stack
+         //
+         char* ptr = hm->allocate(8);
+         memcpy(ptr, &r, 8);
+         t = b[tb] + 2;
+         tb--;
+         s[t].atype = 5;
+         s[t].address = (short uint16_t) (ptr - hm->getStart());
+         t++;
+         break;
+      }
+      default:
+         puts("unexpected return type in external call");
+         exit(-1);
+
+   }
+   dcFree(vm);
 }
