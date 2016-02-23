@@ -30,7 +30,7 @@ y.tab.c y.tab.h: myparser.y
 #
 	
 myparser.lex.o: myparser.lex.c y.tab.h
-	g++ -std=gnu++11 -g -o myparser.lex.o -c myparser.lex.c
+	g++ -std=gnu++11 -g -I../dyncall-0.8_win/include -o myparser.lex.o -c myparser.lex.c
 
 myparser.y.o: y.tab.c
 	g++ -Wno-write-strings $(CFLAGS) -c y.tab.c -o myparser.y.o

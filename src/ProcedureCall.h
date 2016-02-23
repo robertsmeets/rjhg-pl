@@ -20,6 +20,7 @@ public:
    virtual void print(int);
    virtual void emit(CodeGenerator*,pProcedureNode*);
    virtual string stype();
+   void addCallToProcedure(CodeGenerator*, string); 
 };
 
 #endif

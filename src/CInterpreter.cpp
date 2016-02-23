@@ -125,11 +125,19 @@ void CInterpreter::start() {
    // get the external symbols
    //
    externs.clear();
-   for (uint16_t j = start_ext_proc_table; j < pc; j += 4) {
-      unsigned long ptr = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8); + ((buffer[j + 2] & 0xff) << 16); + ((buffer[j + 3] & 0xff) << 24);
+   uint16_t j = start_ext_proc_table;
+   while (j < pc)
+   {
+      unsigned long ptr = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8) + ((buffer[j + 2] & 0xff) << 16) + ((buffer[j + 3] & 0xff) << 24);
       printf("Pushing external pointer 0x%x\n",ptr);
-      externs.push_back(ptr);
-   }
+      j += 4;
+      extern_record er;
+      string signature = string(buffer + j);
+      er.address = ptr;
+      er.signature = signature; 
+      externs.push_back(er);
+      j+= signature.length() + 1;
+   } 
 
 #ifdef DEBUG
        printf("end filling methodmap" ); 
@@ -584,21 +592,10 @@ int CInterpreter::execute_next() {
 #endif
       // parameters should have already been pushed on the stack
       //
-      // first get the string that is the procedure name
-      // get some memory
-      //
-      ptr = (char*) malloc(0xff);
-      //
-      // copy the string to a local variable
-      //
-      memcpy(ptr, buffer + pc, a);
-      ptr[a] = '\0';
-      pc += a;
       //
       // call the procedure
       //
-      call_external(ptr, l);
-      free(ptr);
+      call_external(l);
       break;
    case 11: // object creation
 #ifdef DEBUG
@@ -766,23 +763,20 @@ void CInterpreter::print_a_string(char* ptr, uint16_t len) {
    }
 }
 
-void CInterpreter::call_external(char* function_name,
-      uint16_t nparameters) {
-   /* string libpath = "msvcrt.dll";
-    const char* lp = libpath.c_str();
-    DLLib* ll = dlLoadLibrary(lp);
-    if (ll == NULL) {
-    puts("could not find library " + libpath);
-    }
-    //
-    // dlLoadLibrary loads a dynamic library at libpath and returns a handle
-    // to it for use in dlFreeLibrary and dlFindSymbol calls.
-    // dlFreeLibrary frees the loaded library with handle pLib.
-    //
-    DCpointer sym = dlFindSymbol(ll, function_name);
-    if (sym == NULL) {
-    puts("could not find external symbol");
-    }
+/**
+ *
+ * call an external function
+ *
+ **/
+void CInterpreter::call_external(short unsigned int function_number) {
+   if (function_number > externs.size())
+   {
+        printf("illegal function number %d highest function number is %d\n",function_number,externs.size());
+        exit(-1);
+   }
+   extern_record e = externs[function_number-1];
+   void* sym = (void*)(e.address);
+   string signature = e.signature;
     DCCallVM* vm = dcNewCallVM(4096);
     dcMode(vm, DC_CALL_C_DEFAULT);
     dcReset(vm);
@@ -795,14 +789,15 @@ void CInterpreter::call_external(char* function_name,
     char* adr;
     char* str;
     uint16_t len;
-    switch (atype) {
-    case 5: // double
-    adr = hm.getStart() + f.address;
-    memcpy(&arg_in, adr, 8);
-    dcArgDouble(vm, arg_in);
-    break;
+    switch (atype) 
+   {
+      case 5: // double
+         adr = hm->getStart() + f.address;
+         memcpy(&arg_in, adr, 8);
+         dcArgDouble(vm, arg_in);
+      break;
     case 7: // string
-    adr = hm.getStart() + f.address;
+    adr = hm->getStart() + f.address;
     memcpy(&arg_in, adr, 8);
     len = ((*adr) & 0xff) + (*(adr + 1) << 8);
     str = (char*) malloc(len + 1);
@@ -817,16 +812,15 @@ void CInterpreter::call_external(char* function_name,
     double r = dcCallDouble(vm, sym);
     // dcCallPointer(vm,sym);
     dcFree(vm);
-    dlFreeLibrary(ll);
+    //dlFreeLibrary(ll);
     //
     // put the result on the stack
     //
-    char* ptr = hm.allocate(8);
+    char* ptr = hm->allocate(8);
     memcpy(ptr, &r, 8);
     t = b[tb] + 2;
     tb--;
     s[t].atype = 5;
-    s[t].address = (short uint16_t) (ptr - hm.getStart());
+    s[t].address = (short uint16_t) (ptr - hm->getStart());
     t++;
-    */
 }

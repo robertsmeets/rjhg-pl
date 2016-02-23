@@ -49,6 +49,9 @@ class CodeGenerator {
 public:
   CodeGenerator();
   virtual ~CodeGenerator();
+  char* getCodeBuffer();
+  uint16_t getHere();
+  pProgramNode* getProgramNode();
   void start(pProgramNode*, DebugInfo*);
   void start_proc(pProcedureNode*);
   void emit(char, unsigned short int, unsigned short int, Expression*);
@@ -56,10 +59,8 @@ public:
   void emitOperation(char, Expression*);
   void fix_proc_addresses();
   void addCallAddress(uint16_t, string);
-  uint16_t getHere();
   void emit_to_file();
   void fix(uint16_t, uint16_t);
-  char* getCodeBuffer();
   void addCallTo(string, Expression*);
   void addCallToClassConstructor(pClassDefinition*, Expression*);
   void addCallToMethod(string, Expression*);

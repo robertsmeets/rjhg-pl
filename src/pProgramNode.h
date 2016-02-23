@@ -33,8 +33,8 @@ public:
    pProgramNode();
    virtual ~pProgramNode();
    pClassDefinition* getClass(string);
-   unsigned int assignMethodNumber(string);
    unsigned int getMethodNumber(string);
+   unsigned int assignMethodNumber(string);
    void addProcedure(pProcedureNode*);
    void addClass(pClassDefinition*);
    void addClassByName(string);
@@ -45,6 +45,7 @@ public:
    vector<pProcedureNode*> getProcedures();
    void assignClassNumbers();
    vector<Extern*> getExterns();
+   Extern* lookupExternal(string);
 };
 
 #endif

@@ -32,6 +32,11 @@ string Extern::getName()
    return name;
 }
 
+string Extern::getEstring()
+{
+   return estring;
+}
+
 DCpointer Extern::address()
 {
    string libpath = "msvcrt.dll";
