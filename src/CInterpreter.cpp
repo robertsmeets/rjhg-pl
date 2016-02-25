@@ -99,12 +99,12 @@ void CInterpreter::start() {
    methodmap.clear();
    check_magic_number();
    pc = find_offset();
-   printf("PC is now %d\n",pc);
+   printf("PC is now 0x%x\n",pc);
    uint16_t start_ext_proc_table = find_ext_proc_table();
    //
    // fill the methodmap
    //
-   for (uint16_t j = 8; j < start_ext_proc_table ; j += 8) {
+   for (uint16_t j = 10; j < start_ext_proc_table ; j += 8) {
       uint16_t classnum = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8);
       uint16_t methodnum = (buffer[j + 2] & 0xff) + ((buffer[j + 3] & 0xff) << 8);
       uint16_t address = (buffer[j + 4] & 0xff) + ((buffer[j + 5] & 0xff) << 8);
@@ -703,6 +703,7 @@ int CInterpreter::execute_next() {
       break;
    default:
       puts("unexpected F value");
+      exit(-1);
       break;
    }
    //
@@ -777,7 +778,7 @@ void CInterpreter::call_external(short unsigned int function_number) {
    extern_record e = externs[function_number-1];
    void* sym = (void*)(e.address);
    string signature = e.signature;
-   size_t pos = signature.find(")");
+   size_t pos = signature.find("-");
    string ingoing =  signature.substr(0,pos);
    string outgoing = signature.substr(pos+1); 
    DCCallVM* vm = dcNewCallVM(4096);
@@ -791,7 +792,7 @@ void CInterpreter::call_external(short unsigned int function_number) {
       uint16_t atype = f.atype;
       switch (c)
       {
-          case 'D':
+          case 'd':
              if (atype != 5)
              {
                 printf("expected double in external call but got %d\n",atype);
@@ -803,31 +804,32 @@ void CInterpreter::call_external(short unsigned int function_number) {
              memcpy(&arg_in, adr, 8);
              dcArgDouble(vm, arg_in);
              break;
+          case 'Z': // char*
+          {
+             if (atype != 7)
+             {
+                printf("expected double in external call but got %d\n",atype);
+                exit(-1);
+             }
+             adr = hm->getStart() + f.address;
+             memcpy(&arg_in, adr, 8);
+             int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
+             char* str = (char*) malloc(len + 1);
+             memcpy(str, adr + 2, len);
+             str[len] = '\0';
+             dcArgChar(vm, *str);
+             free(str);
+             break;
+          }
           default:
-             puts("unexpected type in external call");
+             printf("unexpected type <%c> in external call",c);
              exit(-1);
       } 
    } 
-
-/*
-
-      case 7: // string
-         adr = hm->getStart() + f.address;
-         memcpy(&arg_in, adr, 8);
-         len = ((*adr) & 0xff) + (*(adr + 1) << 8);
-         str = (char*) malloc(len + 1);
-         memcpy(str, adr + 2, len);
-         str[len] = '\0';
-         dcArgChar(vm, *str);
-         free(str);
-         break;
-
-*/
-
    char c = outgoing[0];
    switch (c)
    {
-      case 'D':
+      case 'd':
      {
          double r = dcCallDouble(vm, sym);
          //
@@ -843,7 +845,7 @@ void CInterpreter::call_external(short unsigned int function_number) {
          break;
       }
       default:
-         puts("unexpected return type in external call");
+         printf("unexpected return type <%c> in external call",c);
          exit(-1);
 
    }
