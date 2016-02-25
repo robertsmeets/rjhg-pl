@@ -29,8 +29,8 @@ identifier   	[_a-zA-Z]+
 float 		[0-9]+\.[0-9]*
 integer		[0-9]+
 boolean        	true|false
-string        	\"[a-zA-Z0-9]*\"
-estring         [A-Z]*\)[A-Z]*
+string        	\"[\% \.a-zA-Z0-9]*\"
+estring         [BcCsSiIjJlLfdpZv]*\-[BcCsSiIjJlLfdpZv]*
 
 %%
 

@@ -1,8 +1,16 @@
-extern sqrt D)D 
+extern sqrt    d-d       ;
+extern fopen   ZZ-p      ;
+extern fclose  p-i       ;
+extern fprintf pZZ-v     ;
+
 
 proc main()
 {
    print sqrt(2.0); 
+   print sqrt(3.0); 
+   fp = fopen("file.txt", "w");
+   fprintf(fp, "s", "This is tutorialspoint.com");
+   fclose(fp);
 }
 
 

@@ -157,7 +157,7 @@ Class:
    ; {  $$ = new pClassDefinition($2);}
 
 Extern:
-   EXTERN IDENTIFIER ESTRING
+   EXTERN IDENTIFIER ESTRING SEMICOL
    ; { $$ = new Extern($2,$3); }
 
 Method:
