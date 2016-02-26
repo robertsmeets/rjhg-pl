@@ -1,7 +1,7 @@
 extern sqrt    d-d       ;
-extern fopen   ZZ-p      ;
-extern fclose  p-i       ;
-extern fprintf pZZ-v     ;
+extern fopen   pp-p      ;
+extern fclose  p-p       ;
+extern fprintf ppp-v     ;
 
 
 proc main()
