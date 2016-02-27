@@ -138,10 +138,6 @@ void CInterpreter::start() {
       externs.push_back(er);
       j+= signature.length() + 1;
    } 
-
-#ifdef DEBUG
-       printf("end filling methodmap" ); 
-#endif
    unsigned i = 0;
    for (; !i;) {
       i = execute_next();
@@ -180,7 +176,7 @@ int CInterpreter::execute_next() {
    // a is the 3rd param
    //
 #ifdef DEBUG
-   printf("pc=x" << hex << pc << dec << ": ";
+   printf("pc=0x%x: ", pc );
 #endif
    unsigned short int f = *((char*) buffer + pc) & 0xff;
    pc++;
@@ -208,7 +204,7 @@ int CInterpreter::execute_next() {
    switch (f) {
    case 1:   // lit: Literal value, to be pushed on the stack
 #ifdef DEBUG
-   printf("LIT " << l << "," << a;
+   printf("LIT %d,%d", l , a);
 #endif
       switch (l) {
       case 2: // Int
@@ -257,7 +253,7 @@ int CInterpreter::execute_next() {
       break;
    case 2: // opr
 #ifdef DEBUG
-   printf("OPR";
+   printf("OPR");
 #endif
 
       iiptr aiiptr;
@@ -273,7 +269,7 @@ int CInterpreter::execute_next() {
       switch (a) {
       case 0:
 #ifdef DEBUG
-         printf(" RET l= " << l;
+         printf(" RET l= %d" , l);
 #endif
          // return
          if (tr <= 0) {
@@ -300,7 +296,7 @@ int CInterpreter::execute_next() {
          break;
       case 1:
 #ifdef DEBUG
-         printf(" UNARY MINUS";
+         printf(" UNARY MINUS");
 #endif
          fr1 = s[t - 1];
          if (fr1.atype != 2) {
@@ -313,7 +309,7 @@ int CInterpreter::execute_next() {
       case 3:
       case 4:
 #ifdef DEBUG
-         printf(" PLUS, MINUS oR MUL";
+         printf(" PLUS, MINUS or MUL");
 #endif
          t--;
          fr1 = s[t - 1];
@@ -400,7 +396,7 @@ int CInterpreter::execute_next() {
          break;
       case 5:
 #ifdef DEBUG
-         printf(" DIV";
+         printf(" DIV");
 #endif
          t--;
          fr1 = s[t - 1];
@@ -414,7 +410,7 @@ int CInterpreter::execute_next() {
          break;
       case 6:
 #ifdef DEBUG
-         printf(" MOD";
+         printf(" MOD");
 #endif
          t--;
          fr1 = s[t - 1];
@@ -492,7 +488,7 @@ int CInterpreter::execute_next() {
       break;
    case 3:
 #ifdef DEBUG
-      printf("LOD " << a << " ";
+      printf("LOD %d ",a);
 #endif
       //
       // lod: copy a local variable or parameter on top of the stack
@@ -502,7 +498,7 @@ int CInterpreter::execute_next() {
       break;
    case 4:   // sto: pop a value from the stack and put it in a local variable or parameter
 #ifdef DEBUG
-   printf("STO " << a << " ";
+   printf("STO %d " ,a);
 #endif
       t--;
       s[b[tb - 1] + a] = s[t];
@@ -513,7 +509,7 @@ int CInterpreter::execute_next() {
       // call the procedure
       //
 #ifdef DEBUG
-      printf("CAL " << a;
+      printf("CAL %d ",a);
 #endif
       r[tr] = pc;
       tr++;
@@ -521,7 +517,7 @@ int CInterpreter::execute_next() {
       break;
    case 6:         // int:
 #ifdef DEBUG
-   printf("INT " << l << "," << a;
+   printf("INT %d,%d", l , a);
 #endif
       //
       // this creates a new block with depth a for local variables and parameters
@@ -538,13 +534,13 @@ int CInterpreter::execute_next() {
       break;
    case 7:         // jmp
 #ifdef DEBUG
-   printf("JMP " << a;
+   printf("JMP %d " , a);
 #endif
       pc = a;
       break;
    case 8:         // jpc - jump when false
 #ifdef DEBUG
-   printf("JPC " << a;
+   printf("JPC %d " , a);
 #endif
       fr1 = s[t - 1];
       if (fr1.atype != 6) {
@@ -557,7 +553,7 @@ int CInterpreter::execute_next() {
       break;
    case 9: // print
 #ifdef DEBUG
-   printf("PRINT " << a;
+   printf("PRINT %d " , a);
 #endif
       t--;
       fr1 = s[t];
@@ -588,7 +584,7 @@ int CInterpreter::execute_next() {
 
    case 10: // external function call
 #ifdef DEBUG
-   printf("EXTCALL " << a;
+   printf("EXTCALL %d",  a);
 #endif
       // parameters should have already been pushed on the stack
       //
@@ -599,7 +595,7 @@ int CInterpreter::execute_next() {
       break;
    case 11: // object creation
 #ifdef DEBUG
-   printf("OBJCREATE " << l<<"," << a;
+   printf("OBJCREATE %d,%d " ,l,a);
 #endif
 
       //
@@ -623,7 +619,7 @@ int CInterpreter::execute_next() {
       break;
    case 12:
 #ifdef DEBUG
-      printf("METHODCALL " << l << " ";
+      printf("METHODCALL %d " ,l );
 #endif
       // method call, the object is already on the stack.
       //
@@ -642,7 +638,7 @@ int CInterpreter::execute_next() {
       ptr = hm->getStart() + s[t].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
 #ifdef DEBUG
-                printf("classnum = " << classnum << " ";
+                printf("classnum = %d ", classnum );
 #endif
       //
       // this creates a new block with depth for local variables and parameters
@@ -662,7 +658,7 @@ int CInterpreter::execute_next() {
       break;
    case 13:
 #ifdef DEBUG
-      printf("LODI " << l << " ";
+      printf("LODI %d ", l );
 #endif
       // access an instance variable and put it on the stack
       //
@@ -682,7 +678,7 @@ int CInterpreter::execute_next() {
       break;
    case 14:
 #ifdef DEBUG
-      printf("STOI " << l << " ";
+      printf("STOI %d", l );
 #endif
       // store a value inside an inst. variable
       //
@@ -709,42 +705,45 @@ int CInterpreter::execute_next() {
    //
    // print the stack
    //
-#ifdef DEBUG
-   printf("      stack: ";
+   printf("      stack: ");
    for (uint16_t i = 0; i < t; i++) {
       char* adr;
-      printf("[";
+      printf("[");
       switch (s[i].atype) {
          case 2:
-            printf(s[i].address;
+            printf("0x%x",s[i].address);
             break;
          case 5:
             adr = hm->getStart() + s[i].address;
             double d;
             memcpy(&d, adr, 8);
-            printf(d;
+            printf("%f",d);
             break;
          case 7: // string
             adr = hm->getStart() + s[i].address;
             print_a_string(adr,false);
-            printf("]";
+            break;
+         case 8: // pointer
+            adr = hm->getStart() + s[i].address;
+            void* ptr;
+            memcpy(&ptr, adr, 4);
+            printf("ptr 0x%x",ptr);
             break;
          default:
-            printf("?" << s[i].atype;
+            printf("?%d" , s[i].atype);
             break;
       }
-      printf("]";
+      printf("]");
    }
-   printf("      bstack: ";
+   printf("      bstack: ");
    for (uint16_t i = 0; i < tb; i++) {
-      printf(b[i] << " ";
+      printf("%d",b[i]);
    }
-   printf("      rstack: ";
+   printf("      rstack: ");
    for (uint16_t i = 0; i < tr; i++) {
-      printf("x" << hex << r[i] << dec << " ";
+      printf("0x%x", r[i]);
    }
-   printf(endl;
-#endif
+   printf("\n");
    return 0;
 }
 
@@ -828,9 +827,10 @@ void CInterpreter::call_external(short unsigned int function_number) {
              else if (atype == 8)
              {
                 adr = hm->getStart() + f.address;
-                memcpy(&arg_in, adr, 4);
-                printf("Pushing a pointer <0x%x>\n",adr);
-                dcArgPointer(vm, adr);
+                void* ptr;
+                memcpy(&ptr, adr, 4);
+                printf("Pushing a pointer <0x%x>\n",ptr);
+                dcArgPointer(vm, ptr);
                 // free(str);
              }
              break;
@@ -880,6 +880,20 @@ void CInterpreter::call_external(short unsigned int function_number) {
          //
          // no return value
          //
+         dcCallVoid(vm,sym);
+         break;
+      }
+      case 'i': 
+      {  
+         // 
+         // integer return type
+         //
+         int i = dcCallInt(vm,sym);
+         t = b[tb] + 2;
+         tb--;
+         s[t].atype = 2;
+         s[t].address = i;
+         t++;
          break;
       }
       default:
