@@ -778,10 +778,22 @@ void CInterpreter::call_external(short unsigned int function_number) {
    void* sym = (void*)(e.address);
    string signature = e.signature;
    size_t pos = signature.find("-");
+   bool varargs =  (pos==std::string::npos);
+   if (varargs)
+   {
+      pos = signature.find("+");
+   }
    string ingoing =  signature.substr(0,pos);
    string outgoing = signature.substr(pos+1); 
    DCCallVM* vm = dcNewCallVM(4096);
-   dcMode(vm, DC_CALL_C_DEFAULT);
+   if (varargs)
+   {
+      dcMode(vm, DC_CALL_C_ELLIPSIS);
+   }
+   else
+   {
+      dcMode(vm, DC_CALL_C_DEFAULT);
+   }
    dcReset(vm);
    //
    // loop over the signature
