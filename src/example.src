@@ -1,8 +1,8 @@
 extern sqrt    d-d       ;
 extern fopen   pp-p      ;
 extern fclose  p-p       ;
-extern fputs   pp-i      ;
-extern fprintf pp-v      ;
+extern fputs   pp+i      ;
+extern fprintf pp+i      ;
 extern fflush  p-v       ;
 
 proc main()
@@ -10,11 +10,11 @@ proc main()
    print sqrt(2.0); 
    print sqrt(3.0); 
    fp = fopen("file.txt", "w");
-   fputs(fp, "This is tutorialspoint.com1");
+   fprintf(fp, "This is tutorialspoint.com1");
    fflush(fp);
-   fputs(fp, "This is tutorialspoint.com2");
+   fpringf(fp, "This is tutorialspoint.com2");
    fflush(fp);
-   fputs(fp, "This is tutorialspoint.com3");
+   fpringf(fp, "This is tutorialspoint.com3");
    fclose(fp);
 }
 
