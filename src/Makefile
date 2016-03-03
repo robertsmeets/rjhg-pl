@@ -165,7 +165,6 @@ clean:
 	rm -f myparser.c
 	rm -f y.output
 	rm -f lex.yy.c
-	rm -f AssignmentNode.o
 	rm -f CFunctions.o
 	rm -f CInterpreter.o
 	rm -f ClassDefinition.o

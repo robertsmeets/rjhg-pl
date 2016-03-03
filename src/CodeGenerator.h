@@ -17,9 +17,7 @@
 #include <unordered_map>
 
 #include "pProgramNode.h"
-#include "ProcedureNode.h"
 #include "ExpressionThing.h"
-#include "AssignmentNode.h"
 
 #include "DebugInfo.h"
 #include "pClassDefinition.h"
