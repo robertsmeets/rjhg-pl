@@ -66,7 +66,9 @@ class CInterpreter {
    uint16_t find_ext_proc_table(); 
    void check_magic_number();
    uint16_t find_offset();
-   void call_external(short unsigned int) ;
+   void call_external(short unsigned int,short unsigned int) ;
+   void pass_in_arg( DCCallVM* ,char ,stack_element);
+
 public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
@@ -75,6 +77,7 @@ public:
    void print_a_string(char*,bool);
    void print_a_string(char*, uint16_t);
    vector<stack_element>* getStack();
+
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */
