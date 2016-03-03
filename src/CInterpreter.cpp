@@ -943,7 +943,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
             }
           default:
           {
-             printf("unexpected type given <%d> but expected <%d> in external call\n", atype,c);
+             printf("unexpected type given <%d> but expected <%c> in external call\n", atype,c);
              exit(-1);
           }
       } 
