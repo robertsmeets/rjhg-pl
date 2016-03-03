@@ -33,7 +33,7 @@ void LitBool::print(int level)
 
 }
 
-void LitBool::emit(CodeGenerator* cg, pProcedureNode* pn)
+void LitBool::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
 	cg->emit(1, 6, value, NULL);
 }

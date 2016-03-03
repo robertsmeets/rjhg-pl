@@ -1,9 +1,9 @@
-#include "pProcedureNode.h"
+#include "ProcedureNode.h"
 
 #include <iostream>
 
  /*
- * pProcedureNode.cpp
+ * ProcedureNode.cpp
  *
  *  Created on: Dec 18, 2014
  *      Author: robert
@@ -16,7 +16,7 @@ using namespace std;
 /**
  * constructor
  */
-pProcedureNode::pProcedureNode(string cname, string a_name, CommaSeparated* identifiers, Statements* some_statements)
+ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identifiers, Statements* some_statements)
 {
    method_number =0;
    proc_address = 0;
@@ -32,7 +32,7 @@ pProcedureNode::pProcedureNode(string cname, string a_name, CommaSeparated* iden
 /**
  * destructor
  */
-pProcedureNode::~pProcedureNode() {
+ProcedureNode::~ProcedureNode() {
    //
    // delete all the statements
    //
@@ -48,12 +48,12 @@ pProcedureNode::~pProcedureNode() {
  * getter methods
  */
 
- string pProcedureNode::getName()
+ string ProcedureNode::getName()
  {
     return name;
  }
  
- string pProcedureNode::getClassName()
+ string ProcedureNode::getClassName()
  {
     return class_name;
  }
@@ -61,36 +61,36 @@ pProcedureNode::~pProcedureNode() {
 /**
  * setter methods
  */
-void pProcedureNode::setName(string a_name) {
+void ProcedureNode::setName(string a_name) {
    name = a_name;
 }
 
-void pProcedureNode::setProcAddress(uint16_t a) {
+void ProcedureNode::setProcAddress(uint16_t a) {
    proc_address = a;
 }
 
-void pProcedureNode::addParameter(string a_parameter) {
+void ProcedureNode::addParameter(string a_parameter) {
    // parameters->push_back(a_parameter);
 }
 
-void pProcedureNode::setStatements(vector<Statement*> some_statements) {
+void ProcedureNode::setStatements(vector<Statement*> some_statements) {
    // statements = some_statements;
 }
 
-void pProcedureNode::setMethodNumber(int mn)
+void ProcedureNode::setMethodNumber(int mn)
 {
    method_number = mn;
 }
 
-uint16_t pProcedureNode::getProcAddress() {
+uint16_t ProcedureNode::getProcAddress() {
    return proc_address;
 }
 
-vector<string>* pProcedureNode::getParameters() {
+vector<string>* ProcedureNode::getParameters() {
     return parameters->getIdentifiers();
 }
 
-map<string, uint16_t>* pProcedureNode::getLocalVariables() {
+map<string, uint16_t>* ProcedureNode::getLocalVariables() {
    return local_variables;
 }
 
@@ -99,7 +99,7 @@ map<string, uint16_t>* pProcedureNode::getLocalVariables() {
  * find the index of an index variable by string
  *
  */
-uint16_t pProcedureNode::assignLocalVariable(string s) {
+uint16_t ProcedureNode::assignLocalVariable(string s) {
 
    map<string, uint16_t>::iterator foundIter = local_variables->find(s);
    if (foundIter != local_variables->end()) {
@@ -120,7 +120,7 @@ uint16_t pProcedureNode::assignLocalVariable(string s) {
 /**
  * add a return statement if the procedure does not define one
  */
-void pProcedureNode::fixReturn() {
+void ProcedureNode::fixReturn() {
    //
    // if return is missing, add it
    //
@@ -140,21 +140,21 @@ void pProcedureNode::fixReturn() {
       addreturn = (last->stype() != "return");
    }
    if (addreturn) {
-      pReturn* r = new pReturn(NULL);
+      ReturnNode* r = new ReturnNode(NULL);
       statements->addStatement(r);
    }
 }
 
-void pProcedureNode::print(int level) {
+void ProcedureNode::print(int level) {
    for (int i=0;i<level;i++)
    {
       printf("+") ;
    } 
-   printf("pProcedureNode \n" );
+   printf("ProcedureNode \n" );
    statements->print(level+1);
 }
 
-int pProcedureNode::getInstanceVarNum(string name) {
+int ProcedureNode::getInstanceVarNum(string name) {
    if (cd == NULL) {
       return 0;
    }
@@ -168,7 +168,7 @@ int pProcedureNode::getInstanceVarNum(string name) {
    return 0; 
 }
 
-Statements* pProcedureNode::getStatements()
+Statements* ProcedureNode::getStatements()
 {
    return statements;
 }
@@ -177,7 +177,7 @@ Statements* pProcedureNode::getStatements()
 /**
  * generate the code for a procedure
  */
-void pProcedureNode::emit(CodeGenerator* cg) {
+void ProcedureNode::emit(CodeGenerator* cg) {
    //
    // emit all the statements for a procedure
    //
@@ -187,7 +187,7 @@ void pProcedureNode::emit(CodeGenerator* cg) {
    }
 }
 
-uint16_t pProcedureNode::getMethodNumber() {
+uint16_t ProcedureNode::getMethodNumber() {
       return method_number;
    }
 

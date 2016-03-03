@@ -19,7 +19,7 @@ public:
 	If(Expression*, Statements*, Statements*);
 	virtual ~If();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*, pProcedureNode*);
+	virtual void emit(CodeGenerator*, ProcedureNode*);
 	virtual string stype();
 };
 #endif

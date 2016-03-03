@@ -40,12 +40,12 @@ char* CodeGenerator::getCodeBuffer() {
    return codebuffer;
 }
 
-pProgramNode* CodeGenerator::getProgramNode()
+ProgramNode* CodeGenerator::getProgramNode()
 {
    return pn;
 }
 
-void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
+void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
    printf("Code generation...\n" );
    pn=a_pn;
    //
@@ -145,13 +145,13 @@ void CodeGenerator::start(pProgramNode* a_pn, DebugInfo* a_di) {
    //
    // generate all the procedures
    //
-   vector<pProcedureNode*> procs;
+   vector<ProcedureNode*> procs;
    procs = pn->getProcedures();
    //
    // generate the code for all the procedures
    //
-   for (vector<pProcedureNode*>::iterator it = procs.begin(); it != procs.end(); ++it) {
-      pProcedureNode* a_proc = *it;
+   for (vector<ProcedureNode*>::iterator it = procs.begin(); it != procs.end(); ++it) {
+      ProcedureNode* a_proc = *it;
       string pname = a_proc->getName();
       a_proc->setProcAddress(here);
       procaddresses[pname] = a_proc;
@@ -227,7 +227,7 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 //
 // emit the code for an expression
 //
-void CodeGenerator::emitRpn(vector<ExpressionThing> vs, pProcedureNode* pn,
+void CodeGenerator::emitRpn(vector<ExpressionThing> vs, ProcedureNode* pn,
       Expression* s) {
    /* for (vector<ExpressionThing>::iterator it = vs.begin(); it != vs.end();
          ++it) {
@@ -354,7 +354,7 @@ void CodeGenerator::fix_proc_addresses() {
       //
       // look up the proc name
       //
-      pProcedureNode* pn = procaddresses[proc_name];
+      ProcedureNode* pn = procaddresses[proc_name];
       if (pn == NULL) {
          //
          // external function
@@ -407,7 +407,7 @@ void CodeGenerator::addCallAddress(uint16_t address, string proc_name) {
 void CodeGenerator::addCallToProc(string name, Expression* s) {
    //
    //
-   pClassDefinition* a_class = pn->getClass(name);
+   ClassDefinition* a_class = pn->getClass(name);
    if (a_class != NULL) {
       //
       // it's a class constructor
@@ -443,7 +443,7 @@ void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
    emit(12, method_number, 0, s);
 }
 
-void CodeGenerator::addCallToClassConstructor(pClassDefinition* cd, Expression* s) {
+void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd, Expression* s) {
    uint16_t ivs = cd->getInstanceVariables().size();
    uint16_t classnum = cd->getClassNum();
    emit(11, classnum, ivs, s);
@@ -484,10 +484,10 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s)
 }
 
 Expression* CodeGenerator::procDefined(string procedure_name) {
-   vector<pProcedureNode*> procedures = pn->getProcedures();
-   for (vector<pProcedureNode*>::iterator it = procedures.begin();
+   vector<ProcedureNode*> procedures = pn->getProcedures();
+   for (vector<ProcedureNode*>::iterator it = procedures.begin();
          it != procedures.end(); ++it) {
-      pProcedureNode* a_proc = *it;
+      ProcedureNode* a_proc = *it;
       string pname = a_proc->getName();
       if (pname == procedure_name) {
          return (Expression*) a_proc;
@@ -504,7 +504,7 @@ char* CodeGenerator::allot(int size)
    return codebuffer + loc;
 }
 
-pClassDefinition* CodeGenerator::getClassDefinition(string name)
+ClassDefinition* CodeGenerator::getClassDefinition(string name)
 {
    return pn->getClass(name);
 }

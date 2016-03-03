@@ -3,9 +3,8 @@
 
 #include "Expression.h"
 #include "VariableValue.h"
-#include "pProcedureNode.h"
-
 #include "stdio.h"
+#include "ProcedureNode.h"
 
 using namespace std;
 
@@ -17,7 +16,7 @@ public:
    Assignment(VariableValue*,Expression*);
    virtual ~Assignment();
    void print(int);
-   virtual void emit(CodeGenerator*,pProcedureNode*);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
    virtual string stype();
 };
 #endif

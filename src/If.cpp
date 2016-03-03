@@ -24,7 +24,7 @@ void If::print(int level) {
 }
 
 
-void If::emit(CodeGenerator* cg, pProcedureNode* pn)
+void If::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
 	//
 	// emit the instructions to calculate the value and put it on the stack

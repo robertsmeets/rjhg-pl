@@ -22,7 +22,7 @@ public:
 	VariableValue(string);
 	virtual ~VariableValue();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*,pProcedureNode*);
+	virtual void emit(CodeGenerator*,ProcedureNode*);
 	virtual string stype();
 	string getName();
 };

@@ -9,15 +9,15 @@
 using namespace std;
 
 
-class pReturn: public Expression {
+class ReturnNode: public Expression {
 
 private:
 	Expression* expression;
 public:
-	pReturn(Expression*);
-	virtual ~pReturn();
+	ReturnNode(Expression*);
+	virtual ~ReturnNode();
 	virtual void print(int);
-	virtual void emit(CodeGenerator*,pProcedureNode*);
+	virtual void emit(CodeGenerator*,ProcedureNode*);
 	virtual string stype();
 };
 #endif

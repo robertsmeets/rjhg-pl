@@ -16,7 +16,7 @@ private:
 public:
 	Val2Expression(char, Expression*, Expression*);
 	void print(int);
-	virtual void emit(CodeGenerator*, pProcedureNode*);
+	virtual void emit(CodeGenerator*, ProcedureNode*);
 	virtual string stype();
 };
 

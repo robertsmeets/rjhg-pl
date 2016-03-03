@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void Expression::emit(CodeGenerator*, pProcedureNode* pn) {
+void Expression::emit(CodeGenerator*, ProcedureNode* pn) {
 	//
 	// type 1: operation
 	// type 2: literal integer

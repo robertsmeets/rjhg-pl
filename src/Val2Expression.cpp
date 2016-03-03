@@ -16,7 +16,7 @@ void Val2Expression::print(int level) {
 }
 
 
-void Val2Expression::emit(CodeGenerator* cg, pProcedureNode* pn)
+void Val2Expression::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
    lhs->emit(cg,pn);
    rhs->emit(cg,pn);

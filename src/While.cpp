@@ -18,7 +18,7 @@ void While::print(int level) {
         statements->print(level+1);
 }
 
-void While::emit(CodeGenerator* cg, pProcedureNode* pn)
+void While::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
 
 	//

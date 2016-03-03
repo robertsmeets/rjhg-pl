@@ -18,7 +18,7 @@ void Assignment::print(int level) {
    expression->print(level+1);
 }
 
-void Assignment::emit(CodeGenerator* cg, pProcedureNode* pn) {
+void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
    //
    // emit the calculation instructions
    //

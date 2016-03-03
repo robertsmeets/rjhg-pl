@@ -32,7 +32,7 @@ string MethodCall::stype() { return "MethodCall"; }
  * emit bytecode for this
  *
  **/
-void MethodCall::emit(CodeGenerator* cg, pProcedureNode* pn)
+void MethodCall::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
    //
    // put the parameters on the stack

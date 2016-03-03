@@ -15,15 +15,14 @@
 #include <fstream>
 
 #include "ExpressionParser.h"
-#include "pProgramNode.h"
-
-#include "pProcedureNode.h"
 #include "ProcedureCallNode.h"
 #include "ReturnNode.h"
 #include "IfNode.h"
 #include "WhileNode.h"
 #include "PrintNode.h"
 #include "ClassDefinition.h"
+#include "ProcedureNode.h"
+#include "ProgramNode.h"
 
 using namespace std;
 
@@ -59,13 +58,13 @@ public:
 	void procedure_definition();
 	void trim(string&);
 	void lookahead();
-	vector<Statement*> block(pProcedureNode*);
-	Statement* procedure_call(pProcedureNode*);
-	Statement* assignment(pProcedureNode*);
-	Statement* return_statement(pProcedureNode*);
-	Statement* if_statement(pProcedureNode*);
-	Statement* while_statement(pProcedureNode*);
-	Statement* print_statement(pProcedureNode*);
+	vector<Statement*> block(ProcedureNode*);
+	Statement* procedure_call(ProcedureNode*);
+	Statement* assignment(ProcedureNode*);
+	Statement* return_statement(ProcedureNode*);
+	Statement* if_statement(ProcedureNode*);
+	Statement* while_statement(ProcedureNode*);
+	Statement* print_statement(ProcedureNode*);
 	vector<char, allocator<char> >* getBuffer();
 };
 

@@ -21,7 +21,7 @@ void LitInt::print(int level)
 }
 
 
-void LitInt::emit(CodeGenerator* cg, pProcedureNode* pn)
+void LitInt::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
 	cg -> emit(1, 2, value, NULL);
 }
