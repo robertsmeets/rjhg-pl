@@ -9,7 +9,7 @@
 #include "Disassembler.h"
 #include "CInterpreter.h"
 #include "DebugInfo.h"
-#include "pProgramNode.h"
+#include "ProgramNode.h"
 
 
 using namespace std;

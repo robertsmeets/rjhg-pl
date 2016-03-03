@@ -18,7 +18,7 @@ void LitString::print(int level)
 			}
 }
 
-void LitString::emit(CodeGenerator* cg, pProcedureNode* pn)
+void LitString::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
 	int strlen = value.length() - 2;
 	string my_string = value.substr(1, strlen);

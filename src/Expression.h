@@ -1,7 +1,7 @@
 #ifndef EXPRESSION_H_
 #define EXPRESSION_H_ 
 
-class pProcedureNode; // forward declaration
+class ProcedureNode; // forward declaration
 
 #include <string>
 
@@ -12,7 +12,7 @@ class CodeGenerator; // forward declaration
 class Expression {
 public:
 	virtual void print(int) =0;
-	virtual void emit(CodeGenerator*, pProcedureNode*)=0;
+	virtual void emit(CodeGenerator*, ProcedureNode*)=0;
 	virtual string stype() = 0;
 };
 #endif

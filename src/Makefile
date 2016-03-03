@@ -10,8 +10,8 @@ CFLAGS=-std=c++11 -g -I../dyncall-0.8_win/include -DDEBUG
 #-mfpmath=387 -mfancy-math-387 
 #-ffast-math 
  
-myparser.exe: myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o Extern.o
-	g++ -L"../dyncall-0.8_win/lib" -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o pReturn.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o pClassDefinition.o pProcedureNode.o pProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o Extern.o -llibdyncall_s -llibdynload_s 
+myparser.exe: myparser.lex.o myparser.y.o Assignment.o ReturnNode.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o ClassDefinition.o ProcedureNode.o ProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o Extern.o
+	g++ -L"../dyncall-0.8_win/lib" -g -o myparser.exe myparser.lex.o myparser.y.o Assignment.o ReturnNode.o While.o If.o CommaSeparated.o MethodCall.o Expression.o ExpressionList.o LitBool.o Literal.o LitFloat.o LitInt.o LitString.o ClassDefinition.o ProcedureNode.o ProgramNode.o ProcedureCall.o SingleMethodCall.o Statements.o Val2Expression.o VariableValue.o CodeGenerator.o Disassembler.o DebugInfo.o PrintNode.o CInterpreter.o HeapManager.o CFunctions.o Extern.o -llibdyncall_s -llibdynload_s 
 #	strip myparser.exe
 #	/cygdrive/d/upx391w/upx.exe myparser.exe
 
@@ -51,8 +51,8 @@ DebugInfo.o: DebugInfo.h DebugInfo.cpp
 Assignment.o: Assignment.h Assignment.cpp
 	g++ $(CFLAGS) -o Assignment.o -c Assignment.cpp
 
-pReturn.o: pReturn.h pReturn.cpp
-	g++ $(CFLAGS) -o pReturn.o -c pReturn.cpp
+ReturnNode.o: ReturnNode.h ReturnNode.cpp
+	g++ $(CFLAGS) -o ReturnNode.o -c ReturnNode.cpp
 
 While.o: While.h While.cpp
 	g++ $(CFLAGS) -o While.o -c While.cpp
@@ -87,14 +87,14 @@ LitInt.o: LitInt.h LitInt.cpp
 LitString.o: LitString.h LitString.cpp
 	g++ $(CFLAGS) -o LitString.o -c LitString.cpp
 
-pClassDefinition.o: pClassDefinition.h pClassDefinition.cpp
-	g++ $(CFLAGS) -o pClassDefinition.o -c pClassDefinition.cpp
+ClassDefinition.o: ClassDefinition.h ClassDefinition.cpp
+	g++ $(CFLAGS) -o ClassDefinition.o -c ClassDefinition.cpp
 
-pProcedureNode.o: pProcedureNode.h pProcedureNode.cpp
-	g++ $(CFLAGS) -o pProcedureNode.o -c pProcedureNode.cpp
+ProcedureNode.o: ProcedureNode.h ProcedureNode.cpp
+	g++ $(CFLAGS) -o ProcedureNode.o -c ProcedureNode.cpp
 
-pProgramNode.o: pProgramNode.h pProgramNode.cpp
-	g++ $(CFLAGS) -o pProgramNode.o -c pProgramNode.cpp
+ProgramNode.o: ProgramNode.h ProgramNode.cpp
+	g++ $(CFLAGS) -o ProgramNode.o -c ProgramNode.cpp
 
 ProcedureCall.o: ProcedureCall.h ProcedureCall.cpp
 	g++ $(CFLAGS) -o ProcedureCall.o -c ProcedureCall.cpp
@@ -131,7 +131,7 @@ clean:
 	rm -f Extern.o
 	rm -f CodeGenerator.o
 	rm -f Assignment.o
-	rm -f pReturn.o
+	rm -f ReturnNode.o
 	rm -f While.o
 	rm -f If.o
 	rm -f CommaSeparated.o
@@ -143,9 +143,9 @@ clean:
 	rm -f LitFloat.o
 	rm -f LitInt.o
 	rm -f LitString.o
-	rm -f pClassDefinition.o
-	rm -f pProcedureNode.o
-	rm -f pProgramNode.o
+	rm -f ClassDefinition.o
+	rm -f ProcedureNode.o
+	rm -f ProgramNode.o
 	rm -f ProcedureCall.o
 	rm -f SingleMethodCall.o
 	rm -f Statements.o

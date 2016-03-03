@@ -22,7 +22,7 @@ void VariableValue::print(int level) {
    printf("VariableValue\n");
 }
 
-void VariableValue::emit(CodeGenerator* cg, pProcedureNode* pn) {
+void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
    map<string, uint16_t>* local_variables;
    map<string, uint16_t>::iterator foundIter;
    vector<string>* parameters;

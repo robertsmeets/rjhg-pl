@@ -1,14 +1,14 @@
-#include "pReturn.h"
+#include "ReturnNode.h"
 
-pReturn::pReturn(Expression* e)
+ReturnNode::ReturnNode(Expression* e)
 {
     expression = e;
 }
 
-pReturn::~pReturn() {
+ReturnNode::~ReturnNode() {
 }
 
-void pReturn::print(int level) {
+void ReturnNode::print(int level) {
    for (unsigned int i = 0; i < level; i++) {
       printf("+");
    }
@@ -16,7 +16,7 @@ void pReturn::print(int level) {
    expression->print(level+1);
 }
 
-void pReturn::emit(CodeGenerator* cg, pProcedureNode* pn)
+void ReturnNode::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
    //
    // emit RET
@@ -32,4 +32,4 @@ void pReturn::emit(CodeGenerator* cg, pProcedureNode* pn)
    }
 }
 
-string pReturn::stype() {return "return";}
+string ReturnNode::stype() {return "return";}

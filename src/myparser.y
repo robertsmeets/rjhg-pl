@@ -2,7 +2,7 @@
 #include "Expression.h"
 #include "Assignment.h"
 #include "If.h"
-#include "pReturn.h"
+#include "ReturnNode.h"
 #include "While.h"
 #include "CommaSeparated.h"
 #include "MethodCall.h"
@@ -12,9 +12,9 @@
 #include "LitFloat.h"
 #include "LitInt.h"
 #include "LitString.h"
-#include "pClassDefinition.h"
-#include "pProcedureNode.h"
-#include "pProgramNode.h"
+#include "ClassDefinition.h"
+#include "ProcedureNode.h"
+#include "ProgramNode.h"
 #include "ProcedureCall.h"
 #include "Val2Expression.h"
 #include "VariableValue.h"
@@ -34,13 +34,13 @@ extern char *yytext;
 %union
 {
     char* sval;
-    pProgramNode *a_program;
-    pClassDefinition *a_class;
-    pProcedureNode *a_procedure;
-    pProcedureNode *a_method;
+    ProgramNode *a_program;
+    ClassDefinition *a_class;
+    ProcedureNode *a_procedure;
+    ProcedureNode *a_method;
     Assignment *an_assignment;
     If *an_if;
-    pReturn* a_return;
+    ReturnNode* a_return;
     While* a_while;
     MethodCall *a_methodcall;
     ProcedureCall *a_procedurecall;
@@ -102,7 +102,7 @@ extern char *yytext;
 
 %right POINT
 
-%parse-param {pProgramNode *glob}
+%parse-param {ProgramNode *glob}
 %parse-param {char **errmsg}
 
 %type <a_program> Program
@@ -150,18 +150,18 @@ Highlevelblock:
    ; {$$=glob;}
 
 Procedure:
-   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new pProcedureNode("",$2,$4,$6);}
+   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new ProcedureNode("",$2,$4,$6);}
 
 Class:
    CLASS IDENTIFIER BLOCK CommaSeparated ENDBLOCK
-   ; {  $$ = new pClassDefinition($2);}
+   ; {  $$ = new ClassDefinition($2);}
 
 Extern:
    EXTERN IDENTIFIER ESTRING SEMICOL
    ; { $$ = new Extern($2,$3); }
 
 Method:
-   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new pProcedureNode($2,$4,$6,$8);}
+   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new ProcedureNode($2,$4,$6,$8);}
 
 Statements:
     /* empty */ { $$=new Statements();} 
@@ -179,8 +179,8 @@ Assignment:
    ; { $$ = new Assignment($1,$3);}
 
 Return:
-   RETURN Expression { $$ = new pReturn($2); }
-  |RETURN { $$ = new pReturn(NULL); }
+   RETURN Expression { $$ = new ReturnNode($2); }
+  |RETURN { $$ = new ReturnNode(NULL); }
    ;
 
 While:
@@ -261,11 +261,11 @@ extern "C"
         }   
 }
 
-int yyerror(pProgramNode*s,char**x,char*y) {
+int yyerror(ProgramNode*s,char**x,char*y) {
    printf("yyerror : %s %s\n",y,*x);
 }
 
-pProgramNode* glob;
+ProgramNode* glob;
 
 int main(int argc, char* argv[]) {
 //
@@ -281,7 +281,7 @@ setvbuf(stdout, NULL, _IONBF, 0);
    cout << "Parsing... " << argv[1] << " ... " << endl;
    yyin = fopen(argv[1],"r");
    yydebug = 1;
-   glob = new pProgramNode();
+   glob = new ProgramNode();
    char* errmsg = "error";
    int result = yyparse(glob,&errmsg);
    fclose(yyin);

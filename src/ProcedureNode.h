@@ -1,8 +1,8 @@
-#ifndef PPROCEDURENODE_H_
-#define PPROCEDURENODE_H_
+#ifndef PROCEDURENODE_H_
+#define PROCEDURENODE_H_
 
  /*
- * pProcedureNode.h
+ * ProcedureNode.h
  *
  *  Created on: Dec 18, 2014
  *      Author: robert
@@ -17,27 +17,27 @@
 
 #include "Statement.h"
 
-#include "pReturn.h"
 #include "CFunctions.h"
-#include "pClassDefinition.h"
-#include "pProgramNode.h"
+#include "ClassDefinition.h"
 #include "Statements.h"
 #include "CommaSeparated.h"
+#include "ProgramNode.h"
+#include "ReturnNode.h"
 
 using namespace std;
 
 class Statements; // forward declaration
 
-class pProgramNode;
+class ProgramNode;
 // forward declaration
 
 class Statement;
 // forward declaration
 
-class pProcedureNode {
+class ProcedureNode {
    string class_name;
    string name;
-   pClassDefinition* cd;
+   ClassDefinition* cd;
    CommaSeparated* parameters;
    vector<string> instance_variables;
    Statements* statements;
@@ -46,8 +46,8 @@ class pProcedureNode {
    uint16_t method_number;
 
 public:
-   pProcedureNode(string, string, CommaSeparated*, Statements*);
-   virtual ~pProcedureNode();
+   ProcedureNode(string, string, CommaSeparated*, Statements*);
+   virtual ~ProcedureNode();
    void setName(string);
    string getName();
    map<string, uint16_t>* getLocalVariables();
@@ -70,6 +70,6 @@ public:
    
 };
 
-#endif /* PPROCEDURENODE_H_ */
+#endif /* PROCEDURENODE_H_ */
 
 

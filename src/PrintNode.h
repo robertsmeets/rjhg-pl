@@ -21,7 +21,7 @@ private:
 public:
 	PrintNode(Expression*);
 	virtual ~PrintNode();
-	virtual void emit(CodeGenerator*,pProcedureNode*);
+	virtual void emit(CodeGenerator*,ProcedureNode*);
 	virtual string stype();
 	virtual void print(int);
 };

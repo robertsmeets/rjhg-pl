@@ -1,32 +1,34 @@
-#ifndef PCLASSDEFINITION_H_
-#define PCLASSDEFINITION_H_
+#ifndef CLASSDEFINITION_H_
+#define CLASSDEFINITION_H_
 
 #include <string>
 #include "stdio.h"
 #include <vector>
 
-#include "pProcedureNode.h"
+#include "ProcedureNode.h"
 
 using namespace std;
 
-class pClassDefinition {
+class ProcedureNode; // forward declaration
+
+class ClassDefinition {
 private:
    string name;
    unsigned int classnum;
    vector<string> instance_variables;
-   vector <pProcedureNode*> methods;
+   vector <ProcedureNode*> methods;
    
 public:
-   pClassDefinition(string);
-   virtual ~pClassDefinition();
+   ClassDefinition(string);
+   virtual ~ClassDefinition();
    void print(int);
    string getName();
-   vector <pProcedureNode*> getMethods();
+   vector <ProcedureNode*> getMethods();
    void add_instance_variable(string);
-   void add_method(pProcedureNode*);
+   void add_method(ProcedureNode*);
    vector<string> getInstanceVariables();
    unsigned int getClassNum();
-   pProcedureNode* findMethod(string);
+   ProcedureNode* findMethod(string);
    void setClassNum(int);
 };
 

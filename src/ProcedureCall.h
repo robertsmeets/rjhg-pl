@@ -18,7 +18,7 @@ public:
    ProcedureCall(string,ExpressionList*);
    virtual ~ProcedureCall();
    virtual void print(int);
-   virtual void emit(CodeGenerator*,pProcedureNode*);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
    virtual string stype();
    void addCallToProcedure(CodeGenerator*, string); 
 };

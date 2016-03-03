@@ -5,13 +5,13 @@
  *      Author: robert
  */
 
-#include "pProgramNode.h"
+#include "ProgramNode.h"
 
-pProgramNode::pProgramNode() {
+ProgramNode::ProgramNode() {
    next_methodnumber = 1;
 }
 
-pProgramNode::~pProgramNode() {
+ProgramNode::~ProgramNode() {
    for (auto a_procedure : procedures) {
       delete a_procedure;
    }
@@ -23,16 +23,16 @@ pProgramNode::~pProgramNode() {
    }
 }
 
-void pProgramNode::addClass(pClassDefinition* c) {
+void ProgramNode::addClass(ClassDefinition* c) {
    my_classes.push_back(c);
 }
 
-void pProgramNode::addProcedure(pProcedureNode* c) {
+void ProgramNode::addProcedure(ProcedureNode* c) {
    procedures.push_back(c);
 }
 
-void pProgramNode::addMethodDefinition(pProcedureNode* m) {
-   pClassDefinition* c = getClass(m->getClassName());
+void ProgramNode::addMethodDefinition(ProcedureNode* m) {
+   ClassDefinition* c = getClass(m->getClassName());
    if (c==NULL)
    {
      puts("Class does not exist");
@@ -42,48 +42,48 @@ void pProgramNode::addMethodDefinition(pProcedureNode* m) {
    methods.push_back(m);
 }
 
-void pProgramNode::addExtern(Extern* e)
+void ProgramNode::addExtern(Extern* e)
 {
    externs.push_back(e);
 }
 
-vector<Extern*> pProgramNode::getExterns()
+vector<Extern*> ProgramNode::getExterns()
 {
    return externs;
 }
 
-void pProgramNode::print(int level) {
+void ProgramNode::print(int level) {
    for (int i = 0; i < level; i++) {
       printf("+");
    }
-   printf("pProgramNode\n" );
+   printf("ProgramNode\n" );
    for (Extern* an_extern:externs)
    {
       an_extern->print(level+1);
    }
-   for (pClassDefinition* a_class : my_classes) {
+   for (ClassDefinition* a_class : my_classes) {
       a_class->print(level + 1);
    }
-   for (pProcedureNode* a_method : methods) {
+   for (ProcedureNode* a_method : methods) {
       a_method->print(level + 1);
    }
-   for (pProcedureNode* a_proc : procedures) {
+   for (ProcedureNode* a_proc : procedures) {
       a_proc->print(level + 1);
    }
 }
 
-vector <pClassDefinition*> pProgramNode::getClasses()
+vector <ClassDefinition*> ProgramNode::getClasses()
 {
    return my_classes;
 }
 
-vector <pProcedureNode*> pProgramNode::getProcedures()
+vector <ProcedureNode*> ProgramNode::getProcedures()
 {
    return procedures;
 }
 
 
-pClassDefinition* pProgramNode::getClass(string class_name) {
+ClassDefinition* ProgramNode::getClass(string class_name) {
    for (auto a_class : my_classes) {
       if (a_class->getName() == class_name) {
          return a_class;
@@ -92,7 +92,7 @@ pClassDefinition* pProgramNode::getClass(string class_name) {
    return NULL;
 }
 
-unsigned int pProgramNode::assignMethodNumber(string method_name) {
+unsigned int ProgramNode::assignMethodNumber(string method_name) {
    auto it = method_numbers.find(method_name);
    unsigned int i;
    if (it == method_numbers.end()) {
@@ -105,7 +105,7 @@ unsigned int pProgramNode::assignMethodNumber(string method_name) {
    return i;
 }
 
-unsigned int pProgramNode::getMethodNumber(string method_name) {
+unsigned int ProgramNode::getMethodNumber(string method_name) {
    return method_numbers[method_name];
 }
 
@@ -114,7 +114,7 @@ unsigned int pProgramNode::getMethodNumber(string method_name) {
  * assign class numbers
  *
  **/
-void pProgramNode::assignClassNumbers()
+void ProgramNode::assignClassNumbers()
 {
    int num = 1;
    for (auto a_class:my_classes)
@@ -124,7 +124,7 @@ void pProgramNode::assignClassNumbers()
    } 
 }
 
-Extern* pProgramNode::lookupExternal(string name)
+Extern* ProgramNode::lookupExternal(string name)
 {
    for (auto an_extern:externs)
    {

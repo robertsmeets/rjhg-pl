@@ -10,7 +10,7 @@ private:
 public:
 	LitBool(char*);
 	void print(int);
-	virtual void emit(CodeGenerator*,pProcedureNode*);
+	virtual void emit(CodeGenerator*,ProcedureNode*);
 	virtual string stype();
 };
 

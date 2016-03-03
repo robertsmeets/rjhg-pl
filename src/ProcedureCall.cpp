@@ -27,7 +27,7 @@ void ProcedureCall::print(int level)
  * It may be a procedurecall, or a class instigation
  *
  **/
-void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
+void ProcedureCall::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
    //
    // put the parameters on the stack
@@ -37,7 +37,7 @@ void ProcedureCall::emit(CodeGenerator* cg, pProcedureNode* pn)
    {
       (*it)->emit(cg,pn);
    }
-   pClassDefinition* cd = cg->getClassDefinition(name);
+   ClassDefinition* cd = cg->getClassDefinition(name);
    if (cd != NULL)
    {
       cg->addCallToClassConstructor(cd,NULL);
