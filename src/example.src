@@ -12,9 +12,9 @@ proc main()
    fp = fopen("file.txt", "w");
    fprintf(fp, "This is tutorialspoint.com1");
    fflush(fp);
-   fpringf(fp, "This is tutorialspoint.com2");
+   fprintf(fp, "This is tutorialspoint.com2");
    fflush(fp);
-   fpringf(fp, "This is tutorialspoint.com3");
+   fprintf(fp, "This is tutorialspoint.com3");
    fclose(fp);
 }
 

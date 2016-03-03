@@ -181,7 +181,7 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       break;
    case 10:
       sf = "DYNCAL";
-      i += 5 + a;
+      i += 5;
       break;
    case 11:
       sf = "OBJ CREATION";

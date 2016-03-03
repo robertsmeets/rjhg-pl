@@ -75,7 +75,12 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
       // look up the external function
       //
       Extern* external = cg->getProgramNode()->lookupExternal(procedure_name);
-      cg->emit(10, external->getNumber(), 0, NULL);
+      if (external == NULL)
+      {
+         printf("Could not find procedure <%s>\n",procedure_name.c_str());
+         exit(-1);
+      }
+      cg->emit(10, external->getNumber(), expressionlist->getExpressions().size(), NULL);
    }
 }
 

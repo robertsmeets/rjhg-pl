@@ -591,7 +591,7 @@ int CInterpreter::execute_next() {
       //
       // call the procedure
       //
-      call_external(l);
+      call_external(l,a);
       break;
    case 11: // object creation
 #ifdef DEBUG
@@ -768,7 +768,7 @@ void CInterpreter::print_a_string(char* ptr, uint16_t len) {
  * call an external function
  *
  **/
-void CInterpreter::call_external(short unsigned int function_number) {
+void CInterpreter::call_external(short unsigned int function_number,short unsigned int a) {
    if (function_number > externs.size())
    {
         printf("illegal function number %d highest function number is %d\n",function_number,externs.size());
@@ -784,76 +784,50 @@ void CInterpreter::call_external(short unsigned int function_number) {
       pos = signature.find("+");
    }
    string ingoing =  signature.substr(0,pos);
+   int ilen = ingoing.length();
    string outgoing = signature.substr(pos+1); 
    DCCallVM* vm = dcNewCallVM(4096);
    if (varargs)
    {
+      if (a < ilen) 
+      {
+         printf("Mismatch: ingoing arguments given %d but expected at least %d",a,ingoing.size());
+         exit(-1);
+      }
       dcMode(vm, DC_CALL_C_ELLIPSIS);
    }
    else
    {
+      if (a != ilen) 
+      {
+         printf("Mismatch: ingoing arguments given %d but expected %d",a,ingoing.size());
+         exit(-1);
+      }
       dcMode(vm, DC_CALL_C_DEFAULT);
    }
    dcReset(vm);
    //
-   // loop over the signature
+   // loop over the given args
    //
-   int nr_ingoing =  ingoing.length();
+   int nr_ingoing = ilen;
    int cnt = nr_ingoing;
    for(char& c : ingoing) {
       stack_element f = s[t - cnt];
-      uint16_t atype = f.atype;
-      switch (c)
-      {
-          case 'd':
-             if (atype != 5)
-             {
-                printf("expected double in external call but got %d\n",atype);
-                exit(-1);
-             }
-             double arg_in;
-             char* adr;
-             adr = hm->getStart() + f.address;
-             memcpy(&arg_in, adr, 8);
-             dcArgDouble(vm, arg_in);
-             break;
-          case 'p': // char*
-          {
-             if ((atype != 7) && (atype != 8))
-             {
-                printf("expected string or pointer in external call but got %d\n",atype);
-                exit(-1);
-             } 
-             if (atype == 7)
-             {
-                adr = hm->getStart() + f.address;
-                memcpy(&arg_in, adr, 8);
-                int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
-                char* str = (char*) malloc(len + 1);
-                memcpy(str, adr + 2, len);
-                str[len] = '\0';
-                printf("Pushing a string <%s>\n",str);
-                dcArgPointer(vm, str);
-                // free(str);
-             }
-             else if (atype == 8)
-             {
-                adr = hm->getStart() + f.address;
-                void* ptr;
-                memcpy(&ptr, adr, 4);
-                printf("Pushing a pointer <0x%x>\n",ptr);
-                dcArgPointer(vm, ptr);
-                // free(str);
-             }
-             break;
-          }
-          default:
-             printf("unexpected type <%c> in external call",c);
-             exit(-1);
-      } 
+      pass_in_arg(vm,c,f);
       cnt--;
    } 
    t -= nr_ingoing - 1;
+   //
+   //  in case of a vararg, there may be more args
+   //
+   int left = a - ilen;
+   for (int i = 0; i< left;i++)
+   {
+      stack_element f = s[t - cnt];
+      pass_in_arg(vm,' ' ,f);
+      cnt--;
+   }
+   t -= left;
    char c = outgoing[0];
    switch (c)
    {
@@ -914,4 +888,64 @@ void CInterpreter::call_external(short unsigned int function_number) {
 
    }
    dcFree(vm);
+}
+
+
+void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
+{
+      uint16_t atype = f.atype;
+      switch(atype)
+      {
+          case 5:
+          {
+             if ( (c != ' ' ) && ( c!= 'd'))
+             {
+                printf("expected double in external call but got %d\n",atype);
+                exit(-1);
+             }
+             double arg_in;
+             char* adr = hm->getStart() + f.address;
+             memcpy(&arg_in, adr, 8);
+             dcArgDouble(vm, arg_in);
+             break;
+          }
+          case 7: // char*
+          {
+             if ((c !=' ' ) && (c != 'p'))
+             {
+                printf("expected string or pointer in external call but got %d\n",atype);
+                exit(-1);
+             } 
+                char* adr = hm->getStart() + f.address;
+                int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
+                char* str = (char*) malloc(len + 1);
+                memcpy(str, adr + 2, len);
+                str[len] = '\0';
+                printf("Pushing a string <%s>\n",str);
+                dcArgPointer(vm, str);
+                // free(str);
+                break;
+            }
+         case 8:
+            {
+               if ((c !=' ' ) && (c != 'p'))
+               {
+                  printf("expected string or pointer in external call but got %d\n",atype);
+                  exit(-1);
+               }
+               char* adr = hm->getStart() + f.address;
+               void* ptr;
+               memcpy(&ptr, adr, 4);
+               printf("Pushing a pointer <0x%x>\n",ptr);
+               dcArgPointer(vm, ptr);
+                // free(str);
+               break;
+            }
+          default:
+          {
+             printf("unexpected type given <%d> but expected <%d> in external call\n", atype,c);
+             exit(-1);
+          }
+      } 
+
 }
