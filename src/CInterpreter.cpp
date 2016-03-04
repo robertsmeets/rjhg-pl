@@ -810,13 +810,12 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
    // loop over the given args
    //
    int nr_ingoing = ilen;
-   int cnt = nr_ingoing;
+   int cnt = a;
    for(char& c : ingoing) {
       stack_element f = s[t - cnt];
       pass_in_arg(vm,c,f);
       cnt--;
    } 
-   t -= nr_ingoing - 1;
    //
    //  in case of a vararg, there may be more args
    //
@@ -827,7 +826,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
       pass_in_arg(vm,' ' ,f);
       cnt--;
    }
-   t -= left;
+   t -= a;
    char c = outgoing[0];
    switch (c)
    {
