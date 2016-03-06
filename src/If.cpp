@@ -14,7 +14,7 @@ void If::print(int level) {
 	for (unsigned int i = 0; i < level; i++) {
 		printf("+");
 	}
-	printf("If " );
+	printf("If\n" );
 	expression->print(level+1);
         statements1->print(level+1);
         if (statements2 != NULL)
