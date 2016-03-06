@@ -137,6 +137,7 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
          break;
       default:
          sa = "unexpected A value: " + a;
+         printf("the a value was unexpected <%d>\n",a);
          break;
       }
       i += 5;

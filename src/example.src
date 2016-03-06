@@ -1,18 +1,22 @@
-extern sqrt    d-d       ;
 extern fopen   pp-p      ;
 extern fclose  p-p       ;
 extern fprintf pp+i      ;
 
 proc main()
 {
-   print sqrt(2.0); 
-   print sqrt(3.0); 
-   fp = fopen("file.txt", "w");
-   a = fprintf(fp, "This is tutorialspoint.com1");
-   print "ooooooooooooooooooooooooooooooooooooooooooooooooooooo";
-   a = fprintf(fp, "This is tutorialspoint.com2");
-   a = fprintf(fp, "This is tutorialspoint.com3");
-   z = fclose(fp);
+   fp = fopen("file.txt","w");
+   if (fp == 0)
+   {
+      print "Something went wrong";
+   };
+   i = 1;
+   while i < 10
+   {
+      print i ;
+      fprintf(fp,"%d and %s",i,"BLA");
+      i=i+1;
+   };
+   fclose(fp);
 }
 
 

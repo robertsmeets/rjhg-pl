@@ -20,8 +20,8 @@ CodeGenerator::CodeGenerator() {
    opr_mapping['*'] = 4;
    opr_mapping['/'] = 5;
    opr_mapping['%'] = 6;
-   opr_mapping['='] = 7;
-   opr_mapping['N'] = 8;
+   opr_mapping['='] = 8;
+   opr_mapping['N'] = 9;
    opr_mapping['<'] = 10;
    opr_mapping['G'] = 11;
    opr_mapping['>'] = 12;

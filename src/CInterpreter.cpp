@@ -479,6 +479,7 @@ int CInterpreter::execute_next() {
             s[t - 1] = fr1;
          } else {
             printf( "operation %d: incompatible types %d and %d\n",fr1.atype,fr2.atype);
+            exit(-1);
          }
 
          break;
@@ -918,9 +919,9 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
       {
           case 2: // int
           {
-             if ( (c != ' ' ) && ( c!= 'i'))
+             if ((c != ' ' ) && (c!= 'i'))
              {
-                printf("expected int in external call but got %d\n",atype);
+                printf("expected %c in external call but got %d\n",c,atype);
                 exit(-1);
              }
 #ifdef DEBUG
@@ -958,7 +959,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 printf("Pushing a string <%s>\n",str);
 #endif
                 dcArgPointer(vm, str);
-                // free(str);
+                free(str);
                 break;
             }
          case 8:
@@ -975,7 +976,6 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                printf("Pushing a pointer <0x%x>\n",ptr);
 #endif
                dcArgPointer(vm, ptr);
-                // free(str);
                break;
             }
           default:
