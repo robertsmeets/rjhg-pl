@@ -51,18 +51,18 @@ void ProcedureCall::emit(CodeGenerator* cg, ProcedureNode* pn)
 void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name) 
 {
    //
-   // add room for the local variables.
-   // emit an INT
-   // Since we don't know how many, leave 0 for the INT parameter
-   // this will be corrected in the fix stage
-   //
-   cg->emit(6, 0, 0, NULL);
-   //
    // determine if procedure_name was defined
    // in the program code, if not it's a dynamic call
    //
    Expression* proc = cg->procDefined(procedure_name);
    if (proc != NULL) {
+      //
+      // add room for the local variables.
+      // emit an INT
+      // Since we don't know how many, leave 0 for the INT parameter
+      // this will be corrected in the fix stage
+      //
+      cg->emit(6, 0, 0, NULL);
       //
       // emit a "cal"
       // leave the call address 0, since this will be corrected in the fix stage
@@ -72,6 +72,13 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
    } else {
       //
       // dealing with a dynamic call, to a library function
+      //
+      int sz = expressionlist->getExpressions().size();
+      //
+      // Emit an INT. A dynamic call has sz parameters but 0 local variables
+      //
+      cg->emit(6,sz,0,NULL);
+      //
       // look up the external function
       //
       Extern* external = cg->getProgramNode()->lookupExternal(procedure_name);
@@ -80,7 +87,7 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
          printf("Could not find procedure <%s>\n",procedure_name.c_str());
          exit(-1);
       }
-      cg->emit(10, external->getNumber(), expressionlist->getExpressions().size(), NULL);
+      cg->emit(10, external->getNumber(), sz , NULL);
    }
 }
 

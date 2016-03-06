@@ -129,7 +129,9 @@ void CInterpreter::start() {
    while (j < pc)
    {
       unsigned long ptr = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8) + ((buffer[j + 2] & 0xff) << 16) + ((buffer[j + 3] & 0xff) << 24);
+#ifdef DEBUG
       printf("Pushing external pointer 0x%x\n",ptr);
+#endif
       j += 4;
       extern_record er;
       string signature = string(buffer + j);
@@ -391,7 +393,8 @@ int CInterpreter::execute_next() {
             memcpy(st + fr3->address, &d3, 8);
             s[t - 1] = *fr3;
          } else {
-            printf("incompatible types %d and %d\n",fr1.atype,fr2.atype);
+            printf("operation %d incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
+            exit(-1);
          }
          break;
       case 5:
@@ -702,6 +705,7 @@ int CInterpreter::execute_next() {
       exit(-1);
       break;
    }
+#ifdef DEBUG
    //
    // print the stack
    //
@@ -710,14 +714,27 @@ int CInterpreter::execute_next() {
       char* adr;
       printf("[");
       switch (s[i].atype) {
+         case 0:
+            printf("NULL");
+            break;
          case 2:
-            printf("0x%x",s[i].address);
+            printf("%d",s[i].address);
             break;
          case 5:
             adr = hm->getStart() + s[i].address;
             double d;
             memcpy(&d, adr, 8);
             printf("%f",d);
+            break;
+         case 6:
+            if (s[i].address)
+            {
+               printf("true");
+            }
+            else
+            {
+               printf("false");
+            }
             break;
          case 7: // string
             adr = hm->getStart() + s[i].address;
@@ -737,13 +754,14 @@ int CInterpreter::execute_next() {
    }
    printf("      bstack: ");
    for (uint16_t i = 0; i < tb; i++) {
-      printf("%d",b[i]);
+      printf("%d ",b[i]);
    }
    printf("      rstack: ");
    for (uint16_t i = 0; i < tr; i++) {
       printf("0x%x", r[i]);
    }
    printf("\n");
+#endif
    return 0;
 }
 
@@ -828,6 +846,9 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
    }
    t -= a;
    char c = outgoing[0];
+   //
+   // do the actual call
+   //
    switch (c)
    {
       case 'd':
@@ -838,7 +859,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          //
          char* ptr = hm->allocate(8);
          memcpy(ptr, &r, 8);
-         t = b[tb] + 2;
+         //t = b[tb] + 2;
          tb--;
          s[t].atype = 5;
          s[t].address = (short uint16_t) (ptr - hm->getStart());
@@ -853,7 +874,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
           //
           char* ptr = hm->allocate(4);
           memcpy(ptr, &r, 4);
-          t = b[tb] + 2;
+          //t = b[tb] + 2;
           tb--;
           s[t].atype = 8;
           s[t].address = (short uint16_t) (ptr - hm->getStart());
@@ -874,7 +895,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          // integer return type
          //
          int i = dcCallInt(vm,sym);
-         t = b[tb] + 2;
+         //t = b[tb] + 2;
          tb--;
          s[t].atype = 2;
          s[t].address = i;
@@ -895,6 +916,19 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
       uint16_t atype = f.atype;
       switch(atype)
       {
+          case 2: // int
+          {
+             if ( (c != ' ' ) && ( c!= 'i'))
+             {
+                printf("expected int in external call but got %d\n",atype);
+                exit(-1);
+             }
+#ifdef DEBUG
+                printf("Pushing an int <%d>\n",f.address);
+#endif
+             dcArgInt(vm,f.address);
+             break;
+          }
           case 5:
           {
              if ( (c != ' ' ) && ( c!= 'd'))
@@ -920,7 +954,9 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 char* str = (char*) malloc(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
+#ifdef DEBUG
                 printf("Pushing a string <%s>\n",str);
+#endif
                 dcArgPointer(vm, str);
                 // free(str);
                 break;
@@ -935,7 +971,9 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                char* adr = hm->getStart() + f.address;
                void* ptr;
                memcpy(&ptr, adr, 4);
+#ifdef DEBUG
                printf("Pushing a pointer <0x%x>\n",ptr);
+#endif
                dcArgPointer(vm, ptr);
                 // free(str);
                break;
