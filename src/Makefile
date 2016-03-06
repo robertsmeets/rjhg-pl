@@ -4,8 +4,8 @@
 #
 # add -DDEBUG for debug
 #
-CFLAGS=-std=c++11 -g -I../dyncall-0.8_win/include -DDEBUG
-#CFLAGS=-std=c++11 -s -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections  -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,-z,norelro -Wl,--hash-style=gnu -Wl,--build-id=none 
+CFLAGS=-std=c++11 -g -I../dyncall-0.8_win/include 
+#CFLAGS=-std=c++11 -DDEBUG -I../dyncall-0.8_win/include -s -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections  -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,-z,norelro -Wl,--hash-style=gnu -Wl,--build-id=none 
 #-fshort-double -fsingle-precision-constant 
 #-mfpmath=387 -mfancy-math-387 
 #-ffast-math 

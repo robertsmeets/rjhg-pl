@@ -21,20 +21,23 @@
 
 #include "y.tab.h"
 
+int line_num = 1;
+
 extern "C" int yylex();
 %}
 
-blanks          [ \t\n]+
+blanks          [ \t]+
 identifier   	[_a-zA-Z]+
 float 		[0-9]+\.[0-9]*
 integer		[0-9]+
 boolean        	true|false
 string        	\"[\% \.a-zA-Z0-9\\\>\<]*\"
-estring         [BcCsSiIjJlLfdpZv]*[\-\+][BcCsSiIjJlLfdpZv]*
+estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
 
 %%
 
 {blanks}        { /* ignore */ }
+\n             { ++line_num; }
 
 "proc"      return(PROCEDURE);
 "{"         return(BLOCK);

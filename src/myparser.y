@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 
+extern int line_num;
 extern char *yytext;
 #define YYDEBUG_LEXER_TEXT yytext
 
@@ -262,7 +263,8 @@ extern "C"
 }
 
 int yyerror(ProgramNode*s,char**x,char*y) {
-   printf("yyerror : %s %s\n",y,*x);
+   printf("yyerror : line_num %d %s %s\n",line_num,y,*x);
+   exit(-1);
 }
 
 ProgramNode* glob;
