@@ -5,7 +5,6 @@
 #include "If.h"
 #include "CommaSeparated.h"
 #include "MethodCall.h"
-#include "Expression.h"
 #include "ExpressionList.h"
 #include "LitBool.h"
 #include "Literal.h"
@@ -66,6 +65,7 @@ estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
 "while"     return(WHILE);
 "print"     return(PRINT);
 "extern"    return(EXTERN);
+"null"      return(NULLID);
 
 {boolean} {
             yylval.sval = malloc(strlen(yytext)+1);

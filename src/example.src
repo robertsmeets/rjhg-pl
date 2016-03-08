@@ -5,9 +5,10 @@ extern fprintf pp+i      ;
 proc main()
 {
    fp = fopen("file.txt","w");
-   if (fp == 0)
+   if (fp==null)
    {
-      print "Something went wrong";
+      print "could not open the file";
+      return;
    };
    i = 1;
    while i < 10
@@ -18,6 +19,4 @@ proc main()
    };
    fclose(fp);
 }
-
-
 

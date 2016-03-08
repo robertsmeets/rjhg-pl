@@ -1,14 +1,14 @@
-#ifndef LITBOOL_H_
-#define LITBOOL_H_ 
+#ifndef LITNULL_H_
+#define LITNULL_H_ 
 
 #include "Literal.h"
 #include "CodeGenerator.h"
 
-class LitBool: public Literal {
+class LitNull: public Literal {
 private:
    bool value;
 public:
-   LitBool(char*);
+   LitNull();
    void print(int);
    virtual void emit(CodeGenerator*,ProcedureNode*);
    virtual string stype();

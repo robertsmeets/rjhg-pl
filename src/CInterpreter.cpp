@@ -209,6 +209,11 @@ int CInterpreter::execute_next() {
    printf("LIT %d,%d", l , a);
 #endif
       switch (l) {
+      case 0: // null
+         s[t].atype=0;
+         s[t].address = 0;
+         t++;
+         break;
       case 2: // Int
          s[t].atype = 2;
          s[t].address = a;
@@ -477,11 +482,29 @@ int CInterpreter::execute_next() {
             fr1.atype = 6;
             fr1.address = eq;
             s[t - 1] = fr1;
-         } else {
-            printf( "operation %d: incompatible types %d and %d\n",fr1.atype,fr2.atype);
+         } 
+          else if ((fr1.atype == 0) && (fr2.atype == 8)) {
+            //
+            // null vs pointer 
+            //
+            bool eq = (fr2.address == 0);
+            fr1.atype=6;
+            fr1.address=eq;
+            s[t-1]= fr1;
+          }
+          else if ((fr1.atype == 8) && (fr2.atype == 0)) {
+            //
+            // pointer vs null
+            //
+            bool eq = (fr1.address == 0);
+            fr1.atype=6;
+            fr1.address=eq;
+            s[t-1]= fr1;
+          }
+         else {
+            printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
             exit(-1);
          }
-
          break;
 
       default:
@@ -959,7 +982,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 printf("Pushing a string <%s>\n",str);
 #endif
                 dcArgPointer(vm, str);
-                free(str);
+     //           free(str);
                 break;
             }
          case 8:

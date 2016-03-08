@@ -87,8 +87,11 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       case 6: // boolean
          i += 5;
          break;
+      case 0: // null
+         i +=5;
+         break;
       default:
-         printf("unexpected LIT value" );
+         printf("unexpected LIT value");
          i += 5;
          break;
       }
