@@ -8,6 +8,7 @@
 #include "MethodCall.h"
 #include "ExpressionList.h"
 #include "LitBool.h"
+#include "LitNull.h"
 #include "Literal.h"
 #include "LitFloat.h"
 #include "LitInt.h"
@@ -58,6 +59,7 @@ extern char *yytext;
     PrintNode *a_printnode;
     Extern *an_extern;
     char* an_estring;
+    void* nullid;
 };
 
 %token IDENTIFIER
@@ -93,6 +95,7 @@ extern char *yytext;
 %token PRINT
 %token EXTERN
 %token ESTRING
+%token NULLID
 
 %nonassoc BLOCK
 %nonassoc IDENTIFIER
@@ -132,6 +135,7 @@ extern char *yytext;
 %type <sval> IDENTIFIER
 %type <a_printnode> Print
 %type <an_estring> ESTRING
+%type <nullid> NULLID
 
 %token PROCEDURE
 %start Program
@@ -240,6 +244,7 @@ Literal:
    |INTEGER {$$=new LitInt($1);}
    |BOOLEAN {$$=new LitBool($1);}
    |STRING {$$=new LitString($1);}
+   |NULLID {$$=new LitNull();}
    ;
 
 CommaSeparated:

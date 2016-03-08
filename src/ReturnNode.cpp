@@ -13,7 +13,10 @@ void ReturnNode::print(int level) {
       printf("+");
    }
    printf("Return\n" );
-   expression->print(level+1);
+   if (expression != NULL)
+   {
+      expression->print(level+1);
+   }
 }
 
 void ReturnNode::emit(CodeGenerator* cg, ProcedureNode* pn)
