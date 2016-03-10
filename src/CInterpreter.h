@@ -30,7 +30,7 @@ class HeapManager; // forward declaration
 
 struct stack_element {
       unsigned short int atype;
-      unsigned short int address;
+      unsigned long long int address;
 };
 
 struct extern_record {
