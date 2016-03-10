@@ -85,20 +85,14 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
    {
       an_extern->setNumber(i);
       void* ptr = an_extern->address();
-      printf("the address of %s is 0x%x\n" ,an_extern->getName().c_str(),ptr); 
-      unsigned long a = (unsigned long)ptr;  
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
-      *((char*) codebuffer + the_index) = a & 255;
-      a = a >> 8;
-      the_index++;
+      printf("the address of %s is 0x%llx\n" ,an_extern->getName().c_str(),ptr); 
+      unsigned long long a = (unsigned long long)ptr;  
+      for (int j = 0;j< 8;j++)
+      { 
+         *((char*) codebuffer + the_index) = a & 255;
+         a = a >> 8;
+         the_index++;
+      }
       //
       // now save the signature as as string
       //

@@ -3,4 +3,5 @@ RemoteSystemsTempFiles/
 msvc/
 workspace/
 dyncall-0.8_win/
+dyncall-0.8_linux/
 dyncall-0.9/

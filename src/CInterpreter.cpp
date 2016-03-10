@@ -128,14 +128,15 @@ void CInterpreter::start() {
    uint16_t j = start_ext_proc_table;
    while (j < pc)
    {
-      unsigned long ptr = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8) + ((buffer[j + 2] & 0xff) << 16) + ((buffer[j + 3] & 0xff) << 24);
+       void* ptr;
+       memcpy(&ptr,buffer + j,8); 
 #ifdef DEBUG
-      printf("Pushing external pointer 0x%x\n",ptr);
+      printf("Pushing external pointer 0x%llx\n",(long long unsigned int)ptr);
 #endif
-      j += 4;
+      j += 8;
       extern_record er;
       string signature = string(buffer + j);
-      er.address = ptr;
+      er.address = (long long unsigned int)ptr;
       er.signature = signature; 
       externs.push_back(er);
       j+= signature.length() + 1;
@@ -767,8 +768,8 @@ int CInterpreter::execute_next() {
          case 8: // pointer
             adr = hm->getStart() + s[i].address;
             void* ptr;
-            memcpy(&ptr, adr, 4);
-            printf("ptr 0x%x",ptr);
+            memcpy(&ptr, adr, 8);
+            printf("ptr 0x%llx",ptr);
             break;
          default:
             printf("?%d" , s[i].atype);
@@ -896,8 +897,8 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
           //
           // put the result on the stack
           //
-          char* ptr = hm->allocate(4);
-          memcpy(ptr, &r, 4);
+          char* ptr = hm->allocate(8);
+          memcpy(ptr, &r, 8);
           //t = b[tb] + 2;
           tb--;
           s[t].atype = 8;
@@ -994,9 +995,9 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                }
                char* adr = hm->getStart() + f.address;
                void* ptr;
-               memcpy(&ptr, adr, 4);
+               memcpy(&ptr, adr, 8);
 #ifdef DEBUG
-               printf("Pushing a pointer <0x%x>\n",ptr);
+               printf("Pushing a pointer <0x%llx>\n",ptr);
 #endif
                dcArgPointer(vm, ptr);
                break;
