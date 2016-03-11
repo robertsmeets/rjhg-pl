@@ -725,6 +725,15 @@ int CInterpreter::execute_next() {
       *(hm->getStart() + adr + 2) = s[t].address >> 8;
       t--;
       break;
+   case 15:
+#ifdef DEBUG
+      printf("DROP");
+#endif
+      //
+      // drop the top value of the stack
+      //
+      t--;
+      break;
    default:
       printf("unexpected F value <0x%x> at PC <0x%x>\n",f,pc);
       exit(-1);

@@ -22,3 +22,6 @@ void LitNull::emit(CodeGenerator* cg, ProcedureNode* pn)
 }
 
 string LitNull::stype() { return "LitNull"; }
+
+
+void LitNull::setTopLevel() {}

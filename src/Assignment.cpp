@@ -49,4 +49,5 @@ string Assignment::stype()
    return "Assignment";
 }
 
+void Assignment::setTopLevel() {}
 

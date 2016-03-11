@@ -11,9 +11,8 @@ proc main()
       return;
    };
    i = 1;
-   while i < 10
+   while i < 500
    {
-      print i ;
       fprintf(fp,"%d and %s",i,"BLA");
       i=i+1;
    };

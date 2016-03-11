@@ -7,12 +7,13 @@
 class LitFloat: public Literal {
 
 private:
-	double value;
+   double value;
 public:
-	LitFloat(char*);
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,ProcedureNode*);
-	virtual string stype();
+   LitFloat(char*);
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 
 #endif

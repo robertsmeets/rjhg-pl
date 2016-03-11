@@ -6,12 +6,13 @@
 
 class LitInt: public Literal {
 private:
-	int value;
+   int value;
 public:
-	LitInt(char*);
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,ProcedureNode*);
-	virtual string stype();
+   LitInt(char*);
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 
 #endif

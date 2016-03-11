@@ -12,12 +12,13 @@ using namespace std;
 class ReturnNode: public Expression {
 
 private:
-	Expression* expression;
+   Expression* expression;
 public:
-	ReturnNode(Expression*);
-	virtual ~ReturnNode();
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,ProcedureNode*);
-	virtual string stype();
+   ReturnNode(Expression*);
+   virtual ~ReturnNode();
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 #endif

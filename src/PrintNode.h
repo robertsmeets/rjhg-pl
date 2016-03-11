@@ -17,13 +17,14 @@ using namespace std;
 class PrintNode : public Expression
 {
 private:
-	Expression* expression;
+   Expression* expression;
 public:
-	PrintNode(Expression*);
-	virtual ~PrintNode();
-	virtual void emit(CodeGenerator*,ProcedureNode*);
-	virtual string stype();
-	virtual void print(int);
+   PrintNode(Expression*);
+   virtual ~PrintNode();
+   virtual void emit(CodeGenerator*,ProcedureNode*);
+   virtual string stype();
+   virtual void print(int);
+   virtual void setTopLevel();
 };
 
 #endif /* PRINTNODE_H_ */

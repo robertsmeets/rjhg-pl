@@ -25,3 +25,5 @@ void LitInt::emit(CodeGenerator* cg, ProcedureNode* pn)
 }
 
 string LitInt::stype() { return "LitInt"; }
+
+void LitInt::setTopLevel() {}

@@ -17,6 +17,6 @@ public:
    virtual void print(int);
    virtual void emit(CodeGenerator*,ProcedureNode*);
    virtual string stype();
-
+   virtual void setTopLevel();
 };
 #endif

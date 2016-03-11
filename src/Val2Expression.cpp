@@ -24,3 +24,6 @@ void Val2Expression::emit(CodeGenerator* cg, ProcedureNode* pn)
 }
 
 string Val2Expression::stype() { return "Val2Expression";}
+
+
+void Val2Expression::setTopLevel() {}
