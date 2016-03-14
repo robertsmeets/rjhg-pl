@@ -13,13 +13,14 @@ using namespace std;
 class While: public Expression {
 
 private:
-	Expression* expression;
+   Expression* expression;
         Statements* statements;
 public:
-	While(Expression*,Statements*);
-	virtual ~While();
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,ProcedureNode*);
-	virtual string stype();
+   While(Expression*,Statements*);
+   virtual ~While();
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 #endif

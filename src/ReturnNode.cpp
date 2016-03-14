@@ -36,3 +36,6 @@ void ReturnNode::emit(CodeGenerator* cg, ProcedureNode* pn)
 }
 
 string ReturnNode::stype() {return "return";}
+
+
+void ReturnNode::setTopLevel() {}

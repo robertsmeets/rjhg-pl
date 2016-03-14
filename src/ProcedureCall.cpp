@@ -4,12 +4,17 @@ ProcedureCall::ProcedureCall(string s,ExpressionList* el)
 {
    name = s;
    expressionlist = el;
+   toplevel = false;
 }
 
 ProcedureCall::~ProcedureCall()
 {
 }
 
+void ProcedureCall::setTopLevel()
+{
+   toplevel = true;
+}
 
 void ProcedureCall::print(int level)
 {
@@ -88,6 +93,13 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
          exit(-1);
       }
       cg->emit(10, external->getNumber(), sz , NULL);
+      //
+      // if this is a top level call, the result is ignored. Therefore we must drop it from the stack
+      //
+      if (toplevel)
+      {
+         cg->emit(15,0,0,NULL);
+      }
    }
 }
 

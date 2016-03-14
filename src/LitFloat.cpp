@@ -28,3 +28,5 @@ void LitFloat::emit(CodeGenerator* cg, ProcedureNode* pn)
 }
 
 string LitFloat::stype() { return "LitFloat" ;}
+
+void LitFloat::setTopLevel() {}

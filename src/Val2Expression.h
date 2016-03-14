@@ -10,14 +10,15 @@ using namespace std;
 
 class Val2Expression: public Expression {
 private:
-	char operation;
-	Expression* lhs;
-	Expression* rhs;
+   char operation;
+   Expression* lhs;
+   Expression* rhs;
 public:
-	Val2Expression(char, Expression*, Expression*);
-	void print(int);
-	virtual void emit(CodeGenerator*, ProcedureNode*);
-	virtual string stype();
+   Val2Expression(char, Expression*, Expression*);
+   void print(int);
+   virtual void emit(CodeGenerator*, ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 
 #endif

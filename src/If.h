@@ -12,14 +12,15 @@ using namespace std;
 class If: public Expression {
 
 private:
-	Expression* expression;
+   Expression* expression;
         Statements* statements1;
         Statements* statements2;
 public:
-	If(Expression*, Statements*, Statements*);
-	virtual ~If();
-	virtual void print(int);
-	virtual void emit(CodeGenerator*, ProcedureNode*);
-	virtual string stype();
+   If(Expression*, Statements*, Statements*);
+   virtual ~If();
+   virtual void print(int);
+   virtual void emit(CodeGenerator*, ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 #endif

@@ -73,3 +73,4 @@ string VariableValue::stype() {
 string VariableValue::getName() {
    return value;
 }
+void VariableValue::setTopLevel() {}

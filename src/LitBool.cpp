@@ -25,17 +25,20 @@ LitBool::LitBool(char* s)
 
 void LitBool::print(int level)
 {
-	for (int i = 0; i < level; i++) {
-		printf("+");
-	}
-	printf("LitBool\n" );
-	
+   for (int i = 0; i < level; i++) {
+      printf("+");
+   }
+   printf("LitBool\n" );
+   
 
 }
 
 void LitBool::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
-	cg->emit(1, 6, value, NULL);
+   cg->emit(1, 6, value, NULL);
 }
 
 string LitBool::stype() { return "LitBool"; }
+
+
+void LitBool::setTopLevel() {}

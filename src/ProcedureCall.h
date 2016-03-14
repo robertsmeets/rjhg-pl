@@ -14,12 +14,14 @@ class ProcedureCall: public Expression {
 private:
      string name;
      ExpressionList* expressionlist;
+     bool toplevel;
 public:
    ProcedureCall(string,ExpressionList*);
    virtual ~ProcedureCall();
    virtual void print(int);
    virtual void emit(CodeGenerator*,ProcedureNode*);
    virtual string stype();
+   virtual void setTopLevel();
    void addCallToProcedure(CodeGenerator*, string); 
 };
 

@@ -10,12 +10,13 @@ using namespace std;
 
 class LitString: public Literal {
 private:
-	string value;
+   string value;
 public:
-	LitString (string);
-	virtual void print(int);
-	virtual void emit(CodeGenerator*, ProcedureNode*);
-	virtual string stype();
+   LitString (string);
+   virtual void print(int);
+   virtual void emit(CodeGenerator*, ProcedureNode*);
+   virtual string stype();
+   virtual void setTopLevel();
 };
 
 #endif

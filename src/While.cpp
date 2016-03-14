@@ -52,3 +52,5 @@ void While::emit(CodeGenerator* cg, ProcedureNode* pn)
 string While::stype() {
 	return "while";
 }
+
+void While::setTopLevel() {}

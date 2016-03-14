@@ -17,14 +17,15 @@ using namespace std;
 
 class VariableValue : public Expression {
 private:
-	string value;
+   string value;
 public:
-	VariableValue(string);
-	virtual ~VariableValue();
-	virtual void print(int);
-	virtual void emit(CodeGenerator*,ProcedureNode*);
-	virtual string stype();
-	string getName();
+   VariableValue(string);
+   virtual ~VariableValue();
+   virtual void print(int);
+   virtual void emit(CodeGenerator*,ProcedureNode*);
+   virtual string stype();
+   string getName();
+   virtual void setTopLevel();
 };
 
 #endif /* VARIABLEVALUE_H_ */

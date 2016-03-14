@@ -9,32 +9,34 @@
 
 PrintNode::PrintNode(Expression* e)
 {
-	expression = e;
+   expression = e;
 }
 
 PrintNode::~PrintNode() {
 }
 
 void PrintNode::emit(CodeGenerator* cg, ProcedureNode* pn) {
-	//
-	// emit the instructions to calculate the value and put it on the stack
-	//
-	expression->emit(cg, pn);
-	//
-	// return
-	//
-	cg->emit(9, 0, 0, this);
+   //
+   // emit the instructions to calculate the value and put it on the stack
+   //
+   expression->emit(cg, pn);
+   //
+   // return
+   //
+   cg->emit(9, 0, 0, this);
 }
 
 string PrintNode::stype() {
-	return "print";
+   return "print";
 }
 
 void PrintNode::print(int level) {
-	for (int i=0;i<level;i++)
-		{
-			printf("+" );
-		}
-	printf("PrintNode\n" );
-	expression->print(level + 1);
+   for (int i=0;i<level;i++)
+      {
+         printf("+" );
+      }
+   printf("PrintNode\n" );
+   expression->print(level + 1);
 }
+
+void PrintNode::setTopLevel() {}

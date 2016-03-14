@@ -53,3 +53,4 @@ void MethodCall::emit(CodeGenerator* cg, ProcedureNode* pn)
 }
 
 
+void MethodCall::setTopLevel() {}
