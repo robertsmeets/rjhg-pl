@@ -68,7 +68,7 @@ class CInterpreter {
    uint16_t find_offset();
    void call_external(short unsigned int,short unsigned int) ;
    void pass_in_arg( DCCallVM* ,char ,stack_element);
-
+   void print_stack();
 public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
