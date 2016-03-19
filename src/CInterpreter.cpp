@@ -739,6 +739,13 @@ int CInterpreter::execute_next() {
       exit(-1);
       break;
    }
+   print_stack();
+   return 0;
+}
+
+
+void CInterpreter::print_stack()
+{
 #ifdef DEBUG
    //
    // print the stack
@@ -780,6 +787,9 @@ int CInterpreter::execute_next() {
             memcpy(&ptr, adr, 8);
             printf("ptr 0x%llx",ptr);
             break;
+         case 9: // object reference
+            printf("objref");
+            break;
          default:
             printf("?%d" , s[i].atype);
             break;
@@ -796,7 +806,6 @@ int CInterpreter::execute_next() {
    }
    printf("\n");
 #endif
-   return 0;
 }
 
 void CInterpreter::print_a_string(char* ptr,bool b) {
@@ -995,7 +1004,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
      //           free(str);
                 break;
             }
-         case 8:
+         case 8: // pointer
             {
                if ((c !=' ' ) && (c != 'p'))
                {

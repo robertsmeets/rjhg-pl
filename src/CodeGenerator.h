@@ -17,7 +17,6 @@
 #include <unordered_map>
 
 #include "ClassDefinition.h"
-#include "ExpressionThing.h"
 
 #include "DebugInfo.h"
 #include "Expression.h"
@@ -53,7 +52,6 @@ public:
   void start(ProgramNode*, DebugInfo*);
   void start_proc(ProcedureNode*);
   void emit(char, unsigned short int, unsigned short int, Expression*);
-  void emitRpn(vector<ExpressionThing>, ProcedureNode*, Expression*);
   void emitOperation(char, Expression*);
   void fix_proc_addresses();
   void addCallAddress(uint16_t, string);

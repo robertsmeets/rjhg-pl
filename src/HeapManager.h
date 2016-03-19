@@ -19,19 +19,19 @@
 class CInterpreter; // forward declaration
 
 class HeapManager {
-	char* space;        // absolute address, beginning of heap
-	char* here; 		// absolute address, beginning of free space
-	unsigned int size; // size of the heap incl. unused space
-	CInterpreter* interpreter;
+   char* space;       // absolute address, beginning of heap
+   char* here;        // absolute address, beginning of free space
+   unsigned int size; // size of the heap incl. unused space
+   CInterpreter* interpreter;
 
 public:
-	HeapManager();
-	virtual ~HeapManager();
-	char* allocate(unsigned int);
-	char* getStart();
-	unsigned short int getOffset();
-	void garbageCollect();
-	void setInterpreter(CInterpreter*);
+   HeapManager();
+   virtual ~HeapManager();
+   char* allocate(unsigned int);
+   char* getStart();
+   unsigned short int getOffset();
+   void garbageCollect();
+   void setInterpreter(CInterpreter*);
 };
 
 #endif /* HEAPMANAGER_H_ */
