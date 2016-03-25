@@ -34,7 +34,7 @@ struct stack_element {
 };
 
 struct extern_record {
-   unsigned long address;
+   unsigned long long int address;
    string signature;
 };
 
@@ -68,7 +68,6 @@ class CInterpreter {
    uint16_t find_offset();
    void call_external(short unsigned int,short unsigned int) ;
    void pass_in_arg( DCCallVM* ,char ,stack_element);
-   void print_stack();
 public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
@@ -76,8 +75,9 @@ public:
    int execute_next();
    void print_a_string(char*,bool);
    void print_a_string(char*, uint16_t);
+   void print_stack();
    vector<stack_element>* getStack();
-
+   int getStackDepth();
 };
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */
