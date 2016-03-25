@@ -41,6 +41,8 @@ char* HeapManager::allocate(unsigned int nbytes) {
    if (available < nbytes) {
       garbageCollect();
    }
+   printf("some stack\n");
+   interpreter->print_stack();
    used = here - space;
    available = size - used;
    if (available < nbytes) {
@@ -50,6 +52,8 @@ char* HeapManager::allocate(unsigned int nbytes) {
    }
    ptr = here;
    here += nbytes;
+   printf("some stack2\n");
+   interpreter->print_stack();
    return ptr;
 }
 
@@ -75,6 +79,7 @@ void HeapManager::garbageCollect() {
 #ifdef DEBUG
    printf("--------------------------------------------- GC  -----------------------------------------------------\n");
 #endif
+   interpreter->print_stack();
    //
    // loop over the stack
    //
@@ -83,7 +88,12 @@ void HeapManager::garbageCollect() {
    map<unsigned int, unsigned int> movetable; // old rel. address, new rel.address
    vector<stack_element>* s = interpreter->getStack();
    unsigned int i = 0;
+   int depth = interpreter->getStackDepth();
    for (auto const &an_element : *s) {
+      if (i>=depth)
+      {
+          break;
+      }
       //
       // the following types can be found
       //
@@ -96,6 +106,7 @@ void HeapManager::garbageCollect() {
       //   9: object reference -> stored on the heap
       //
       unsigned int t = an_element.atype;
+      printf("element %d\n",t);
       if (t == 5) { // float
          //
          // the size is 8
@@ -120,6 +131,7 @@ void HeapManager::garbageCollect() {
          addresses[address] = len;
          references[address] = i;
       } else if (t == 9) { // object
+         printf("--------------------FOUND object pointer\n");
          unsigned int address = an_element.address;
          char* ptr = space + address;
          unsigned int len = (*(ptr + 2) & 255) * 2 + 3;
@@ -135,6 +147,8 @@ void HeapManager::garbageCollect() {
    // addresses must be sorted now
    // transfer them to a vector
    //
+   printf("------- stack at CP21\n");
+   interpreter->print_stack();
    vector<saddress> vaddresses;
    for (auto const &it : addresses) {
       //
@@ -155,7 +169,10 @@ void HeapManager::garbageCollect() {
    // the references are gathered. Find the holes.
    //
    unsigned int last = 0;
+   printf("------- stack at CP22\n");
+   interpreter->print_stack();
    for (auto const &it : vaddresses) {
+   printf("last = %u\n",last);
       //
       // it.first is the address
       // it.second is the length
@@ -167,12 +184,15 @@ void HeapManager::garbageCollect() {
          // Move the data. Use memmove since the areas may overlap.
          // memmove(destination,origin,length)
          //
-         printf("memmove(0x%llx,0x%llx,%u)\n",space + last, space + it.address, it.len);
+         printf("memmove(%u,%u,%u)\n", last, it.address, it.len);
          memmove(space + last, space + it.address, it.len);
          movetable[it.address] = last;
       }
       last += it.len;
    }
+   printf("------- stack at CP3\n");
+   interpreter->print_stack();
+   printf("after loop last = %u\n",last);
    //
    // set here to the new value
    //
@@ -182,10 +202,14 @@ void HeapManager::garbageCollect() {
    // loop over all references
    //
    for (auto const &it : references) {
+      printf("reference %u %u\n",it.first, it.second);
       if (movetable.find(it.first) != movetable.end()) {
          unsigned int new_address = movetable[it.first];
+         printf("moving stack item %u to %u\n",it.second, new_address);
          (*s)[it.second].address = new_address;
       }
    }
+   printf("------- stack at end\n");
+   interpreter->print_stack();
 
 }

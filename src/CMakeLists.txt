@@ -8,6 +8,8 @@ add_library(libdyncall_s STATIC IMPORTED)
 add_library(libdynload_s STATIC IMPORTED)
 set_property(TARGET libdyncall_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdyncall_s.lib)
 set_property(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdynload_s.lib)
+SET(GCC_COVERAGE_COMPILE_FLAGS "-g -DDEBUG")
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 target_link_libraries(myparser libdyncall_s libdynload_s)
 
 # Create target for the parser

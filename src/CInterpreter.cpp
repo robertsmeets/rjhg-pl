@@ -90,6 +90,12 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
 CInterpreter::~CInterpreter() {
    delete hm;
 }
+
+int CInterpreter::getStackDepth()
+{
+   return t;
+}
+
 vector<stack_element>* CInterpreter::getStack() {
    return &s;
 }
@@ -231,30 +237,41 @@ int CInterpreter::execute_next() {
          t++;
          pc += a;
          break;
-      case 7: // string
-         //
-         // get some memory
-         //
-         ptr = hm->allocate(a + 2);
-         //
-         // copy the string to the heap
-         //
-         *ptr = a & 0xff;
-         *(ptr + 1) = a >> 8;
-         memcpy(ptr + 2, buffer + pc, a);
-         //
-         // put the pointer and the type on the stack
-         //
-         s[t].atype = 7;
-         s[t].address = (uint16_t) (ptr - hm->getStart());
-         t++;
-         pc += a;
-         break;
       case 6: // boolean
          s[t].atype = 6;
          s[t].address = a;
          t++;
          break;
+      case 7: // string
+      {
+         //
+         // get some memory
+         //
+         char* tmp = hm->allocate(a + 2);
+         printf("stack in LIT after allocate\n");
+         print_stack();
+         //
+         // copy the string to the heap
+         //
+         *tmp = a & 0xff;
+         *(tmp + 1) = (a >> 8) & 0xff;
+         printf("stack in LIT1 after allocate\n");
+         print_stack();
+         printf("memcpy 0x%x 0x%x %d",tmp+2,buffer+pc,a);
+         memcpy(tmp + 2, buffer + pc, a);
+         //
+         // put the pointer and the type on the stack
+         //
+         printf("stack in LIT2 after allocate\n");
+         print_stack();
+         s[t].atype = 7;
+         s[t].address = (uint16_t) (tmp - hm->getStart());
+         t++;
+         pc += a;
+         printf("stack in LIT\n");
+         print_stack();
+         break;
+      }
       default:
          puts("unexpected LIT value " + s[t].atype);
       }
@@ -356,7 +373,8 @@ int CInterpreter::execute_next() {
             d3 = (*aidptr)(fr1.address, d2);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            fr3->address = hm->allocate(8) - hm->getStart();
+            char* tmp = hm->allocate(8);
+            fr3->address = tmp - hm->getStart();
             memcpy(st + fr3->address, &d3, 8);
             s[t - 1] = *fr3;
          } else if ((fr1.atype == 5) && (fr2.atype == 2)) {
@@ -369,7 +387,8 @@ int CInterpreter::execute_next() {
             d3 = (*adiptr)(d1, fr2.address);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            fr3->address = hm->allocate(8) - hm->getStart();
+            char* tmp = hm->allocate(8);
+            fr3->address = tmp - hm->getStart();
             memcpy(st + fr3->address, &d3, 8);
             s[t - 1] = *fr3;
 
@@ -395,7 +414,8 @@ int CInterpreter::execute_next() {
             //
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            fr3->address = hm->allocate(8) - hm->getStart();
+            char* tmp = hm->allocate(8);
+            fr3->address = tmp -hm->getStart();
             memcpy(st + fr3->address, &d3, 8);
             s[t - 1] = *fr3;
          } else {
@@ -604,7 +624,9 @@ int CInterpreter::execute_next() {
             printf("false\n" );
          }
       } else if (fr1.atype == 8) {
-         printf("A fancy object\n" );
+         printf("A Pointer\n" );
+      } else if (fr1.atype == 9) {
+         printf("A Fancy Object\n" );
       } else {
          printf( "Cannot print something of type %d\n", fr1.atype );
       }
@@ -746,7 +768,6 @@ int CInterpreter::execute_next() {
 
 void CInterpreter::print_stack()
 {
-#ifdef DEBUG
    //
    // print the stack
    //
@@ -782,11 +803,10 @@ void CInterpreter::print_stack()
             print_a_string(adr,false);
             break;
          case 8: // pointer
-            adr = hm->getStart() + s[i].address;
-            void* ptr;
-            memcpy(&ptr, adr, 8);
-            printf("ptr 0x%llx",ptr);
+         {
+            printf("ptr 0x%llx",s[i].address);
             break;
+         }
          case 9: // object reference
             printf("objref");
             break;
@@ -805,7 +825,6 @@ void CInterpreter::print_stack()
       printf("0x%x", r[i]);
    }
    printf("\n");
-#endif
 }
 
 void CInterpreter::print_a_string(char* ptr,bool b) {
@@ -902,7 +921,6 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          //
          char* ptr = hm->allocate(8);
          memcpy(ptr, &r, 8);
-         //t = b[tb] + 2;
          tb--;
          s[t].atype = 5;
          s[t].address = (short uint16_t) (ptr - hm->getStart());
@@ -915,12 +933,9 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
           //
           // put the result on the stack
           //
-          char* ptr = hm->allocate(8);
-          memcpy(ptr, &r, 8);
-          //t = b[tb] + 2;
           tb--;
           s[t].atype = 8;
-          s[t].address = (short uint16_t) (ptr - hm->getStart());
+          s[t].address = r;
           t++;
          break;
       }
@@ -938,7 +953,6 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          // integer return type
          //
          int i = dcCallInt(vm,sym);
-         //t = b[tb] + 2;
          tb--;
          s[t].atype = 2;
          s[t].address = i;
@@ -1011,13 +1025,10 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                   printf("expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
-               char* adr = hm->getStart() + f.address;
-               void* ptr;
-               memcpy(&ptr, adr, 8);
 #ifdef DEBUG
-               printf("Pushing a pointer <0x%llx>\n",ptr);
+               printf("Pushing a pointer <0x%llx>\n",f.address);
 #endif
-               dcArgPointer(vm, ptr);
+               dcArgPointer(vm, f.address);
                break;
             }
           default:
