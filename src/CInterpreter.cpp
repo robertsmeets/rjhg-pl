@@ -248,27 +248,22 @@ int CInterpreter::execute_next() {
          // get some memory
          //
          char* tmp = hm->allocate(a + 2);
-         printf("stack in LIT after allocate\n");
          print_stack();
          //
          // copy the string to the heap
          //
          *tmp = a & 0xff;
-         *(tmp + 1) = (a >> 8) & 0xff;
-         printf("stack in LIT1 after allocate\n");
-         print_stack();
-         printf("memcpy 0x%x 0x%x %d",tmp+2,buffer+pc,a);
+	 *(tmp + 1) = (a >> 8) & 0xff;
+	 print_stack();
          memcpy(tmp + 2, buffer + pc, a);
          //
          // put the pointer and the type on the stack
          //
-         printf("stack in LIT2 after allocate\n");
          print_stack();
          s[t].atype = 7;
          s[t].address = (uint16_t) (tmp - hm->getStart());
          t++;
          pc += a;
-         printf("stack in LIT\n");
          print_stack();
          break;
       }
@@ -768,6 +763,7 @@ int CInterpreter::execute_next() {
 
 void CInterpreter::print_stack()
 {
+#ifdef DEBUG
    //
    // print the stack
    //
@@ -825,6 +821,7 @@ void CInterpreter::print_stack()
       printf("0x%x", r[i]);
    }
    printf("\n");
+#endif
 }
 
 void CInterpreter::print_a_string(char* ptr,bool b) {
