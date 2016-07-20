@@ -1,6 +1,7 @@
 .project
 *.o
 lex.yy.c
+myparser
 myparser.exe
 myparser.lex.c
 y.output
