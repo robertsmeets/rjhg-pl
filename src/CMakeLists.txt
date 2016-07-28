@@ -12,8 +12,6 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-#set (CMAKE_CXX_STANDARD 11)
-#set_property(TARGET myparser PROPERTY CXX_STANDARD 11)
 INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include)
 
 LINK_DIRECTORIES(../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu)
@@ -23,45 +21,44 @@ ADD_LIBRARY(libdynload_s STATIC IMPORTED)
 ADD_LIBRARY(dynload_s.a STATIC IMPORTED)
 ADD_LIBRARY(dyncall_s.a STATIC IMPORTED)
 ADD_LIBRARY(dyncallback_s.a STATIC IMPORTED)
-ADD_LIBRARY(dl STATIC IMPORTED)
+# library dl may be required on linux
+#ADD_LIBRARY(dl STATIC IMPORTED)
 
 SET_PROPERTY(TARGET libdyncall_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdyncall_s.lib)
 SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdynload_s.lib)
 SET_PROPERTY(TARGET dyncall_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncall_s.a)
 SET_PROPERTY(TARGET dynload_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdynload_s.a)
 SET_PROPERTY(TARGET dyncallback_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncallback_s.a)
-SET_PROPERTY(TARGET dl PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so)
+#SET_PROPERTY(TARGET dl PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so)
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-Wwrite-strings -fpermissive")
 ADD_DEFINITIONS(${GCC_COVERAGE_COMPILE_FLAGS})
-TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s dyncall_s.a dynload_s.a dyncallback_s.a dl)
+TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s dyncall_s.a dynload_s.a dyncallback_s.a)
 
 # Create target for the parser
-ADD_CUSTOM_TARGET(FooParser echo "Creating parser.c")
+ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")
+SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11" )
+SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++11" )
 
 # Create custom command for flex/lex (note the outputs)
 ADD_CUSTOM_COMMAND(
    COMMAND flex 
    ARGS myparser.lex 
-   TARGET FooParser
+   TARGET YaccParser
    OUTPUTS lex.yy.c)
 
 # Create custom command for bison/yacc (note the DEPENDS)
 ADD_CUSTOM_COMMAND(
    COMMAND byacc
    ARGS -d -v -t myparser.y
-   TARGET FooParser
+   TARGET YaccParser
    DEPENDS myparser.lex.c
    OUTPUTS y.tab.c)
-set (CMAKE_CXX_FLAGS "-fpermissive")
+SET (CMAKE_CXX_FLAGS "-fpermissive")
 
 FILE(READ lex.yy.c f0 )
   STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
 FILE(WRITE myparser.lex.c "${f2}")
-
-
-#ADD_CUSTOM_COMMAND(
-#   COMMAND cat lex.yy.c | sed s/malloc\(strlen/\(char*\)malloc\(strlen/g >myparser.lex.c
 
 # Add parser.c to the list of sources
 SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
@@ -74,7 +71,7 @@ SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/yy.tab.c GENERATED)
 # Include binary directory to include lexer.c in parser.c
 INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
 
-ADD_DEPENDENCIES(myparser FooParser)
+ADD_DEPENDENCIES(myparser YaccParser)
 
 SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
 
