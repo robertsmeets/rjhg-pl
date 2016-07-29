@@ -37,7 +37,8 @@ TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s dyncall_s.a dynload_s.a
 
 # Create target for the parser
 ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")
-SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11" )
+SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11 -Wno-write-strings" )
+SET_SOURCE_FILES_PROPERTIES( y.tab.c PROPERTIES COMPILE_FLAGS "-Wno-write-strings" )
 SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++11" )
 
 # Create custom command for flex/lex (note the outputs)

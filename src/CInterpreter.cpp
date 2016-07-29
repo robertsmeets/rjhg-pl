@@ -932,7 +932,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
           //
           tb--;
           s[t].atype = 8;
-          s[t].address = r;
+          s[t].address = (long long unsigned int)r;
           t++;
          break;
       }
@@ -1025,7 +1025,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
 #ifdef DEBUG
                printf("Pushing a pointer <0x%llx>\n",f.address);
 #endif
-               dcArgPointer(vm, f.address);
+               dcArgPointer(vm, (void*)f.address);
                break;
             }
           default:
