@@ -1,12 +1,22 @@
+/**
+ *
+ * example program
+ *
+ */
+
 extern fopen   pp-p      ;
 extern fclose  p-p       ;
 extern fprintf pp+i      ;
 
-
+/**
+ *
+ * main 
+ *
+ */
 proc main()
 {
    i=1;
-   while i < 10
+   while i < 32000
    {
      write(i);
      i = i +1;
@@ -14,6 +24,11 @@ proc main()
 }
 
 
+/**
+ *
+ * write
+ *
+ */
 proc write(z)
 {
    filename ="file"+z+".txt";
@@ -25,7 +40,10 @@ proc write(z)
       return;
    };
    i = 1;
-   while i < 10
+   //
+   // do this a few times
+   //
+   while i < 100
    {
       fprintf(fp,"%d and %s\n",i,"BLA");
       i=i+1;

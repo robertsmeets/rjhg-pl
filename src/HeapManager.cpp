@@ -128,7 +128,6 @@ void HeapManager::garbageCollect() {
          addresses[address] = len;
          references[address] = i;
       } else if (t == 9) { // object
-         printf("--------------------FOUND object pointer\n");
          unsigned int address = an_element.address;
          char* ptr = space + address;
          unsigned int len = (*(ptr + 2) & 255) * 2 + 3;
@@ -154,7 +153,6 @@ void HeapManager::garbageCollect() {
       saddress s;
       s.address = it.first;
       s.len = it.second;
-      printf("transfereing %u %u\n",s.address,s.len);
       vaddresses.push_back(s);
    }
    //
@@ -167,7 +165,6 @@ void HeapManager::garbageCollect() {
    unsigned int last = 0;
    interpreter->print_stack();
    for (auto const &it : vaddresses) {
-   printf("last = %u\n",last);
       //
       // it.first is the address
       // it.second is the length
@@ -179,7 +176,6 @@ void HeapManager::garbageCollect() {
          // Move the data. Use memmove since the areas may overlap.
          // memmove(destination,origin,length)
          //
-         printf("memmove(%u,%u,%u)\n", last, it.address, it.len);
          memmove(space + last, space + it.address, it.len);
          movetable[it.address] = last;
       }
@@ -195,10 +191,8 @@ void HeapManager::garbageCollect() {
    // loop over all references
    //
    for (auto const &it : references) {
-      printf("reference %u %u\n",it.first, it.second);
       if (movetable.find(it.first) != movetable.end()) {
          unsigned int new_address = movetable[it.first];
-         printf("moving stack item %u to %u\n",it.second, new_address);
          (*s)[it.second].address = new_address;
       }
    }
