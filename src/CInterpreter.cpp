@@ -358,6 +358,23 @@ int CInterpreter::execute_next() {
             memcpy(ptr + len1 + 2, ptr2 + 2, len2);
             fr1.address = (uint16_t) (ptr - hm->getStart());
             s[t - 1] = fr1;
+         } else if ((fr1.atype == 7) && (fr2.atype == 2)) {
+            //
+            // add a string and an integer
+            //
+            char* ptr1 = hm->getStart() + fr1.address;
+            char str[15];
+            snprintf(str, 15, "%d", fr2.address);
+            uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+            uint16_t len2 = strlen(str);
+            uint16_t newlen = len1 + len2;
+            ptr = hm->allocate(newlen + 2);
+            *ptr = newlen & 0xff;
+            *(ptr + 1) = newlen >> 8;
+            memcpy(ptr + 2, ptr1 + 2, len1);
+            memcpy(ptr + len1 + 2, &str, len2);
+            fr1.address = (uint16_t) (ptr - hm->getStart());
+            s[t - 1] = fr1;
          } else if ((fr1.atype == 2) && (fr2.atype == 5)) {
             //
             // integer plus float

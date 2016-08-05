@@ -2,16 +2,30 @@ extern fopen   pp-p      ;
 extern fclose  p-p       ;
 extern fprintf pp+i      ;
 
+
 proc main()
 {
-   fp = fopen("file.txt","w");
+   i=1;
+   while i < 10
+   {
+     write(i);
+     i = i +1;
+   }
+}
+
+
+proc write(z)
+{
+   filename ="file"+z+".txt";
+   print "Filename " + filename;
+   fp = fopen(filename,"w");
    if (fp==null)
    {
       print "could not open the file";
       return;
    };
    i = 1;
-   while i <32000 
+   while i < 10
    {
       fprintf(fp,"%d and %s\n",i,"BLA");
       i=i+1;
