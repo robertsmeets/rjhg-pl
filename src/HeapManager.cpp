@@ -13,7 +13,7 @@ HeapManager::HeapManager() {
    //
    // initial allocation
    //
-   size = 4096;
+   size = 65535;
    space = (char*) malloc(size);
    here = space;
    interpreter = NULL;
@@ -74,9 +74,7 @@ bool acompare(saddress lhs, saddress rhs) {
 }
 
 void HeapManager::garbageCollect() {
-#ifdef DEBUG
    printf("--------------------------------------------- GC  -----------------------------------------------------\n");
-#endif
    interpreter->print_stack();
    //
    // loop over the stack

@@ -32,7 +32,7 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
    hexdump(buffer, size);
    i = buffer[6] + buffer[7] * 256;
    for (; i < size;) {
-      printf("%d ",i );
+      printf("%04x ",i );
       char f = buffer[i];
       printf("f= %d ", (unsigned int) f);
       unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);

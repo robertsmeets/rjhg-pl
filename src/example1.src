@@ -26,7 +26,7 @@ proc myproc(e,f,g,h)
 
 proc main(a)
 {
-   PRINT "HELLO";
+   print "HELLO";
 }
 
 

@@ -30,6 +30,9 @@
 
 extern int line_num;
 extern char *yytext;
+
+
+#define YYDEBUG 0
 #define YYDEBUG_LEXER_TEXT yytext
 
 %}
@@ -107,8 +110,13 @@ extern char *yytext;
 
 %right POINT
 
+/*
+
 %parse-param {ProgramNode *glob}
 %parse-param {char **errmsg}
+
+
+*/
 
 %type <a_program> Program
 %type <an_extern> Extern
@@ -268,13 +276,11 @@ extern "C"
         }   
 }
 
-int yyerror(ProgramNode*s,char**x,char*y) {
-   printf("yyerror : line_num %d %s %s\n",line_num,y,*x);
-   exit(-1);
-}
+ int yyerror(char*y) { printf("yyerror : line_num %s\n",y); exit(-1); }
+// int yyerror(ProgramNode*s,char**x,char*y) { printf("yyerror : line_num %d %s %s\n",line_num,y,*x); exit(-1); }
 
 ProgramNode* glob;
-
+int yyparse();
 int main(int argc, char* argv[]) {
    //
    // workaround for a bug in the Eclipse console
@@ -298,11 +304,11 @@ int main(int argc, char* argv[]) {
    fclose(outfile);
    cout << "Parsing... " << argv[1] << " ... " << endl;
    yyin = fopen(outfilename,"r");
-   yydebug = 1;
+   yydebug = 0;
    glob = new ProgramNode();
    char errmsg[] = "error";
    char* ptr = (char*)errmsg;
-   int result = yyparse(glob,&ptr);
+   int result = yyparse() ; // glob,&ptr);
    fclose(yyin);
    glob->print(0);
    CodeGenerator cg;
