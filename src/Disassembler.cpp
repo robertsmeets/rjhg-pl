@@ -42,20 +42,39 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
    }
 }
 
+/**
+ *
+ * Hexdump of a buffer
+ *
+ */
 void Disassembler::hexdump(char* buf, unsigned int buflen) {
    unsigned int i, j;
    for (i = 0; i < buflen; i += 16) {
       printf("%06x: ", i);
-      for (j = 0; j < 16; j++)
-         if (i + j < buflen)
-            printf("%02x ", buf[i + j] &255);
-         else
-            printf("   ");
+	  for (j = 0; j < 16; j++)
+	  {
+		 unsigned int location = i + j;
+         if (location < buflen)
+		 {
+            printf("%02x ", buf[location] &255);
+		 }
+		 else
+		 {
+			 printf("   ");
+		 }
       printf(" ");
-      for (j = 0; j < 16; j++)
-         if (i + j < buflen)
-            printf("%c", isprint(buf[i + j]) ? buf[i + j] : '.');
-      printf("\n");
+	  }
+	  for (j = 0; j < 16; j++)
+	  {
+		  unsigned int location = i + j;
+		  if (location < buflen)
+		  {
+			  int a_char = buf[location] & 255;
+			  int prin = (a_char > 0) && isprint(a_char);
+			  printf("%c", prin ? a_char : '.');
+		  }
+	  }
+	  printf("\n");
    }
 }
 

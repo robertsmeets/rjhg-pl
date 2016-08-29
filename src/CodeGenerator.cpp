@@ -98,7 +98,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
       //
       // now save the signature as as string
       //
-      const char* signature = an_extern->getEstring().c_str();
+	  string s = an_extern->getEstring();
+	  const char * ss = s.c_str();
+	  char signature[50];
+	  strncpy(signature, ss, 49);
       printf("--- copying <%s>\n",signature);
       int len = strlen(signature);
       memcpy((char*) codebuffer + the_index,signature,len+1);
