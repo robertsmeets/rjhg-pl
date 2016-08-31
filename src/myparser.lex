@@ -26,7 +26,7 @@ int line_num = 1;
 
 extern "C" int yylex();
 %}
-
+%option noyywrap
 blanks          [ \t]+
 identifier   	[_a-zA-Z]+
 float 		[0-9]+\.[0-9]*

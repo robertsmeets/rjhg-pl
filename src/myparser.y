@@ -35,7 +35,6 @@ extern char *yytext;
 
 #define YYDEBUG 0
 #define YYDEBUG_LEXER_TEXT yytext
-
 %}
 
 %union
@@ -275,11 +274,14 @@ extern "C"
         {
                 return 1;
         }   
+
+
+
 }
 
  int yyerror(char*y) { printf("yyerror : line_num %s\n",y); exit(-1); }
 // int yyerror(ProgramNode*s,char**x,char*y) { printf("yyerror : line_num %d %s %s\n",line_num,y,*x); exit(-1); }
-
+int yyparse();
 ProgramNode* glob;
 
 int compile_run(char* filename)
@@ -287,12 +289,6 @@ int compile_run(char* filename)
    printf("Removing comments...\n");
    FILE *infile = fopen (filename, "rt");
    extern FILE * yyin;
-   if (argc != 2) {
-      cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
-      return -1;
-   }
-   FILE *infile;
-   infile = fopen (argv[1], "rt");
    char outfilename[100];
    snprintf(outfilename,100,"%s%s",filename,".strip");
    FILE* outfile = fopen (outfilename, "w");
