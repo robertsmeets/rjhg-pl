@@ -48,6 +48,7 @@ ProgramNode* CodeGenerator::getProgramNode()
 void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
    printf("Code generation...\n" );
    pn=a_pn;
+   printf("beginning of code here = %04x\n",here);
    //
    // emit a magic number
    //
@@ -61,6 +62,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
    // leave some space for the start address of the code
    //
    emit2Byte(0);
+   printf("Before method table here = %04x\n",here);
    //
    // count the number of methods
    //
@@ -96,7 +98,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
       //
       // now save the signature as as string
       //
-      const char* signature = an_extern->getEstring().c_str();
+	  string s = an_extern->getEstring();
+	  const char * ss = s.c_str();
+	  char signature[50];
+	  strncpy(signature, ss, 49);
       printf("--- copying <%s>\n",signature);
       int len = strlen(signature);
       memcpy((char*) codebuffer + the_index,signature,len+1);
@@ -106,13 +111,15 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di) {
    uint16_t offset = the_index;
    *((char*) codebuffer + 6) = offset & 255;
    *((char*) codebuffer + 7) = offset >> 8;
+   printf("Before offset here = %04x\n",here);
    here = offset;
+   printf("AFter offset here = %04x\n",here);
    //
    // save the start address of the proc table
    // 
    *((char*) codebuffer + 8) = start_ext_proc_table & 255;
    *((char*) codebuffer + 9) = start_ext_proc_table >> 8;
-   printf("here = %d offset = %d start_ext_proc_table = %d\n",here,offset,start_ext_proc_table);
+   printf("here = %04x offset = %04x start_ext_proc_table = %04x\n",here,offset,start_ext_proc_table);
    //
    //
    di = a_di;

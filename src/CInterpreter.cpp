@@ -937,7 +937,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          memcpy(ptr, &r, 8);
          tb--;
          s[t].atype = 5;
-         s[t].address = (short uint16_t) (ptr - hm->getStart());
+         s[t].address = (uint16_t) (ptr - hm->getStart());
          t++;
          break;
       }

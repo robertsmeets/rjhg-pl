@@ -20,6 +20,8 @@
 
 #include "y.tab.h"
 
+#undef __cplusplus
+
 int line_num = 1;
 
 extern "C" int yylex();

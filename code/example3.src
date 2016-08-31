@@ -1,0 +1,15 @@
+proc main(in1)
+   print "starting out"
+   print factorial(3)
+   print "that was it"
+end
+
+proc factorial(n)
+   if n<=2
+      return n
+   endif
+   print "about to go recursive"
+   print n
+   return n * factorial(n-1)
+end
+
