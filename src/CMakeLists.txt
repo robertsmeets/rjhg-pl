@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.6.1)
 PROJECT(myparser)
 ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.cpp CInterpreter.cpp ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp HeapManager.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp VariableValue.cpp While.cpp strip.cpp SelfTest.cpp myparser.lex.c y.tab.c)
 INCLUDE(CheckCXXCompilerFlag)
@@ -12,7 +12,7 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include)
+INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include .)
 
 LINK_DIRECTORIES(../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu)
 
@@ -32,15 +32,14 @@ SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/l
 #SET_PROPERTY(TARGET dyncallback_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncallback_s.a)
 #SET_PROPERTY(TARGET dl PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so)
 
-SET(GCC_COVERAGE_COMPILE_FLAGS "-Wwrite-strings -fpermissive")
+SET(GCC_COVERAGE_COMPILE_FLAGS "-fpermissive")
 ADD_DEFINITIONS(${GCC_COVERAGE_COMPILE_FLAGS})
 TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s )
 #TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s dyncall_s.a dynload_s.a dyncallback_s.a)
 
 # Create target for the parser
 ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")
-SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11 -Wno-write-strings" )
-SET_SOURCE_FILES_PROPERTIES( y.tab.c PROPERTIES COMPILE_FLAGS "-Wno-write-strings" )
+SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11 -SAFESEH:NO" )
 SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++11" )
 
 # Create custom command for flex/lex (note the outputs)
@@ -57,13 +56,17 @@ ADD_CUSTOM_COMMAND(
    TARGET YaccParser
    DEPENDS myparser.lex.c
    OUTPUTS y.tab.c)
-SET (CMAKE_CXX_FLAGS "-fpermissive")
-
+SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc /SAFESEH:NO")
+SET (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO" )
+#
+# add a cast to the result of the malloc() command
+# write the result to myparser.lex.c
+#
 FILE(READ lex.yy.c f0 )
   STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
 FILE(WRITE myparser.lex.c "${f2}")
 
-# Add parser.c to the list of sources
+# Add y.tab.c to the list of sources
 SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
 
 # Since some files do not exist yet when cmake is run, mark

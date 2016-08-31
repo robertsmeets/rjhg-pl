@@ -31,6 +31,9 @@
 
 extern int line_num;
 extern char *yytext;
+
+
+#define YYDEBUG 0
 #define YYDEBUG_LEXER_TEXT yytext
 
 %}
@@ -108,8 +111,13 @@ extern char *yytext;
 
 %right POINT
 
+/*
+
 %parse-param {ProgramNode *glob}
 %parse-param {char **errmsg}
+
+
+*/
 
 %type <a_program> Program
 %type <an_extern> Extern
@@ -269,10 +277,8 @@ extern "C"
         }   
 }
 
-int yyerror(ProgramNode*s,char**x,char*y) {
-   printf("yyerror : line_num %d %s %s\n",line_num,y,*x);
-   exit(-1);
-}
+ int yyerror(char*y) { printf("yyerror : line_num %s\n",y); exit(-1); }
+// int yyerror(ProgramNode*s,char**x,char*y) { printf("yyerror : line_num %d %s %s\n",line_num,y,*x); exit(-1); }
 
 ProgramNode* glob;
 
@@ -280,6 +286,13 @@ int compile_run(char* filename)
 {  
    printf("Removing comments...\n");
    FILE *infile = fopen (filename, "rt");
+   extern FILE * yyin;
+   if (argc != 2) {
+      cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
+      return -1;
+   }
+   FILE *infile;
+   infile = fopen (argv[1], "rt");
    char outfilename[100];
    snprintf(outfilename,100,"%s%s",filename,".strip");
    FILE* outfile = fopen (outfilename, "w");
@@ -291,11 +304,11 @@ int compile_run(char* filename)
    cout << "Parsing... " << filename << " ... " << endl;
    extern FILE* yyin;
    yyin = fopen(outfilename,"r");
-   yydebug = 1;
+   yydebug = 0;
    glob = new ProgramNode();
    char errmsg[] = "error";
    char* ptr = (char*)errmsg;
-   int result = yyparse(glob,&ptr);
+   int result = yyparse() ; // glob,&ptr);
    fclose(yyin);
    glob->print(0);
    CodeGenerator cg;

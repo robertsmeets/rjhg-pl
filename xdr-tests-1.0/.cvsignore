@@ -1,0 +1,6 @@
+test.c
+test.h
+test1
+test2
+*.out
+xdr-tests-*.tar.gz

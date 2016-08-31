@@ -1,0 +1,71 @@
+RJHG-PL 0.01
+procedural programming language with an algol-like syntax
+
+data types:
+integer (16 bit)
+double
+string
+boolean
+
+dynamic typing
+garbage collection
+
+Known bugs
+- procedures must have at least 1 argument otherwise the parser fails
+- sometimes problems when the procedure return statement is missing
+- when the max. string length of 65535 bytes long is exceeded, a segfault occurs
+
+TODO
+- changing syntax to C style curly braces
+- change integer to at least 32 bits
+- introduction of classes & objects & instance variables & methods
+- create exe file by putting bytecode into "resources" block of interpreter exe
+- access to C standard library functions (math, file access etc)
+- expand the PRINT statement to print more than one variable or turn it into a function ala printf()
+- CInterpreter::execute_next() needs to be split up in smaller fuctions
+- fix DebugInfo - to get the cross references between the source code and the bytecode right
+
+Architecture
+
+The main method in parse.cpp takes one argument, the source file. 
+It calls the parser, codegenerator and interpreter activities in turn.
+
+LL(1) Parser  - contained in Parse.cpp. This parses the source file and creates an AST. 
+   Whenever an expression is encountered this is parsed by the class ExpressionParser
+
+The elements of the AST are the following classes
+
+ProgramNode       - top level
+ProcedureNode     - a procedure definition
+Statement         - virtual base class for the various statements
+AssignmentNode    - an assignment statement
+IfNode            - if statement
+PrintNode         - print statement
+ProcedureCallNode - a procedure call
+ReturnNode        - return statement
+WhileNode         - while statement
+ExpressionNode    - a parsed expression, in reverse polish notation
+ExpressionThing   - an individual expression element 
+
+CodeGenerator class - turns the AST into bytecode. 
+
+This is done by calling emit() on the various statements and expressions.
+The bytecode is kept in memory. 
+The bytecode is 5 bytes per opcode and is similar to the PL/0 bytecode. 
+The first byte is the opcode, the 2-5th byte contain operands/adresses depending on the opcode.
+The bytes are stored little endian. 
+
+CInterpreter class - interpreter for the bytecode.
+The bulk of the interpreter is in CInterpreter::execute_next() - one by one the opcodes are pulled and their actions performed. 
+There are 3 stacks 
+- the parameter stack contains function parameters, local variables and temporary expression values during evaluation
+- the return stack contains the return address for each procedure call
+- the base stack contains the base index value for each procedure call, where the local variables and parameters are stored. 
+CFunctions.cpp - contains evaluation functions that are called from the interpreter
+HeapManager class - allocates heap storage and performs garbage collection
+
+Disassembler class - shows the bytecode in readable format
+
+DebugInfo class - maintains and shows the relation between bytecode and source code
+
+
