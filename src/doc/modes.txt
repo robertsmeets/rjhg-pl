@@ -1,0 +1,21 @@
+1 - Compile & execute  from SRC
+2 - Compile to bytecode from SRC
+3 - Execute bytecode
+4 - Create EXE from SRC
+5 - Extract bytecode from exe
+6 - Create EXE from bytecode
+7 - selftest
+8 - version
+
+Flags: 
+- debug mode
+
+1 - myparser example.src 
+2 - myparser c example.src
+3 - myparser example.byt
+4 - myparser e example.src
+5 - myparser x example.exe
+6 - myparser e example.byt
+7 - myparser t 
+8 - myparser --version
+

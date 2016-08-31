@@ -6,6 +6,7 @@
 
 extern fopen   pp-p      ;
 extern fclose  p-p       ;
+extern printf  p+i       ;
 extern fprintf pp+i      ;
 
 /**
@@ -31,7 +32,7 @@ proc main()
  */
 proc write(z)
 {
-   filename ="file"+z+".txt";
+   filename ="f"+z+".txt";
    print "Filename " + filename;
    fp = fopen(filename,"w");
    if (fp==null)

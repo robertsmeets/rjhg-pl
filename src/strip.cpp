@@ -70,7 +70,6 @@ void stripcmt (FILE *infile, FILE *outfile)
                   break;
               /* always copy newlines */
               case '\n':
-                  printf("FOUND A NEWLINE\n");
                   fputc(buffer[i],outfile);
                   break;
               /* Anything else?  Show it if necessary. */

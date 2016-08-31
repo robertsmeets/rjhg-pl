@@ -24,6 +24,7 @@
 #include "PrintNode.h"
 #include "CInterpreter.h"
 #include "Extern.h"
+#include "SelfTest.h"
 #include "strip.h"
 
 #include <stdio.h>
@@ -275,28 +276,20 @@ int yyerror(ProgramNode*s,char**x,char*y) {
 
 ProgramNode* glob;
 
-int main(int argc, char* argv[]) {
-   //
-   // workaround for a bug in the Eclipse console
-   //
-   setvbuf(stdout, NULL, _IONBF, 0);
-   extern FILE * yyin;
-   if (argc != 2) {
-      cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
-      return -1;
-   }
-   cout << "Removing comments..." << endl;
-   FILE *infile;
-   infile = fopen (argv[1], "rt");
+int compile_run(char* filename)
+{  
+   printf("Removing comments...\n");
+   FILE *infile = fopen (filename, "rt");
    char outfilename[100];
-   snprintf(outfilename,100,"%s%s",argv[1],".strip");
+   snprintf(outfilename,100,"%s%s",filename,".strip");
    FILE* outfile = fopen (outfilename, "w");
-   if (!infile) { perror (argv[1]); return 1; }
+   if (!infile) { perror (filename); return 1; }
    if (!outfile) { perror (outfilename); return 1; }
    stripcmt(infile, outfile);
    fclose(infile);
    fclose(outfile);
-   cout << "Parsing... " << argv[1] << " ... " << endl;
+   cout << "Parsing... " << filename << " ... " << endl;
+   extern FILE* yyin;
    yyin = fopen(outfilename,"r");
    yydebug = 1;
    glob = new ProgramNode();
@@ -316,3 +309,27 @@ int main(int argc, char* argv[]) {
    i.start();
 }
 
+
+int main(int argc, char* argv[]) {
+   //
+   // workaround for a bug in the Eclipse console
+   //
+   setvbuf(stdout, NULL, _IONBF, 0);
+   if (argc == 2)
+   {
+      if (strcmp(argv[1],"t") == 0)
+      {
+         SelfTest st;
+         st.run();
+      }
+      else
+      {
+         return compile_run(argv[1]);
+      }
+   }
+   else
+   {
+      cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
+      return -1;
+   }
+}
