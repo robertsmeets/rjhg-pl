@@ -57,8 +57,13 @@ ADD_CUSTOM_COMMAND(
    DEPENDS myparser.lex.c
    OUTPUTS y.tab.c)
 SET (CMAKE_CXX_FLAGS "-fpermissive")
+
 # for visual studio: SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
-#SET (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO" )
+
+IF(MSVC)
+   SET (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO" )
+ENDIF(MSVC)
+
 #
 # add a cast to the result of the malloc() command
 # write the result to myparser.lex.c
