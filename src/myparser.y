@@ -25,7 +25,8 @@
 #include "CInterpreter.h"
 #include "Extern.h"
 #include "SelfTest.h"
-#include "strip.h"
+#include "Comments.h"
+#include "Runner.h"
 
 #include <stdio.h>
 
@@ -36,7 +37,6 @@ extern char *yytext;
 #define YYDEBUG 0
 #define YYDEBUG_LEXER_TEXT yytext
 %}
-
 %union
 {
     char* sval;
@@ -276,47 +276,12 @@ extern "C"
         }   
 
 
-
+//int yyparse(ProgramNode*,void*);
 }
 
  int yyerror(char*y) { printf("yyerror : line_num %s\n",y); exit(-1); }
 // int yyerror(ProgramNode*s,char**x,char*y) { printf("yyerror : line_num %d %s %s\n",line_num,y,*x); exit(-1); }
-int yyparse();
-ProgramNode* glob;
-
-int compile_run(char* filename)
-{  
-   printf("Removing comments...\n");
-   FILE *infile = fopen (filename, "rt");
-   extern FILE * yyin;
-   char outfilename[100];
-   snprintf(outfilename,100,"%s%s",filename,".strip");
-   FILE* outfile = fopen (outfilename, "w");
-   if (!infile) { perror (filename); return 1; }
-   if (!outfile) { perror (outfilename); return 1; }
-   stripcmt(infile, outfile);
-   fclose(infile);
-   fclose(outfile);
-   cout << "Parsing... " << filename << " ... " << endl;
-   extern FILE* yyin;
-   yyin = fopen(outfilename,"r");
-   yydebug = 0;
-   glob = new ProgramNode();
-   char errmsg[] = "error";
-   char* ptr = (char*)errmsg;
-   int result = yyparse() ; // glob,&ptr);
-   fclose(yyin);
-   glob->print(0);
-   CodeGenerator cg;
-   cg.start(glob,NULL);
-   Disassembler d; 
-   d.start(cg.getCodeBuffer(),cg.getHere(),NULL);
-   //
-   // start interpreting
-   //
-   CInterpreter i(cg.getCodeBuffer(),NULL);
-   i.start();
-}
+// ProgramNode* glob;
 
 
 int main(int argc, char* argv[]) {
@@ -333,7 +298,9 @@ int main(int argc, char* argv[]) {
       }
       else
       {
-         return compile_run(argv[1]);
+         Runner runner;
+         string filename = argv[1];
+         return runner.compile_run(filename);
       }
    }
    else

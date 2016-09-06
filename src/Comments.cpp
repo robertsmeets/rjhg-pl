@@ -1,4 +1,4 @@
-#include "strip.h"
+#include "Comments.h"
 
 void stripcmt (FILE *infile, FILE *outfile)
 {
