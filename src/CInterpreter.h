@@ -39,6 +39,7 @@ struct extern_record {
 };
 
 class CInterpreter {
+   bool debug;
    DebugInfo* di;
    char* buffer;
    uint16_t pc;
@@ -71,8 +72,8 @@ class CInterpreter {
 public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
-   void start();
-   int execute_next();
+   void start(bool);
+   int execute_next(bool);
    void print_a_string(char*,bool);
    void print_a_string(char*, uint16_t);
    void print_stack();

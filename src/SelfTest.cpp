@@ -25,15 +25,79 @@ void SelfTest::run()
             Test(line2);
    }
    fclose(infile);
-   printf("--------------------------------\n");
+   // printf("--------------------------------\n");
 }
 
 void SelfTest::Test(char * filename)
 {
    printf("Testing <%s>\n",filename);
+   char filename_src[256];
+   snprintf(filename_src,255,"%s.src",filename);
+   char filename_out[256];
+   snprintf(filename_out,255,"%s.out",filename);
+   printf("filename_src <%s>\n",filename_src);
+   printf("filename_out <%s>\n",filename_out);
    FILE* org_stdout = stdout;
-   stdout = freopen("my_log.txt", "w", stdout);
+   stdout = freopen(filename_out, "w", stdout);
    Runner runner;
-   runner.compile_run(filename); 
+   runner.compile_run(filename_src,false); 
+   fclose(stdout);
    stdout = org_stdout;
+   char filename_tst[256];
+   snprintf(filename_tst,255,"%s.tst",filename);
+   if (Compare(filename_out,filename_tst))
+   {
+       printf("%s PASSED\n",filename);
+   }
+   else
+   {
+       printf("%s FAILED\n",filename);
+   }
 } 
+
+bool SelfTest::Compare(char* one,char* two)
+{
+ FILE * fp1;
+ FILE * fp2;
+ char c1[100], c2[100];
+ int cmp;
+ 
+ fp1 = fopen(one, "r");
+ fp2 = fopen(two, "r");
+ 
+ if(fp1 == NULL)
+ {
+    printf("Cannot open %s\n",one);
+     return false;
+}
+
+ if(fp2 == NULL)
+ {
+    printf("Cannot open %s\n",two);
+     return false;
+}
+  while(true)
+  {
+     char* r1=       fgets(c1 , 99, fp1) ;
+     char* r2=       fgets(c2 , 99, fp2) ;
+     if ((r1 == NULL)!= (r2 == NULL))
+     { 
+        fclose(fp1);
+        fclose(fp2);
+        return false;
+     }
+     if (r1 == NULL)
+     {
+        fclose(fp1);
+        fclose(fp2);
+        return true;
+     } 
+   
+  if(!((strcmp(c1, c2)) == 0))
+  {
+        fclose(fp1);
+        fclose(fp2);
+  return false; 
+  }
+ }
+}

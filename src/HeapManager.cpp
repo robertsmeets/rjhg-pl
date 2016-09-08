@@ -74,7 +74,6 @@ bool acompare(saddress lhs, saddress rhs) {
 }
 
 void HeapManager::garbageCollect() {
-   printf("--------------------------------------------- GC  -----------------------------------------------------\n");
    interpreter->print_stack();
    //
    // loop over the stack

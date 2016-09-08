@@ -100,12 +100,12 @@ vector<stack_element>* CInterpreter::getStack() {
    return &s;
 }
 
-void CInterpreter::start() {
-   printf("Starting interpreter...\n" );
+void CInterpreter::start(bool debug) {
+   if (debug) {printf("Starting interpreter...\n" );}
    methodmap.clear();
    check_magic_number();
    pc = find_offset();
-   printf("PC is now 0x%x\n",pc);
+   if (debug){ printf("PC is now 0x%x\n",pc);}
    uint16_t start_ext_proc_table = find_ext_proc_table();
    //
    // fill the methodmap
@@ -136,9 +136,6 @@ void CInterpreter::start() {
    {
        void* ptr;
        memcpy(&ptr,buffer + j,8); 
-#ifdef DEBUG
-      printf("Pushing external pointer 0x%llx\n",(long long unsigned int)ptr);
-#endif
       j += 8;
       extern_record er;
       string signature = string(buffer + j);
@@ -149,7 +146,7 @@ void CInterpreter::start() {
    } 
    unsigned i = 0;
    for (; !i;) {
-      i = execute_next();
+      i = execute_next(debug);
    }
 }
 
@@ -165,10 +162,6 @@ uint16_t CInterpreter::find_offset() {
 }
 
 uint16_t CInterpreter::find_ext_proc_table() {
-   printf("buffer[8] = %d\n",buffer[8]);
-   printf("buffer[9] = %d\n",buffer[9]);
-   printf("result %d\n",buffer[8] + (buffer[9] >> 8));
-
    return buffer[8] + (buffer[9] >> 8);
 }
 
@@ -178,15 +171,15 @@ uint16_t CInterpreter::find_ext_proc_table() {
  i: instruction; {instruction register}
  s: array [1..stacksize] of integer; {datastore}
  */
-int CInterpreter::execute_next() {
+int CInterpreter::execute_next(bool debug) {
    //
    // f is the opcode
    // l is the 2nd param
    // a is the 3rd param
    //
-#ifdef DEBUG
+if (debug) {
    printf("pc=0x%x: ", pc );
-#endif
+}
    unsigned short int f = *((char*) buffer + pc) & 0xff;
    pc++;
    //
@@ -212,9 +205,9 @@ int CInterpreter::execute_next() {
    uint16_t classnum;
    switch (f) {
    case 1:   // lit: Literal value, to be pushed on the stack
-#ifdef DEBUG
+if (debug) {
    printf("LIT %d,%d", l , a);
-#endif
+}
       switch (l) {
       case 0: // null
          s[t].atype=0;
@@ -272,9 +265,9 @@ int CInterpreter::execute_next() {
       }
       break;
    case 2: // opr
-#ifdef DEBUG
+if (debug) {
    printf("OPR");
-#endif
+}
 
       iiptr aiiptr;
       idptr aidptr;
@@ -288,12 +281,12 @@ int CInterpreter::execute_next() {
 
       switch (a) {
       case 0:
-#ifdef DEBUG
+if (debug) {
          printf(" RET l= %d" , l);
-#endif
+}
          // return
          if (tr <= 0) {
-            printf("Exiting program...\n" );
+            if(debug){printf("Exiting program...\n" );}
             // exit
             return -1;
          }
@@ -315,9 +308,9 @@ int CInterpreter::execute_next() {
          }
          break;
       case 1:
-#ifdef DEBUG
+if (debug) {
          printf(" UNARY MINUS");
-#endif
+}
          fr1 = s[t - 1];
          if (fr1.atype != 2) {
             puts("type must be integer");
@@ -328,9 +321,9 @@ int CInterpreter::execute_next() {
       case 2:
       case 3:
       case 4:
-#ifdef DEBUG
+if (debug) {
          printf(" PLUS, MINUS or MUL");
-#endif
+}
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
@@ -436,9 +429,9 @@ int CInterpreter::execute_next() {
          }
          break;
       case 5:
-#ifdef DEBUG
+if (debug) {
          printf(" DIV");
-#endif
+}
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
@@ -450,9 +443,9 @@ int CInterpreter::execute_next() {
          s[t - 1] = fr1;
          break;
       case 6:
-#ifdef DEBUG
+if (debug) {
          printf(" MOD");
-#endif
+}
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
@@ -547,9 +540,9 @@ int CInterpreter::execute_next() {
       }
       break;
    case 3:
-#ifdef DEBUG
+if (debug) {
       printf("LOD %d ",a);
-#endif
+}
       //
       // lod: copy a local variable or parameter on top of the stack
       //
@@ -557,9 +550,9 @@ int CInterpreter::execute_next() {
       t++;
       break;
    case 4:   // sto: pop a value from the stack and put it in a local variable or parameter
-#ifdef DEBUG
+if (debug) {
    printf("STO %d " ,a);
-#endif
+}
       t--;
       s[b[tb - 1] + a] = s[t];
       break;
@@ -568,17 +561,17 @@ int CInterpreter::execute_next() {
       // push the return address on the return stack
       // call the procedure
       //
-#ifdef DEBUG
+if (debug) {
       printf("CAL %d ",a);
-#endif
+}
       r[tr] = pc;
       tr++;
       pc = a;
       break;
    case 6:         // int:
-#ifdef DEBUG
+if (debug) {
    printf("INT %d,%d", l , a);
-#endif
+}
       //
       // this creates a new block with depth a for local variables and parameters
       //
@@ -593,15 +586,15 @@ int CInterpreter::execute_next() {
       t += a;
       break;
    case 7:         // jmp
-#ifdef DEBUG
+if (debug) {
    printf("JMP %d " , a);
-#endif
+}
       pc = a;
       break;
    case 8:         // jpc - jump when false
-#ifdef DEBUG
+if (debug) {
    printf("JPC %d " , a);
-#endif
+}
       fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPC value is not boolean");
@@ -612,9 +605,9 @@ int CInterpreter::execute_next() {
       t--;
       break;
    case 9: // print
-#ifdef DEBUG
+if (debug) {
    printf("PRINT %d " , a);
-#endif
+}
       t--;
       fr1 = s[t];
       if (fr1.atype == 7) {
@@ -645,9 +638,9 @@ int CInterpreter::execute_next() {
       break;
 
    case 10: // external function call
-#ifdef DEBUG
+if (debug) {
    printf("EXTCALL %d",  a);
-#endif
+}
       // parameters should have already been pushed on the stack
       //
       //
@@ -656,9 +649,9 @@ int CInterpreter::execute_next() {
       call_external(l,a);
       break;
    case 11: // object creation
-#ifdef DEBUG
+if (debug) {
    printf("OBJCREATE %d,%d " ,l,a);
-#endif
+}
 
       //
       // l contains the classnum
@@ -680,9 +673,9 @@ int CInterpreter::execute_next() {
       t++;
       break;
    case 12:
-#ifdef DEBUG
+if (debug) {
       printf("METHODCALL %d " ,l );
-#endif
+}
       // method call, the object is already on the stack.
       //
       // lookup the method by object type and name
@@ -699,9 +692,9 @@ int CInterpreter::execute_next() {
       }
       ptr = hm->getStart() + s[t].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
-#ifdef DEBUG
+if (debug) {
                 printf("classnum = %d ", classnum );
-#endif
+}
       //
       // this creates a new block with depth for local variables and parameters
       //
@@ -719,9 +712,9 @@ int CInterpreter::execute_next() {
       pc = methodmap[l][classnum][0];
       break;
    case 13:
-#ifdef DEBUG
+if (debug) {
       printf("LODI %d ", l );
-#endif
+}
       // access an instance variable and put it on the stack
       //
       // l is the instance variable
@@ -739,9 +732,9 @@ int CInterpreter::execute_next() {
       t++;
       break;
    case 14:
-#ifdef DEBUG
+if (debug) {
       printf("STOI %d", l );
-#endif
+}
       // store a value inside an inst. variable
       //
       // l is the instance variable
@@ -760,9 +753,9 @@ int CInterpreter::execute_next() {
       t--;
       break;
    case 15:
-#ifdef DEBUG
+if (debug) {
       printf("DROP");
-#endif
+}
       //
       // drop the top value of the stack
       //
@@ -780,7 +773,7 @@ int CInterpreter::execute_next() {
 
 void CInterpreter::print_stack()
 {
-#ifdef DEBUG
+if (debug) {
    //
    // print the stack
    //
@@ -838,7 +831,7 @@ void CInterpreter::print_stack()
       printf("0x%x", r[i]);
    }
    printf("\n");
-#endif
+}
 }
 
 void CInterpreter::print_a_string(char* ptr,bool b) {
@@ -994,9 +987,6 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 printf("expected %c in external call but got %d\n",c,atype);
                 exit(-1);
              }
-#ifdef DEBUG
-                printf("Pushing an int <%d>\n",f.address);
-#endif
              dcArgInt(vm,f.address);
              break;
           }
@@ -1025,9 +1015,6 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 char* str = (char*) malloc(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
-#ifdef DEBUG
-                printf("Pushing a string <%s>\n",str);
-#endif
                 dcArgPointer(vm, str);
      //           free(str);
                 break;
@@ -1039,9 +1026,6 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                   printf("expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
-#ifdef DEBUG
-               printf("Pushing a pointer <0x%llx>\n",f.address);
-#endif
                dcArgPointer(vm, (void*)f.address);
                break;
             }

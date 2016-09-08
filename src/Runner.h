@@ -8,8 +8,7 @@
 #include "stdio.h"
 
 using namespace std;
- extern int yyparse(); // ProgramNode*,char**);
-
+extern int yyparse();
 
 
 #ifdef  MAIN_FILE
@@ -22,6 +21,6 @@ extern ProgramNode* glob;
 class Runner {
 
 public:
-   int compile_run(string);
+   int compile_run(string,bool);
 };
 #endif

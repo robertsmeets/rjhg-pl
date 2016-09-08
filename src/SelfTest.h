@@ -13,5 +13,6 @@ public:
    void run();
 private:
    void Test(char*);
+   bool Compare(char*,char*);
 };
 #endif

@@ -300,7 +300,7 @@ int main(int argc, char* argv[]) {
       {
          Runner runner;
          string filename = argv[1];
-         return runner.compile_run(filename);
+         return runner.compile_run(filename,true);
       }
    }
    else

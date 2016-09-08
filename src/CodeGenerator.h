@@ -34,6 +34,7 @@ class ClassDefinition; // forward declaration
 class Expression; // forward declaration
 
 class CodeGenerator {
+  bool debug;
   ofstream myfile;
   map<string, ProcedureNode*> procaddresses;
   map<uint16_t, string> callpoints;
@@ -49,7 +50,7 @@ public:
   char* getCodeBuffer();
   uint16_t getHere();
   ProgramNode* getProgramNode();
-  void start(ProgramNode*, DebugInfo*);
+  void start(ProgramNode*, DebugInfo*, bool);
   void start_proc(ProcedureNode*);
   void emit(char, unsigned short int, unsigned short int, Expression*);
   void emitOperation(char, Expression*);
