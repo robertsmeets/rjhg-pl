@@ -1,0 +1,15 @@
+/**
+ *
+ * example program
+ *
+ */
+
+ /*
+ * main 
+ *
+ */
+proc main()
+{
+print 2+3 
+}
+

@@ -6,9 +6,6 @@ void SelfTest::run()
 	//
 	// open test directory
 	//
-
-   printf("SELFTEST\n");
-   printf("--------------------------------\n");
    string path = "test/list.txt";
    FILE *infile;
    infile = fopen(path.c_str(), "r");       
@@ -25,24 +22,24 @@ void SelfTest::run()
             Test(line2);
    }
    fclose(infile);
-   // printf("--------------------------------\n");
 }
 
 void SelfTest::Test(char * filename)
 {
-   printf("Testing <%s>\n",filename);
    char filename_src[256];
    snprintf(filename_src,255,"%s.src",filename);
    char filename_out[256];
    snprintf(filename_out,255,"%s.out",filename);
-   printf("filename_src <%s>\n",filename_src);
-   printf("filename_out <%s>\n",filename_out);
    FILE* org_stdout = stdout;
-   stdout = freopen(filename_out, "w", stdout);
+   freopen(filename_out,"w",stdout);
    Runner runner;
    runner.compile_run(filename_src,false); 
-   fclose(stdout);
-   stdout = org_stdout;
+   // windows: freopen("CON", "w", stdout);
+#ifdef _WIN32
+ freopen("CON","w",stdout);
+#else
+ freopen("/dev/tty","w",stdout);
+#endif
    char filename_tst[256];
    snprintf(filename_tst,255,"%s.tst",filename);
    if (Compare(filename_out,filename_tst))
