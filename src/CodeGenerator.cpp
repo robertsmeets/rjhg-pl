@@ -45,8 +45,7 @@ ProgramNode* CodeGenerator::getProgramNode()
    return pn;
 }
 
-void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debugflag) {
-   debug=debugflag;
+void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    if(debug){printf("Code generation...\n" );}
    pn=a_pn;
    if(debug){printf("beginning of code here = %04x\n",here);}
@@ -98,10 +97,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debugflag) {
       //
       // now save the signature as as string
       //
-	  string s = an_extern->getEstring();
-	  const char * ss = s.c_str();
-	  char signature[50];
-	  strncpy(signature, ss, 49);
+     string s = an_extern->getEstring();
+     const char * ss = s.c_str();
+     char signature[50];
+     strncpy(signature, ss, 49);
       int len = strlen(signature);
       memcpy((char*) codebuffer + the_index,signature,len+1);
       the_index += len + 1;

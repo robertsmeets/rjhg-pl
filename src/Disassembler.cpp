@@ -20,8 +20,9 @@ Disassembler::Disassembler() {
 Disassembler::~Disassembler() {
 }
 
-void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
+void Disassembler::start(char* inbuffer, unsigned int size, DebugInfo* a_di) {
    printf("Starting disassembler...\n" );
+   buffer = inbuffer;
    if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
          && buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
       puts("Magic number does not match, invalid bytecode");
@@ -30,9 +31,10 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
    // hexdump
    //
    hexdump(buffer, size);
+   print_tables();
    i = buffer[6] + buffer[7] * 256;
    for (; i < size;) {
-      printf("%04x ",i );
+      printf("%04X ",i );
       char f = buffer[i];
       printf("f= %d ", (unsigned int) f);
       unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
@@ -43,6 +45,59 @@ void Disassembler::start(char* buffer, unsigned int size, DebugInfo* a_di) {
 }
 
 /**
+ * Print the tables
+ *
+ */
+
+void Disassembler::print_tables()
+{
+   print_magic_number();
+   uint16_t pc = find_offset();
+   uint16_t start_ext_proc_table = find_ext_proc_table();
+   printf("Method table starts at %04X\n",10);
+   printf("Ext proc table starts at %04X\n",start_ext_proc_table);
+   printf("Code starts at %04X\n",pc);
+   //
+   // fill the methodmap
+   //
+   for (uint16_t j = 10; j < start_ext_proc_table ; j += 8) {
+      uint16_t classnum = (buffer[j] & 0xff) + ((buffer[j + 1] & 0xff) << 8);
+      uint16_t methodnum = (buffer[j + 2] & 0xff) + ((buffer[j + 3] & 0xff) << 8);
+      uint16_t address = (buffer[j + 4] & 0xff) + ((buffer[j + 5] & 0xff) << 8);
+      uint16_t num_params = buffer[j + 6];
+      uint16_t num_local_vars = buffer[j + 7];
+      printf("Method classnum=%u methodnum=%u address=%04X num_params=%u num_local_vars=%u\n",classnum,methodnum,address,num_params,num_local_vars);
+   }
+   //
+   // get the external symbols
+   //
+   uint16_t j = start_ext_proc_table;
+   while (j < pc)
+   {
+      void* ptr;
+      memcpy(&ptr,buffer + j,8); 
+      j += 8;
+      string signature = string(buffer + j);
+      printf("External symbol address=%p\n",(void*)ptr);
+      cout << "Signature " << signature << endl;
+      j+= signature.length() + 1;
+   } 
+}
+
+void Disassembler::print_magic_number() {
+   printf("Magic Number %c%c%c%c%c%c\n", buffer[0] ,buffer[1], buffer[2], buffer[3] ,buffer[4] , buffer[5] );
+}
+
+uint16_t Disassembler::find_offset() {
+   return buffer[6] + (buffer[7] >> 8);
+}
+
+uint16_t Disassembler::find_ext_proc_table() {
+   return buffer[8] + (buffer[9] >> 8);
+}
+
+
+/**
  *
  * Hexdump of a buffer
  *
@@ -51,30 +106,30 @@ void Disassembler::hexdump(char* buf, unsigned int buflen) {
    unsigned int i, j;
    for (i = 0; i < buflen; i += 16) {
       printf("%06x: ", i);
-	  for (j = 0; j < 16; j++)
-	  {
-		 unsigned int location = i + j;
+     for (j = 0; j < 16; j++)
+     {
+       unsigned int location = i + j;
          if (location < buflen)
-		 {
+       {
             printf("%02x ", buf[location] &255);
-		 }
-		 else
-		 {
-			 printf("   ");
-		 }
+       }
+       else
+       {
+          printf("   ");
+       }
       printf(" ");
-	  }
-	  for (j = 0; j < 16; j++)
-	  {
-		  unsigned int location = i + j;
-		  if (location < buflen)
-		  {
-			  int a_char = buf[location] & 255;
-			  int prin = (a_char > 0) && isprint(a_char);
-			  printf("%c", prin ? a_char : '.');
-		  }
-	  }
-	  printf("\n");
+     }
+     for (j = 0; j < 16; j++)
+     {
+        unsigned int location = i + j;
+        if (location < buflen)
+        {
+           int a_char = buf[location] & 255;
+           int prin = (a_char > 0) && isprint(a_char);
+           printf("%c", prin ? a_char : '.');
+        }
+     }
+     printf("\n");
    }
 }
 

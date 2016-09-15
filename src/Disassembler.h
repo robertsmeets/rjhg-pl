@@ -9,25 +9,30 @@
 #define DISASSEMBLER_H_
 
 #include <vector>
-
-#include "DebugInfo.h"
-
-
+#include <iostream>
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 
+#include "DebugInfo.h"
 
 using namespace std;
 
 class Disassembler {
-	DebugInfo* di;
-	unsigned int i;
+   DebugInfo* di;
+   unsigned int i;
+   char* buffer;
 public:
-	Disassembler();
-	virtual ~Disassembler();
-	void start(char*, unsigned int, DebugInfo*);
-	string decode(char, unsigned short, unsigned short);
-	void hexdump(char*, unsigned int);
+   Disassembler();
+   virtual ~Disassembler();
+   void start(char*, unsigned int, DebugInfo*);
+   string decode(char, unsigned short, unsigned short);
+   void hexdump(char*, unsigned int);
+   void print_tables();
+   void print_magic_number();
+   uint16_t find_offset(); 
+   uint16_t find_ext_proc_table(); 
 };
 
 #endif /* DISASSEMBLER_H_ */
+
