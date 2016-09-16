@@ -82,7 +82,11 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    // emit the ext procedure table
    //
    int i = 1;
-   uint16_t the_index = 10;
+   uint16_t the_index = start_ext_proc_table;
+   if(debug){printf("The index is now %04X\n",the_index);}
+   int nExterns = a_pn->getExterns().size();
+   if(debug){printf("There are %d methods\n",amount_of_methods);}
+   if(debug){printf("There are %d external functions\n",nExterns);}
    for (auto an_extern:a_pn->getExterns())
    {
       an_extern->setNumber(i);
@@ -93,20 +97,26 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
          *((char*) codebuffer + the_index) = a & 255;
          a = a >> 8;
          the_index++;
+   if(debug){printf("The index is now %04X\n",the_index);}
       }
       //
       // now save the signature as as string
       //
-     string s = an_extern->getEstring();
-     const char * ss = s.c_str();
-     char signature[50];
-     strncpy(signature, ss, 49);
+      string s = an_extern->getEstring();
+      const char * ss = s.c_str();
+      char signature[50];
+      strncpy(signature, ss, 49);
       int len = strlen(signature);
       memcpy((char*) codebuffer + the_index,signature,len+1);
       the_index += len + 1;
+   if(debug){printf("The index is now %04X\n",the_index);}
       i++;
    }
    uint16_t offset = the_index;
+   if(debug){printf("The index is now %04X\n",the_index);}
+   //
+   // save the start address of the bytecode
+   //
    *((char*) codebuffer + 6) = offset & 255;
    *((char*) codebuffer + 7) = offset >> 8;
    here = offset;
@@ -171,11 +181,14 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // emit the method table
    //
+   if(debug){printf("Emitting method table\n"); }
+   the_index = 10;
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
          uint16_t cnum = a_class->getClassNum();
          uint16_t mnum = a_method->getMethodNumber();
          uint16_t address = a_method->getProcAddress();
+         if(debug){printf("A method classnum %d methodnum %d address %04X params %d localvars %d\n",cnum,mnum,address,a_method->getParameters()->size(),a_method->getLocalVariables()->size());}
          *((char*) codebuffer + the_index) = cnum & 255;
          the_index++;
          *((char*) codebuffer + the_index) = cnum >> 8;

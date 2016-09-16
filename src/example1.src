@@ -27,11 +27,15 @@ proc myproc(e,f,g,h)
 proc main(a)
 {
    print "HELLO";
+   m = myclass();
+   f = m.mymethod(1,2,3);
+   print f;
 }
 
 
 method myclass.mymethod(x,y,z)
 {
+   print "INTHEMETHOD";
    a = x + y + z;
    b = x * y * z;
    if (a > b)

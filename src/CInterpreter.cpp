@@ -100,7 +100,8 @@ vector<stack_element>* CInterpreter::getStack() {
    return &s;
 }
 
-void CInterpreter::start(bool debug) {
+void CInterpreter::start(bool indebug) {
+   debug=indebug;
    if (debug) {printf("Starting interpreter...\n" );}
    methodmap.clear();
    check_magic_number();
