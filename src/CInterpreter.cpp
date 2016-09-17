@@ -587,28 +587,22 @@ if (debug) {
       t += a;
       break;
    case 7:         // jmp
-if (debug) {
-   printf("JMP %d " , a);
-}
+      if (debug) { printf("JMP %d " , a); }
       pc = a;
       break;
-   case 8:         // jpc - jump when false
-if (debug) {
-   printf("JPC %d " , a);
-}
+   case 8:         // jpc - jump when true
+      if (debug) { printf("JPC %d " , a); }
       fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPC value is not boolean");
       }
-      if (fr1.address == 0) {
+      if (fr1.address != 0) {
          pc = a;
       }
       t--;
       break;
    case 9: // print
-if (debug) {
-   printf("PRINT %d " , a);
-}
+      if (debug) { printf("PRINT %d " , a); }
       t--;
       fr1 = s[t];
       if (fr1.atype == 7) {

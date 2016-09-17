@@ -1,4 +1,5 @@
 *.o
+*.swp
 .cproject
 .fuse_hidden0001b5f600000001
 .project

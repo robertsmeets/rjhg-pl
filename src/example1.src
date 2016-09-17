@@ -38,9 +38,13 @@ method myclass.mymethod(x,y,z)
    print "INTHEMETHOD";
    a = x + y + z;
    b = x * y * z;
-   if (a > b)
+   if (a <= b)
    {
      c = a + b;
+   }
+   else
+   {
+     c = 55;
    };
    return c;
 }
