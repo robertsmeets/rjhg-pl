@@ -644,10 +644,7 @@ if (debug) {
       call_external(l,a);
       break;
    case 11: // object creation
-if (debug) {
-   printf("OBJCREATE %d,%d " ,l,a);
-}
-
+      if (debug) { printf("OBJCREATE %d,%d " ,l,a); }
       //
       // l contains the classnum
       // a contains the number of instance variables
@@ -668,9 +665,7 @@ if (debug) {
       t++;
       break;
    case 12:
-if (debug) {
-      printf("METHODCALL %d " ,l );
-}
+      if (debug) { printf("METHODCALL %d " ,l ); }
       // method call, the object is already on the stack.
       //
       // lookup the method by object type and name
@@ -687,9 +682,7 @@ if (debug) {
       }
       ptr = hm->getStart() + s[t].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
-if (debug) {
-                printf("classnum = %d ", classnum );
-}
+      if (debug) { printf("classnum = %d ", classnum ); }
       //
       // this creates a new block with depth for local variables and parameters
       //
@@ -707,9 +700,7 @@ if (debug) {
       pc = methodmap[l][classnum][0];
       break;
    case 13:
-if (debug) {
-      printf("LODI %d ", l );
-}
+      if (debug) { printf("LODI %d ", l ); }
       // access an instance variable and put it on the stack
       //
       // l is the instance variable
@@ -722,14 +713,11 @@ if (debug) {
       // put the value on the stack
       //
       s[t].atype = *(hm->getStart() + adr) & 0xff;
-      s[t].address = (*(hm->getStart() + adr + 1) & 0xff)
-            + (*(hm->getStart() + adr + 2) << 8);
+      s[t].address = (*(hm->getStart() + adr + 1) & 0xff) + (*(hm->getStart() + adr + 2) << 8);
       t++;
       break;
    case 14:
-if (debug) {
-      printf("STOI %d", l );
-}
+      if (debug) { printf("STOI %d", l ); }
       // store a value inside an inst. variable
       //
       // l is the instance variable
@@ -748,9 +736,7 @@ if (debug) {
       t--;
       break;
    case 15:
-if (debug) {
-      printf("DROP");
-}
+      if (debug) { printf("DROP"); }
       //
       // drop the top value of the stack
       //

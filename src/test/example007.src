@@ -1,0 +1,25 @@
+//
+// test method persist instance variables 
+//
+class myclass
+{
+    a,b,c,d,e
+}
+
+proc main(a)
+{
+   m = myclass();
+   f = m.mymethod(1,2,3);
+   m.anothermethod();
+}
+
+
+method myclass.mymethod(x,y,z)
+{
+   c=5;
+}
+
+method myclass.anothermethod()
+{
+   print c;
+}

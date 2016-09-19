@@ -154,15 +154,30 @@ void ProcedureNode::print(int level) {
    statements->print(level+1);
 }
 
+/**
+ *
+ * Look up the instance variable
+ *
+ */
 int ProcedureNode::getInstanceVarNum(string name) {
+   printf("-------------------------------------------------------getInstanceVarNum\n");
+   cout << "name = " << name << endl;
    if (cd == NULL) {
+      printf("cd is null\n");
       return 0;
    }
    int i = 0;
+   printf("There are %d instance variables\n", cd->getInstanceVariables()); 
    for (auto it : cd->getInstanceVariables()) {
+      cout << "compare against " << it << endl;
       if (it == name) {
+          printf("FOUND\n");
          return i;
       }
+      else
+      { 
+         printf("NOT EQUAL\n");
+}
       i++;
    }
    return 0; 

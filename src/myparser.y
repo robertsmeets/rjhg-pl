@@ -168,7 +168,7 @@ Procedure:
 
 Class:
    CLASS IDENTIFIER BLOCK CommaSeparated ENDBLOCK
-   ; {  $$ = new ClassDefinition($2);}
+   ; {  $$ = new ClassDefinition($2,$4);}
 
 Extern:
    EXTERN IDENTIFIER ESTRING SEMICOL

@@ -1,0 +1,21 @@
+//
+// test method return parameter 
+//
+class myclass
+{
+    a,b,c,d,e
+}
+
+proc main(a)
+{
+   m = myclass();
+   f = m.mymethod(1,2,3);
+   print f;
+}
+
+
+method myclass.mymethod(x,y,z)
+{
+  return "RETURN"; 
+}
+

@@ -1,0 +1,20 @@
+//
+// test method call parameter passing
+//
+class myclass
+{
+    a,b,c,d,e
+}
+
+proc main(a)
+{
+   m = myclass();
+   f = m.mymethod(1,2,3);
+}
+
+
+method myclass.mymethod(x,y,z)
+{
+   print z;
+}
+

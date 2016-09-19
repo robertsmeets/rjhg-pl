@@ -2,11 +2,11 @@
 #define CLASSDEFINITION_H_
 
 #include <string>
-#include "stdio.h"
 #include <vector>
+#include "stdio.h"
 
 #include "ProcedureNode.h"
-
+#include "CommaSeparated.h"
 using namespace std;
 
 class ProcedureNode; // forward declaration
@@ -19,7 +19,7 @@ private:
    vector <ProcedureNode*> methods;
    
 public:
-   ClassDefinition(string);
+   ClassDefinition(string,CommaSeparated*);
    virtual ~ClassDefinition();
    void print(int);
    string getName();

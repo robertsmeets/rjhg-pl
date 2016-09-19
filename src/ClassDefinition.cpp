@@ -3,9 +3,14 @@
 
 using namespace std;
 
-ClassDefinition::ClassDefinition(string class_name) {
+ClassDefinition::ClassDefinition(string class_name,CommaSeparated* instance_vars) {
    classnum = 0;
    name = class_name;
+   vector<string>* v =  instance_vars->getIdentifiers();
+   for (auto i: *v)
+{
+      instance_variables.push_back(i);
+} 
 }
 
 ClassDefinition::~ClassDefinition() {
@@ -19,7 +24,9 @@ void ClassDefinition::print(int level) {
    for (int i = 0; i < level; i++) {
       printf("+");
    } 
-   printf("ClassDefinition \n" );
+   printf("ClassDefinition ");
+   printf("There are %d instance variables",instance_variables.size());
+   printf("\n" );
 }
 
 vector<ProcedureNode*> ClassDefinition::getMethods() {
