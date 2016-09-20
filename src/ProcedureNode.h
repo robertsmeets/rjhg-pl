@@ -67,6 +67,7 @@ public:
    void print(int);
    int getInstanceVarNum(string);
    void emit(CodeGenerator*);
+   void setClassDefinition(ClassDefinition*);
    
 };
 

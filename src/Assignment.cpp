@@ -22,14 +22,14 @@ void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
    //
    // emit the calculation instructions
    //
-      expression->emit(cg, pn);
-   bool is_iv = false;
-   if (is_iv) {
+   expression->emit(cg, pn);
+   int varnum = pn->getInstanceVarNum(variable->getName());
+   if (varnum > 0) {
       //
       // instance variable.  emit a STOI
       //
-      //printf("void AssignmentNode::emit(CodeGenerator* cg) STOI " << lhs );
-      //cg->emit(14, lhs, 0, this);
+      printf("void AssignmentNode::emit(CodeGenerator* cg) STOI "  );
+      cg->emit(14, varnum, 0, this);
    } else {
       //
       // emit a "sto" to store the value in a local variable

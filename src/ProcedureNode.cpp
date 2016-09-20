@@ -68,6 +68,10 @@ void ProcedureNode::setName(string a_name) {
 void ProcedureNode::setProcAddress(uint16_t a) {
    proc_address = a;
 }
+void ProcedureNode::setClassDefinition(ClassDefinition* classDefinition)
+{
+   cd = classDefinition;
+}
 
 void ProcedureNode::addParameter(string a_parameter) {
    // parameters->push_back(a_parameter);

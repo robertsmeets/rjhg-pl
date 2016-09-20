@@ -270,7 +270,11 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       i += 5;
       break;
    case 13:
-      sf = "INSTVAR";
+      sf = "LDI";
+      i +=5;
+      break;
+   case 14:
+      sf = "STI";
       i +=5;
       break;
    case 15:

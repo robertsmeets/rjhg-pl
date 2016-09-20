@@ -15,9 +15,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <unordered_map>
+#include <iostream>
 
 #include "ClassDefinition.h"
-
 #include "DebugInfo.h"
 #include "Expression.h"
 #include "ProgramNode.h"

@@ -709,11 +709,14 @@ if (debug) {
       // first get the this pointer
       // then calculate the address of the inst. variable
       adr = s[b[tb - 1]].address + 3 * l + 3;
+      if (debug){printf("-----The offset is %d\n",adr);}
       //
       // put the value on the stack
       //
       s[t].atype = *(hm->getStart() + adr) & 0xff;
+      if (debug){printf("-----The type is %d\n",s[t].atype);}
       s[t].address = (*(hm->getStart() + adr + 1) & 0xff) + (*(hm->getStart() + adr + 2) << 8);
+      if (debug){printf("-----The object is %d\n",s[t].address);}
       t++;
       break;
    case 14:
@@ -727,12 +730,15 @@ if (debug) {
       // then calculate the address of the inst. variable
       //
       adr = s[b[tb - 1]].address + 3 * l + 3;
+      if(debug){printf("offset = %d\n",adr);}
       //
       // store the value on the heap
       //
       *(hm->getStart() + adr) = s[t].atype;
       *(hm->getStart() + adr + 1) = s[t].address & 0xff;
       *(hm->getStart() + adr + 2) = s[t].address >> 8;
+      if (debug){printf("-----The type is %d\n",s[t].atype);}
+      if (debug){printf("-----The object is %d\n",s[t].address);}
       t--;
       break;
    case 15:

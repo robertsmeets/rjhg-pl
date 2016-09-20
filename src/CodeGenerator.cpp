@@ -159,6 +159,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    for (vector<ProcedureNode*>::iterator it = procs.begin(); it != procs.end(); ++it) {
       ProcedureNode* a_proc = *it;
       string pname = a_proc->getName();
+      if(debug){ cout << "--------------- Generating code for procedure " << pname << endl;}
       a_proc->setProcAddress(here);
       procaddresses[pname] = a_proc;
       a_proc->fixReturn();
@@ -169,8 +170,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
+         if (debug){cout << "--------------- Generating code for method " << a_class->getName() << "." << a_method->getName() << endl;}
          a_method->setProcAddress(here);
          a_method->fixReturn();
+         a_method->setClassDefinition(a_class);
          a_method->emit(this);
       }
    }
