@@ -49,7 +49,7 @@ void MethodCall::emit(CodeGenerator* cg, ProcedureNode* pn)
    //
    // add a call
    //
-   cg->addCallToMethod(name, NULL);
+   cg->addCallToMethod(name, pn, NULL);
 }
 
 

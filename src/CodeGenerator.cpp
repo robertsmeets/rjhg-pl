@@ -345,11 +345,11 @@ printf("METHOD CALL " );
 
 }
 
-void CodeGenerator::addCallToMethod(string method_name, Expression* s) {
+void CodeGenerator::addCallToMethod(string method_name, ProcedureNode* procn, Expression* s) {
    //
    //
    uint16_t method_number = pn->getMethodNumber(method_name);
-   emit(12, method_number, 0, s);
+   emit(12, method_number, procn->getParameters()->size(), s);
 }
 
 void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd, Expression* s) {

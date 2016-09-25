@@ -541,9 +541,7 @@ if (debug) {
       }
       break;
    case 3:
-if (debug) {
-      printf("LOD %d ",a);
-}
+      if (debug) { printf("LOD %d ",a); }
       //
       // lod: copy a local variable or parameter on top of the stack
       //
@@ -551,9 +549,7 @@ if (debug) {
       t++;
       break;
    case 4:   // sto: pop a value from the stack and put it in a local variable or parameter
-if (debug) {
-   printf("STO %d " ,a);
-}
+      if (debug) { printf("STO %d " ,a); }
       t--;
       s[b[tb - 1] + a] = s[t];
       break;
@@ -562,17 +558,13 @@ if (debug) {
       // push the return address on the return stack
       // call the procedure
       //
-if (debug) {
-      printf("CAL %d ",a);
-}
+      if (debug) { printf("CAL %d ",a); }
       r[tr] = pc;
       tr++;
       pc = a;
       break;
    case 6:         // int:
-if (debug) {
-   printf("INT %d,%d", l , a);
-}
+      if (debug) { printf("INT %d,%d", l , a); }
       //
       // this creates a new block with depth a for local variables and parameters
       //
@@ -672,21 +664,21 @@ if (debug) {
       // call the method
       //
       // l is the method number
-      // a is unused
+      // a is the number of parameters
       //
       // figure out what class type is on top of the stack
       //
-      t--;
-      if (s[t].atype != 8) {
+      if (s[t-1].atype != 8) {
          puts("Performed a method call on a nonfancy object");
+         return -1;
       }
-      ptr = hm->getStart() + s[t].address;
+      ptr = hm->getStart() + s[t-1].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
       if (debug) { printf("classnum = %d ", classnum ); }
       //
       // this creates a new block with depth for local variables and parameters
       //
-      b[tb] = t - methodmap[l][classnum][1];
+      b[tb] = t - methodmap[l][classnum][1] - a;
       tb++;
       //
       // add room for the this pointer and the local vars
@@ -708,7 +700,9 @@ if (debug) {
       //
       // first get the this pointer
       // then calculate the address of the inst. variable
-      adr = s[b[tb - 1]].address + 3 * l + 3;
+      // But what is the offset of the this pointer?
+      //
+      adr = s[b[tb - 1] + 3].address + 3 * l + 3;
       if (debug){printf("-----The offset is %d\n",adr);}
       //
       // put the value on the stack
@@ -729,16 +723,16 @@ if (debug) {
       // first get the this pointer
       // then calculate the address of the inst. variable
       //
-      adr = s[b[tb - 1]].address + 3 * l + 3;
+      adr = s[b[tb - 1]+2].address + 3 * l + 3;
       if(debug){printf("offset = %d\n",adr);}
       //
       // store the value on the heap
       //
-      *(hm->getStart() + adr) = s[t].atype;
-      *(hm->getStart() + adr + 1) = s[t].address & 0xff;
-      *(hm->getStart() + adr + 2) = s[t].address >> 8;
-      if (debug){printf("-----The type is %d\n",s[t].atype);}
-      if (debug){printf("-----The object is %d\n",s[t].address);}
+      *(hm->getStart() + adr) = s[t-1].atype;
+      *(hm->getStart() + adr + 1) = s[t-1].address & 0xff;
+      *(hm->getStart() + adr + 2) = s[t-1].address >> 8;
+      if (debug){printf("-----The type is %d\n",s[t-1].atype);}
+      if (debug){printf("-----The object is %d\n",s[t-1].address);}
       t--;
       break;
    case 15:
@@ -797,7 +791,7 @@ if (debug) {
             break;
          case 8: // pointer
          {
-            printf("ptr 0x%llx",s[i].address);
+            printf("ptr %p",s[i].address);
             break;
          }
          case 9: // object reference

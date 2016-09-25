@@ -58,6 +58,11 @@ ProcedureNode::~ProcedureNode() {
     return class_name;
  }
 
+ClassDefinition* ProcedureNode::getClassDefinition()
+{
+   return cd;
+}
+
 /**
  * setter methods
  */
@@ -68,6 +73,7 @@ void ProcedureNode::setName(string a_name) {
 void ProcedureNode::setProcAddress(uint16_t a) {
    proc_address = a;
 }
+
 void ProcedureNode::setClassDefinition(ClassDefinition* classDefinition)
 {
    cd = classDefinition;
@@ -164,24 +170,14 @@ void ProcedureNode::print(int level) {
  *
  */
 int ProcedureNode::getInstanceVarNum(string name) {
-   printf("-------------------------------------------------------getInstanceVarNum\n");
-   cout << "name = " << name << endl;
    if (cd == NULL) {
-      printf("cd is null\n");
       return 0;
    }
    int i = 0;
-   printf("There are %d instance variables\n", cd->getInstanceVariables()); 
    for (auto it : cd->getInstanceVariables()) {
-      cout << "compare against " << it << endl;
       if (it == name) {
-          printf("FOUND\n");
          return i;
       }
-      else
-      { 
-         printf("NOT EQUAL\n");
-}
       i++;
    }
    return 0; 

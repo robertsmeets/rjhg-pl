@@ -60,7 +60,7 @@ public:
   void fix(uint16_t, uint16_t);
   void addCallTo(string, Expression*);
   void addCallToClassConstructor(ClassDefinition*, Expression*);
-  void addCallToMethod(string, Expression*);
+  void addCallToMethod(string, ProcedureNode*, Expression*);
   void addCallToProc(string, Expression*);
   void addCallToProcedure(string, Expression*);
   Expression* procDefined(string);

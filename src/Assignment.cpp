@@ -28,7 +28,6 @@ void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
       //
       // instance variable.  emit a STOI
       //
-      printf("void AssignmentNode::emit(CodeGenerator* cg) STOI "  );
       cg->emit(14, varnum, 0, this);
    } else {
       //

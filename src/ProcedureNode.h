@@ -48,27 +48,27 @@ class ProcedureNode {
 public:
    ProcedureNode(string, string, CommaSeparated*, Statements*);
    virtual ~ProcedureNode();
-   void setName(string);
-   string getName();
+   ClassDefinition* getClassDefinition();
+   vector<string>* getParameters();
    map<string, uint16_t>* getLocalVariables();
    string getClassName();
+   string getName();
+   uint16_t getProcAddress();
+   string getFullMethodName();
+   int getInstanceVarNum(string);
+   uint16_t get_proc_address();
+   uint16_t getMethodNumber();
+   Statements* getStatements();
+   void setName(string);
    void setProcAddress(uint16_t);
    void setMethodNumber(int);
-   uint16_t getProcAddress();
-   vector<string>* getParameters();
-   string getFullMethodName();
    void addParameter(string);
    uint16_t assignLocalVariable(string);
-   uint16_t get_proc_address();
-   Statements* getStatements();
    void setStatements(vector<Statement*>);
    void fixReturn();
-   uint16_t getMethodNumber();
    void print(int);
-   int getInstanceVarNum(string);
    void emit(CodeGenerator*);
    void setClassDefinition(ClassDefinition*);
-   
 };
 
 #endif /* PROCEDURENODE_H_ */
