@@ -50,8 +50,8 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
          // look for instance variable
          //
          uint16_t j = pn->getInstanceVarNum(value);
-         if (j != 0) {
-            cg->emit(13, j, 0, NULL); // LODI
+         if (j != 0xffff) {
+            cg->emit(13, j, pn->getParameters()->size(), NULL); // LDI
             return;
          }
       }

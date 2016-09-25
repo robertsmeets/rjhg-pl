@@ -53,7 +53,7 @@ void Expression::emit(CodeGenerator*, ProcedureNode* pn) {
 				// look for instance variable
 				//
 				uint16_t j = pn->getInstanceVarNum(avalue);
-				emit(13, j, 0, s); // LODI
+				emit(13, j, 0, s); // LDI
 			}
 		} else {
 			//

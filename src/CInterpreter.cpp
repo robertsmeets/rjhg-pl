@@ -692,17 +692,17 @@ if (debug) {
       pc = methodmap[l][classnum][0];
       break;
    case 13:
-      if (debug) { printf("LODI %d ", l ); }
+      if (debug) { printf("LDI %d ", l ); }
       // access an instance variable and put it on the stack
       //
       // l is the instance variable
-      // a is unused
+      // a is the number of parameters
       //
       // first get the this pointer
       // then calculate the address of the inst. variable
       // But what is the offset of the this pointer?
       //
-      adr = s[b[tb - 1] + 3].address + 3 * l + 3;
+      adr = s[b[tb - 1] + a].address + 3 * l + 3;
       if (debug){printf("-----The offset is %d\n",adr);}
       //
       // put the value on the stack
@@ -714,16 +714,16 @@ if (debug) {
       t++;
       break;
    case 14:
-      if (debug) { printf("STOI %d", l ); }
+      if (debug) { printf("STI %d %d", l,a ); }
       // store a value inside an inst. variable
       //
       // l is the instance variable
-      // a is unused
+      // a is the number of parameters
       //
       // first get the this pointer
       // then calculate the address of the inst. variable
       //
-      adr = s[b[tb - 1]+2].address + 3 * l + 3;
+      adr = s[b[tb - 1] + a].address + 3 * l + 3;
       if(debug){printf("offset = %d\n",adr);}
       //
       // store the value on the heap

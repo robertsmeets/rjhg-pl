@@ -55,7 +55,7 @@ public:
    string getName();
    uint16_t getProcAddress();
    string getFullMethodName();
-   int getInstanceVarNum(string);
+   uint16_t getInstanceVarNum(string);
    uint16_t get_proc_address();
    uint16_t getMethodNumber();
    Statements* getStatements();

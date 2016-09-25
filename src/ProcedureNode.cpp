@@ -166,21 +166,22 @@ void ProcedureNode::print(int level) {
 
 /**
  *
- * Look up the instance variable
+ * Look up the instance variable. 0 is a valid value
+ * If the variable is not found, return -1
  *
  */
-int ProcedureNode::getInstanceVarNum(string name) {
+uint16_t ProcedureNode::getInstanceVarNum(string name) {
    if (cd == NULL) {
-      return 0;
+      return 0xffff;
    }
-   int i = 0;
+   uint16_t i = 0;
    for (auto it : cd->getInstanceVariables()) {
       if (it == name) {
          return i;
       }
       i++;
    }
-   return 0; 
+   return 0xffff; 
 }
 
 Statements* ProcedureNode::getStatements()

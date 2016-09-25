@@ -23,18 +23,20 @@ void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
    // emit the calculation instructions
    //
    expression->emit(cg, pn);
-   int varnum = pn->getInstanceVarNum(variable->getName());
-   if (varnum > 0) {
+   uint16_t varnum = pn->getInstanceVarNum(variable->getName());
+   if (varnum != 0xffff) {
       //
-      // instance variable.  emit a STOI
+      // instance variable.  emit a STI
       //
-      cg->emit(14, varnum, 0, this);
+      //
+      cg->emit(14, varnum, pn->getParameters()->size(), this);
    } else {
       //
       // emit a "sto" to store the value in a local variable
       //
       // stack order:
       // parameters
+      // this pointer (only if in a method)
       // local variables
       // therefore if we want a local variable, we need to add the amount of parameters to it
       //
