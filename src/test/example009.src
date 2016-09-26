@@ -1,0 +1,29 @@
+//
+// test different classes 
+//
+class myclass
+{
+}
+
+class anotherclass
+{
+}
+
+proc main(a)
+{
+   m = myclass();
+   n = anotherclass();
+   m.mymethod();
+   n.mymethod();
+}
+
+
+method myclass.mymethod()
+{
+   print "one";
+}
+
+method anotherclass.mymethod()
+{
+   print "two";
+}

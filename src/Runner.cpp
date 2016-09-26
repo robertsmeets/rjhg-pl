@@ -22,6 +22,7 @@ int Runner::compile_run(string filename,bool debug)
    char* ptr = (char*)errmsg;
    int result = yyparse();
    fclose(yyin);
+   remove(outfilename);
    if(debug){glob->print(0);}
    CodeGenerator cg;
    cg.start(glob,NULL, debug);
