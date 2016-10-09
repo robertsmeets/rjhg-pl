@@ -266,9 +266,7 @@ if (debug) {
       }
       break;
    case 2: // opr
-if (debug) {
-   printf("OPR");
-}
+      if (debug) { printf("OPR"); }
 
       iiptr aiiptr;
       idptr aidptr;
@@ -282,10 +280,7 @@ if (debug) {
 
       switch (a) {
       case 0:
-if (debug) {
-         printf(" RET l= %d" , l);
-}
-         // return
+         if (debug) { printf(" RET l= %d" , l); }
          if (tr <= 0) {
             if(debug){printf("Exiting program...\n" );}
             // exit
@@ -309,9 +304,7 @@ if (debug) {
          }
          break;
       case 1:
-if (debug) {
-         printf(" UNARY MINUS");
-}
+         if (debug) { printf(" UNARY MINUS"); }
          fr1 = s[t - 1];
          if (fr1.atype != 2) {
             puts("type must be integer");
@@ -322,9 +315,7 @@ if (debug) {
       case 2:
       case 3:
       case 4:
-if (debug) {
-         printf(" PLUS, MINUS or MUL");
-}
+         if (debug) { printf(" PLUS, MINUS or MUL"); }
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
@@ -533,7 +524,11 @@ if (debug) {
             exit(-1);
          }
          break;
-
+      case 14:
+         {
+            printf("Index operation. Don't know what to do yet\n");
+            exit(-1);
+         }
       default:
          puts("unexpected A value");
          return -1;

@@ -45,14 +45,14 @@ SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++
 # Create custom command for flex/lex (note the outputs)
 ADD_CUSTOM_COMMAND(
    COMMAND flex 
-   ARGS myparser.lex 
+   ARGS myparser.lex
    TARGET YaccParser
-   OUTPUTS lex.yy.c)
+   OUTPUTS myparser.lex.c)
 
 # Create custom command for bison/yacc (note the DEPENDS)
 ADD_CUSTOM_COMMAND(
-   COMMAND byacc
-   ARGS -d -v -t myparser.y
+   COMMAND bison
+   ARGS -y -d -v -t myparser.y --output y.tab.c
    TARGET YaccParser
    DEPENDS myparser.lex.c
    OUTPUTS y.tab.c)
@@ -78,7 +78,7 @@ SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
 # Since some files do not exist yet when cmake is run, mark
 # them as generated
 SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/yy.tab.c GENERATED)
+SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
 
 # Include binary directory to include lexer.c in parser.c
 INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)

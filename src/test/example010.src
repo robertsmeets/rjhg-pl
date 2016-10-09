@@ -1,0 +1,10 @@
+//
+// test vector
+//
+
+proc main(a)
+{
+    f = a[ b ] 
+}
+
+

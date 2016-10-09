@@ -19,6 +19,8 @@ myparser.dir/
 myparser.exe
 myparser.exe.stackdump
 myparser.lex.c
+myparser.output
+myparser.tab.h
 myparser.sln
 myparser.VC.db
 myparser.VC.VC.opendb

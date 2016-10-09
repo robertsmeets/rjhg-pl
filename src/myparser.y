@@ -27,11 +27,26 @@
 #include "SelfTest.h"
 #include "Comments.h"
 #include "Runner.h"
+#include "y.tab.h"
 
 #include <stdio.h>
+#include <iostream>
 
 extern int line_num;
 extern char *yytext;
+
+
+using namespace std;
+
+extern "C"
+{
+        int yylex(void);  
+        int yywrap()
+        {
+                return 1;
+        }   
+}
+void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
 
 
 #define YYDEBUG 0
@@ -83,6 +98,8 @@ extern char *yytext;
 %token NE
 %token LPAREN
 %token RPAREN
+%token LBRACKET
+%token RBRACKET
 %token SEMICOL
 %token PLUS
 %token MINUS
@@ -132,6 +149,7 @@ extern char *yytext;
 %type <a_procedurecall> ProcedureCall
 %type <an_expressionlist> ExpressionList
 %type <an_expression> Expression
+%type <an_expression> Statement
 %type <a_statements> BSB
 %type <a_statements> Statements
 %type <a_comma_separated> CommaSeparated
@@ -146,9 +164,8 @@ extern char *yytext;
 %type <an_estring> ESTRING
 %type <nullid> NULLID
 
-%token PROCEDURE
+%glr-parser
 %start Program
-
 %%
 
 Program:
@@ -161,26 +178,26 @@ Highlevelblock:
    |Procedure { glob->addProcedure($1);}
    |Method { glob->addMethodDefinition($1);}
    |Extern { glob->addExtern($1); }
-   ; {$$=glob;}
+    {$$=glob;};
 
 Procedure:
-   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {$$=new ProcedureNode("",$2,$4,$6);}
+   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {$$=new ProcedureNode("",$2,$4,$6);} ;
 
 Class:
    CLASS IDENTIFIER BLOCK CommaSeparated ENDBLOCK
-   ; {  $$ = new ClassDefinition($2,$4);}
+    {  $$ = new ClassDefinition($2,$4);};
 
 Extern:
    EXTERN IDENTIFIER ESTRING SEMICOL
-   ; { $$ = new Extern($2,$3); }
+    { $$ = new Extern($2,$3); };
 
 Method:
-   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB ; {  $$ = new ProcedureNode($2,$4,$6,$8);}
+   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {  $$ = new ProcedureNode($2,$4,$6,$8);};
 
 Statements:
     /* empty */ { $$=new Statements();} 
-   |Expression { $$ = new Statements(); $$->addStatement($1); }
-   |Statements SEMICOL Expression { $$=$1;$1->addStatement($3); }
+   |Statement { $$ = new Statements(); $$->addStatement($1); }
+   |Statements SEMICOL Statement { $$=$1;$1->addStatement($3); }
    |Statements SEMICOL { $$=$1; }
    ;
 
@@ -190,7 +207,7 @@ BSB:
 
 Assignment:
    Lhs EQUALS Expression 
-   ; { $$ = new Assignment($1,$3);}
+    { $$ = new Assignment($1,$3);};
 
 Return:
    RETURN Expression { $$ = new ReturnNode($2); }
@@ -207,10 +224,10 @@ If:
    ;
 
 Lhs:
-   IDENTIFIER ; { $$ = new VariableValue($1);}
+   IDENTIFIER  { $$ = new VariableValue($1);};
 
 ProcedureCall:
-   IDENTIFIER LPAREN ExpressionList RPAREN ; { $$=new ProcedureCall($1,$3); }
+   IDENTIFIER LPAREN ExpressionList RPAREN  { $$=new ProcedureCall($1,$3); };
 
 ExpressionList:
     /* empty */ {$$ = new ExpressionList();}
@@ -219,11 +236,11 @@ ExpressionList:
    ;
 
 MethodCall: 
-   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN; { $$ = new MethodCall($1,$3,$5);}
+   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN { $$ = new MethodCall($1,$3,$5);};
 
 Expression:
     Literal { $$=$1; }
-   |IDENTIFIER { $$=new VariableValue($1);}
+   |IDENTIFIER { $$=new VariableValue($1); }
    |Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
    |Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
    |Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
@@ -235,14 +252,21 @@ Expression:
    |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
    |Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
    |LPAREN Expression RPAREN {$$=$2;}
+   |Expression LBRACKET Expression RBRACKET  {$$=new Val2Expression('I',$1,$3);}
    |MethodCall {$$=$1;}
    |ProcedureCall {$$=$1;}
-   |Assignment {$$ = $1;}
+   ;
+
+Statement:
+    Assignment {$$ = $1;}
    |Return {$$ = $1;}
    |While {$$ = $1;}
    |If {$$ = $1;}
    |Print {$$ = $1;}
+   |MethodCall {$$=$1;}
+   |ProcedureCall {$$=$1;}
    ;
+
 
 Print:
    PRINT Expression {$$=new PrintNode($2);}
@@ -262,33 +286,15 @@ CommaSeparated:
    |CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
      ; 
 
+
 %%
-#include <iostream>
-
-using namespace std;
-
-extern "C"
-{
-        int yylex(void);  
-        int yywrap()
-        {
-                return 1;
-        }   
-
-
-//int yyparse(ProgramNode*,void*);
-}
-
- int yyerror(char*y) { printf("yyerror : line_num %s\n",y); exit(-1); }
-// int yyerror(ProgramNode*s,char**x,char*y) { printf("yyerror : line_num %d %s %s\n",line_num,y,*x); exit(-1); }
-// ProgramNode* glob;
-
 
 int main(int argc, char* argv[]) {
    //
    // workaround for a bug in the Eclipse console
    //
    setvbuf(stdout, NULL, _IONBF, 0);
+   //yydebug=1;
    if (argc == 2)
    {
       if (strcmp(argv[1],"t") == 0)
