@@ -19,7 +19,7 @@ void VariableValue::print(int level) {
    for (int i = 0; i < level; i++) {
       printf("+");
    }
-   printf("VariableValue\n");
+   cout << "VariableValue <" <<value<< ">" << endl;
 }
 
 void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {

@@ -26,7 +26,9 @@ int line_num = 1;
 
 extern "C" int yylex();
 %}
+
 %option noyywrap
+
 blanks          [ \t]+
 identifier   	[_a-zA-Z]+
 float 		[0-9]+\.[0-9]*
@@ -57,6 +59,8 @@ estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
 ";"         return(SEMICOL);
 "("         return(LPAREN);
 ")"         return(RPAREN);
+\[          return(LBRACKET);
+\]          return(RBRACKET);
 "+"         return(PLUS);
 "-"         return(MINUS);
 "*"         return(MUL);

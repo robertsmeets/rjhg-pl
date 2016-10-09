@@ -6,9 +6,17 @@
 #include "Disassembler.h"
 #include "CInterpreter.h"
 #include "stdio.h"
+#include "Assignment.h"
+#include "If.h"
+#include "While.h"
+#include "PrintNode.h"
+#include "Literal.h"
+#include "ProcedureCall.h"
+#include "MethodCall.h"
+#include "y.tab.h"
 
 using namespace std;
-extern int yyparse();
+// int yyparse();
 
 
 #ifdef  MAIN_FILE
