@@ -16,6 +16,7 @@
 #include <cstring>
 #include <unordered_map>
 #include <iostream>
+#include <gc.h>
 
 #include "ClassDefinition.h"
 #include "DebugInfo.h"

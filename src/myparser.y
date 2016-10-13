@@ -49,7 +49,7 @@ extern "C"
 void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
 
 
-#define YYDEBUG 0
+// #define YYDEBUG 0
 #define YYDEBUG_LEXER_TEXT yytext
 %}
 %union
@@ -294,6 +294,7 @@ int main(int argc, char* argv[]) {
    // workaround for a bug in the Eclipse console
    //
    setvbuf(stdout, NULL, _IONBF, 0);
+   GC_INIT();
    //yydebug=1;
    if (argc == 2)
    {

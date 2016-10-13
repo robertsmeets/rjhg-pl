@@ -9,6 +9,7 @@
 #define INTERPRETER_SRC_INTERPRETER_H_
 
 #include <vector>
+#include <map>
 #include "stdio.h"
 #include <cstdlib>
 #include <cstring>
@@ -18,8 +19,7 @@
 #include <dynload.h>
 #include <math.h>
 #include "stdint.h"
-
-#include "HeapManager.h"
+#include <gc.h>
 
 #include "CFunctions.h"
 #include "DebugInfo.h"

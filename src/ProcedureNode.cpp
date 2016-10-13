@@ -14,7 +14,7 @@ using namespace std;
 
 
 /**
- * constructor
+ * constructor for call into bytecode
  */
 ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identifiers, Statements* some_statements)
 {
@@ -25,8 +25,25 @@ ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identi
    parameters = identifiers;
    statements = some_statements;
    local_variables = new map<string, uint16_t>();
+   built_in_method_nr = 0;
    cd = NULL;
 }
+
+/**
+ * constructor for call to built in method
+ */
+ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identifiers, uint16_t pbuilt_in_method_nr)
+{
+   method_number =0;
+   proc_address = 0;
+   class_name = cname;
+   name = a_name;
+   parameters = identifiers;
+   local_variables = new map<string, uint16_t>();
+   built_in_method_nr = pbuilt_in_method_nr;
+   cd = NULL;
+}
+
 
 
 /**
@@ -161,7 +178,14 @@ void ProcedureNode::print(int level) {
       printf("+") ;
    } 
    printf("ProcedureNode \n" );
-   statements->print(level+1);
+   if (built_in_method_nr != 0)
+   {
+      printf("built in method %d\n",built_in_method_nr);
+   }
+   else
+   {
+      statements->print(level+1);
+   }
 }
 
 /**
@@ -193,13 +217,26 @@ Statements* ProcedureNode::getStatements()
 /**
  * generate the code for a procedure
  */
-void ProcedureNode::emit(CodeGenerator* cg) {
-   //
-   // emit all the statements for a procedure
-   //
-   vector<Expression*> expressions =statements->getStatements();
-   for (auto const &it :expressions) {
+void ProcedureNode::emit(CodeGenerator* cg, uint16_t here, ClassDefinition* a_cd) {
+   cd = a_cd;
+   if (built_in_method_nr == 0)
+   {
+      fixReturn(); 
+      proc_address = here;
+      //
+      // emit all the statements for a procedure
+      //
+      vector<Expression*> expressions =statements->getStatements();
+      for (auto const &it :expressions) {
            it->emit(cg,this);
+      }
+   }
+   else
+   {
+      //
+      // built in method
+      //
+      cg->emit(16,built_in_method_nr,0,NULL); 
    }
 }
 

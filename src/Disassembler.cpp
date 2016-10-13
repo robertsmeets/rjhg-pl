@@ -212,6 +212,9 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       case 13:
          sa = "LE";
          break;
+      case 14:
+         sa = "I";
+         break;
       default:
          sa = "unexpected A value: " + a;
          printf("the a value was unexpected <%d>\n",a);
@@ -279,6 +282,10 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       break;
    case 15:
       sf = "DROP";
+      i += 5;
+      break;
+   case 16:
+      sf = "METHOD CALL BUILTIN";
       i += 5;
       break;
    default:
