@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6.1)
 PROJECT(myparser)
-ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.cpp CInterpreter.cpp ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp HeapManager.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Runner.cpp myparser.lex.c y.tab.c)
+ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.cpp CInterpreter.cpp ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Runner.cpp myparser.lex.c y.tab.c)
 INCLUDE(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
