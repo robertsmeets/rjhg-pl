@@ -11,8 +11,6 @@
 using namespace std;
 
 CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
-   hm = new HeapManager();
-   hm->setInterpreter(this);
    di = a_di;
    buffer = a_buffer;
    pc = 0; // program counter
@@ -88,7 +86,7 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
 }
 
 CInterpreter::~CInterpreter() {
-   delete hm;
+//   delete hm;
 }
 
 int CInterpreter::getStackDepth()
@@ -202,13 +200,11 @@ if (debug) {
    double d3;
    stack_element fr1;
    stack_element fr2;
-   uint16_t adr;
+   char* adr;
    uint16_t classnum;
    switch (f) {
    case 1:   // lit: Literal value, to be pushed on the stack
-if (debug) {
-   printf("LIT %d,%d", l , a);
-}
+      if (debug) { printf("LIT %d,%d", l , a); }
       switch (l) {
       case 0: // null
          s[t].atype=0;
@@ -221,13 +217,13 @@ if (debug) {
          t++;
          break;
       case 5: // float
-         ptr = hm->allocate(a);
+         ptr = GC_MALLOC(a);
          memcpy(ptr, buffer + pc, a);
          //
          // put the pointer and the type on the stack
          //
          s[t].atype = 5;
-         s[t].address = (uint16_t) (ptr - hm->getStart());
+         s[t].address = (unsigned long long int) ptr;
          t++;
          pc += a;
          break;
@@ -241,24 +237,22 @@ if (debug) {
          //
          // get some memory
          //
-         char* tmp = hm->allocate(a + 2);
-         print_stack();
+         char* tmp = GC_MALLOC(a + 2);
          //
          // copy the string to the heap
          //
          *tmp = a & 0xff;
 	 *(tmp + 1) = (a >> 8) & 0xff;
-	 print_stack();
          memcpy(tmp + 2, buffer + pc, a);
          //
          // put the pointer and the type on the stack
          //
-         print_stack();
          s[t].atype = 7;
-         s[t].address = (uint16_t) (tmp - hm->getStart());
+         if (debug) { printf("Storing a string in %p\n",tmp); }
+         s[t].address = (unsigned long long int) tmp;
+         if (debug) { printf("address is %p\n",tmp); }
          t++;
          pc += a;
-         print_stack();
          break;
       }
       default:
@@ -331,74 +325,71 @@ if (debug) {
             //
             // add two strings
             //
-            char * ptr1 = hm->getStart() + fr1.address;
-            char * ptr2 = hm->getStart() + fr2.address;
+            char * ptr1 = fr1.address;
+            char * ptr2 = fr2.address;
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
             uint16_t newlen = len1 + len2;
-            ptr = hm->allocate(newlen + 2);
+            ptr = GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
             memcpy(ptr + len1 + 2, ptr2 + 2, len2);
-            fr1.address = (uint16_t) (ptr - hm->getStart());
+            fr1.address = (uint16_t) (ptr );
             s[t - 1] = fr1;
          } else if ((fr1.atype == 7) && (fr2.atype == 2)) {
             //
             // add a string and an integer
             //
-            char* ptr1 = hm->getStart() + fr1.address;
+            char* ptr1 = fr1.address;
             char str[15];
             snprintf(str, 15, "%d", fr2.address);
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = hm->allocate(newlen + 2);
+            ptr = GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
             memcpy(ptr + len1 + 2, &str, len2);
-            fr1.address = (uint16_t) (ptr - hm->getStart());
+            fr1.address = (uint16_t) (ptr );
             s[t - 1] = fr1;
          } else if ((fr1.atype == 2) && (fr2.atype == 5)) {
             //
             // integer plus float
             //
-            char* st = hm->getStart();
-            memcpy(&d2, st + fr2.address, 8);
+            memcpy(&d2, fr2.address, 8);
             aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
             d3 = (*aidptr)(fr1.address, d2);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            char* tmp = hm->allocate(8);
-            fr3->address = tmp - hm->getStart();
-            memcpy(st + fr3->address, &d3, 8);
+            char* tmp = GC_MALLOC(8);
+            fr3->address = tmp ;
+            memcpy(fr3->address, &d3, 8);
             s[t - 1] = *fr3;
          } else if ((fr1.atype == 5) && (fr2.atype == 2)) {
             //
             // float plus integer
             //
-            char* st = hm->getStart();
-            memcpy(&d1, st + fr1.address, 8);
+            memcpy(&d1, fr1.address, 8);
             adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
             d3 = (*adiptr)(d1, fr2.address);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            char* tmp = hm->allocate(8);
-            fr3->address = tmp - hm->getStart();
-            memcpy(st + fr3->address, &d3, 8);
+            char* tmp = GC_MALLOC(8);
+            fr3->address = tmp ;
+            memcpy(fr3->address, &d3, 8);
             s[t - 1] = *fr3;
 
          } else if ((fr1.atype == 5) && (fr1.atype == 5)) {
             //
             // both floats
             //
-            char* st = hm->getStart();
             //
             // copy both floats to temp variables d1 and d2
             //
-            memcpy(&d1, st + fr1.address, 8);
-            memcpy(&d2, st + fr2.address, 8);
+            memcpy(&d1, fr1.address, 8);
+            memcpy(&d2, fr2.address, 8);
             //
             // find the function
             //
@@ -411,9 +402,9 @@ if (debug) {
             //
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            char* tmp = hm->allocate(8);
-            fr3->address = tmp -hm->getStart();
-            memcpy(st + fr3->address, &d3, 8);
+            char* tmp = GC_MALLOC(8);
+            fr3->address = tmp ;
+            memcpy(fr3->address, &d3, 8);
             s[t - 1] = *fr3;
          } else {
             printf("operation %d incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
@@ -470,8 +461,7 @@ if (debug) {
             //
             // integer plus float
             //
-            char* st = hm->getStart();
-            memcpy(&d2, st + fr2.address, 8);
+            memcpy(&d2, fr2.address, 8);
             abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abidptr)(fr1.address, d2);
             fr1.atype = 6;
@@ -481,8 +471,7 @@ if (debug) {
             //
             // float plus integer
             //
-            char* st = hm->getStart();
-            memcpy(&d1, st + fr1.address, 8);
+            memcpy(&d1, fr1.address, 8);
             abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abdiptr)(d1, fr2.address);
             fr1.atype = 6;
@@ -492,9 +481,8 @@ if (debug) {
             //
             // both floats
             //
-            char* st = hm->getStart();
-            memcpy(&d1, st + fr1.address, 8);
-            memcpy(&d2, st + fr2.address, 8);
+            memcpy(&d1, fr1.address, 8);
+            memcpy(&d2, fr2.address, 8);
             abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abddptr)(d1, d2);
             fr1.atype = 6;
@@ -593,13 +581,13 @@ if (debug) {
       t--;
       fr1 = s[t];
       if (fr1.atype == 7) {
-         char* ptr = hm->getStart() + fr1.address;
+         char* ptr = fr1.address;
          print_a_string(ptr,true);
       } else if (fr1.atype == 5) {
          //
          // float
          //
-         char* ptr = hm->getStart() + fr1.address;
+         char* ptr = fr1.address;
          memcpy(&d1, ptr, 8);
          printf("%f\n",d1 );
       } else if (fr1.atype == 2) {
@@ -636,7 +624,7 @@ if (debug) {
       // l contains the classnum
       // a contains the number of instance variables
       //
-      ptr = hm->allocate(3 * a + 3);
+      ptr = GC_MALLOC(5 * a + 3);
       //
       // in the first 2 bytes, put in the class number
       // the rest is left for the instance variables
@@ -648,7 +636,7 @@ if (debug) {
       // leave the new object on the stack
       //
       s[t].atype = 8; // Object?
-      s[t].address = ptr - hm->getStart();
+      s[t].address = ptr ;
       t++;
       break;
    case 12:
@@ -667,7 +655,7 @@ if (debug) {
          puts("Performed a method call on a nonfancy object");
          return -1;
       }
-      ptr = hm->getStart() + s[t-1].address;
+      ptr = s[t-1].address;
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
       if (debug) { printf("classnum = %d ", classnum ); }
       //
@@ -697,15 +685,15 @@ if (debug) {
       // then calculate the address of the inst. variable
       // But what is the offset of the this pointer?
       //
-      adr = s[b[tb - 1] + a].address + 3 * l + 3;
-      if (debug){printf("-----The offset is %d\n",adr);}
+      adr = s[b[tb - 1] + a].address + 5 * l + 3;
+      if (debug){printf("-----The offset is %p\n",adr);}
       //
       // put the value on the stack
       //
-      s[t].atype = *(hm->getStart() + adr) & 0xff;
+      s[t].atype = *((char*)adr) & 0xff;
       if (debug){printf("-----The type is %d\n",s[t].atype);}
-      s[t].address = (*(hm->getStart() + adr + 1) & 0xff) + (*(hm->getStart() + adr + 2) << 8);
-      if (debug){printf("-----The object is %d\n",s[t].address);}
+      s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
+      if (debug){printf("-----The object is %p\n",s[t].address);}
       t++;
       break;
    case 14:
@@ -718,14 +706,14 @@ if (debug) {
       // first get the this pointer
       // then calculate the address of the inst. variable
       //
-      adr = s[b[tb - 1] + a].address + 3 * l + 3;
-      if(debug){printf("offset = %d\n",adr);}
+      adr = s[b[tb - 1] + a].address + 5 * l + 3;
+      if(debug){printf(" offset = %p\n",adr);}
       //
       // store the value on the heap
       //
-      *(hm->getStart() + adr) = s[t-1].atype;
-      *(hm->getStart() + adr + 1) = s[t-1].address & 0xff;
-      *(hm->getStart() + adr + 2) = s[t-1].address >> 8;
+      *((char*) adr) = s[t-1].atype;
+      *((char*)(adr + 1)) = s[t-1].address & 0xff;
+      *((char*)(adr + 2)) = s[t-1].address >> 8;
       if (debug){printf("-----The type is %d\n",s[t-1].atype);}
       if (debug){printf("-----The object is %d\n",s[t-1].address);}
       t--;
@@ -736,6 +724,12 @@ if (debug) {
       // drop the top value of the stack
       //
       t--;
+      break;
+   case 16:
+      //
+      // built in method call
+      // 
+      printf("Calling a built in method\n");
       break;
    default:
       printf("unexpected F value <0x%x> at PC <0x%x>\n",f,pc);
@@ -765,7 +759,7 @@ if (debug) {
             printf("%d",s[i].address);
             break;
          case 5:
-            adr = hm->getStart() + s[i].address;
+            adr = s[i].address;
             double d;
             memcpy(&d, adr, 8);
             printf("%f",d);
@@ -781,12 +775,12 @@ if (debug) {
             }
             break;
          case 7: // string
-            adr = hm->getStart() + s[i].address;
+            adr = s[i].address;
             print_a_string(adr,false);
             break;
          case 8: // pointer
          {
-            printf("ptr %p",s[i].address);
+            printf("%p",s[i].address);
             break;
          }
          case 9: // object reference
@@ -902,11 +896,11 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          //
          // put the result on the stack
          //
-         char* ptr = hm->allocate(8);
+         char* ptr = GC_MALLOC(8);
          memcpy(ptr, &r, 8);
          tb--;
          s[t].atype = 5;
-         s[t].address = (uint16_t) (ptr - hm->getStart());
+         s[t].address = (uint16_t) (ptr );
          t++;
          break;
       }
@@ -974,7 +968,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 exit(-1);
              }
              double arg_in;
-             char* adr = hm->getStart() + f.address;
+             char* adr = f.address;
              memcpy(&arg_in, adr, 8);
              dcArgDouble(vm, arg_in);
              break;
@@ -986,13 +980,12 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 printf("expected string or pointer in external call but got %d\n",atype);
                 exit(-1);
              } 
-                char* adr = hm->getStart() + f.address;
+                char* adr = f.address;
                 int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
                 char* str = (char*) malloc(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
                 dcArgPointer(vm, str);
-     //           free(str);
                 break;
             }
          case 8: // pointer

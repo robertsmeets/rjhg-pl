@@ -44,9 +44,11 @@ class ProcedureNode {
    map<string, uint16_t>* local_variables;
    uint16_t proc_address;
    uint16_t method_number;
+   uint16_t built_in_method_nr;
 
 public:
    ProcedureNode(string, string, CommaSeparated*, Statements*);
+   ProcedureNode(string, string, CommaSeparated*, uint16_t);
    virtual ~ProcedureNode();
    ClassDefinition* getClassDefinition();
    vector<string>* getParameters();
@@ -67,7 +69,7 @@ public:
    void setStatements(vector<Statement*>);
    void fixReturn();
    void print(int);
-   void emit(CodeGenerator*);
+   void emit(CodeGenerator*, uint16_t, ClassDefinition*);
    void setClassDefinition(ClassDefinition*);
 };
 

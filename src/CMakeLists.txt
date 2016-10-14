@@ -14,10 +14,11 @@ else()
 endif()
 INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include .)
 
-LINK_DIRECTORIES(../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu)
+LINK_DIRECTORIES(/usr/lib ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu)
 
 ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
 ADD_LIBRARY(libdynload_s STATIC IMPORTED)
+ADD_LIBRARY(libgc STATIC IMPORTED)
 #ADD_LIBRARY(libdl_s STATIC IMPORTED)
 #ADD_LIBRARY(dynload_s.a STATIC IMPORTED)
 #ADD_LIBRARY(dyncall_s.a STATIC IMPORTED)
@@ -34,7 +35,7 @@ SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/l
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-fpermissive")
 ADD_DEFINITIONS(${GCC_COVERAGE_COMPILE_FLAGS})
-TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s )
+TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s libgc.dll.a )
 #TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s dyncall_s.a dynload_s.a dyncallback_s.a)
 
 # Create target for the parser

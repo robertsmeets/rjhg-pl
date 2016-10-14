@@ -11,7 +11,7 @@ using namespace std;
 
 CodeGenerator::CodeGenerator() {
    codesize = 60000;
-   codebuffer = (char*) malloc(codesize);
+   codebuffer = (char*) GC_MALLOC(codesize);
    here = 0;
    pn = NULL;
    di = NULL;
@@ -161,10 +161,8 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
       ProcedureNode* a_proc = *it;
       string pname = a_proc->getName();
       if(debug){ cout << "--------------- Generating code for procedure " << pname << endl;}
-      a_proc->setProcAddress(here);
       procaddresses[pname] = a_proc;
-      a_proc->fixReturn();
-      a_proc->emit(this);
+      a_proc->emit(this, here, NULL);
    }
    //
    // also the methods
@@ -172,12 +170,10 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
          if (debug){cout << "--------------- Generating code for method " << a_class->getName() << "." << a_method->getName() << endl;}
-         a_method->setProcAddress(here);
-         a_method->fixReturn();
-         a_method->setClassDefinition(a_class);
-         a_method->emit(this);
+         a_method->emit(this, here, a_class);
       }
    }
+   if (debug) {printf("------------Done generating code for methods\n");}
    //
    // fix the proc addresses
    //

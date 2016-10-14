@@ -9,6 +9,11 @@
 
 ProgramNode::ProgramNode() {
    next_methodnumber = 1;
+   //
+   // add the vector class
+   // 
+   addClass(new ClassDefinition("vector",new CommaSeparated()));
+   addMethodDefinition(new ProcedureNode("vector","add",new CommaSeparated(),1));
 }
 
 ProgramNode::~ProgramNode() {
