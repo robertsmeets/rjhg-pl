@@ -200,7 +200,7 @@ if (debug) {
    double d3;
    stack_element fr1;
    stack_element fr2;
-   uint16_t adr;
+   char* adr;
    uint16_t classnum;
    switch (f) {
    case 1:   // lit: Literal value, to be pushed on the stack
@@ -223,7 +223,7 @@ if (debug) {
          // put the pointer and the type on the stack
          //
          s[t].atype = 5;
-         s[t].address = (uint16_t) ptr;
+         s[t].address = (unsigned long long int) ptr;
          t++;
          pc += a;
          break;
@@ -624,7 +624,7 @@ if (debug) {
       // l contains the classnum
       // a contains the number of instance variables
       //
-      ptr = GC_MALLOC(3 * a + 3);
+      ptr = GC_MALLOC(5 * a + 3);
       //
       // in the first 2 bytes, put in the class number
       // the rest is left for the instance variables
@@ -685,15 +685,15 @@ if (debug) {
       // then calculate the address of the inst. variable
       // But what is the offset of the this pointer?
       //
-      adr = s[b[tb - 1] + a].address + 3 * l + 3;
-      if (debug){printf("-----The offset is %d\n",adr);}
+      adr = s[b[tb - 1] + a].address + 5 * l + 3;
+      if (debug){printf("-----The offset is %p\n",adr);}
       //
       // put the value on the stack
       //
       s[t].atype = *((char*)adr) & 0xff;
       if (debug){printf("-----The type is %d\n",s[t].atype);}
-      s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8);
-      if (debug){printf("-----The object is %d\n",s[t].address);}
+      s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
+      if (debug){printf("-----The object is %p\n",s[t].address);}
       t++;
       break;
    case 14:
@@ -706,8 +706,8 @@ if (debug) {
       // first get the this pointer
       // then calculate the address of the inst. variable
       //
-      adr = s[b[tb - 1] + a].address + 3 * l + 3;
-      if(debug){printf("offset = %d\n",adr);}
+      adr = s[b[tb - 1] + a].address + 5 * l + 3;
+      if(debug){printf(" offset = %p\n",adr);}
       //
       // store the value on the heap
       //
@@ -750,7 +750,7 @@ if (debug) {
    printf("      stack: ");
    for (uint16_t i = 0; i < t; i++) {
       char* adr;
-      printf("[type=%d",s[i].atype);
+      printf("[");
       switch (s[i].atype) {
          case 0:
             printf("NULL");
@@ -780,7 +780,7 @@ if (debug) {
             break;
          case 8: // pointer
          {
-            printf("ptr %p",s[i].address);
+            printf("%p",s[i].address);
             break;
          }
          case 9: // object reference

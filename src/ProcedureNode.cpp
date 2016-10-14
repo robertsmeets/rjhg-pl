@@ -231,13 +231,6 @@ void ProcedureNode::emit(CodeGenerator* cg, uint16_t here, ClassDefinition* a_cd
            it->emit(cg,this);
       }
    }
-   else
-   {
-      //
-      // built in method
-      //
-      cg->emit(16,built_in_method_nr,0,NULL); 
-   }
 }
 
 uint16_t ProcedureNode::getMethodNumber() {
