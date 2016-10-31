@@ -30,7 +30,7 @@ CodeGenerator::CodeGenerator() {
 }
 
 CodeGenerator::~CodeGenerator() {
-   free(codebuffer);
+   // free(codebuffer);
 }
 
 uint16_t CodeGenerator::getHere() {
