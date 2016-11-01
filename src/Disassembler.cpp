@@ -288,6 +288,9 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       sf = "METHOD CALL BUILTIN";
       i += 5;
       break;
+   case 17:
+      sf = "JPF";
+      i += 5;
    default:
       sf = "-----------------------------------+> unexpected F value: " + int(f);
       printf(" F=%d L=%d A=%d" , (unsigned int) f , l , a );
