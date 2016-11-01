@@ -25,7 +25,7 @@ void ClassDefinition::print(int level) {
       printf("+");
    } 
    printf("ClassDefinition ");
-   printf("There are %d instance variables",instance_variables.size());
+   printf("There are %lu instance variables",instance_variables.size());
    printf("\n" );
 }
 

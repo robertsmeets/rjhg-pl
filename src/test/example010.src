@@ -1,18 +1,16 @@
 //
-// test vector
+//  test the if statement
 //
-
-proc main()
+proc main(a)
 {
-   a = vector();
-   a.add("now");
-   a.add("is");
-   a.add("the");
-   a.add("time);
-   print a[0];
-   print a[1];
-   print a[2];
-   print a[3];
-}
 
+   if 5 > 0
+   {
+      print "greater"
+   }
+   else
+   {
+      print "smaller"
+   }
+}
 

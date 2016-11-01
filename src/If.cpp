@@ -33,7 +33,7 @@ void If::emit(CodeGenerator* cg, ProcedureNode* pn)
         vector<Expression*> vstatements1 = statements1->getStatements();
         if (statements2 == NULL) {
       //
-      // emit JPC, jump if the stack top is 0 (false)
+      // emit JPC, jump if the stack top is true
       //
       cg->emit(8, 0, 0, this);
       unsigned int jump_address = cg->getHere() - 2;

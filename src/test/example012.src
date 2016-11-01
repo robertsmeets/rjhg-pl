@@ -1,0 +1,18 @@
+//
+// test vector
+//
+
+proc main()
+{
+   a = vector();
+   a.add("now");
+   a.add("is");
+   a.add("the");
+   a.add("time);
+   print a[0];
+   print a[1];
+   print a[2];
+   print a[3];
+}
+
+
