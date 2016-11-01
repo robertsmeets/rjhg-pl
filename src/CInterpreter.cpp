@@ -325,8 +325,8 @@ if (debug) {
             //
             // add two strings
             //
-            char * ptr1 = fr1.address;
-            char * ptr2 = fr2.address;
+            char * ptr1 = (char*) fr1.address;
+            char * ptr2 = (char*) fr2.address;
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
             uint16_t newlen = len1 + len2;
@@ -335,15 +335,15 @@ if (debug) {
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
             memcpy(ptr + len1 + 2, ptr2 + 2, len2);
-            fr1.address = (uint16_t) (ptr );
+            fr1.address = (long long unsigned int) (ptr );
             s[t - 1] = fr1;
          } else if ((fr1.atype == 7) && (fr2.atype == 2)) {
             //
             // add a string and an integer
             //
-            char* ptr1 = fr1.address;
+            char* ptr1 = (char*) fr1.address;
             char str[15];
-            snprintf(str, 15, "%d", fr2.address);
+            snprintf(str, 15, "%llu", fr2.address);
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
@@ -352,33 +352,33 @@ if (debug) {
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
             memcpy(ptr + len1 + 2, &str, len2);
-            fr1.address = (uint16_t) (ptr );
+            fr1.address = (long long unsigned int) (ptr );
             s[t - 1] = fr1;
          } else if ((fr1.atype == 2) && (fr2.atype == 5)) {
             //
             // integer plus float
             //
-            memcpy(&d2, fr2.address, 8);
+            memcpy(&d2, (void*) fr2.address, 8);
             aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
             d3 = (*aidptr)(fr1.address, d2);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = GC_MALLOC(8);
-            fr3->address = tmp ;
-            memcpy(fr3->address, &d3, 8);
+            fr3->address = (long long unsigned int) tmp ;
+            memcpy((void*) (fr3->address), &d3, 8);
             s[t - 1] = *fr3;
          } else if ((fr1.atype == 5) && (fr2.atype == 2)) {
             //
             // float plus integer
             //
-            memcpy(&d1, fr1.address, 8);
+            memcpy(&d1, (void*) (fr1.address), 8);
             adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
             d3 = (*adiptr)(d1, fr2.address);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = GC_MALLOC(8);
-            fr3->address = tmp ;
-            memcpy(fr3->address, &d3, 8);
+            fr3->address = (long long unsigned int)tmp ;
+            memcpy((void*) (fr3->address), &d3, 8);
             s[t - 1] = *fr3;
 
          } else if ((fr1.atype == 5) && (fr1.atype == 5)) {
@@ -388,8 +388,8 @@ if (debug) {
             //
             // copy both floats to temp variables d1 and d2
             //
-            memcpy(&d1, fr1.address, 8);
-            memcpy(&d2, fr2.address, 8);
+            memcpy(&d1, (void*)(fr1.address), 8);
+            memcpy(&d2, (void*)(fr2.address), 8);
             //
             // find the function
             //
@@ -403,8 +403,8 @@ if (debug) {
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = GC_MALLOC(8);
-            fr3->address = tmp ;
-            memcpy(fr3->address, &d3, 8);
+            fr3->address = (long long unsigned int) tmp ;
+            memcpy((void*)(fr3->address), &d3, 8);
             s[t - 1] = *fr3;
          } else {
             printf("operation %d incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
@@ -461,7 +461,7 @@ if (debug) {
             //
             // integer plus float
             //
-            memcpy(&d2, fr2.address, 8);
+            memcpy(&d2, (void*)(fr2.address), 8);
             abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abidptr)(fr1.address, d2);
             fr1.atype = 6;
@@ -471,7 +471,7 @@ if (debug) {
             //
             // float plus integer
             //
-            memcpy(&d1, fr1.address, 8);
+            memcpy(&d1, (void*)(fr1.address), 8);
             abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abdiptr)(d1, fr2.address);
             fr1.atype = 6;
@@ -481,8 +481,8 @@ if (debug) {
             //
             // both floats
             //
-            memcpy(&d1, fr1.address, 8);
-            memcpy(&d2, fr2.address, 8);
+            memcpy(&d1, (void*)(fr1.address), 8);
+            memcpy(&d2, (void*)(fr2.address), 8);
             abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abddptr)(d1, d2);
             fr1.atype = 6;
@@ -576,22 +576,33 @@ if (debug) {
       }
       t--;
       break;
+   case 17:          // jpf: jump when false
+      if (debug) { printf("JPC %d " , a); }
+      fr1 = s[t - 1];
+      if (fr1.atype != 6) {
+         puts("JPF value is not boolean");
+      }
+      if (fr1.address == 0) {
+         pc = a;
+      }
+      t--;
+      break;
    case 9: // print
       if (debug) { printf("PRINT %d " , a); }
       t--;
       fr1 = s[t];
       if (fr1.atype == 7) {
-         char* ptr = fr1.address;
+         char* ptr = (char*) (fr1.address);
          print_a_string(ptr,true);
       } else if (fr1.atype == 5) {
          //
          // float
          //
-         char* ptr = fr1.address;
+         char* ptr = (char*) (fr1.address);
          memcpy(&d1, ptr, 8);
          printf("%f\n",d1 );
       } else if (fr1.atype == 2) {
-         printf("%d\n",fr1.address );
+         printf("%llu\n",fr1.address );
       } else if (fr1.atype == 6) { // boolean
          if (fr1.address) {
             printf("true\n" );
@@ -608,9 +619,7 @@ if (debug) {
       break;
 
    case 10: // external function call
-if (debug) {
-   printf("EXTCALL %d",  a);
-}
+      if (debug) { printf("EXTCALL %d",  a); }
       // parameters should have already been pushed on the stack
       //
       //
@@ -636,7 +645,7 @@ if (debug) {
       // leave the new object on the stack
       //
       s[t].atype = 8; // Object?
-      s[t].address = ptr ;
+      s[t].address = (long long unsigned int) ptr ;
       t++;
       break;
    case 12:
@@ -655,7 +664,7 @@ if (debug) {
          puts("Performed a method call on a nonfancy object");
          return -1;
       }
-      ptr = s[t-1].address;
+      ptr = (char*)(s[t-1].address);
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
       if (debug) { printf("classnum = %d ", classnum ); }
       //
@@ -685,7 +694,7 @@ if (debug) {
       // then calculate the address of the inst. variable
       // But what is the offset of the this pointer?
       //
-      adr = s[b[tb - 1] + a].address + 5 * l + 3;
+      adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
       if (debug){printf("-----The offset is %p\n",adr);}
       //
       // put the value on the stack
@@ -693,7 +702,7 @@ if (debug) {
       s[t].atype = *((char*)adr) & 0xff;
       if (debug){printf("-----The type is %d\n",s[t].atype);}
       s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
-      if (debug){printf("-----The object is %p\n",s[t].address);}
+      if (debug){printf("-----The object is %llu\n",s[t].address);}
       t++;
       break;
    case 14:
@@ -706,7 +715,7 @@ if (debug) {
       // first get the this pointer
       // then calculate the address of the inst. variable
       //
-      adr = s[b[tb - 1] + a].address + 5 * l + 3;
+      adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
       if(debug){printf(" offset = %p\n",adr);}
       //
       // store the value on the heap
@@ -715,7 +724,7 @@ if (debug) {
       *((char*)(adr + 1)) = s[t-1].address & 0xff;
       *((char*)(adr + 2)) = s[t-1].address >> 8;
       if (debug){printf("-----The type is %d\n",s[t-1].atype);}
-      if (debug){printf("-----The object is %d\n",s[t-1].address);}
+      if (debug){printf("-----The object is %llu\n",s[t-1].address);}
       t--;
       break;
    case 15:
@@ -756,10 +765,10 @@ if (debug) {
             printf("NULL");
             break;
          case 2:
-            printf("%d",s[i].address);
+            printf("%llu",s[i].address);
             break;
          case 5:
-            adr = s[i].address;
+            adr = (char*)(s[i].address);
             double d;
             memcpy(&d, adr, 8);
             printf("%f",d);
@@ -775,12 +784,12 @@ if (debug) {
             }
             break;
          case 7: // string
-            adr = s[i].address;
+            adr = (char*) (s[i].address);
             print_a_string(adr,false);
             break;
          case 8: // pointer
          {
-            printf("%p",s[i].address);
+            printf("%llu",s[i].address);
             break;
          }
          case 9: // object reference
@@ -828,7 +837,7 @@ void CInterpreter::print_a_string(char* ptr, uint16_t len) {
 void CInterpreter::call_external(short unsigned int function_number,short unsigned int a) {
    if (function_number > externs.size())
    {
-        printf("illegal function number %d highest function number is %d\n",function_number,externs.size());
+        printf("illegal function number %d highest function number is %lu\n",function_number,externs.size());
         exit(-1);
    }
    extern_record e = externs[function_number-1];
@@ -848,7 +857,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
    {
       if (a < ilen) 
       {
-         printf("Mismatch: ingoing arguments given %d but expected at least %d",a,ingoing.size());
+         printf("Mismatch: ingoing arguments given %d but expected at least %lu",a,ingoing.size());
          exit(-1);
       }
       dcMode(vm, DC_CALL_C_ELLIPSIS);
@@ -857,7 +866,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
    {
       if (a != ilen) 
       {
-         printf("Mismatch: ingoing arguments given %d but expected %d",a,ingoing.size());
+         printf("Mismatch: ingoing arguments given %d but expected %lu",a,ingoing.size());
          exit(-1);
       }
       dcMode(vm, DC_CALL_C_DEFAULT);
@@ -900,7 +909,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          memcpy(ptr, &r, 8);
          tb--;
          s[t].atype = 5;
-         s[t].address = (uint16_t) (ptr );
+         s[t].address = (long long unsigned int) (ptr );
          t++;
          break;
       }
@@ -968,7 +977,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 exit(-1);
              }
              double arg_in;
-             char* adr = f.address;
+             char* adr = (char*) (f.address);
              memcpy(&arg_in, adr, 8);
              dcArgDouble(vm, arg_in);
              break;
@@ -980,7 +989,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 printf("expected string or pointer in external call but got %d\n",atype);
                 exit(-1);
              } 
-                char* adr = f.address;
+                char* adr = (char*) (f.address);
                 int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
                 char* str = (char*) malloc(len + 1);
                 memcpy(str, adr + 2, len);

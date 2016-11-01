@@ -188,7 +188,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
          uint16_t cnum = a_class->getClassNum();
          uint16_t mnum = a_method->getMethodNumber();
          uint16_t address = a_method->getProcAddress();
-         if(debug){printf("A method classnum %d methodnum %d address %04X params %d localvars %d\n",cnum,mnum,address,a_method->getParameters()->size(),a_method->getLocalVariables()->size());}
+         if(debug){printf("A method classnum %d methodnum %d address %04X params %lu localvars %lu\n",cnum,mnum,address,a_method->getParameters()->size(),a_method->getLocalVariables()->size());}
          *((char*) codebuffer + the_index) = cnum & 255;
          the_index++;
          *((char*) codebuffer + the_index) = cnum >> 8;
