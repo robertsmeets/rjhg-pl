@@ -45,4 +45,50 @@ bool func_le_ii(unsigned int i, unsigned int j) { return i <= j; }
 bool func_le_id(unsigned int i, double j) { return i <= j; }
 bool func_le_di(double i, unsigned int j) { return i <= j; }
 bool func_le_dd(double i, double j) { return i <= j; }
+/**
+ * this adds an element to an array 
+ *
+ */
+void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug) 
+{
+   if (debug){printf("In the array_add\n");}
+   //
+   // byte 0 and 1 are the actual length
+   // byte 2 and 3 are the claimed length
+   //
+   int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
+   int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
+   actual++;
+   if (actual > claimed)
+   {
+      //
+      // resize that array
+      //
+      claimed *= 2;
+      ptr = (char*)GC_realloc(ptr, 8 * claimed + 4);
+      (*s)[*t-1].address = (long long unsigned int)ptr;
+   }
+   if ((actual > 10) && (actual < claimed / 3))
+   {
+      //
+      // resize that array
+      //
+      claimed /= 2;
+      ptr = (char*)GC_realloc(ptr,8 * claimed + 4);
+      vector<stack_element> thestack = *s;
+      (*s)[*t-1].address = (long long unsigned int)ptr;
+   }
+   //
+   // set the value
+   //
+   char* nptr = ptr + (actual - 1) * 8 + 4;
+   *nptr = (*s)[*t].atype;
+   unsigned long long int a = (*s)[*t].address;
+   *(nptr+1) = a & 0xff;
+   *(nptr+2) = (a >> 8) & 0xff;
+   *(nptr+3) = (a >> 16) & 0xff;
+   *(nptr+4) = (a >> 24) & 0xff;
+   (*t)--;
+   (*t)--;
+}
 

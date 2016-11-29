@@ -21,7 +21,7 @@
 #include "stdint.h"
 #include <gc.h>
 
-#include "CFunctions.h"
+#include "CConstants.h"
 #include "DebugInfo.h"
 
 using namespace std;
@@ -32,6 +32,7 @@ struct stack_element {
       unsigned short int atype;
       unsigned long long int address;
 };
+#include "CFunctions.h"
 
 struct extern_record {
    unsigned long long int address;
@@ -51,6 +52,7 @@ class CInterpreter {
    vector<unsigned short int> b;
    HeapManager* hm;
 
+   typedef void (*especial) (char* ,vector<stack_element>* ,uint16_t* ,bool );
    typedef uint16_t (*iiptr)(uint16_t, uint16_t);
    typedef double (*ddptr)(double, double);
    typedef double (*idptr)(uint16_t, double);

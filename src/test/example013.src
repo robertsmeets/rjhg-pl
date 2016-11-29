@@ -1,0 +1,14 @@
+//
+// test adding strings
+//
+
+proc main()
+{
+   a = "add";
+   b = " some";
+   c = " strings";
+   d = " together";
+   print a + b + c + d;
+}
+
+

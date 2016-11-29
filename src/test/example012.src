@@ -4,7 +4,7 @@
 
 proc main()
 {
-   a = vector();
+   a = array();
    a.add("now");
    a.add("is");
    a.add("the");

@@ -85,8 +85,8 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
 
 }
 
-CInterpreter::~CInterpreter() {
-//   delete hm;
+CInterpreter::~CInterpreter()
+{
 }
 
 int CInterpreter::getStackDepth()
@@ -176,9 +176,7 @@ int CInterpreter::execute_next(bool debug) {
    // l is the 2nd param
    // a is the 3rd param
    //
-if (debug) {
-   printf("pc=0x%x: ", pc );
-}
+   if (debug) { printf("pc=0x%x: ", pc ); }
    unsigned short int f = *((char*) buffer + pc) & 0xff;
    pc++;
    //
@@ -206,17 +204,17 @@ if (debug) {
    case 1:   // lit: Literal value, to be pushed on the stack
       if (debug) { printf("LIT %d,%d", l , a); }
       switch (l) {
-      case 0: // null
+      case TYPE_NULL: // null
          s[t].atype=0;
          s[t].address = 0;
          t++;
          break;
-      case 2: // Int
+      case TYPE_INT : // Int
          s[t].atype = 2;
          s[t].address = a;
          t++;
          break;
-      case 5: // float
+      case TYPE_FLOAT: // float
          ptr = GC_MALLOC(a);
          memcpy(ptr, buffer + pc, a);
          //
@@ -227,12 +225,12 @@ if (debug) {
          t++;
          pc += a;
          break;
-      case 6: // boolean
+      case TYPE_BOOLEAN: // boolean
          s[t].atype = 6;
          s[t].address = a;
          t++;
          break;
-      case 7: // string
+      case TYPE_STRING: // string
       {
          //
          // get some memory
@@ -248,9 +246,7 @@ if (debug) {
          // put the pointer and the type on the stack
          //
          s[t].atype = 7;
-         if (debug) { printf("Storing a string in %p\n",tmp); }
          s[t].address = (unsigned long long int) tmp;
-         if (debug) { printf("address is %p\n",tmp); }
          t++;
          pc += a;
          break;
@@ -313,15 +309,14 @@ if (debug) {
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
-         if ((fr1.atype == 2) && (fr2.atype == 2)) {
+         if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
             //
             aiiptr = fptrs[a][fr1.atype][fr2.atype];
             fr1.address = (*aiiptr)(fr1.address, fr2.address);
             s[t - 1] = fr1;
-
-         } else if ((fr1.atype == 7) && (fr2.atype == 7)) {
+         } else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) {
             //
             // add two strings
             //
@@ -337,7 +332,7 @@ if (debug) {
             memcpy(ptr + len1 + 2, ptr2 + 2, len2);
             fr1.address = (long long unsigned int) (ptr );
             s[t - 1] = fr1;
-         } else if ((fr1.atype == 7) && (fr2.atype == 2)) {
+         } else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_INT)) {
             //
             // add a string and an integer
             //
@@ -354,7 +349,7 @@ if (debug) {
             memcpy(ptr + len1 + 2, &str, len2);
             fr1.address = (long long unsigned int) (ptr );
             s[t - 1] = fr1;
-         } else if ((fr1.atype == 2) && (fr2.atype == 5)) {
+         } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) {
             //
             // integer plus float
             //
@@ -367,7 +362,7 @@ if (debug) {
             fr3->address = (long long unsigned int) tmp ;
             memcpy((void*) (fr3->address), &d3, 8);
             s[t - 1] = *fr3;
-         } else if ((fr1.atype == 5) && (fr2.atype == 2)) {
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr2.atype == TYPE_INT)) {
             //
             // float plus integer
             //
@@ -380,8 +375,7 @@ if (debug) {
             fr3->address = (long long unsigned int)tmp ;
             memcpy((void*) (fr3->address), &d3, 8);
             s[t - 1] = *fr3;
-
-         } else if ((fr1.atype == 5) && (fr1.atype == 5)) {
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr1.atype == TYPE_FLOAT)) {
             //
             // both floats
             //
@@ -448,7 +442,7 @@ if (debug) {
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
-         if ((fr1.atype == 2) && (fr2.atype == 2)) {
+         if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
             //
@@ -457,7 +451,7 @@ if (debug) {
             fr1.atype = 6;
             fr1.address = eq;
             s[t - 1] = fr1;
-         } else if ((fr1.atype == 2) && (fr2.atype == 5)) {
+         } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) {
             //
             // integer plus float
             //
@@ -467,7 +461,7 @@ if (debug) {
             fr1.atype = 6;
             fr1.address = eq;
             s[t - 1] = fr1;
-         } else if ((fr1.atype == 5) && (fr2.atype == 2)) {
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr2.atype == TYPE_INT)) {
             //
             // float plus integer
             //
@@ -477,7 +471,7 @@ if (debug) {
             fr1.atype = 6;
             fr1.address = eq;
             s[t - 1] = fr1;
-         } else if ((fr1.atype == 5) && (fr1.atype == 5)) {
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr1.atype == TYPE_FLOAT)) {
             //
             // both floats
             //
@@ -489,7 +483,7 @@ if (debug) {
             fr1.address = eq;
             s[t - 1] = fr1;
          } 
-          else if ((fr1.atype == 0) && (fr2.atype == 8)) {
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_PTR)) {
             //
             // null vs pointer 
             //
@@ -498,7 +492,7 @@ if (debug) {
             fr1.address=eq;
             s[t-1]= fr1;
           }
-          else if ((fr1.atype == 8) && (fr2.atype == 0)) {
+          else if ((fr1.atype == TYPE_PTR) && (fr2.atype == TYPE_NULL)) {
             //
             // pointer vs null
             //
@@ -591,27 +585,27 @@ if (debug) {
       if (debug) { printf("PRINT %d " , a); }
       t--;
       fr1 = s[t];
-      if (fr1.atype == 7) {
+      if (fr1.atype == TYPE_STRING) {
          char* ptr = (char*) (fr1.address);
          print_a_string(ptr,true);
-      } else if (fr1.atype == 5) {
+      } else if (fr1.atype == TYPE_FLOAT) {
          //
          // float
          //
          char* ptr = (char*) (fr1.address);
          memcpy(&d1, ptr, 8);
          printf("%f\n",d1 );
-      } else if (fr1.atype == 2) {
+      } else if (fr1.atype == TYPE_INT) {
          printf("%llu\n",fr1.address );
-      } else if (fr1.atype == 6) { // boolean
+      } else if (fr1.atype == TYPE_BOOLEAN) { // boolean
          if (fr1.address) {
             printf("true\n" );
          } else {
             printf("false\n" );
          }
-      } else if (fr1.atype == 8) {
+      } else if (fr1.atype == TYPE_PTR) {
          printf("A Pointer\n" );
-      } else if (fr1.atype == 9) {
+      } else if (fr1.atype == TYPE_OBJ) {
          printf("A Fancy Object\n" );
       } else {
          printf( "Cannot print something of type %d\n", fr1.atype );
@@ -629,26 +623,53 @@ if (debug) {
       break;
    case 11: // object creation
       if (debug) { printf("OBJCREATE %d,%d " ,l,a); }
-      //
-      // l contains the classnum
-      // a contains the number of instance variables
-      //
-      ptr = GC_MALLOC(5 * a + 3);
-      //
-      // in the first 2 bytes, put in the class number
-      // the rest is left for the instance variables
-      //
-      *ptr = l & 0xff;
-      *(ptr + 1) = l >> 8;
-      *(ptr + 2) = a;
-      //
-      // leave the new object on the stack
-      //
-      s[t].atype = 8; // Object?
-      s[t].address = (long long unsigned int) ptr ;
-      t++;
+      if (l == 1)
+      {
+         //
+         // this creates a array of size x
+         //
+         if (debug){printf("In the array_new\n");}
+         // 
+         // initial claimed size is 5 elements
+         // byte 0 and 1 are the actual length
+         // byte 2 and 3 are the claimed length
+         //
+         int claimed = 5;
+         ptr = GC_MALLOC(4 + claimed * 8);
+         *ptr = 0;
+         *(ptr + 1) = 0;
+         *(ptr + 2) = claimed;
+         *(ptr + 3) = 0;
+         //
+         // leave the new object on the stack
+         //
+         s[t].atype = TYPE_ARRAY; 
+         s[t].address = (long long unsigned int) ptr;
+         t++;
+      }
+      else
+      {
+         //
+         // l contains the classnum
+         // a contains the number of instance variables
+         //
+         ptr = GC_MALLOC(5 * a + 3);
+         //
+         // in the first 2 bytes, put in the class number
+         // the rest is left for the instance variables
+         //
+         *ptr = l & 0xff;
+         *(ptr + 1) = l >> 8;
+         *(ptr + 2) = a;
+         //
+         // leave the new object on the stack
+         //
+         s[t].atype = TYPE_OBJ; // Object
+         s[t].address = (long long unsigned int) ptr ;
+         t++;
+      }
       break;
-   case 12:
+   case 12:{
       if (debug) { printf("METHODCALL %d " ,l ); }
       // method call, the object is already on the stack.
       //
@@ -660,29 +681,43 @@ if (debug) {
       //
       // figure out what class type is on top of the stack
       //
-      if (s[t-1].atype != 8) {
-         puts("Performed a method call on a nonfancy object");
+      int xtype = s[t-1].atype;
+      if ((xtype != TYPE_OBJ) && (xtype != TYPE_ARRAY)) {
+         puts("Performed a method call on a non-object");
          return -1;
       }
       ptr = (char*)(s[t-1].address);
       classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
       if (debug) { printf("classnum = %d ", classnum ); }
-      //
-      // this creates a new block with depth for local variables and parameters
-      //
-      b[tb] = t - methodmap[l][classnum][1] - a;
-      tb++;
-      //
-      // add room for the this pointer and the local vars
-      //
-      t += methodmap[l][classnum][2] + 1;
-      //
-      // add the program counter on the return stack
-      //
-      r[tr] = pc;
-      tr++;
-      pc = methodmap[l][classnum][0];
-      break;
+      if (xtype == TYPE_ARRAY)
+      {
+        // 
+        // array.add() method
+        //
+        printf("---------------- hitting array.add()\n");
+        especial callthis =  &array_add; 
+        (*callthis)(ptr,&s,&t,debug);
+        printf("---------------- after array.add()\n");
+      }
+      else
+      {
+         //
+         // this creates a new block with depth for local variables and parameters
+         //
+         b[tb] = t - methodmap[l][classnum][1] - a;
+         tb++;
+         //
+         // add room for the this pointer and the local vars
+         //
+         t += methodmap[l][classnum][2] + 1;
+         //
+         // add the program counter on the return stack
+         //
+         r[tr] = pc;
+         tr++;
+         pc = methodmap[l][classnum][0];
+      }
+      break;}
    case 13:
       if (debug) { printf("LDI %d ", l ); }
       // access an instance variable and put it on the stack
@@ -761,19 +796,22 @@ if (debug) {
       char* adr;
       printf("[");
       switch (s[i].atype) {
-         case 0:
+         case TYPE_NULL:
             printf("NULL");
             break;
-         case 2:
+         case TYPE_ARRAY:
+            printf("array");
+            break;
+         case TYPE_INT:
             printf("%llu",s[i].address);
             break;
-         case 5:
+         case TYPE_FLOAT:
             adr = (char*)(s[i].address);
             double d;
             memcpy(&d, adr, 8);
             printf("%f",d);
             break;
-         case 6:
+         case TYPE_BOOLEAN:
             if (s[i].address)
             {
                printf("true");
@@ -783,16 +821,16 @@ if (debug) {
                printf("false");
             }
             break;
-         case 7: // string
+         case TYPE_STRING: // string
             adr = (char*) (s[i].address);
             print_a_string(adr,false);
             break;
-         case 8: // pointer
+         case TYPE_PTR: // pointer
          {
-            printf("%llu",s[i].address);
+            printf("%p",s[i].address);
             break;
          }
-         case 9: // object reference
+         case TYPE_OBJ: // object reference
             printf("objref");
             break;
          default:
@@ -959,7 +997,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
       uint16_t atype = f.atype;
       switch(atype)
       {
-          case 2: // int
+          case TYPE_INT: // int
           {
              if ((c != ' ' ) && (c!= 'i'))
              {
@@ -969,7 +1007,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
              dcArgInt(vm,f.address);
              break;
           }
-          case 5:
+          case TYPE_FLOAT:
           {
              if ( (c != ' ' ) && ( c!= 'd'))
              {
@@ -982,7 +1020,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
              dcArgDouble(vm, arg_in);
              break;
           }
-          case 7: // char*
+          case TYPE_STRING: // char*
           {
              if ((c !=' ' ) && (c != 'p'))
              {
@@ -997,7 +1035,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
                 dcArgPointer(vm, str);
                 break;
             }
-         case 8: // pointer
+         case TYPE_PTR: // pointer
             {
                if ((c !=' ' ) && (c != 'p'))
                {
