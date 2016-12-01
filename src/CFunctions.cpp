@@ -78,12 +78,21 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
       vector<stack_element> thestack = *s;
       (*s)[*t-1].address = (long long unsigned int)ptr;
    }
+   if(debug){printf("------------------- the pointer is %p\n",ptr);}
+   //
+   // set the new size
+   //
+   *ptr = actual & 0xff;
+   *(ptr+1) = actual >> 8;
    //
    // set the value
    //
    char* nptr = ptr + (actual - 1) * 8 + 4;
-   *nptr = (*s)[*t].atype;
-   unsigned long long int a = (*s)[*t].address;
+   printf("storing the thing pointed to is %p\n",nptr);
+   *nptr = (*s)[*t-2].atype;
+   printf("the type is %d\n",(*s)[*t-2].atype);
+   printf("the value is %llu\n", (*s)[*t-2].address);
+   unsigned long long int a = (*s)[*t-2].address;
    *(nptr+1) = a & 0xff;
    *(nptr+2) = (a >> 8) & 0xff;
    *(nptr+3) = (a >> 16) & 0xff;
