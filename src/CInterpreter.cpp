@@ -508,11 +508,36 @@ if (debug) {
          break;
       case 14:
          {
-            printf("Index operation. Don't know what to do yet\n");
-            exit(-1);
+            if(debug){ printf("Index operation\n");}
+            printf("t = %d\n",t);
+            t--;
+            int atype = s[t].atype;
+            if (atype != TYPE_INT) { printf("index is not an integer but type %d\n",atype); exit(-1);}
+            int index = s[t].address;
+            atype=s[t-1].atype;
+            if (atype != TYPE_ARRAY) { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
+            char* ptr = (char*)(s[t-1].address);
+            if(debug){printf("------------ now the pointer is %p\n",ptr);}
+            //
+            // byte 0 and 1 are the actual length
+            // byte 2 and 3 are the claimed length
+            //
+            int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) >> 8) ;
+            if(debug){printf("the size of the array is %d\n",actual);};
+            if (index > actual) { printf("index out of bounds: %d array size = %d\n",index,actual); exit(-1);}
+            //
+            // get the value
+            //
+            char* nptr = ptr + index * 8 + 4;
+            if(debug){printf("------------ now the thing pointed to is %p\n",nptr);}
+            s[t-1].atype = *nptr ;
+            printf("its type is %d\n",atype);
+            s[t-1].address = *(nptr+1) + *(nptr+2) >> 8 + *(nptr+3) >> 16 + *(nptr+4) >> 24;
+            printf("its value is %llu\n",s[t-1].address);
+            break;
          }
       default:
-         puts("unexpected A value");
+         printf("unexpected A value %d",a);
          return -1;
          break;
       }
@@ -585,7 +610,12 @@ if (debug) {
       if (debug) { printf("PRINT %d " , a); }
       t--;
       fr1 = s[t];
-      if (fr1.atype == TYPE_STRING) {
+
+      if (fr1.atype == TYPE_NULL)
+      {
+          printf("NULL\n");
+      }
+      else if (fr1.atype == TYPE_STRING) {
          char* ptr = (char*) (fr1.address);
          print_a_string(ptr,true);
       } else if (fr1.atype == TYPE_FLOAT) {
