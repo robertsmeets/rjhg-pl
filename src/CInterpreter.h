@@ -21,6 +21,7 @@
 #include "stdint.h"
 #include <gc.h>
 
+#include "Disassembler.h"
 #include "CConstants.h"
 #include "DebugInfo.h"
 
