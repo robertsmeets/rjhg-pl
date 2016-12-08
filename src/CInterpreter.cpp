@@ -510,10 +510,9 @@ if (debug) {
          {
             if(debug){ printf("Index operation\n");}
             printf("t = %d\n",t);
-            t--;
-            int atype = s[t].atype;
+            int atype = s[t-1].atype;
             if (atype != TYPE_INT) { printf("index is not an integer but type %d\n",atype); exit(-1);}
-            int index = s[t].address;
+            int index = s[t-1].address;
             atype=s[t-1].atype;
             if (atype != TYPE_ARRAY) { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
             char* ptr = (char*)(s[t-1].address);
@@ -530,10 +529,22 @@ if (debug) {
             //
             char* nptr = ptr + index * 8 + 4;
             if(debug){printf("------------ now the thing pointed to is %p\n",nptr);}
+            Disassembler dis;
+            dis.hexdump(ptr,128);
             s[t-1].atype = *nptr ;
-            printf("its type is %d\n",atype);
-            s[t-1].address = *(nptr+1) + *(nptr+2) >> 8 + *(nptr+3) >> 16 + *(nptr+4) >> 24;
-            printf("its value is %llu\n",s[t-1].address);
+            printf("its type is %d\n",s[t-1].atype);
+            unsigned char a= (*(nptr+1))&0xff;
+            unsigned char b =(*(nptr+2))&0xff;
+            unsigned char c= (*(nptr+3))&0xff;
+            unsigned char d =(*(nptr+4))&0xff;
+            printf("1= %02X\n",a);
+            printf("2= %02X\n",b);
+            printf("3= %02X\n",c);
+            printf("4= %02X\n",d);
+            char* mptr = (char*)(a  + (b << 8) + (c << 16) + (d << 24));
+            printf("mptr = %08X\n",mptr);
+            s[t-1].address = (long long unsigned int) mptr;
+            printf("its value is %p\n",s[t-1].address);
             break;
          }
       default:
