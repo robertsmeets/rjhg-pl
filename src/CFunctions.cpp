@@ -58,8 +58,6 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    //
    int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
    int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
-   printf("actual = %d\n",actual);
-   printf("claimed = %d\n",claimed);
    actual++;
    if (actual > claimed)
    {
@@ -80,7 +78,6 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
       vector<stack_element> thestack = *s;
       (*s)[*t-1].address = (long long unsigned int)ptr;
    }
-   if(debug){printf("------------------- the pointer is %p\n",ptr);}
    //
    // set the new size
    //
@@ -90,10 +87,7 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    // set the value
    //
    char* nptr = ptr + (actual - 1) * 8 + 4;
-   printf("storing the thing pointed to is %p\n",nptr);
    *nptr = (*s)[*t-2].atype & 0xff;
-   printf("+++++++++++++the type is %d\n",(*s)[*t-2].atype);
-   printf("+++++++++++++the value is %p\n", (*s)[*t-2].address);
    unsigned long long int a = (*s)[*t-2].address;
    *(nptr+1) = a & 0xff;
    *(nptr+2) = (a >> 8) & 0xff;
