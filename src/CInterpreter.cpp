@@ -508,14 +508,14 @@ if (debug) {
          break;
       case 14:
          {
+            print_stack();
             if(debug){ printf("Index operation\n");}
-            printf("t = %d\n",t);
             int atype = s[t-1].atype;
             if (atype != TYPE_INT) { printf("index is not an integer but type %d\n",atype); exit(-1);}
             int index = s[t-1].address;
-            atype=s[t-1].atype;
+            atype=s[t-2].atype;
             if (atype != TYPE_ARRAY) { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
-            char* ptr = (char*)(s[t-1].address);
+            char* ptr = (char*)(s[t-2].address);
             if(debug){printf("------------ now the pointer is %p\n",ptr);}
             //
             // byte 0 and 1 are the actual length
@@ -529,22 +529,13 @@ if (debug) {
             //
             char* nptr = ptr + index * 8 + 4;
             if(debug){printf("------------ now the thing pointed to is %p\n",nptr);}
-            Disassembler dis;
-            dis.hexdump(ptr,128);
             s[t-1].atype = *nptr ;
-            printf("its type is %d\n",s[t-1].atype);
             unsigned char a= (*(nptr+1))&0xff;
             unsigned char b =(*(nptr+2))&0xff;
             unsigned char c= (*(nptr+3))&0xff;
             unsigned char d =(*(nptr+4))&0xff;
-            printf("1= %02X\n",a);
-            printf("2= %02X\n",b);
-            printf("3= %02X\n",c);
-            printf("4= %02X\n",d);
             char* mptr = (char*)(a  + (b << 8) + (c << 16) + (d << 24));
-            printf("mptr = %08X\n",mptr);
             s[t-1].address = (long long unsigned int) mptr;
-            printf("its value is %p\n",s[t-1].address);
             break;
          }
       default:
@@ -735,10 +726,8 @@ if (debug) {
         // 
         // array.add() method
         //
-        printf("---------------- hitting array.add()\n");
         especial callthis =  &array_add; 
         (*callthis)(ptr,&s,&t,debug);
-        printf("---------------- after array.add()\n");
       }
       else
       {
