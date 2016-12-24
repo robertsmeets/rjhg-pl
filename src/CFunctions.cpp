@@ -88,11 +88,9 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    //
    char* nptr = ptr + (actual - 1) * 8 + 4;
    *nptr = (*s)[*t-2].atype & 0xff;
-   unsigned long long int a = (*s)[*t-2].address;
-   *(nptr+1) = a & 0xff;
-   *(nptr+2) = (a >> 8) & 0xff;
-   *(nptr+3) = (a >> 16) & 0xff;
-   *(nptr+4) = (a >> 24) & 0xff;
+   char* avptr = (char*)(*s)[*t-2].address;
+   char** vptr = (char**)(nptr+1);
+   *vptr = avptr; 
    (*t)--;
    (*t)--;
 }

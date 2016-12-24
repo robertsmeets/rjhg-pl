@@ -530,11 +530,8 @@ if (debug) {
             char* nptr = ptr + index * 8 + 4;
             if(debug){printf("------------ now the thing pointed to is %p\n",nptr);}
             s[t-1].atype = *nptr ;
-            unsigned char a= (*(nptr+1))&0xff;
-            unsigned char b =(*(nptr+2))&0xff;
-            unsigned char c= (*(nptr+3))&0xff;
-            unsigned char d =(*(nptr+4))&0xff;
-            char* mptr = (char*)(a  + (b << 8) + (c << 16) + (d << 24));
+            char** aptr = (char**)(nptr+1);
+            char* mptr = *aptr;
             s[t-1].address = (long long unsigned int) mptr;
             break;
          }
