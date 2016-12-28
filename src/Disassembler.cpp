@@ -291,6 +291,7 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
    case 17:
       sf = "JPF";
       i += 5;
+      break;
    default:
       sf = "-----------------------------------+> unexpected F value: " + int(f);
       printf(" F=%d L=%d A=%d" , (unsigned int) f , l , a );
