@@ -1,0 +1,10 @@
+proc main()
+{
+    if (5 == 5)
+    {
+        print "true";
+	}
+  
+  
+  }
+
