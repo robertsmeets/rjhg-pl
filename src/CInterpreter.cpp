@@ -595,7 +595,7 @@ if (debug) {
       t--;
       break;
    case 17:          // jpf: jump when false
-      if (debug) { printf("JPC %d " , a); }
+      if (debug) { printf("JPF %d " , a); }
       fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPF value is not boolean");
