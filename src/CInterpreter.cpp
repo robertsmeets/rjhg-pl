@@ -521,18 +521,25 @@ if (debug) {
             // byte 0 and 1 are the actual length
             // byte 2 and 3 are the claimed length
             //
-            int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) >> 8) ;
+            int actual = ((*ptr) & 0xff) + ((*(ptr + 1))  << 8) ;
             if(debug){printf("the size of the array is %d\n",actual);};
             if (index > actual) { printf("index out of bounds: %d array size = %d\n",index,actual); exit(-1);}
             //
+            // get the spaceptr
+            //
+            char* mptr = ptr+4;
+            char** aptr = (char**) mptr;
+            char* spaceptr = *aptr;
+            //
             // get the value
             //
-            char* nptr = ptr + index * 8 + 4;
+            char* nptr = spaceptr + index * 8 ;
+            t--;
             if(debug){printf("------------ now the thing pointed to is %p\n",nptr);}
             s[t-1].atype = *nptr ;
-            char** aptr = (char**)(nptr+1);
-            char* mptr = *aptr;
-            s[t-1].address = (long long unsigned int) mptr;
+            char** xptr = (char**)(nptr+1);
+            char* zptr = *xptr;
+            s[t-1].address = (long long unsigned int) zptr;
             break;
          }
       default:
@@ -662,13 +669,20 @@ if (debug) {
          // initial claimed size is 5 elements
          // byte 0 and 1 are the actual length
          // byte 2 and 3 are the claimed length
+         // byte 4 to 11 are the pointer to the allocated memory
          //
          int claimed = 5;
-         ptr = GC_MALLOC(4 + claimed * 8);
+         ptr = GC_MALLOC(12);
+         if(debug){printf("---------------------- Array pointer allocation address = %p\n",ptr);};
          *ptr = 0;
          *(ptr + 1) = 0;
          *(ptr + 2) = claimed;
          *(ptr + 3) = 0;
+         char* nptr = ptr + 4;
+         char** vptr = (char**)nptr;
+         char* nnptr = GC_MALLOC(8 * claimed); 
+         *vptr = nnptr; 
+if(debug)printf("the startptr is %p\n",nnptr);
          //
          // leave the new object on the stack
          //
@@ -716,18 +730,22 @@ if (debug) {
          return -1;
       }
       ptr = (char*)(s[t-1].address);
-      classnum = (*ptr & 0xff) + (*(ptr + 1) << 8);
-      if (debug) { printf("classnum = %d ", classnum ); }
       if (xtype == TYPE_ARRAY)
       {
         // 
         // array.add() method
         //
+        if(debug)printf("----------------- calling array.add()!?\n");
         especial callthis =  &array_add; 
         (*callthis)(ptr,&s,&t,debug);
       }
       else
       {
+         if(debug)printf("----------------- calling a non-system method\n");
+         //
+         // figure out the classnum
+         //
+         uint16_t classnum = *ptr + (*(ptr+1) >> 8);
          //
          // this creates a new block with depth for local variables and parameters
          //
@@ -742,7 +760,9 @@ if (debug) {
          //
          r[tr] = pc;
          tr++;
+         if(debug)printf("l=%d\n",l);
          pc = methodmap[l][classnum][0];
+         if(debug)printf("classnum = %d, the pc is now 0x%x\n",classnum,pc);
       }
       break;}
    case 13:

@@ -1,0 +1,23 @@
+//
+// test vector
+//
+
+proc main()
+{
+   max = 1000;
+   a = array();
+   i = 0;
+   while i < max
+   {
+   a.add(i);
+   i = i + 1;
+   };
+   i = 0;
+   while i < max
+   {
+       print a[i];
+       i = i + 1;
+   }
+}
+
+
