@@ -58,15 +58,21 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    //
    int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
    int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
+   char* nptr = ptr+4;
+   char** ptrptr = (char**)nptr; 
+   char* spaceptr =  *ptrptr;
    actual++;
+   if (debug)printf("actual = %d claimed = %d\n",actual,claimed);
    if (actual > claimed)
    {
       //
       // resize that array
       //
       claimed *= 2;
-      ptr = (char*)GC_realloc(ptr, 8 * claimed + 4);
-      (*s)[*t-1].address = (long long unsigned int)ptr;
+      if (debug) {printf("resize larger spaceptr = %p actual = %d claimed = %d\n",spaceptr,actual,claimed);};
+      spaceptr = (char*)GC_REALLOC(spaceptr, 8 * claimed);
+      if (debug) {printf("after larger\n");};
+      *ptrptr = spaceptr;
    }
    if ((actual > 10) && (actual < claimed / 3))
    {
@@ -74,9 +80,10 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
       // resize that array
       //
       claimed /= 2;
-      ptr = (char*)GC_realloc(ptr,8 * claimed + 4);
-      vector<stack_element> thestack = *s;
-      (*s)[*t-1].address = (long long unsigned int)ptr;
+      if (debug) {printf("resize smaller %p actual = %d claimed = %d\n",ptr,actual,8*claimed);};
+      spaceptr = (char*)GC_REALLOC(spaceptr,8 * claimed);
+      if (debug) {printf("after smaller\n");};
+      *ptrptr = spaceptr;
    }
    //
    // set the new size
@@ -84,12 +91,17 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    *ptr = actual & 0xff;
    *(ptr+1) = actual >> 8;
    //
+   // set the new claimed value
+   //
+   *(ptr+2) = claimed & 0xff;
+   *(ptr+3) = claimed >> 8;
+   //
    // set the value
    //
-   char* nptr = ptr + (actual - 1) * 8 + 4;
-   *nptr = (*s)[*t-2].atype & 0xff;
+   char* mptr = spaceptr + (actual-1) * 8;
+   *mptr = (*s)[*t-2].atype & 0xff;
    char* avptr = (char*)(*s)[*t-2].address;
-   char** vptr = (char**)(nptr+1);
+   char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
    (*t)--;
    (*t)--;
