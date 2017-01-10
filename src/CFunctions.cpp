@@ -107,3 +107,41 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    (*t)--;
 }
 
+void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug) 
+{
+   if (debug){printf("In the array_set\n");}
+   //
+   // byte 0 and 1 are the actual length
+   // byte 2 and 3 are the claimed length
+   //
+   int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
+   int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
+   char* nptr = ptr+4;
+   char** ptrptr = (char**)nptr; 
+   char* spaceptr =  *ptrptr;
+   if (debug)printf("actual = %d claimed = %d\n",actual,claimed);
+   //
+   // set the value
+   //
+   int atype = (*s)[*t-3].atype & 0xff;
+   if (atype != TYPE_INT)
+   {
+       printf("array index is not an integer\n");
+       exit(-1);
+   }
+   int index = (*s)[*t-3].address;
+   if (index >= actual)
+   {
+       printf("array index %d out of range, array size is %d\n",index,actual);
+       exit(-1);
+   }       
+   char* mptr = spaceptr + index * 8;
+   *mptr = (*s)[*t-2].atype & 0xff;
+   char* avptr = (char*)(*s)[*t-2].address;
+   char** vptr = (char**)(mptr+1);
+   *vptr = avptr; 
+   (*t)--;
+   (*t)--;
+   (*t)--;
+}
+
