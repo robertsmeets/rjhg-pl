@@ -1,0 +1,19 @@
+/**
+ *
+ * test the array set function
+ *
+ */
+proc main(x)
+{
+   a = array();
+   a.add("one");
+   a.add("two");
+   a.add("three");
+   a.set(0,"onemod");
+   a.set(1,"twomod");
+   a.set(2,"threemod");
+   print a[0];
+   print a[1];
+   print a[2];
+}
+

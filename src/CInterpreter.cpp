@@ -732,16 +732,30 @@ if(debug)printf("the startptr is %p\n",nnptr);
       ptr = (char*)(s[t-1].address);
       if (xtype == TYPE_ARRAY)
       {
+        if (l==1)
+        {
         // 
         // array.add() method
         //
-        if(debug)printf("----------------- calling array.add()!?\n");
         especial callthis =  &array_add; 
         (*callthis)(ptr,&s,&t,debug);
+        }
+        else if (l==0)
+        {// 
+        // array.set() method
+        //
+        print_stack();
+        especial callthis =  &array_set; 
+        (*callthis)(ptr,&s,&t,debug);
+        }
+        else
+        {
+           printf("unsupported l = %d\n",l);
+           exit(-1);
+        }
       }
       else
       {
-         if(debug)printf("----------------- calling a non-system method\n");
          //
          // figure out the classnum
          //
