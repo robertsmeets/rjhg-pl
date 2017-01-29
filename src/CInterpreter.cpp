@@ -580,6 +580,19 @@ if (debug) {
          s[t - 1] = fr1;
           break;
 	 }
+	 case 18: // MOD 
+	 {
+            t--;
+            fr1 = s[t - 1];
+            fr2 = s[t];
+         if ((fr1.atype != TYPE_INT) || (fr2.atype != TYPE_INT)) {
+            printf("MOD: both types must be integer");
+	    exit(-1);
+            }
+            fr1.address=fr1.address % fr2.address;
+         s[t - 1] = fr1;
+          break;
+	 }
       default:
          printf("unexpected A value %d",a);
          return -1;

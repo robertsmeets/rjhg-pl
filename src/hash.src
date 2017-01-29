@@ -35,13 +35,24 @@ method hashtable.add(k,v)
     {
        element.setNext(e);
     }
-
 }
 
+method hashtable.init()
+{
+   a = array();
+   a.add(NULL);
+   a.add(NULL);
+   a.add(NULL);
+   a.add(NULL);
+   a.add(NULL);
+   claimed=5;
+   filled=0;
+}
 
 proc f(x)
 {
-   return x;
+   y = (37 * x) % claimed;
+   return y;
 }
 
 method hashtable.get(k)
@@ -52,5 +63,5 @@ method hashtable.get(k)
    {
       element = element.getNext(); 
    };
-   return element
+   return element;
 }
