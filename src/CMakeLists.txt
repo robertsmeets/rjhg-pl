@@ -108,6 +108,7 @@ SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
 # Since some files do not exist yet when cmake is run, mark
 # them as generated
 SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
+SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
 SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
 
 # Include binary directory to include lexer.c in parser.c
