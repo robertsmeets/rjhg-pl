@@ -56,6 +56,9 @@ estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
 ">="        return(GE);
 "<="        return(LE);
 "!="        return(NE);
+"!"         return(NOT);
+"&&"        return(AND);
+"||"        return(OR);
 ";"         return(SEMICOL);
 "("         return(LPAREN);
 ")"         return(RPAREN);

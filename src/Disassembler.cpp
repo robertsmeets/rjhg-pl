@@ -215,6 +215,15 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       case 14:
          sa = "I";
          break;
+      case 15:
+         sa = "NOT";
+         break;
+      case 16:
+         sa = "AND";
+         break;
+      case 17:
+         sa = "OR";
+         break;
       default:
          sa = "unexpected A value: " + a;
          printf("the a value was unexpected <%d>\n",a);
