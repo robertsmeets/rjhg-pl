@@ -224,6 +224,9 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       case 17:
          sa = "OR";
          break;
+      case 18:
+         sa = "MOD";
+         break;
       default:
          sa = "unexpected A value: " + a;
          printf("the a value was unexpected <%d>\n",a);

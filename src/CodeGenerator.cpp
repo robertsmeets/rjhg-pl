@@ -30,6 +30,7 @@ CodeGenerator::CodeGenerator() {
    opr_mapping['n'] = 15; // NOT
    opr_mapping['A'] = 16; // AND
    opr_mapping['O'] = 17; // OR
+   opr_mapping['M'] = 18; // MOD 
 }
 
 CodeGenerator::~CodeGenerator() {
