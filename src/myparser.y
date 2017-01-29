@@ -17,6 +17,7 @@
 #include "ProcedureNode.h"
 #include "ProgramNode.h"
 #include "ProcedureCall.h"
+#include "NotExpression.h"
 #include "Val2Expression.h"
 #include "VariableValue.h"
 #include "CodeGenerator.h"
@@ -96,6 +97,9 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
 %token GE
 %token LE
 %token NE
+%token AND
+%token OR
+%token NOT
 %token LPAREN
 %token RPAREN
 %token LBRACKET
@@ -249,6 +253,9 @@ Expression:
    |Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
    |Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
    |Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
+   |Expression AND Expression {$$=new Val2Expression('A',$1,$3);}
+   |Expression OR Expression {$$=new Val2Expression('O',$1,$3);}
+   |NOT Expression {$$=new NotExpression($2);}
    |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
    |Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
    |LPAREN Expression RPAREN {$$=$2;}
