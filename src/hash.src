@@ -1,0 +1,56 @@
+class hashtable 
+{
+    a,claimed,filled
+}
+
+
+proc main(a)
+{
+   h = hashtable();
+   h.add("one",1);
+   h.add("two",2);
+   h.add("three",3);
+   print h.get("one");
+   print h.get("two");
+   print h.get("three");
+}
+
+class helement
+{
+   key, value, next
+}
+
+method hashtable.add(k,v)
+{
+    hk = f(k);
+    element = a[hk];
+    e = helement();
+    e.setKey(hk);
+    e.setValue(v);
+    if (element == NULL)
+    {
+       a.set(hk,e);
+    }
+    else
+    {
+       element.setNext(e);
+    }
+
+}
+
+
+proc f(x)
+{
+   return x;
+}
+
+method hashtable.get(k)
+{
+   hk = f(k);
+   element = a[hk];
+   while ((element.getKey() != k) && (element.getNext() != NULL))
+   {
+      element = element.getNext(); 
+   };
+   return element
+}

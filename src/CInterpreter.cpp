@@ -542,6 +542,44 @@ if (debug) {
             s[t-1].address = (long long unsigned int) zptr;
             break;
          }
+	 case 15: // NOT
+	 {
+	 if (debug) { printf("NOT"); }
+         fr1 = s[t - 1];
+         if (fr1.atype != TYPE_BOOLEAN) {
+            printf("NOT: type must be boolean");
+	    exit(-1);
+         }
+         fr1.address = !fr1.address;
+         s[t - 1] = fr1;
+         break;
+	 }
+	 case 16: // AND
+	 {
+            t--;
+            fr1 = s[t - 1];
+            fr2 = s[t];
+         if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
+            printf("AND: both types must be boolean");
+	    exit(-1);
+            }
+            fr1.address=fr1.address && fr2.address;
+         s[t - 1] = fr1;
+          break;
+	 }
+	 case 17: // OR
+	 {
+            t--;
+            fr1 = s[t - 1];
+            fr2 = s[t];
+         if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
+            printf("OR: both types must be boolean");
+	    exit(-1);
+            }
+            fr1.address=fr1.address || fr2.address;
+         s[t - 1] = fr1;
+          break;
+	 }
       default:
          printf("unexpected A value %d",a);
          return -1;

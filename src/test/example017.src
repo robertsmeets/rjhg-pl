@@ -1,0 +1,19 @@
+/**
+ *
+ * test and, or and not
+ *
+ */
+proc main(x)
+{
+     print false && false;
+     print false && true;
+     print true && false;
+     print true && true;
+     print false || false;
+     print false || true;
+     print true || false;
+     print true || true;
+     print !false; 
+     print !true; 
+}
+

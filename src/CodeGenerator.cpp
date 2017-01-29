@@ -27,6 +27,9 @@ CodeGenerator::CodeGenerator() {
    opr_mapping['>'] = 12;
    opr_mapping['L'] = 13;
    opr_mapping['I'] = 14;
+   opr_mapping['n'] = 15; // NOT
+   opr_mapping['A'] = 16; // AND
+   opr_mapping['O'] = 17; // OR
 }
 
 CodeGenerator::~CodeGenerator() {
