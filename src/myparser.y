@@ -25,6 +25,7 @@
 #include "PrintNode.h"
 #include "CInterpreter.h"
 #include "Extern.h"
+#include "Self.h"
 #include "SelfTest.h"
 #include "Comments.h"
 #include "Runner.h"
@@ -83,6 +84,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
 };
 
 %token IDENTIFIER
+%token SELF 
 %token PROCEDURE
 %token BLOCK
 %token ENDBLOCK
@@ -264,6 +266,7 @@ Expression:
    |Expression LBRACKET Expression RBRACKET  {$$=new Val2Expression('I',$1,$3);}
    |MethodCall {$$=$1;}
    |ProcedureCall {$$=$1;}
+   |SELF { $$ = new Self(); }
    ;
 
 Statement:

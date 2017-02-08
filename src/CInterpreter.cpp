@@ -887,6 +887,20 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // 
       printf("Calling a built in method\n");
       break;
+   case 18:{
+      // 
+      // self
+      //
+      adr = (char*) (s[b[tb - 1] + a].address);
+      if (debug){printf("-----The self object is %p\n",adr);}
+      //
+      // put the value on the stack
+      //
+      s[t].atype = TYPE_OBJ;
+      s[t].address = (unsigned long long int)adr;
+      t++;
+      break;
+     }
    default:
       printf("unexpected F value <0x%x> at PC <0x%x>\n",f,pc);
       exit(-1);
@@ -943,7 +957,7 @@ if (debug) {
             break;
          }
          case TYPE_OBJ: // object reference
-            printf("objref");
+            printf("objref %p",s[i].address);
             break;
          default:
             printf("?%d" , s[i].atype);

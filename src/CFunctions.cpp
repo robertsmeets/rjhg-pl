@@ -145,3 +145,18 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    (*t)--;
 }
 
+/**
+ *
+ * String hash function
+ *
+ */
+long stringhash(char* key) {
+    long hashVal = 0;
+    while (*key != '0') {
+      hashVal = (hashVal << 4) + *(key++);
+      long g = hashVal & 0xF0000000L;
+      if (g != 0) hashVal ^= g >> 24;
+      hashVal &= ~g;
+   }
+   return hashVal;
+}      
