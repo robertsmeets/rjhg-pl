@@ -1,0 +1,24 @@
+//
+// test method call
+//
+class myclass
+{
+}
+
+proc main(a)
+{
+   m = myclass();
+   m.mymethod();
+}
+
+method myclass.mymethod()
+{
+   print "INTHEMETHOD";
+   self.anothermethod();
+   print "AFTER";
+}
+
+method myclass.anothermethod()
+{
+    print "THEOTHERMETHOD";
+}

@@ -42,6 +42,7 @@ estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
 {blanks}        { /* ignore */ }
 \n             { ++line_num; }
 
+"self"      return(SELF);
 "proc"      return(PROCEDURE);
 "{"         return(BLOCK);
 "}"         return(ENDBLOCK);
