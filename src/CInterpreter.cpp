@@ -781,6 +781,7 @@ if(debug)printf("the startptr is %p\n",nnptr);
          return -1;
       }
       ptr = (char*)(s[t-1].address);
+      printf("-------------address is %p turned into %p\n",s[t-1].address,ptr);
       if (xtype == TYPE_ARRAY)
       {
         if (l==1)
@@ -879,9 +880,11 @@ if(debug)printf("the startptr is %p\n",nnptr);
       //
       *((char*) adr) = s[t-1].atype;
       *((char*)(adr + 1)) = s[t-1].address & 0xff;
-      *((char*)(adr + 2)) = s[t-1].address >> 8;
+      *((char*)(adr + 2)) = (s[t-1].address >> 8) & 0xff;
+      *((char*)(adr + 3)) = (s[t-1].address >> 16) & 0xff;
+      *((char*)(adr + 4)) = (s[t-1].address >> 24) & 0xff;
       if (debug){printf("-----The type is %d\n",s[t-1].atype);}
-      if (debug){printf("-----The object is %llu\n",s[t-1].address);}
+      if (debug){printf("-----The object is %llu as pointer %p\n",s[t-1].address,s[t-1].address);}
       t--;
       break;
    case 15:
@@ -936,7 +939,7 @@ if (debug) {
             printf("NULL");
             break;
          case TYPE_ARRAY:
-            printf("array");
+            printf("array %p",s[i].address);
             break;
          case TYPE_INT:
             printf("%llu",s[i].address);
