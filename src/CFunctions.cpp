@@ -9,6 +9,8 @@
 
 using namespace std;
 
+class CInterpreter; // forward declaration
+
 unsigned int func_plus_ii(unsigned int i, unsigned int j) { return i + j; }
 double func_plus_id(int i, double j) { return i + j; } 
 double func_plus_di(double i, int j) { return i + j; }
@@ -49,7 +51,7 @@ bool func_le_dd(double i, double j) { return i <= j; }
  * this adds an element to an array 
  *
  */
-void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug) 
+void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
    if (debug){printf("In the array_add\n");}
    //
@@ -103,11 +105,14 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
+   printf("--- ARRAY_ADD()\n");
+   i->print_stack(); 
    (*t)--;
    (*t)--;
+   i->print_stack(); 
 }
 
-void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug) 
+void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
    if (debug){printf("In the array_set\n");}
    //
@@ -140,9 +145,11 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
+   printf("--- ARRAY_SET()\n");
+   i->print_stack(); 
    (*t)--;
    (*t)--;
-   (*t)--;
+   i->print_stack(); 
 }
 
 /**
