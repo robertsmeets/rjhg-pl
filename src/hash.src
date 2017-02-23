@@ -46,18 +46,26 @@ method hashtable.add(k,v)
 {
     print "ADDING1";
     hk = self.f(k);
+    print "AFTER SELF1";
     element = a[hk];
+    print "AFTER SELF2";
     e = helement();
+    print "AFTER SELF3";
     e.setKey(hk);
+    print "AFTER SELF4";
     e.setValue(v);
+    print "AFTER SELF5";
     if (element == NULL)
     {
+    print "AFTER SELF6";
        a.set(hk,e);
     }
     else
     {
+    print "AFTER SELF7";
        element.setNext(e);
-    }
+    };
+    print "AFTER SELF8";
 }
 
 method hashtable.init()
