@@ -904,7 +904,8 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // 
       // self
       //
-      adr = (char*) (s[b[tb - 1] + a].address);
+      printf("--- a=%d looking for self at stack index %d\n",a,b[tb-1]+a-1);
+      adr = (char*) (s[b[tb - 1] + a-1].address);
       if (debug){printf("-----The self object is %p\n",adr);}
       //
       // put the value on the stack
