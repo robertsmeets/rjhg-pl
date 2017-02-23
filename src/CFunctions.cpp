@@ -113,7 +113,6 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    printf("--- ARRAY_ADD()\n");
    i->print_stack(); 
    (*t)--;
-   (*t)--;
    i->print_stack(); 
 }
 
