@@ -6,10 +6,17 @@ class hashtable
 
 proc main(a)
 {
+   print "lllllllllllllllllllllllllllllllllONE";
    h = hashtable();
+   print "lllllllllllllllllllllllllllllllllxxx";
+   h.init();
+   print "lllllllllllllllllllllllllllllllllTWO";
    h.add("one",1);
+   print "lllllllllllllllllllllllllllllllllTHREE";
    h.add("two",2);
+   print "lllllllllllllllllllllllllllllllllFOUR";
    h.add("three",3);
+   print "lllllllllllllllllllllllllllllllllFIVE";
    print h.get("one");
    print h.get("two");
    print h.get("three");
@@ -20,9 +27,25 @@ class helement
    key, value, next
 }
 
+method helement.setKey(k)
+{
+   key = k;
+}
+
+method helement.setValue(v)
+{
+   value  = v;
+}
+
+method helement.setNext(e)
+{
+   next = e;
+}
+
 method hashtable.add(k,v)
 {
-    hk = f(k);
+    print "ADDING1";
+    hk = self.f(k);
     element = a[hk];
     e = helement();
     e.setKey(hk);
@@ -39,6 +62,7 @@ method hashtable.add(k,v)
 
 method hashtable.init()
 {
+   print "INITING";
    a = array();
    a.add(NULL);
    a.add(NULL);
@@ -47,9 +71,10 @@ method hashtable.init()
    a.add(NULL);
    claimed=5;
    filled=0;
+   print "done INITING";
 }
 
-proc f(x)
+method hashtable.f(x)
 {
    y = (37 * x) % claimed;
    return y;
@@ -57,7 +82,7 @@ proc f(x)
 
 method hashtable.get(k)
 {
-   hk = f(k);
+   hk = self.f(k);
    element = a[hk];
    while ((element.getKey() != k) && (element.getNext() != NULL))
    {
