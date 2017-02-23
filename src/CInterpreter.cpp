@@ -785,19 +785,20 @@ if(debug)printf("the startptr is %p\n",nnptr);
       {
         if (l==1)
         {
-        // 
-        // array.add() method
-        //
-        especial callthis =  &array_add; 
-        (*callthis)(ptr,&s,&t,debug);
+           // 
+           // array.add() method
+           //
+           especial callthis =  &array_add; 
+           (*callthis)(ptr,&s,&t,debug,this);
         }
         else if (l==0)
-        {// 
-        // array.set() method
-        //
-        print_stack();
-        especial callthis =  &array_set; 
-        (*callthis)(ptr,&s,&t,debug);
+        {
+           // 
+           // array.set() method
+           //
+           print_stack();
+           especial callthis =  &array_set; 
+           (*callthis)(ptr,&s,&t,debug,this);
         }
         else
         {
@@ -807,10 +808,12 @@ if(debug)printf("the startptr is %p\n",nnptr);
       }
       else
       {
+         printf("--- calling normal method\n");
          //
          // figure out the classnum
          //
          uint16_t classnum = *ptr + (*(ptr+1) >> 8);
+         printf("--- classnum = %d\n",classnum);
          //
          // this creates a new block with depth for local variables and parameters
          //
@@ -826,6 +829,13 @@ if(debug)printf("the startptr is %p\n",nnptr);
          r[tr] = pc;
          tr++;
          if(debug)printf("l=%d\n",l);
+         //
+         // some checks here to make sure this method exists
+         // 
+         map<uint16_t, uint16_t[3]> mml = methodmap[l];
+         // if (mml == NULL) { printf("method name not found\n"); exit(-1); } 
+         uint16_t* cl = mml[classnum];
+         if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
          pc = methodmap[l][classnum][0];
          if(debug)printf("classnum = %d, the pc is now 0x%x\n",classnum,pc);
       }

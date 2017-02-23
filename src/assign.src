@@ -1,0 +1,26 @@
+class thing
+{
+  a,b,c,d,e
+}
+
+proc main()
+{
+   a=1;
+   b=2;
+   c=3;
+   d=4;
+   e=5;
+   f = thing();
+   f.do();
+   print a;
+   print b;
+   print c;
+   print d;
+   print e;
+}
+
+
+method thing.do()
+{
+   print "doing";
+}

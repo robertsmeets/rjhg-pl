@@ -53,7 +53,7 @@ class CInterpreter {
    vector<unsigned short int> b;
    HeapManager* hm;
 
-   typedef void (*especial) (char* ,vector<stack_element>* ,uint16_t* ,bool );
+   typedef void (*especial) (char* ,vector<stack_element>* ,uint16_t* ,bool,CInterpreter* );
    typedef uint16_t (*iiptr)(uint16_t, uint16_t);
    typedef double (*ddptr)(double, double);
    typedef double (*idptr)(uint16_t, double);
