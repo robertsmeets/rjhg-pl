@@ -9,6 +9,8 @@
 
 using namespace std;
 
+class CInterpreter; // forward declaration
+
 unsigned int func_plus_ii(unsigned int i, unsigned int j) { return i + j; }
 double func_plus_id(int i, double j) { return i + j; } 
 double func_plus_di(double i, int j) { return i + j; }
@@ -49,7 +51,7 @@ bool func_le_dd(double i, double j) { return i <= j; }
  * this adds an element to an array 
  *
  */
-void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug) 
+void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
    if (debug){printf("In the array_add\n");}
    //
@@ -57,12 +59,16 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    // byte 2 and 3 are the claimed length
    //
    int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
+   if (debug)printf("actual = %d\n",actual);
    int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
-   char* nptr = ptr+4;
-   char** ptrptr = (char**)nptr; 
-   char* spaceptr =  *ptrptr;
-   actual++;
    if (debug)printf("actual = %d claimed = %d\n",actual,claimed);
+   char* nptr = ptr+4;
+   if (debug)printf("nptr = %p\n",nptr);
+   char** ptrptr = (char**)nptr; 
+   if (debug)printf("ptrptr = %p\n",ptrptr);
+   char* spaceptr =  *ptrptr;
+   if (debug)printf("spaceptr = %p\n",spaceptr);
+   actual++;
    if (actual > claimed)
    {
       //
@@ -103,11 +109,13 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
+   i->print_stack(); 
    (*t)--;
    (*t)--;
+   i->print_stack(); 
 }
 
-void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug) 
+void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
    if (debug){printf("In the array_set\n");}
    //
@@ -140,9 +148,10 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug)
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
+   i->print_stack(); 
    (*t)--;
    (*t)--;
-   (*t)--;
+   i->print_stack(); 
 }
 
 /**
