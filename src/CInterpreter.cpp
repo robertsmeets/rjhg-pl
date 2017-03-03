@@ -789,15 +789,16 @@ if(debug)printf("the startptr is %p\n",nnptr);
         // array.add() method
         //
         especial callthis =  &array_add; 
-        (*callthis)(ptr,&s,&t,debug);
+           (*callthis)(ptr,&s,&t,debug,this);
         }
         else if (l==0)
-        {// 
+        {
+           // 
         // array.set() method
         //
         print_stack();
         especial callthis =  &array_set; 
-        (*callthis)(ptr,&s,&t,debug);
+           (*callthis)(ptr,&s,&t,debug,this);
         }
         else
         {
@@ -826,6 +827,13 @@ if(debug)printf("the startptr is %p\n",nnptr);
          r[tr] = pc;
          tr++;
          if(debug)printf("l=%d\n",l);
+         //
+         // some checks here to make sure this method exists
+         // 
+         map<uint16_t, uint16_t[3]> mml = methodmap[l];
+         // if (mml == NULL) { printf("method name not found\n"); exit(-1); } 
+         uint16_t* cl = mml[classnum];
+         if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
          pc = methodmap[l][classnum][0];
          if(debug)printf("classnum = %d, the pc is now 0x%x\n",classnum,pc);
       }
@@ -869,9 +877,11 @@ if(debug)printf("the startptr is %p\n",nnptr);
       //
       *((char*) adr) = s[t-1].atype;
       *((char*)(adr + 1)) = s[t-1].address & 0xff;
-      *((char*)(adr + 2)) = s[t-1].address >> 8;
+      *((char*)(adr + 2)) = (s[t-1].address >> 8) & 0xff;
+      *((char*)(adr + 3)) = (s[t-1].address >> 16) & 0xff;
+      *((char*)(adr + 4)) = (s[t-1].address >> 24) & 0xff;
       if (debug){printf("-----The type is %d\n",s[t-1].atype);}
-      if (debug){printf("-----The object is %llu\n",s[t-1].address);}
+      if (debug){printf("-----The object is %llu as pointer %p\n",s[t-1].address,s[t-1].address);}
       t--;
       break;
    case 15:
@@ -891,7 +901,7 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // 
       // self
       //
-      adr = (char*) (s[b[tb - 1] + a].address);
+      adr = (char*) (s[b[tb - 1] + a-1].address);
       if (debug){printf("-----The self object is %p\n",adr);}
       //
       // put the value on the stack
@@ -926,7 +936,7 @@ if (debug) {
             printf("NULL");
             break;
          case TYPE_ARRAY:
-            printf("array");
+            printf("array %p",s[i].address);
             break;
          case TYPE_INT:
             printf("%llu",s[i].address);
