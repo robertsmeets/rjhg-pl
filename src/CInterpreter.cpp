@@ -781,14 +781,15 @@ if(debug)printf("the startptr is %p\n",nnptr);
          return -1;
       }
       ptr = (char*)(s[t-1].address);
+      printf("-------------address is %p turned into %p\n",s[t-1].address,ptr);
       if (xtype == TYPE_ARRAY)
       {
         if (l==1)
         {
-        // 
-        // array.add() method
-        //
-        especial callthis =  &array_add; 
+           // 
+           // array.add() method
+           //
+           especial callthis =  &array_add; 
            (*callthis)(ptr,&s,&t,debug,this);
         }
         else if (l==0)
@@ -808,10 +809,12 @@ if(debug)printf("the startptr is %p\n",nnptr);
       }
       else
       {
+         printf("--- calling normal method\n");
          //
          // figure out the classnum
          //
          uint16_t classnum = *ptr + (*(ptr+1) >> 8);
+         printf("--- classnum = %d\n",classnum);
          //
          // this creates a new block with depth for local variables and parameters
          //
