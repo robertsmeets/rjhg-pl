@@ -58,6 +58,7 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    // byte 0 and 1 are the actual length
    // byte 2 and 3 are the claimed length
    //
+   printf("ptr=%p\n",ptr);
    int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
    if (debug)printf("actual = %d\n",actual);
    int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
@@ -109,10 +110,8 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
-   i->print_stack(); 
    (*t)--;
    (*t)--;
-   i->print_stack(); 
 }
 
 void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
