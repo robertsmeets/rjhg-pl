@@ -110,10 +110,8 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
-   printf("--- ARRAY_ADD()\n");
-   i->print_stack(); 
    (*t)--;
-   i->print_stack(); 
+   (*t)--;
 }
 
 void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
@@ -149,7 +147,6 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
-   printf("--- ARRAY_SET()\n");
    i->print_stack(); 
    (*t)--;
    (*t)--;

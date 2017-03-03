@@ -795,10 +795,10 @@ if(debug)printf("the startptr is %p\n",nnptr);
         else if (l==0)
         {
            // 
-           // array.set() method
-           //
-           print_stack();
-           especial callthis =  &array_set; 
+        // array.set() method
+        //
+        print_stack();
+        especial callthis =  &array_set; 
            (*callthis)(ptr,&s,&t,debug,this);
         }
         else
@@ -904,7 +904,6 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // 
       // self
       //
-      printf("--- a=%d looking for self at stack index %d\n",a,b[tb-1]+a-1);
       adr = (char*) (s[b[tb - 1] + a-1].address);
       if (debug){printf("-----The self object is %p\n",adr);}
       //
