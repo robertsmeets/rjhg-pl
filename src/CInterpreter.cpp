@@ -850,14 +850,11 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // But what is the offset of the this pointer?
       //
       adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
-      if (debug){printf("-----The offset is %p\n",adr);}
       //
       // put the value on the stack
       //
       s[t].atype = *((char*)adr) & 0xff;
-      if (debug){printf("-----The type is %d\n",s[t].atype);}
       s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
-      if (debug){printf("-----The object is %llu\n",s[t].address);}
       t++;
       break;
    case 14:
@@ -880,8 +877,6 @@ if(debug)printf("the startptr is %p\n",nnptr);
       *((char*)(adr + 2)) = (s[t-1].address >> 8) & 0xff;
       *((char*)(adr + 3)) = (s[t-1].address >> 16) & 0xff;
       *((char*)(adr + 4)) = (s[t-1].address >> 24) & 0xff;
-      if (debug){printf("-----The type is %d\n",s[t-1].atype);}
-      if (debug){printf("-----The object is %llu as pointer %p\n",s[t-1].address,s[t-1].address);}
       t--;
       break;
    case 15:

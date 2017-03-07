@@ -55,7 +55,7 @@ method hashtable.add(k,v)
     print "AFTER SELF4";
     e.setValue(v);
     print "AFTER SELF5";
-    if (element == NULL)
+    if (element == null)
     {
     print "AFTER SELF6";
        a.set(hk,e);
@@ -72,11 +72,11 @@ method hashtable.init()
 {
    print "INITING";
    a = array();
-   a.add(NULL);
-   a.add(NULL);
-   a.add(NULL);
-   a.add(NULL);
-   a.add(NULL);
+   a.add(null);
+   a.add(null);
+   a.add(null);
+   a.add(null);
+   a.add(null);
    claimed=5;
    filled=0;
    print "done INITING";
@@ -92,7 +92,7 @@ method hashtable.get(k)
 {
    hk = self.f(k);
    element = a[hk];
-   while ((element.getKey() != k) && (element.getNext() != NULL))
+   while ((element.getKey() != k) && (element.getNext() != null))
    {
       element = element.getNext(); 
    };
