@@ -18,11 +18,10 @@ void MethodCall::addSingleMethodCall(SingleMethodCall*) {
 }
 
 void MethodCall::print(int level) {
-   {for (unsigned int i = 0; i < level; i++) {
-      printf("+");
-   }
-   printf("MethodCall\n" );
-   }
+   for (unsigned int i = 0; i < level; i++) { printf("+"); }
+   printf("MethodCall %s\n",name.c_str());
+   expression->print(level+1);
+   arguments->print(level+1);
 }
 
 string MethodCall::stype() { return "MethodCall"; }
