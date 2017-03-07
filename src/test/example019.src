@@ -1,0 +1,9 @@
+//
+// test null
+//
+
+proc main(a)
+{
+   print null;
+}
+
