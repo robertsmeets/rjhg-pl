@@ -97,11 +97,9 @@ void ProcedureNode::setClassDefinition(ClassDefinition* classDefinition)
 }
 
 void ProcedureNode::addParameter(string a_parameter) {
-   // parameters->push_back(a_parameter);
 }
 
 void ProcedureNode::setStatements(vector<Statement*> some_statements) {
-   // statements = some_statements;
 }
 
 void ProcedureNode::setMethodNumber(int mn)

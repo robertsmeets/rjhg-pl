@@ -1,0 +1,41 @@
+//
+// test instance variables in combination with parameters
+//
+class myclass
+{
+   a,b,c,d,e,f,g,h,i,j
+}
+
+proc main(a)
+{
+   m = myclass();
+   m.anothermethod(66,77,88);
+}
+
+
+method myclass.anothermethod(x,y,z)
+{
+   a=111;
+   b=222;
+   c=333;
+   d=444;
+   e=555;
+   f=666;
+   g=777;
+   h=888;
+   i=999;
+   j=1111;
+   print a;
+   print b;
+   print c;
+   print d;
+   print e;
+   print f;
+   print g;
+   print h;
+   print i;
+   print j;
+   print x;
+   print y;
+   print z;
+}

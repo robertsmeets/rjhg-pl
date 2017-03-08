@@ -9,7 +9,7 @@ class myclass
 proc main(a)
 {
    m = myclass();
-   f = m.mymethod(1,2,3);
+   m.mymethod(1,2,3);
    m.anothermethod();
 }
 

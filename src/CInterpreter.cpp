@@ -764,7 +764,7 @@ if(debug)printf("the startptr is %p\n",nnptr);
       }
       break;
    case 12:{
-      if (debug) { printf("METHODCALL %d " ,l ); }
+      if (debug) printf("METHODCALL %d %d ",l,a);
       // method call, the object is already on the stack.
       //
       // lookup the method by object type and name
@@ -815,31 +815,27 @@ if(debug)printf("the startptr is %p\n",nnptr);
          //
          // this creates a new block with depth for local variables and parameters
          //
-         b[tb] = t - methodmap[l][classnum][1] - a;
+         uint16_t* cl = methodmap[l][classnum];
+         //
+         // some checks here to make sure this method exists
+         // 
+         if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
+         b[tb] = t - a - 1;
          tb++;
          //
          // add room for the this pointer and the local vars
          //
-         t += methodmap[l][classnum][2] + 1;
+         t += cl[2];
          //
          // add the program counter on the return stack
          //
          r[tr] = pc;
          tr++;
-         if(debug)printf("l=%d\n",l);
-         //
-         // some checks here to make sure this method exists
-         // 
-         map<uint16_t, uint16_t[3]> mml = methodmap[l];
-         // if (mml == NULL) { printf("method name not found\n"); exit(-1); } 
-         uint16_t* cl = mml[classnum];
-         if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
-         pc = methodmap[l][classnum][0];
-         if(debug)printf("classnum = %d, the pc is now 0x%x\n",classnum,pc);
+         pc = cl[0];
       }
       break;}
-   case 13:
-      if (debug) { printf("LDI %d ", l ); }
+   case 13: {
+      if (debug) { printf("LDI %d %d", l, a); }
       // access an instance variable and put it on the stack
       //
       // l is the instance variable
@@ -849,15 +845,28 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // then calculate the address of the inst. variable
       // But what is the offset of the this pointer?
       //
-      adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
+      unsigned int offset_self = b[tb-1]+a;
+      if (debug) printf("offset self = %d\n",offset_self); 
+      adr = (char*) (s[offset_self].address+5*l+3);
+      if(debug)  {    printf("GOING TO HEXDUMP %p\n",adr);
+      Disassembler::hexdump(adr,64);}
+      //adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
+      //if (debug) printf("tb is %d\n",tb);
+      //if (debug) printf("b[tb-1] is %d\n",b[tb-1]);
+      //
+      //if (debug) printf("b[tb-1]+a is %d\n",b[tb-1]+a);
+      //if (debug) printf("s[b[tb-1]+a].address is %p\n",s[b[tb-1]+a].address);
+      //if (debug) printf("s[b[tb-1]+a].address+5*l+3 is %p\n",s[b[tb-1]+a].address+5*l+3);
+      //if (debug) printf("adr is %p\n",adr);
       //
       // put the value on the stack
       //
       s[t].atype = *((char*)adr) & 0xff;
       s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
+      if (debug) printf("atype is %d address = %p\n",s[t].atype, s[t].address);
       t++;
-      break;
-   case 14:
+      break; }
+   case 14:{
       if (debug) { printf("STI %d %d", l,a ); }
       // store a value inside an inst. variable
       //
@@ -867,8 +876,9 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // first get the this pointer
       // then calculate the address of the inst. variable
       //
-      adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
-      if(debug){printf(" offset = %p\n",adr);}
+      char* selfptr =  (char*) (s[b[tb - 1] + a].address );
+      if(debug)printf("selfptr %p\n",selfptr);
+      adr = (char*) (selfptr+ 5 * l + 3);
       //
       // store the value on the heap
       //
@@ -878,7 +888,7 @@ if(debug)printf("the startptr is %p\n",nnptr);
       *((char*)(adr + 3)) = (s[t-1].address >> 16) & 0xff;
       *((char*)(adr + 4)) = (s[t-1].address >> 24) & 0xff;
       t--;
-      break;
+      break;}
    case 15:
       if (debug) { printf("DROP"); }
       //
@@ -896,8 +906,8 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // 
       // self
       //
+      if (debug){printf("SELF");}
       adr = (char*) (s[b[tb - 1] + a-1].address);
-      if (debug){printf("-----The self object is %p\n",adr);}
       //
       // put the value on the stack
       //
