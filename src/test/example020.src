@@ -1,0 +1,36 @@
+//
+// test self in combination with parameters
+//
+class myclass
+{
+    a,b,c,d,e
+}
+
+proc main(a)
+{
+   m = myclass();
+   m.mymethod();
+}
+
+
+method myclass.mymethod()
+{
+   a=11;
+   b=22;
+   c=33;
+   d=44;
+   e=55;
+   self.anothermethod(66,77,88);
+}
+
+method myclass.anothermethod(x,y,z)
+{
+   print a;
+   print b;
+   print c;
+   print d;
+   print e;
+   print x;
+   print y;
+   print z;
+}

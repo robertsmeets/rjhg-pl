@@ -27,7 +27,7 @@ public:
    virtual ~Disassembler();
    void start(char*, unsigned int, DebugInfo*);
    string decode(char, unsigned short, unsigned short);
-   void hexdump(char*, unsigned int);
+   static void hexdump(char*, unsigned int);
    void print_tables();
    void print_magic_number();
    uint16_t find_offset(); 
