@@ -45,6 +45,8 @@ method helement.setNext(e)
 method hashtable.add(k,v)
 {
     print "ADDING1";
+    print k;
+    print "SEEABOVE";
     hk = self.f(k);
     print "AFTER SELF1";
     element = a[hk];
@@ -84,6 +86,9 @@ method hashtable.init()
 
 method hashtable.f(x)
 {
+   print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+   print x;
+   print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
    y = (37 * x) % claimed;
    return y;
 }

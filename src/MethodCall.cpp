@@ -39,16 +39,16 @@ void MethodCall::emit(CodeGenerator* cg, ProcedureNode* pn)
    vector<Expression*> expressions = arguments->getExpressions();
    for (auto it=expressions.begin();it != expressions.end();++it)
    {
-      (*it)->emit(cg,pn);
+      (*it)->emit(cg, pn);
    }
    //
    // emit the expression
    //
-   expression->emit(cg,pn);
+   expression->emit(cg, pn);
    //
    // add a call
    //
-   cg->addCallToMethod(name, pn, NULL);
+   cg->emit(12,cg->getProgramNode()->getMethodNumber(name),expressions.size(),NULL);
 }
 
 
