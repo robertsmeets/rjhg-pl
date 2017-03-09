@@ -47,7 +47,31 @@ bool func_le_ii(unsigned int i, unsigned int j) { return i <= j; }
 bool func_le_id(unsigned int i, double j) { return i <= j; }
 bool func_le_di(double i, unsigned int j) { return i <= j; }
 bool func_le_dd(double i, double j) { return i <= j; }
+
 /**
+ *
+ * return the size of a string
+ *
+ */
+void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
+{
+   printf("--------------- in string size\n");
+   stack_element fr1 = (*s)[*t-1];
+   if (fr1.atype != TYPE_STRING)
+   {
+      printf("size requested, but this is not a string\n");
+      exit(-1);
+   }
+   char * ptr1 = (char*) fr1.address;
+   uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+   (*s)[*t].atype=TYPE_INT;
+   (*s)[*t].address=len1;
+   (*t)++; 
+}
+
+
+/**
+ *
  * this adds an element to an array 
  *
  */
@@ -147,18 +171,3 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    i->print_stack(); 
 }
 
-/**
- *
- * String hash function
- *
- */
-long stringhash(char* key) {
-    long hashVal = 0;
-    while (*key != '0') {
-      hashVal = (hashVal << 4) + *(key++);
-      long g = hashVal & 0xF0000000L;
-      if (g != 0) hashVal ^= g >> 24;
-      hashVal &= ~g;
-   }
-   return hashVal;
-}      
