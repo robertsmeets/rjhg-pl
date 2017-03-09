@@ -6,17 +6,11 @@ class hashtable
 
 proc main(a)
 {
-   print "lllllllllllllllllllllllllllllllllONE";
    h = hashtable();
-   print "lllllllllllllllllllllllllllllllllxxx";
    h.init();
-   print "lllllllllllllllllllllllllllllllllTWO";
    h.add("one",1);
-   print "lllllllllllllllllllllllllllllllllTHREE";
    h.add("two",2);
-   print "lllllllllllllllllllllllllllllllllFOUR";
    h.add("three",3);
-   print "lllllllllllllllllllllllllllllllllFIVE";
    print h.get("one");
    print h.get("two");
    print h.get("three");
@@ -44,35 +38,23 @@ method helement.setNext(e)
 
 method hashtable.add(k,v)
 {
-    print "ADDING1";
-    print k;
-    print "SEEABOVE";
     hk = self.f(k);
-    print "AFTER SELF1";
     element = a[hk];
-    print "AFTER SELF2";
     e = helement();
-    print "AFTER SELF3";
     e.setKey(hk);
-    print "AFTER SELF4";
     e.setValue(v);
-    print "AFTER SELF5";
     if (element == null)
     {
-    print "AFTER SELF6";
        a.set(hk,e);
     }
     else
     {
-    print "AFTER SELF7";
        element.setNext(e);
     };
-    print "AFTER SELF8";
 }
 
 method hashtable.init()
 {
-   print "INITING";
    a = array();
    a.add(null);
    a.add(null);
@@ -81,16 +63,25 @@ method hashtable.init()
    a.add(null);
    claimed=5;
    filled=0;
-   print "done INITING";
 }
 
+/**
+ *
+ * calculate a hash value for a string
+ *
+ **/
 method hashtable.f(x)
 {
-   print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-   print x;
-   print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
-   y = (37 * x) % claimed;
-   return y;
+   hash = 5381;
+   sz = x.size(); 
+   i = 0;
+   while (i < sz)
+   {
+      c = x[i];
+      hash = hash * 33 + c;
+      i = i + 1;
+   };
+   return hash % claimed;
 }
 
 method hashtable.get(k)

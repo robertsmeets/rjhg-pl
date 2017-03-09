@@ -13,7 +13,11 @@ ProgramNode::ProgramNode() {
    // add the array class
    // 
    addClass(new ClassDefinition("array",new CommaSeparated()));
+   addClass(new ClassDefinition("string",new CommaSeparated()));
+   uint16_t i=0;
    addMethodDefinition(new ProcedureNode("array","add",new CommaSeparated(),1));
+   addMethodDefinition(new ProcedureNode("array","set",new CommaSeparated(),2));
+   addMethodDefinition(new ProcedureNode("string","size",new CommaSeparated(),3));
 }
 
 ProgramNode::~ProgramNode() {
@@ -38,7 +42,7 @@ void ProgramNode::addProcedure(ProcedureNode* c) {
 
 void ProgramNode::addMethodDefinition(ProcedureNode* m) {
    ClassDefinition* c = getClass(m->getClassName());
-   if (c==NULL)
+   if (c == NULL)
    {
      puts("Class does not exist");
    }

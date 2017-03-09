@@ -12,7 +12,6 @@
 
 using namespace std;
 
-
 /**
  * constructor for call into bytecode
  */
@@ -43,8 +42,6 @@ ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identi
    built_in_method_nr = pbuilt_in_method_nr;
    cd = NULL;
 }
-
-
 
 /**
  * destructor
@@ -234,6 +231,4 @@ void ProcedureNode::emit(CodeGenerator* cg, uint16_t here, ClassDefinition* a_cd
 uint16_t ProcedureNode::getMethodNumber() {
       return method_number;
    }
-
-
 
