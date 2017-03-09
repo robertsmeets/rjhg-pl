@@ -10,11 +10,13 @@ using namespace std;
 
 class Statements {
 private:
-	vector<Expression*> statements;
+   vector<Expression*> statements;
+
 public:
-	void addStatement(Expression*);
-	void print(int);
-	vector<Expression*> getStatements();
+   Statements();
+   void addStatement(Expression*);
+   void print(int);
+   vector<Expression*> getStatements();
 };
 
 #endif

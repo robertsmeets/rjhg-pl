@@ -508,15 +508,12 @@ if (debug) {
          break;
       case 14:
          {
-            print_stack();
-            if(debug){ printf("Index operation\n");}
             int atype = s[t-1].atype;
             if (atype != TYPE_INT) { printf("index is not an integer but type %d\n",atype); exit(-1);}
             int index = s[t-1].address;
             atype=s[t-2].atype;
-            if (atype != TYPE_ARRAY) { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
-            char* ptr = (char*)(s[t-2].address);
-            if(debug){printf("------------ now the pointer is %p\n",ptr);}
+            if (atype == TYPE_ARRAY)
+            {char* ptr = (char*)(s[t-2].address);
             //
             // byte 0 and 1 are the actual length
             // byte 2 and 3 are the claimed length
@@ -535,11 +532,25 @@ if (debug) {
             //
             char* nptr = spaceptr + index * 8 ;
             t--;
-            if(debug){printf("------------ now the thing pointed to is %p\n",nptr);}
             s[t-1].atype = *nptr ;
             char** xptr = (char**)(nptr+1);
             char* zptr = *xptr;
             s[t-1].address = (long long unsigned int) zptr;
+            }
+            else
+            { if (atype == TYPE_STRING)
+              {
+            char* ptr = (char*)(s[t-2].address);
+              char* cptr = ptr+2+index;
+               t--;
+               s[t-1].atype=TYPE_INT;
+               s[t-1].address=*cptr;
+
+}else
+
+ { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
+
+}
             break;
          }
 	 case 15: // NOT
@@ -715,7 +726,6 @@ if (debug) {
          //
          // this creates a array of size x
          //
-         if (debug){printf("In the array_new\n");}
          // 
          // initial claimed size is 5 elements
          // byte 0 and 1 are the actual length
@@ -724,7 +734,6 @@ if (debug) {
          //
          int claimed = 5;
          ptr = GC_MALLOC(12);
-         if(debug){printf("---------------------- Array pointer allocation address = %p\n",ptr);};
          *ptr = 0;
          *(ptr + 1) = 0;
          *(ptr + 2) = claimed;
@@ -733,7 +742,6 @@ if (debug) {
          char** vptr = (char**)nptr;
          char* nnptr = GC_MALLOC(8 * claimed); 
          *vptr = nnptr; 
-if(debug)printf("the startptr is %p\n",nnptr);
          //
          // leave the new object on the stack
          //
@@ -776,7 +784,7 @@ if(debug)printf("the startptr is %p\n",nnptr);
       // figure out what class type is on top of the stack
       //
       int xtype = s[t-1].atype;
-      if ((xtype != TYPE_OBJ) && (xtype != TYPE_ARRAY)) {
+      if ((xtype != TYPE_OBJ) && (xtype != TYPE_ARRAY) && (xtype != TYPE_STRING)) {
          puts("Performed a method call on a non-object");
          return -1;
       }
@@ -788,17 +796,14 @@ if(debug)printf("the startptr is %p\n",nnptr);
            // 
            // array.add() method
            //
-           especial callthis =  &array_add; 
-           (*callthis)(ptr,&s,&t,debug,this);
+           array_add(ptr,&s,&t,debug,this);
         }
-        else if (l==0)
+        else if (l==2)
         {
            // 
-        // array.set() method
-        //
-        print_stack();
-        especial callthis =  &array_set; 
-           (*callthis)(ptr,&s,&t,debug,this);
+           // array.set() method
+           //
+           array_set(ptr,&s,&t,debug,this);
         }
         else
         {
@@ -808,6 +813,22 @@ if(debug)printf("the startptr is %p\n",nnptr);
       }
       else
       {
+         if  (xtype == TYPE_STRING)
+         {
+
+           if (l==3)
+           {
+              string_size(ptr,&s,&t,debug,this);
+           }
+           else
+        {
+           printf("unsupported l = %d\n",l);
+           exit(-1);
+        }
+        
+         }
+         else
+         {
          //
          // figure out the classnum
          //
@@ -832,6 +853,7 @@ if(debug)printf("the startptr is %p\n",nnptr);
          r[tr] = pc;
          tr++;
          pc = cl[0];
+         }
       }
       break;}
    case 13: {

@@ -1,7 +1,16 @@
 #include "Statements.h"
 
+Statements::Statements()
+{
+}
+
+vector<Expression*> Statements::getStatements()
+{
+   return statements;
+}
+
 void Statements::addStatement(Expression* s) {
-   if (s!=NULL)
+   if (s != NULL)
    {
       s->setTopLevel();
       statements.push_back(s);
@@ -17,9 +26,6 @@ void Statements::print(int level) {
    {
       a_statement->print(level+1);
    }
+   printf("DOne with them statements\n");
 }
 
-vector<Expression*> Statements::getStatements()
-{
-   return statements;
-}

@@ -113,11 +113,9 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
       int len = strlen(signature);
       memcpy((char*) codebuffer + the_index,signature,len+1);
       the_index += len + 1;
-   if(debug){printf("The index is now %04X\n",the_index);}
       i++;
    }
    uint16_t offset = the_index;
-   if(debug){printf("The index is now %04X\n",the_index);}
    //
    // save the start address of the bytecode
    //
@@ -163,7 +161,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    for (vector<ProcedureNode*>::iterator it = procs.begin(); it != procs.end(); ++it) {
       ProcedureNode* a_proc = *it;
       string pname = a_proc->getName();
-      if(debug){ cout << "--------------- Generating code for procedure " << pname << endl;}
       procaddresses[pname] = a_proc;
       a_proc->emit(this, here, NULL);
    }
@@ -172,7 +169,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
-         if (debug){cout << "--------------- Generating code for method " << a_class->getName() << "." << a_method->getName() << endl;}
          a_method->emit(this, here, a_class);
       }
    }
@@ -329,20 +325,16 @@ void CodeGenerator::addCallToProc(string name, Expression* s) {
          //
          // it's a method call
          //
-      //         emitRpn(LhsExpression.getRpn(), pn, this);
-//         addCallToMethod(procedure_name, this);
-printf("METHOD CALL " );
+         printf("METHOD CALL " );
       }
       else
       {
-      //
-      // it's a procedure
-      //
-      addCallToProcedure(name, s);
+         //
+         // it's a procedure
+         //
+         addCallToProcedure(name, s);
       }
    }
-
-
 }
 
 void CodeGenerator::addCallToMethod(string method_name, ProcedureNode* procn, Expression* s) {

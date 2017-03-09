@@ -53,7 +53,7 @@ bool func_le_dd(double, double);
 
 void array_add(char* ,vector<stack_element>* ,uint16_t* ,bool,CInterpreter* );
 void array_set(char* ,vector<stack_element>* ,uint16_t* ,bool ,CInterpreter*);
-long stringhash(char*);
+void string_size(char*, vector<stack_element>* ,uint16_t* ,bool ,CInterpreter*);
 
 template <typename T>
 void delete_pointed_to(T* const ptr)
