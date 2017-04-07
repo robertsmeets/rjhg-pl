@@ -15,6 +15,7 @@ proc main(a)
 
 method myclass.anothermethod(x,y,z)
 {
+   print self;
    a=111;
    b=222;
    c=333;

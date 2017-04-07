@@ -61,7 +61,13 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
       //
       int sz1 = pn->getParameters()->size();
       int av = local_variables->at(value);
-      cg->emit(3, 0, sz1 + av, NULL); // LOD
+      // add the parameters plus one for self
+      int offset = sz1 + av;
+      if (pn->getClassDefinition() != NULL)
+      {
+          offset++;
+      }
+      cg->emit(3, 0, offset, NULL); // LOD
    }
 
 }
