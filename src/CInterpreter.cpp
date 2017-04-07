@@ -815,29 +815,27 @@ if (debug) {
       {
          if  (xtype == TYPE_STRING)
          {
-
-           if (l==3)
-           {
+            if (l==3)
+            {
               string_size(ptr,&s,&t,debug,this);
-           }
-           else
-        {
-           printf("unsupported l = %d\n",l);
-           exit(-1);
-        }
-        
+            }
+            else
+            {
+              printf("unsupported l = %d\n",l);
+              exit(-1);
+            }
          }
          else
          {
-         //
-         // figure out the classnum
-         //
-         uint16_t classnum = *ptr + (*(ptr+1) >> 8);
-         //
-         // this creates a new block with depth for local variables and parameters
-         //
-         uint16_t* cl = methodmap[l][classnum];
-         //
+            //
+            // figure out the classnum
+            //
+            uint16_t classnum = *ptr + (*(ptr+1) >> 8);
+            //
+            // this creates a new block with depth for local variables and parameters
+            //
+            uint16_t* cl = methodmap[l][classnum];
+            //
          // some checks here to make sure this method exists
          // 
          if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
@@ -867,23 +865,24 @@ if (debug) {
       // then calculate the address of the inst. variable
       // But what is the offset of the this pointer?
       //
-      unsigned int offset_self = b[tb-1]+a;
+      unsigned int offset_self = b[tb-1] + a;
       if (debug) printf("offset self = %d\n",offset_self); 
-      adr = (char*) (s[offset_self].address+5*l+3);
+      adr = (char*) (s[offset_self].address + 5 * l +3);
       if(debug)  {    printf("GOING TO HEXDUMP %p\n",adr);
       Disassembler::hexdump(adr,64);}
       //adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
-      //if (debug) printf("tb is %d\n",tb);
-      //if (debug) printf("b[tb-1] is %d\n",b[tb-1]);
+      if (debug) printf("tb is %d\n",tb);
+      if (debug) printf("b[tb-1] is %d\n",b[tb-1]);
       //
-      //if (debug) printf("b[tb-1]+a is %d\n",b[tb-1]+a);
-      //if (debug) printf("s[b[tb-1]+a].address is %p\n",s[b[tb-1]+a].address);
-      //if (debug) printf("s[b[tb-1]+a].address+5*l+3 is %p\n",s[b[tb-1]+a].address+5*l+3);
-      //if (debug) printf("adr is %p\n",adr);
+      if (debug) printf("b[tb-1]+a is %d\n",b[tb-1]+a);
+      if (debug) printf("s[b[tb-1]+a].address is %p\n",s[b[tb-1]+a].address);
+      if (debug) printf("s[b[tb-1]+a].address+5*l+3 is %p\n",s[b[tb-1]+a].address+5*l+3);
+      if (debug) printf("adr is %p\n",adr);
       //
       // put the value on the stack
       //
       s[t].atype = *((char*)adr) & 0xff;
+      if (debug) printf("We are here\n");
       s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
       if (debug) printf("atype is %d address = %p\n",s[t].atype, s[t].address);
       t++;
