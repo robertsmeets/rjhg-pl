@@ -53,6 +53,7 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
    //
    // fill up for OPR 8..13
    //
+   fptrs[8][0][0] = (iiptr) (&func_eq_nn);
    fptrs[8][2][2] = (iiptr) (&func_eq_ii);
    fptrs[8][2][5] = (iiptr) (&func_eq_id);
    fptrs[8][5][2] = (iiptr) (&func_eq_di);
@@ -483,6 +484,15 @@ if (debug) {
             fr1.address = eq;
             s[t - 1] = fr1;
          } 
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_NULL)) {
+            //
+            // null vs null
+            //
+            bool eq = true;
+            fr1.atype=6;
+            fr1.address=eq;
+            s[t-1]= fr1;
+          }
           else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_PTR)) {
             //
             // null vs pointer 
@@ -866,18 +876,7 @@ if (debug) {
       // But what is the offset of the this pointer?
       //
       unsigned int offset_self = b[tb-1] + a;
-      if (debug) printf("offset self = %d\n",offset_self); 
       adr = (char*) (s[offset_self].address + 5 * l +3);
-      if(debug)  {    printf("GOING TO HEXDUMP %p\n",adr);
-      Disassembler::hexdump(adr,64);}
-      //adr = (char*) (s[b[tb - 1] + a].address + 5 * l + 3);
-      if (debug) printf("tb is %d\n",tb);
-      if (debug) printf("b[tb-1] is %d\n",b[tb-1]);
-      //
-      if (debug) printf("b[tb-1]+a is %d\n",b[tb-1]+a);
-      if (debug) printf("s[b[tb-1]+a].address is %p\n",s[b[tb-1]+a].address);
-      if (debug) printf("s[b[tb-1]+a].address+5*l+3 is %p\n",s[b[tb-1]+a].address+5*l+3);
-      if (debug) printf("adr is %p\n",adr);
       //
       // put the value on the stack
       //

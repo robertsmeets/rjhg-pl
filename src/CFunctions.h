@@ -26,6 +26,7 @@ unsigned int func_mul_ii(unsigned int, unsigned int);
 double func_mul_id(int, double);
 double func_mul_di(double, int);
 double func_mul_dd(double, double);
+bool func_eq_nn(unsigned int, unsigned int);
 bool func_eq_ii(unsigned int, unsigned int);
 bool func_eq_id(int, double);
 bool func_eq_di(double, int);
