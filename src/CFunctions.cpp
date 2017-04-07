@@ -23,6 +23,7 @@ unsigned int func_mul_ii(unsigned int i, unsigned int j) { return i * j; }
 double func_mul_id(int i, double j) { return i * j; }
 double func_mul_di(double i, int j) { return i * j; }
 double func_mul_dd(double i, double j) { return i * j; }
+bool func_eq_nn(unsigned int i, unsigned int j) { return true ; }
 bool func_eq_ii(unsigned int i, unsigned int j) { return i == j; }
 bool func_eq_id(int i, double j) { return i == j; }
 bool func_eq_di(double i, int j) { return i == j; }
@@ -55,7 +56,6 @@ bool func_le_dd(double i, double j) { return i <= j; }
  */
 void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
-   printf("--------------- in string size\n");
    stack_element fr1 = (*s)[*t-1];
    if (fr1.atype != TYPE_STRING)
    {
