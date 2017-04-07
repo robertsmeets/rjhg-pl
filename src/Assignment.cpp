@@ -38,10 +38,15 @@ void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
       // parameters
       // this pointer (only if in a method)
       // local variables
-      // therefore if we want a local variable, we need to add the amount of parameters to it
+      // therefore if we want a local variable, we need to add the amount of parameters to it plus one
       //
       int lhs = pn->assignLocalVariable(variable->getName());
-      cg->emit(4, 0, lhs + pn->getParameters()->size(), this);
+      int offset = lhs + pn->getParameters()->size() ;
+      if (pn->getClassDefinition() != NULL)
+      {
+         offset++;
+      }
+      cg->emit(4, 0, offset, this);
    }
 }
 

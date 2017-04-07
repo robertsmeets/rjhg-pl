@@ -67,6 +67,7 @@ void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInte
    (*s)[*t].atype=TYPE_INT;
    (*s)[*t].address=len1;
    (*t)++; 
+   i->print_stack();
 }
 
 
