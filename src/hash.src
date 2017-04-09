@@ -36,6 +36,16 @@ method helement.setNext(e)
    next = e;
 }
 
+method helement.getKey(k)
+{
+   return key;
+}
+
+method helement.getNext(e)
+{
+   return next;
+}
+
 method hashtable.add(k,v)
 {
     hk = self.f(k);
