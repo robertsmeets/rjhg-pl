@@ -876,7 +876,9 @@ if (debug) {
       // But what is the offset of the this pointer?
       //
       unsigned int offset_self = b[tb-1] + a;
+      if(debug)printf("offset_self=%d\n",offset_self);
       adr = (char*) (s[offset_self].address + 5 * l +3);
+      if(debug)printf("adr=%p\n",adr);
       //
       // put the value on the stack
       //

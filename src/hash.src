@@ -36,13 +36,17 @@ method helement.setNext(e)
    next = e;
 }
 
-method helement.getKey(k)
+method helement.getKey()
 {
+   print "KEY" ;
+   print k;
    return key;
 }
 
-method helement.getNext(e)
+method helement.getNext()
 {
+   print "NEXT" ;
+   print e;
    return next;
 }
 
