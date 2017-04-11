@@ -1,0 +1,1093 @@
+Removing comments hash.src ...
+Parsing... hash.src ...
+ProgramNode
++ClassDefinition There are 0 instance variables
++ClassDefinition There are 0 instance variables
++ClassDefinition There are 3 instance variables
++ClassDefinition There are 3 instance variables
++ProcedureNode 
+built in method 1
++ProcedureNode 
+built in method 2
++ProcedureNode 
+built in method 3
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <key>
+++++VariableValue <k>
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <value>
+++++VariableValue <v>
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <next>
+++++VariableValue <e>
+DOne with them statements
++ProcedureNode 
+++Statements
++++PrintNode
+++++LitString
++++PrintNode
+++++VariableValue <k>
++++Return
+++++VariableValue <key>
+DOne with them statements
++ProcedureNode 
+++Statements
++++PrintNode
+++++LitString
++++PrintNode
+++++VariableValue <e>
++++Return
+++++VariableValue <next>
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <hk>
+++++MethodCall f
++++++Self
++++++ExpressionList
+++++++VariableValue <k>
++++Assignment
+++++VariableValue <element>
+++++Val2Expression I
++++++VariableValue <a>
++++++VariableValue <hk>
++++Assignment
+++++VariableValue <e>
+++++ProcedureCall
++++++ExpressionList
++++MethodCall setKey
+++++VariableValue <e>
+++++ExpressionList
++++++VariableValue <hk>
++++MethodCall setValue
+++++VariableValue <e>
+++++ExpressionList
++++++VariableValue <v>
++++If
+++++Val2Expression =
++++++VariableValue <element>
++++++LitNull
+++++Statements
++++++MethodCall set
+++++++VariableValue <a>
+++++++ExpressionList
++++++++VariableValue <hk>
++++++++VariableValue <e>
+DOne with them statements
+++++Statements
++++++MethodCall setNext
+++++++VariableValue <element>
+++++++ExpressionList
++++++++VariableValue <e>
+DOne with them statements
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <a>
+++++ProcedureCall
++++++ExpressionList
++++MethodCall add
+++++VariableValue <a>
+++++ExpressionList
++++++LitNull
++++MethodCall add
+++++VariableValue <a>
+++++ExpressionList
++++++LitNull
++++MethodCall add
+++++VariableValue <a>
+++++ExpressionList
++++++LitNull
++++MethodCall add
+++++VariableValue <a>
+++++ExpressionList
++++++LitNull
++++MethodCall add
+++++VariableValue <a>
+++++ExpressionList
++++++LitNull
++++Assignment
+++++VariableValue <claimed>
+++++LitInt 5
++++Assignment
+++++VariableValue <filled>
+++++LitInt 0
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <hash>
+++++LitInt 5381
++++Assignment
+++++VariableValue <sz>
+++++MethodCall size
++++++VariableValue <x>
++++++ExpressionList
++++Assignment
+++++VariableValue <i>
+++++LitInt 0
++++While
+++++Val2Expression <
++++++VariableValue <i>
++++++VariableValue <sz>
+++++Statements
++++++Assignment
+++++++VariableValue <c>
+++++++Val2Expression I
++++++++VariableValue <x>
++++++++VariableValue <i>
++++++Assignment
+++++++VariableValue <hash>
+++++++Val2Expression +
++++++++Val2Expression *
+++++++++VariableValue <hash>
+++++++++LitInt 33
++++++++VariableValue <c>
++++++Assignment
+++++++VariableValue <i>
+++++++Val2Expression +
++++++++VariableValue <i>
++++++++LitInt 1
+DOne with them statements
++++Return
+++++Val2Expression M
++++++VariableValue <hash>
++++++VariableValue <claimed>
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <hk>
+++++MethodCall f
++++++Self
++++++ExpressionList
+++++++VariableValue <k>
++++Assignment
+++++VariableValue <element>
+++++Val2Expression I
++++++VariableValue <a>
++++++VariableValue <hk>
++++While
+++++Val2Expression A
++++++Val2Expression !
+++++++MethodCall getKey
++++++++VariableValue <element>
++++++++ExpressionList
+++++++VariableValue <k>
++++++Val2Expression !
+++++++MethodCall getNext
++++++++VariableValue <element>
++++++++ExpressionList
+++++++LitNull
+++++Statements
++++++Assignment
+++++++VariableValue <element>
+++++++MethodCall getNext
++++++++VariableValue <element>
++++++++ExpressionList
+DOne with them statements
++++Return
+++++VariableValue <element>
+DOne with them statements
++ProcedureNode 
+++Statements
++++Assignment
+++++VariableValue <h>
+++++ProcedureCall
++++++ExpressionList
++++MethodCall init
+++++VariableValue <h>
+++++ExpressionList
++++MethodCall add
+++++VariableValue <h>
+++++ExpressionList
++++++LitString
++++++LitInt 1
++++MethodCall add
+++++VariableValue <h>
+++++ExpressionList
++++++LitString
++++++LitInt 2
++++MethodCall add
+++++VariableValue <h>
+++++ExpressionList
++++++LitString
++++++LitInt 3
++++PrintNode
+++++MethodCall get
++++++VariableValue <h>
++++++ExpressionList
+++++++LitString
++++PrintNode
+++++MethodCall get
++++++VariableValue <h>
++++++ExpressionList
+++++++LitString
++++PrintNode
+++++MethodCall get
++++++VariableValue <h>
++++++ExpressionList
+++++++LitString
+DOne with them statements
+Code generation...
+beginning of code here = 0000
+Before method table here = 0008
+The index is now 006A
+There are 12 methods
+There are 0 external functions
+
+
+------------Done generating code for methods
+Emitting method table
+A method classnum 1 methodnum 1 address 0000 params 0 localvars 0
+A method classnum 1 methodnum 2 address 0000 params 0 localvars 0
+A method classnum 2 methodnum 3 address 0000 params 0 localvars 0
+A method classnum 3 methodnum 1 address 0125 params 2 localvars 3
+A method classnum 3 methodnum 9 address 01B6 params 0 localvars 0
+A method classnum 3 methodnum 10 address 0224 params 1 localvars 4
+A method classnum 3 methodnum 11 address 02BA params 1 localvars 2
+A method classnum 4 methodnum 4 address 0328 params 1 localvars 0
+A method classnum 4 methodnum 5 address 0337 params 1 localvars 0
+A method classnum 4 methodnum 6 address 0346 params 1 localvars 0
+A method classnum 4 methodnum 7 address 0355 params 0 localvars 0
+A method classnum 4 methodnum 8 address 0371 params 0 localvars 0
+Generated 910 bytes of code
+Starting disassembler...
+000000: 52  4a  48  47  50  4c  6a  00  6a  00  01  00  01  00  00  00  RJHGPLj.j.......
+000010: 00  00  01  00  02  00  00  00  00  00  02  00  03  00  00  00  ................
+000020: 00  00  03  00  01  00  25  01  02  03  03  00  09  00  b6  01  ......%.........
+000030: 00  00  03  00  0a  00  24  02  01  04  03  00  0b  00  ba  02  ......$.........
+000040: 01  02  04  00  04  00  28  03  01  00  04  00  05  00  37  03  ......(.......7.
+000050: 01  00  04  00  06  00  46  03  01  00  04  00  07  00  55  03  ......F.......U.
+000060: 00  00  04  00  08  00  71  03  00  00  01  02  00  00  00  06  ......q.........
+000070: 01  00  01  00  05  00  00  7e  00  02  00  00  00  00  0b  03  .......~........
+000080: 00  03  00  04  00  00  01  00  03  00  00  01  00  0c  09  00  ................
+000090: 00  00  01  07  00  03  00  6f  6e  65  01  02  00  01  00  03  .......one......
+0000a0: 00  00  01  00  0c  01  00  02  00  01  07  00  03  00  74  77  ..............tw
+0000b0: 6f  01  02  00  02  00  03  00  00  01  00  0c  01  00  02  00  o...............
+0000c0: 01  07  00  05  00  74  68  72  65  65  01  02  00  03  00  03  .....three......
+0000d0: 00  00  01  00  0c  01  00  02  00  01  07  00  03  00  6f  6e  ..............on
+0000e0: 65  03  00  00  01  00  0c  0b  00  01  00  09  00  00  00  00  e...............
+0000f0: 01  07  00  03  00  74  77  6f  03  00  00  01  00  0c  0b  00  .....two........
+000100: 01  00  09  00  00  00  00  01  07  00  05  00  74  68  72  65  ............thre
+000110: 65  03  00  00  01  00  0c  0b  00  01  00  09  00  00  00  00  e...............
+000120: 02  00  00  00  00  03  00  00  00  00  12  00  00  00  00  0c  ................
+000130: 0a  00  01  00  04  00  00  03  00  0d  00  00  02  00  03  00  ................
+000140: 00  03  00  02  00  00  0e  00  04  00  00  04  00  0b  04  00  ................
+000150: 03  00  04  00  00  05  00  03  00  00  03  00  03  00  00  05  ................
+000160: 00  0c  04  00  01  00  03  00  00  01  00  03  00  00  05  00  ................
+000170: 0c  05  00  01  00  03  00  00  04  00  01  00  00  00  00  02  ................
+000180: 00  00  08  00  08  00  00  9d  01  03  00  00  05  00  03  00  ................
+000190: 00  04  00  0c  06  00  01  00  07  00  00  b1  01  03  00  00  ................
+0001a0: 03  00  03  00  00  05  00  0d  00  00  02  00  0c  02  00  02  ................
+0001b0: 00  02  00  00  00  00  0b  01  00  00  00  0e  00  00  00  00  ................
+0001c0: 01  00  00  00  00  0d  00  00  00  00  0c  01  00  01  00  01  ................
+0001d0: 00  00  00  00  0d  00  00  00  00  0c  01  00  01  00  01  00  ................
+0001e0: 00  00  00  0d  00  00  00  00  0c  01  00  01  00  01  00  00  ................
+0001f0: 00  00  0d  00  00  00  00  0c  01  00  01  00  01  00  00  00  ................
+000200: 00  0d  00  00  00  00  0c  01  00  01  00  01  02  00  05  00  ................
+000210: 0e  01  00  00  00  01  02  00  00  00  0e  02  00  00  00  02  ................
+000220: 00  00  00  00  01  02  00  05  15  04  00  00  02  00  03  00  ................
+000230: 00  00  00  0c  03  00  00  00  04  00  00  03  00  01  02  00  ................
+000240: 00  00  04  00  00  04  00  03  00  00  04  00  03  00  00  03  ................
+000250: 00  02  00  00  0a  00  11  00  00  a6  02  03  00  00  00  00  ................
+000260: 03  00  00  04  00  02  00  00  0e  00  04  00  00  05  00  03  ................
+000270: 00  00  02  00  01  02  00  21  00  02  00  00  04  00  03  00  .......!........
+000280: 00  05  00  02  00  00  02  00  04  00  00  02  00  03  00  00  ................
+000290: 04  00  01  02  00  01  00  02  00  00  02  00  04  00  00  04  ................
+0002a0: 00  07  00  00  47  02  03  00  00  02  00  0d  01  00  01  00  ....G...........
+0002b0: 02  00  00  12  00  02  01  00  00  00  03  00  00  00  00  12  ................
+0002c0: 00  00  00  00  0c  0a  00  01  00  04  00  00  02  00  0d  00  ................
+0002d0: 00  01  00  03  00  00  02  00  02  00  00  0e  00  04  00  00  ................
+0002e0: 03  00  03  00  00  03  00  0c  07  00  00  00  03  00  00  00  ................
+0002f0: 00  03  00  00  03  00  0c  08  00  00  00  01  00  00  00  00  ................
+000300: 02  00  00  10  00  11  00  00  1e  03  03  00  00  03  00  0c  ................
+000310: 08  00  00  00  04  00  00  03  00  07  00  00  e2  02  03  00  ................
+000320: 00  03  00  02  01  00  00  00  03  00  00  00  00  0e  00  00  ................
+000330: 01  00  02  00  00  00  00  03  00  00  00  00  0e  01  00  01  ................
+000340: 00  02  00  00  00  00  03  00  00  00  00  0e  02  00  01  00  ................
+000350: 02  00  00  00  00  01  07  00  03  00  4b  45  59  09  00  00  ..........KEY...
+000360: 00  00  09  00  00  00  00  0d  00  00  00  00  02  01  00  00  ................
+000370: 00  01  07  00  04  00  4e  45  58  54  09  00  00  00  00  09  ......NEXT......
+000380: 00  00  00  00  0d  02  00  00  00  02  01  00  00  00          ..............
+Magic Number RJHGPL
+Method table starts at 000A
+Ext proc table starts at 006A
+Code starts at 006A
+Method classnum=1 methodnum=1 address=0000 num_params=0 num_local_vars=0
+Method classnum=1 methodnum=2 address=0000 num_params=0 num_local_vars=0
+Method classnum=2 methodnum=3 address=0000 num_params=0 num_local_vars=0
+Method classnum=3 methodnum=1 address=0125 num_params=2 num_local_vars=3
+Method classnum=3 methodnum=9 address=01B6 num_params=0 num_local_vars=0
+Method classnum=3 methodnum=10 address=0224 num_params=1 num_local_vars=4
+Method classnum=3 methodnum=11 address=02BA num_params=1 num_local_vars=2
+Method classnum=4 methodnum=4 address=0328 num_params=1 num_local_vars=0
+Method classnum=4 methodnum=5 address=0337 num_params=1 num_local_vars=0
+Method classnum=4 methodnum=6 address=0346 num_params=1 num_local_vars=0
+Method classnum=4 methodnum=7 address=0355 num_params=0 num_local_vars=0
+Method classnum=4 methodnum=8 address=0371 num_params=0 num_local_vars=0
+006A f= 1 LIT 2,0
+006F f= 6 INT 1,1
+0074 f= 5 CAL 0,126
+0079 f= 2 OPR 0,RET
+007E f= 11 OBJ CREATION 3,3
+0083 f= 4 STO 0,1
+0088 f= 3 LOD 0,1
+008D f= 12 METHOD CALL 9,0
+0092 f= 1 LIT 7,3
+009A f= 1 LIT 2,1
+009F f= 3 LOD 0,1
+00A4 f= 12 METHOD CALL 1,2
+00A9 f= 1 LIT 7,3
+00B1 f= 1 LIT 2,2
+00B6 f= 3 LOD 0,1
+00BB f= 12 METHOD CALL 1,2
+00C0 f= 1 LIT 7,5
+00CA f= 1 LIT 2,3
+00CF f= 3 LOD 0,1
+00D4 f= 12 METHOD CALL 1,2
+00D9 f= 1 LIT 7,3
+00E1 f= 3 LOD 0,1
+00E6 f= 12 METHOD CALL 11,1
+00EB f= 9 PRINT 0,0
+00F0 f= 1 LIT 7,3
+00F8 f= 3 LOD 0,1
+00FD f= 12 METHOD CALL 11,1
+0102 f= 9 PRINT 0,0
+0107 f= 1 LIT 7,5
+0111 f= 3 LOD 0,1
+0116 f= 12 METHOD CALL 11,1
+011B f= 9 PRINT 0,0
+0120 f= 2 OPR 0,RET
+0125 f= 3 LOD 0,0
+012A f= 18 SELF 0,0
+012F f= 12 METHOD CALL 10,1
+0134 f= 4 STO 0,3
+0139 f= 13 LDI 0,2
+013E f= 3 LOD 0,3
+0143 f= 2 OPR 0,I
+0148 f= 4 STO 0,4
+014D f= 11 OBJ CREATION 4,3
+0152 f= 4 STO 0,5
+0157 f= 3 LOD 0,3
+015C f= 3 LOD 0,5
+0161 f= 12 METHOD CALL 4,1
+0166 f= 3 LOD 0,1
+016B f= 3 LOD 0,5
+0170 f= 12 METHOD CALL 5,1
+0175 f= 3 LOD 0,4
+017A f= 1 LIT 0,0
+017F f= 2 OPR 0,EQ
+0184 f= 8 JPC 0,413
+0189 f= 3 LOD 0,5
+018E f= 3 LOD 0,4
+0193 f= 12 METHOD CALL 6,1
+0198 f= 7 JMP 0,433
+019D f= 3 LOD 0,3
+01A2 f= 3 LOD 0,5
+01A7 f= 13 LDI 0,2
+01AC f= 12 METHOD CALL 2,2
+01B1 f= 2 OPR 0,RET
+01B6 f= 11 OBJ CREATION 1,0
+01BB f= 14 STI 0,0
+01C0 f= 1 LIT 0,0
+01C5 f= 13 LDI 0,0
+01CA f= 12 METHOD CALL 1,1
+01CF f= 1 LIT 0,0
+01D4 f= 13 LDI 0,0
+01D9 f= 12 METHOD CALL 1,1
+01DE f= 1 LIT 0,0
+01E3 f= 13 LDI 0,0
+01E8 f= 12 METHOD CALL 1,1
+01ED f= 1 LIT 0,0
+01F2 f= 13 LDI 0,0
+01F7 f= 12 METHOD CALL 1,1
+01FC f= 1 LIT 0,0
+0201 f= 13 LDI 0,0
+0206 f= 12 METHOD CALL 1,1
+020B f= 1 LIT 2,5
+0210 f= 14 STI 1,0
+0215 f= 1 LIT 2,0
+021A f= 14 STI 2,0
+021F f= 2 OPR 0,RET
+0224 f= 1 LIT 2,5381
+0229 f= 4 STO 0,2
+022E f= 3 LOD 0,0
+0233 f= 12 METHOD CALL 3,0
+0238 f= 4 STO 0,3
+023D f= 1 LIT 2,0
+0242 f= 4 STO 0,4
+0247 f= 3 LOD 0,4
+024C f= 3 LOD 0,3
+0251 f= 2 OPR 0,LT
+0256 f= 17 JPF 0,678
+025B f= 3 LOD 0,0
+0260 f= 3 LOD 0,4
+0265 f= 2 OPR 0,I
+026A f= 4 STO 0,5
+026F f= 3 LOD 0,2
+0274 f= 1 LIT 2,33
+0279 f= 2 OPR 0,MUL
+027E f= 3 LOD 0,5
+0283 f= 2 OPR 0,PLUS
+0288 f= 4 STO 0,2
+028D f= 3 LOD 0,4
+0292 f= 1 LIT 2,1
+0297 f= 2 OPR 0,PLUS
+029C f= 4 STO 0,4
+02A1 f= 7 JMP 0,583
+02A6 f= 3 LOD 0,2
+02AB f= 13 LDI 1,1
+02B0 f= 2 OPR 0,MOD
+02B5 f= 2 OPR 1,RET
+02BA f= 3 LOD 0,0
+02BF f= 18 SELF 0,0
+02C4 f= 12 METHOD CALL 10,1
+02C9 f= 4 STO 0,2
+02CE f= 13 LDI 0,1
+02D3 f= 3 LOD 0,2
+02D8 f= 2 OPR 0,I
+02DD f= 4 STO 0,3
+02E2 f= 3 LOD 0,3
+02E7 f= 12 METHOD CALL 7,0
+02EC f= 3 LOD 0,0
+02F1 f= 3 LOD 0,3
+02F6 f= 12 METHOD CALL 8,0
+02FB f= 1 LIT 0,0
+0300 f= 2 OPR 0,AND
+0305 f= 17 JPF 0,798
+030A f= 3 LOD 0,3
+030F f= 12 METHOD CALL 8,0
+0314 f= 4 STO 0,3
+0319 f= 7 JMP 0,738
+031E f= 3 LOD 0,3
+0323 f= 2 OPR 1,RET
+0328 f= 3 LOD 0,0
+032D f= 14 STI 0,1
+0332 f= 2 OPR 0,RET
+0337 f= 3 LOD 0,0
+033C f= 14 STI 1,1
+0341 f= 2 OPR 0,RET
+0346 f= 3 LOD 0,0
+034B f= 14 STI 2,1
+0350 f= 2 OPR 0,RET
+0355 f= 1 LIT 7,3
+035D f= 9 PRINT 0,0
+0362 f= 9 PRINT 0,0
+0367 f= 13 LDI 0,0
+036C f= 2 OPR 1,RET
+0371 f= 1 LIT 7,4
+037A f= 9 PRINT 0,0
+037F f= 9 PRINT 0,0
+0384 f= 13 LDI 2,0
+0389 f= 2 OPR 1,RET
+Starting interpreter...
+PC is now 0x6a
+pc=0x6a: LIT 2,0      stack: [0]      bstack:       rstack: 
+pc=0x6f: INT 1,1      stack: [0][NULL]      bstack: 0       rstack: 
+pc=0x74: CAL 126       stack: [0][NULL]      bstack: 0       rstack: 0x79
+pc=0x7e: OBJCREATE 3,3       stack: [0][NULL][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0x83: STO 1       stack: [0][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0x88: LOD 1       stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0x8d: METHODCALL 9 0       stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x1b6: OBJCREATE 1,0       stack: [0][objref 0x200bffd8][objref 0x200bffd8][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790x92
+pc=0x1bb: STI 0 0selfptr 0x200bffd8
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x1c0: LIT 0,0      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL]      bstack: 0 2       rstack: 0x790x92
+pc=0x1c5: LDI 0 0offset_self=2
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790x92
+pc=0x1ca: METHODCALL 1 1 In the array_add
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x1cf: LIT 0,0      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL]      bstack: 0 2       rstack: 0x790x92
+pc=0x1d4: LDI 0 0offset_self=2
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790x92
+pc=0x1d9: METHODCALL 1 1 In the array_add
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x1de: LIT 0,0      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL]      bstack: 0 2       rstack: 0x790x92
+pc=0x1e3: LDI 0 0offset_self=2
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790x92
+pc=0x1e8: METHODCALL 1 1 In the array_add
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x1ed: LIT 0,0      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL]      bstack: 0 2       rstack: 0x790x92
+pc=0x1f2: LDI 0 0offset_self=2
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790x92
+pc=0x1f7: METHODCALL 1 1 In the array_add
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x1fc: LIT 0,0      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL]      bstack: 0 2       rstack: 0x790x92
+pc=0x201: LDI 0 0offset_self=2
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8][NULL][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790x92
+pc=0x206: METHODCALL 1 1 In the array_add
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x20b: LIT 2,5      stack: [0][objref 0x200bffd8][objref 0x200bffd8][5]      bstack: 0 2       rstack: 0x790x92
+pc=0x210: STI 1 0selfptr 0x200bffd8
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x215: LIT 2,0      stack: [0][objref 0x200bffd8][objref 0x200bffd8][0]      bstack: 0 2       rstack: 0x790x92
+pc=0x21a: STI 2 0selfptr 0x200bffd8
+      stack: [0][objref 0x200bffd8][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790x92
+pc=0x21f: OPR RET l= 0      stack: [0][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0x92: LIT 7,3      stack: [0][objref 0x200bffd8][one]      bstack: 0       rstack: 0x79
+pc=0x9a: LIT 2,1      stack: [0][objref 0x200bffd8][one][1]      bstack: 0       rstack: 0x79
+pc=0x9f: LOD 1       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xa4: METHODCALL 1 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL]      bstack: 0 2       rstack: 0x790xa9
+pc=0x125: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one]      bstack: 0 2       rstack: 0x790xa9
+pc=0x12a: SELF      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790xa9
+pc=0x12f: METHODCALL 10 1       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][NULL][NULL][NULL][NULL]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x224: LIT 2,5381      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][NULL][NULL][NULL][NULL][5381]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x229: STO 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][NULL][NULL][NULL]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x22e: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][NULL][NULL][NULL][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x233: METHODCALL 3 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][NULL][NULL][NULL][one][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][NULL][NULL][NULL][one][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x238: STO 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][NULL][NULL][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x23d: LIT 2,0      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][NULL][NULL][one][0]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x242: STO 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one][0]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one][0][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one][true]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one][one][0]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][NULL][one][111]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][111][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][111][one][5381]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][111][one][5381][33]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][111][one][46501]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][111][one][46501][111]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][5381][3][0][111][one][46612]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][0][111][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][0][111][one][0]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][0][111][one][0][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][0][111][one][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one][1][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one][true]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one][one][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][111][one][110]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][110][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][110][one][46612]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][110][one][46612][33]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][110][one][30868]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][110][one][30868][110]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][46612][3][1][110][one][30978]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][1][110][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][1][110][one][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][1][110][one][1][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][1][110][one][2]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one][2]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one][2][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one][true]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one][one][2]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][110][one][101]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][101][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][101][one][30978]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][101][one][30978][33]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][101][one][39234]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][101][one][39234][101]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][30978][3][2][101][one][39335]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][2][101][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][2][101][one][2]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][2][101][one][2][1]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][2][101][one][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one][3][3]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one][false]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2a6: LOD 2       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one][39335]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2ab: LDI 1 1offset_self=9
+adr=0x200bffe0
+We are here
+atype is 2 address = 0x5
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one][39335][5]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2b0: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][one][objref 0x200bffd8][39335][3][3][101][one][0]      bstack: 0 2 8       rstack: 0x790xa90x134
+pc=0x2b5: OPR RET l= 1      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][NULL][NULL][NULL][0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x134: STO 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][NULL]      bstack: 0 2       rstack: 0x790xa9
+pc=0x139: LDI 0 2offset_self=4
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][NULL][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x13e: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][NULL][array 0x200c0ff0][0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x143: OPRthe size of the array is 5
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][NULL][NULL]      bstack: 0 2       rstack: 0x790xa9
+pc=0x148: STO 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][NULL]      bstack: 0 2       rstack: 0x790xa9
+pc=0x14d: OBJCREATE 4,3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x152: STO 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x157: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x15c: LOD 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x161: METHODCALL 4 1       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0]      bstack: 0 2 8       rstack: 0x790xa90x166
+pc=0x328: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0][0]      bstack: 0 2 8       rstack: 0x790xa90x166
+pc=0x32d: STI 0 1selfptr 0x200bffc0
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0]      bstack: 0 2 8       rstack: 0x790xa90x166
+pc=0x332: OPR RET l= 0      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x166: LOD 1       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][1]      bstack: 0 2       rstack: 0x790xa9
+pc=0x16b: LOD 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][1][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x170: METHODCALL 5 1       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][1][objref 0x200bffc0]      bstack: 0 2 8       rstack: 0x790xa90x175
+pc=0x337: LOD 0       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][1][objref 0x200bffc0][1]      bstack: 0 2 8       rstack: 0x790xa90x175
+pc=0x33c: STI 1 1selfptr 0x200bffc0
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][1][objref 0x200bffc0]      bstack: 0 2 8       rstack: 0x790xa90x175
+pc=0x341: OPR RET l= 0      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x175: LOD 4       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][NULL]      bstack: 0 2       rstack: 0x790xa9
+pc=0x17a: LIT 0,0      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][NULL][NULL]      bstack: 0 2       rstack: 0x790xa9
+pc=0x17f: OPR      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][true]      bstack: 0 2       rstack: 0x790xa9
+pc=0x184: JPC 413       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x19d: LOD 3       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x1a2: LOD 5       stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x1a7: LDI 0 2offset_self=4
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x1ac: METHODCALL 2 2 In the array_set
+actual = 5 claimed = 5
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0][objref 0x200bffc0][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xa9
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0]      bstack: 0 2       rstack: 0x790xa9
+      stack: [0][objref 0x200bffd8][one][1][objref 0x200bffd8][0][NULL][objref 0x200bffc0][0]      bstack: 0 2       rstack: 0x790xa9
+pc=0x1b1: OPR RET l= 0      stack: [0][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xa9: LIT 7,3      stack: [0][objref 0x200bffd8][two]      bstack: 0       rstack: 0x79
+pc=0xb1: LIT 2,2      stack: [0][objref 0x200bffd8][two][2]      bstack: 0       rstack: 0x79
+pc=0xb6: LOD 1       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xbb: METHODCALL 1 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xc0
+pc=0x125: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two]      bstack: 0 2       rstack: 0x790xc0
+pc=0x12a: SELF      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x12f: METHODCALL 10 1       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][array 0x200c0ff0][3][3][101]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x224: LIT 2,5381      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][array 0x200c0ff0][3][3][101][5381]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x229: STO 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][3][101]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x22e: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][3][101][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x233: METHODCALL 3 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][3][101][two][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][3][101][two][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x238: STO 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][3][101][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x23d: LIT 2,0      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][3][101][two][0]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x242: STO 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two][0]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two][0][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two][true]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two][two][0]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][101][two][116]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][116][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][116][two][5381]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][116][two][5381][33]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][116][two][46501]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][116][two][46501][116]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][5381][3][0][116][two][46617]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][0][116][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][0][116][two][0]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][0][116][two][0][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][0][116][two][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two][1][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two][true]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two][two][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][116][two][119]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][119][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][119][two][46617]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][119][two][46617][33]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][119][two][31033]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][119][two][31033][119]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][46617][3][1][119][two][31152]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][1][119][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][1][119][two][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][1][119][two][1][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][1][119][two][2]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two][2]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two][2][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two][true]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two][two][2]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][119][two][111]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][111][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][111][two][31152]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][111][two][31152][33]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][111][two][44976]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][111][two][44976][111]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][31152][3][2][111][two][45087]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][2][111][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][2][111][two][2]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][2][111][two][2][1]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][2][111][two][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two][3][3]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two][false]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2a6: LOD 2       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two][45087]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2ab: LDI 1 1offset_self=9
+adr=0x200bffe0
+We are here
+atype is 2 address = 0x5
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two][45087][5]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2b0: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][two][objref 0x200bffd8][45087][3][3][111][two][2]      bstack: 0 2 8       rstack: 0x790xc00x134
+pc=0x2b5: OPR RET l= 1      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][0][NULL][objref 0x200bffc0][2]      bstack: 0 2       rstack: 0x790xc0
+pc=0x134: STO 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xc0
+pc=0x139: LDI 0 2offset_self=4
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffc0][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xc0
+pc=0x13e: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffc0][array 0x200c0ff0][2]      bstack: 0 2       rstack: 0x790xc0
+pc=0x143: OPRthe size of the array is 5
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffc0][NULL]      bstack: 0 2       rstack: 0x790xc0
+pc=0x148: STO 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xc0
+pc=0x14d: OBJCREATE 4,3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffc0][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x152: STO 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x157: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2]      bstack: 0 2       rstack: 0x790xc0
+pc=0x15c: LOD 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x161: METHODCALL 4 1       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2 8       rstack: 0x790xc00x166
+pc=0x328: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8][2]      bstack: 0 2 8       rstack: 0x790xc00x166
+pc=0x32d: STI 0 1selfptr 0x200bffa8
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2 8       rstack: 0x790xc00x166
+pc=0x332: OPR RET l= 0      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x166: LOD 1       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2]      bstack: 0 2       rstack: 0x790xc0
+pc=0x16b: LOD 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x170: METHODCALL 5 1       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2 8       rstack: 0x790xc00x175
+pc=0x337: LOD 0       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8][2]      bstack: 0 2 8       rstack: 0x790xc00x175
+pc=0x33c: STI 1 1selfptr 0x200bffa8
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2 8       rstack: 0x790xc00x175
+pc=0x341: OPR RET l= 0      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x175: LOD 4       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][NULL]      bstack: 0 2       rstack: 0x790xc0
+pc=0x17a: LIT 0,0      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][NULL][NULL]      bstack: 0 2       rstack: 0x790xc0
+pc=0x17f: OPR      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][true]      bstack: 0 2       rstack: 0x790xc0
+pc=0x184: JPC 413       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x19d: LOD 3       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2]      bstack: 0 2       rstack: 0x790xc0
+pc=0x1a2: LOD 5       stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xc0
+pc=0x1a7: LDI 0 2offset_self=4
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xc0
+pc=0x1ac: METHODCALL 2 2 In the array_set
+actual = 5 claimed = 5
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2][objref 0x200bffa8][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xc0
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2]      bstack: 0 2       rstack: 0x790xc0
+      stack: [0][objref 0x200bffd8][two][2][objref 0x200bffd8][2][NULL][objref 0x200bffa8][2]      bstack: 0 2       rstack: 0x790xc0
+pc=0x1b1: OPR RET l= 0      stack: [0][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xc0: LIT 7,5      stack: [0][objref 0x200bffd8][three]      bstack: 0       rstack: 0x79
+pc=0xca: LIT 2,3      stack: [0][objref 0x200bffd8][three][3]      bstack: 0       rstack: 0x79
+pc=0xcf: LOD 1       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xd4: METHODCALL 1 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xd9
+pc=0x125: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three]      bstack: 0 2       rstack: 0x790xd9
+pc=0x12a: SELF      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790xd9
+pc=0x12f: METHODCALL 10 1       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][array 0x200c0ff0][3][3][111]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x224: LIT 2,5381      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][array 0x200c0ff0][3][3][111][5381]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x229: STO 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][3][3][111]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x22e: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][3][3][111][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x233: METHODCALL 3 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][3][3][111][three][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][3][3][111][three][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x238: STO 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][3][111][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x23d: LIT 2,0      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][3][111][three][0]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x242: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three][0]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three][0][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three][true]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three][three][0]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][111][three][116]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][116][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][116][three][5381]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][116][three][5381][33]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][116][three][46501]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][116][three][46501][116]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5381][5][0][116][three][46617]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][0][116][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][0][116][three][0]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][0][116][three][0][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][0][116][three][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three][1][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three][true]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three][three][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][116][three][104]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][104][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][104][three][46617]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][104][three][46617][33]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][104][three][31033]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][104][three][31033][104]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][46617][5][1][104][three][31137]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][1][104][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][1][104][three][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][1][104][three][1][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][1][104][three][2]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three][2]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three][2][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three][true]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three][three][2]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][104][three][114]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][114][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][114][three][31137]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][114][three][31137][33]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][114][three][44481]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][114][three][44481][114]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][31137][5][2][114][three][44595]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][2][114][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][2][114][three][2]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][2][114][three][2][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][2][114][three][3]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three][3]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three][3][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three][true]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three][three][3]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][114][three][101]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][101][three][44595]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][101][three][44595][33]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][101][three][29843]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][101][three][29843][101]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][44595][5][3][101][three][29944]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][3][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][3][101][three][3]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][3][101][three][3][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][3][101][three][4]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][4]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][4][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][true]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][three][4]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][101]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][29944]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][29944][33]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][5112]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][5112][101]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][29944][5][4][101][three][5213]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][4][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][4][101][three][4]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][4][101][three][4][1]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][4][101][three][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three][5][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three][false]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2a6: LOD 2       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three][5213]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2ab: LDI 1 1offset_self=9
+adr=0x200bffe0
+We are here
+atype is 2 address = 0x5
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three][5213][5]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2b0: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][three][objref 0x200bffd8][5213][5][5][101][three][3]      bstack: 0 2 8       rstack: 0x790xd90x134
+pc=0x2b5: OPR RET l= 1      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][2][NULL][objref 0x200bffa8][3]      bstack: 0 2       rstack: 0x790xd9
+pc=0x134: STO 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xd9
+pc=0x139: LDI 0 2offset_self=4
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bffa8][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xd9
+pc=0x13e: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bffa8][array 0x200c0ff0][3]      bstack: 0 2       rstack: 0x790xd9
+pc=0x143: OPRthe size of the array is 5
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bffa8][NULL]      bstack: 0 2       rstack: 0x790xd9
+pc=0x148: STO 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bffa8]      bstack: 0 2       rstack: 0x790xd9
+pc=0x14d: OBJCREATE 4,3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bffa8][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x152: STO 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x157: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3]      bstack: 0 2       rstack: 0x790xd9
+pc=0x15c: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x161: METHODCALL 4 1       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2 8       rstack: 0x790xd90x166
+pc=0x328: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90][3]      bstack: 0 2 8       rstack: 0x790xd90x166
+pc=0x32d: STI 0 1selfptr 0x200bff90
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2 8       rstack: 0x790xd90x166
+pc=0x332: OPR RET l= 0      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x166: LOD 1       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3]      bstack: 0 2       rstack: 0x790xd9
+pc=0x16b: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x170: METHODCALL 5 1       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2 8       rstack: 0x790xd90x175
+pc=0x337: LOD 0       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90][3]      bstack: 0 2 8       rstack: 0x790xd90x175
+pc=0x33c: STI 1 1selfptr 0x200bff90
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2 8       rstack: 0x790xd90x175
+pc=0x341: OPR RET l= 0      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x175: LOD 4       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][NULL]      bstack: 0 2       rstack: 0x790xd9
+pc=0x17a: LIT 0,0      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][NULL][NULL]      bstack: 0 2       rstack: 0x790xd9
+pc=0x17f: OPR      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][true]      bstack: 0 2       rstack: 0x790xd9
+pc=0x184: JPC 413       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x19d: LOD 3       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3]      bstack: 0 2       rstack: 0x790xd9
+pc=0x1a2: LOD 5       stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90]      bstack: 0 2       rstack: 0x790xd9
+pc=0x1a7: LDI 0 2offset_self=4
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xd9
+pc=0x1ac: METHODCALL 2 2 In the array_set
+actual = 5 claimed = 5
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3][objref 0x200bff90][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xd9
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3]      bstack: 0 2       rstack: 0x790xd9
+      stack: [0][objref 0x200bffd8][three][3][objref 0x200bffd8][3][NULL][objref 0x200bff90][3]      bstack: 0 2       rstack: 0x790xd9
+pc=0x1b1: OPR RET l= 0      stack: [0][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xd9: LIT 7,3      stack: [0][objref 0x200bffd8][one]      bstack: 0       rstack: 0x79
+pc=0xe1: LOD 1       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8]      bstack: 0       rstack: 0x79
+pc=0xe6: METHODCALL 11 1       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2ba: LOD 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2bf: SELF      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2c4: METHODCALL 10 1       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][3][objref 0x200bff90][array 0x200c0ff0][5]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x224: LIT 2,5381      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][3][objref 0x200bff90][array 0x200c0ff0][5][5381]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x229: STO 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][objref 0x200bff90][array 0x200c0ff0][5]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x22e: LOD 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][objref 0x200bff90][array 0x200c0ff0][5][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x233: METHODCALL 3 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][objref 0x200bff90][array 0x200c0ff0][5][one][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][objref 0x200bff90][array 0x200c0ff0][5][one][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x238: STO 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][array 0x200c0ff0][5][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x23d: LIT 2,0      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][array 0x200c0ff0][5][one][0]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x242: STO 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one][0]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one][0][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one][true]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one][one][0]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][5][one][111]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][111][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][111][one][5381]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][111][one][5381][33]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][111][one][46501]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][111][one][46501][111]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][5381][3][0][111][one][46612]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][0][111][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][0][111][one][0]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][0][111][one][0][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][0][111][one][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one][1][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one][true]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one][one][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][111][one][110]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][110][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][110][one][46612]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][110][one][46612][33]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][110][one][30868]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][110][one][30868][110]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][46612][3][1][110][one][30978]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][1][110][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][1][110][one][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][1][110][one][1][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][1][110][one][2]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one][2]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one][2][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one][true]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x25b: LOD 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x260: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one][one][2]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x265: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][110][one][101]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x26a: STO 5       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][101][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x26f: LOD 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][101][one][30978]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x274: LIT 2,33      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][101][one][30978][33]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x279: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][101][one][39234]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x27e: LOD 5       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][101][one][39234][101]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x283: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][30978][3][2][101][one][39335]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x288: STO 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][2][101][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x28d: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][2][101][one][2]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x292: LIT 2,1      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][2][101][one][2][1]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x297: OPR PLUS, MINUS or MUL      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][2][101][one][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x29c: STO 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2a1: JMP 583       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x247: LOD 4       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x24c: LOD 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one][3][3]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x251: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one][false]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x256: JPF 678       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2a6: LOD 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one][39335]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2ab: LDI 1 1offset_self=7
+adr=0x200bffe0
+We are here
+atype is 2 address = 0x5
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one][39335][5]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2b0: OPR      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][one][objref 0x200bffd8][39335][3][3][101][one][0]      bstack: 0 2 6       rstack: 0x790xeb0x2c9
+pc=0x2b5: OPR RET l= 1      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][objref 0x200bffd8][3][0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2c9: STO 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][3]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2ce: LDI 0 1offset_self=3
+adr=0x200bffdb
+We are here
+atype is 1 address = 0x200c0ff0
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][3][array 0x200c0ff0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2d3: LOD 2       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][3][array 0x200c0ff0][0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2d8: OPRthe size of the array is 5
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][3][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2dd: STO 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2e2: LOD 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2e7: METHODCALL 7 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][objref 0x200bffc0]      bstack: 0 2 6       rstack: 0x790xeb0x2ec
+pc=0x355: LIT 7,3      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][objref 0x200bffc0][KEY]      bstack: 0 2 6       rstack: 0x790xeb0x2ec
+pc=0x35d: PRINT 0 KEY
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][objref 0x200bffc0]      bstack: 0 2 6       rstack: 0x790xeb0x2ec
+pc=0x362: PRINT 0 A Fancy Object
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0]      bstack: 0 2 6       rstack: 0x790xeb0x2ec
+pc=0x367: LDI 0 0offset_self=6
+adr=0x200bffc3
+We are here
+atype is 2 address = 0x0
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0]      bstack: 0 2 6       rstack: 0x790xeb0x2ec
+pc=0x36c: OPR RET l= 1      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2ec: LOD 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2f1: LOD 3       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][objref 0x200bffc0]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2f6: METHODCALL 8 0       stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][objref 0x200bffc0]      bstack: 0 2 8       rstack: 0x790xeb0x2fb
+pc=0x371: LIT 7,4      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][objref 0x200bffc0][NEXT]      bstack: 0 2 8       rstack: 0x790xeb0x2fb
+pc=0x37a: PRINT 0 NEXT
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][objref 0x200bffc0]      bstack: 0 2 8       rstack: 0x790xeb0x2fb
+pc=0x37f: PRINT 0 A Fancy Object
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one]      bstack: 0 2 8       rstack: 0x790xeb0x2fb
+pc=0x384: LDI 2 0offset_self=8
+adr=0x200bffcd
+We are here
+atype is 0 address = 0x0
+      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][NULL]      bstack: 0 2 8       rstack: 0x790xeb0x2fb
+pc=0x389: OPR RET l= 1      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][NULL]      bstack: 0 2       rstack: 0x790xeb
+pc=0x2fb: LIT 0,0      stack: [0][objref 0x200bffd8][one][objref 0x200bffd8][0][objref 0x200bffc0][0][one][NULL][NULL]      bstack: 0 2       rstack: 0x790xeb
+pc=0x300: OPRAND: both types must be boolean

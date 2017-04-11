@@ -28,6 +28,7 @@ bool func_eq_ii(unsigned int i, unsigned int j) { return i == j; }
 bool func_eq_id(int i, double j) { return i == j; }
 bool func_eq_di(double i, int j) { return i == j; }
 bool func_eq_dd(double i, double j) { return i == j; }
+bool func_ne_nn(unsigned int i, unsigned int j) { return false ; }
 bool func_ne_ii(unsigned int i, unsigned int j) { return i != j; }
 bool func_ne_id(unsigned int i, double j) { return i != j; }
 bool func_ne_di(double i, unsigned int j) { return i != j; }

@@ -31,6 +31,7 @@ bool func_eq_ii(unsigned int, unsigned int);
 bool func_eq_id(int, double);
 bool func_eq_di(double, int);
 bool func_eq_dd(double, double);
+bool func_ne_nn(unsigned int, unsigned int);
 bool func_ne_ii(unsigned int, unsigned int);
 bool func_ne_id(unsigned int, double);
 bool func_ne_di(double, unsigned int);

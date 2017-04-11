@@ -26,6 +26,5 @@ void Statements::print(int level) {
    {
       a_statement->print(level+1);
    }
-   printf("DOne with them statements\n");
 }
 
