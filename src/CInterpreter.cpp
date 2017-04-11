@@ -531,7 +531,6 @@ if (debug) {
             // byte 2 and 3 are the claimed length
             //
             int actual = ((*ptr) & 0xff) + ((*(ptr + 1))  << 8) ;
-            if(debug){printf("the size of the array is %d\n",actual);};
             if (index > actual) { printf("index out of bounds: %d array size = %d\n",index,actual); exit(-1);}
             //
             // get the spaceptr
@@ -876,16 +875,12 @@ if (debug) {
       // But what is the offset of the this pointer?
       //
       unsigned int offset_self = b[tb-1] + a;
-      if(debug)printf("offset_self=%d\n",offset_self);
       adr = (char*) (s[offset_self].address + 5 * l +3);
-      if(debug)printf("adr=%p\n",adr);
       //
       // put the value on the stack
       //
       s[t].atype = *((char*)adr) & 0xff;
-      if (debug) printf("We are here\n");
       s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
-      if (debug) printf("atype is %d address = %p\n",s[t].atype, s[t].address);
       t++;
       break; }
    case 14:{
