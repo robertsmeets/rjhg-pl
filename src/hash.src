@@ -38,15 +38,11 @@ method helement.setNext(e)
 
 method helement.getKey()
 {
-   print "KEY" ;
-   print k;
    return key;
 }
 
 method helement.getNext()
 {
-   print "NEXT" ;
-   print e;
    return next;
 }
 
@@ -102,9 +98,9 @@ method hashtable.get(k)
 {
    hk = self.f(k);
    element = a[hk];
-   while ((element.getKey() != k) && (element.getNext() != null))
+   while ((element.getKey() != hk) && (element.getNext() != null))
    {
       element = element.getNext(); 
    };
-   return element;
+   return element.getValue();
 }
