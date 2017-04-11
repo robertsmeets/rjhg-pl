@@ -59,6 +59,7 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
    fptrs[8][5][2] = (iiptr) (&func_eq_di);
    fptrs[8][5][5] = (iiptr) (&func_eq_dd);
 
+   fptrs[9][2][2] = (iiptr) (&func_ne_nn);
    fptrs[9][2][2] = (iiptr) (&func_ne_ii);
    fptrs[9][2][5] = (iiptr) (&func_ne_id);
    fptrs[9][5][2] = (iiptr) (&func_ne_di);
@@ -440,6 +441,7 @@ if (debug) {
       case 11:
       case 12:
       case 13:
+      case 19:
          t--;
          fr1 = s[t - 1];
          fr2 = s[t];
@@ -556,11 +558,9 @@ if (debug) {
                s[t-1].atype=TYPE_INT;
                s[t-1].address=*cptr;
 
-}else
-
- { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
-
-}
+            }else
+               { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
+            }
             break;
          }
 	 case 15: // NOT

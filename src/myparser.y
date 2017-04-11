@@ -261,7 +261,7 @@ Expression:
    |Expression OR Expression {$$=new Val2Expression('O',$1,$3);}
    |NOT Expression {$$=new NotExpression($2);}
    |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
-   |Expression NE Expression {$$=new Val2Expression('!',$1,$3);}
+   |Expression NE Expression {$$=new Val2Expression('N',$1,$3);}
    |LPAREN Expression RPAREN {$$=$2;}
    |Expression LBRACKET Expression RBRACKET  {$$=new Val2Expression('I',$1,$3);}
    |MethodCall {$$=$1;}
