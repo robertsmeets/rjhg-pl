@@ -46,6 +46,11 @@ method helement.getNext()
    return next;
 }
 
+method helement.getValue()
+{
+   return value;
+}
+
 method hashtable.add(k,v)
 {
     hk = self.f(k);
