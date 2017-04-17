@@ -11,9 +11,43 @@ proc main(a)
    h.add("one",1);
    h.add("two",2);
    h.add("three",3);
+   h.add("four",4);
+   h.add("five",5);
+   h.add("six",6);
+   h.add("seven",7);
+   h.add("eight",8);
+   h.add("nine",9);
+   h.add("ten",10);
+   h.add("eleven",11);
+   h.add("twelve",12);
+   h.add("thirteen",13);
+   h.add("fourteen",14);
+   h.add("fifteen",15);
+   h.add("sixteen",16);
+   h.add("seventeen",17);
+   h.add("eighteen",18);
+   h.add("nineteen",19);
+   h.add("twenty",20);
    print h.get("one");
    print h.get("two");
    print h.get("three");
+   print h.get("four");
+   print h.get("five");
+   print h.get("six");
+   print h.get("seven");
+   print h.get("eight");
+   print h.get("nine");
+   print h.get("ten");
+   print h.get("eleven");
+   print h.get("twelve");
+   print h.get("thirteen");
+   print h.get("fourteen");
+   print h.get("fifteen");
+   print h.get("sixteen");
+   print h.get("seventeen");
+   print h.get("eighteen");
+   print h.get("nineteen");
+   print h.get("twenty");
 }
 
 class helement
@@ -56,7 +90,7 @@ method hashtable.add(k,v)
     hk = self.f(k);
     element = a[hk];
     e = helement();
-    e.setKey(hk);
+    e.setKey(k);
     e.setValue(v);
     if (element == null)
     {
@@ -103,7 +137,7 @@ method hashtable.get(k)
 {
    hk = self.f(k);
    element = a[hk];
-   while ((element.getKey() != hk) && (element.getNext() != null))
+   while ((element.getKey() != k) && (element.getNext() != null))
    {
       element = element.getNext(); 
    };

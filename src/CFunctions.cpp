@@ -28,6 +28,8 @@ bool func_eq_ii(unsigned int i, unsigned int j) { return i == j; }
 bool func_eq_id(int i, double j) { return i == j; }
 bool func_eq_di(double i, int j) { return i == j; }
 bool func_eq_dd(double i, double j) { return i == j; }
+bool func_eq_on(unsigned int i, unsigned int j) { return false; }
+bool func_eq_no(unsigned int i, unsigned int j) { return false; }
 bool func_ne_nn(unsigned int i, unsigned int j) { return false ; }
 bool func_ne_ii(unsigned int i, unsigned int j) { return i != j; }
 bool func_ne_id(unsigned int i, double j) { return i != j; }
@@ -68,7 +70,6 @@ void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInte
    (*s)[*t].atype=TYPE_INT;
    (*s)[*t].address=len1;
    (*t)++; 
-   i->print_stack();
 }
 
 
@@ -136,7 +137,6 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
 
 void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
-   if (debug){printf("In the array_set\n");}
    //
    // byte 0 and 1 are the actual length
    // byte 2 and 3 are the claimed length
@@ -146,7 +146,6 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    char* nptr = ptr+4;
    char** ptrptr = (char**)nptr; 
    char* spaceptr =  *ptrptr;
-   if (debug)printf("actual = %d claimed = %d\n",actual,claimed);
    //
    // set the value
    //
@@ -167,9 +166,7 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    char* avptr = (char*)(*s)[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
-   i->print_stack(); 
    (*t)--;
    (*t)--;
-   i->print_stack(); 
 }
 
