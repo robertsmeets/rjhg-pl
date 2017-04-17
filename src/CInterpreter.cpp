@@ -58,6 +58,8 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
    fptrs[8][2][5] = (iiptr) (&func_eq_id);
    fptrs[8][5][2] = (iiptr) (&func_eq_di);
    fptrs[8][5][5] = (iiptr) (&func_eq_dd);
+   fptrs[8][0][9] = (iiptr) (&func_eq_no);
+   fptrs[8][9][0] = (iiptr) (&func_eq_on);
 
    fptrs[9][2][2] = (iiptr) (&func_ne_nn);
    fptrs[9][2][2] = (iiptr) (&func_ne_ii);
@@ -513,6 +515,44 @@ if (debug) {
             fr1.address=eq;
             s[t-1]= fr1;
           }
+          else if ((fr1.atype == TYPE_OBJ) && (fr2.atype == TYPE_NULL)) {
+            //
+            // pointer vs null
+            //
+            bool eq = false;
+            fr1.atype=6;
+            fr1.address=eq;
+            s[t-1]= fr1;
+          }
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_OBJ)) {
+            //
+            // pointer vs null
+            //
+            bool eq = false;
+            fr1.atype=6;
+            fr1.address=eq;
+            s[t-1]= fr1;}
+          else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) {
+            //
+            // string vs string
+            //
+            char * ptr1 = (char*) fr1.address;
+            uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+            char * ptr2 = (char*) fr2.address;
+            uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
+            bool eq;
+            if (len1 == len2)
+            {
+               eq = (strncmp(ptr1+2,ptr2+2,len1) == 0);
+            }
+            else
+            {
+               eq = false;
+            }
+            fr1.atype=6;
+            fr1.address=eq;
+            s[t-1]= fr1;
+         }
          else {
             printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
             exit(-1);
@@ -894,7 +934,6 @@ if (debug) {
       // then calculate the address of the inst. variable
       //
       char* selfptr =  (char*) (s[b[tb - 1] + a].address );
-      if(debug)printf("selfptr %p\n",selfptr);
       adr = (char*) (selfptr+ 5 * l + 3);
       //
       // store the value on the heap
