@@ -549,6 +549,10 @@ if (debug) {
             {
                eq = false;
             }
+            if (a==9)
+            {
+               eq=!eq;
+            }
             fr1.atype=6;
             fr1.address=eq;
             s[t-1]= fr1;
