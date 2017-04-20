@@ -137,7 +137,7 @@ method hashtable.get(k)
 {
    hk = self.f(k);
    element = a[hk];
-   while ((element.getKey() != k) && (element.getNext() != null))
+   while ((element.getKey() != k ) && (element.getNext() != null))
    {
       element = element.getNext(); 
    };

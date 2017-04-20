@@ -1,7 +1,9 @@
 proc main()
 {
     if ("trythis" == "trythis") { print "true"; } else { print "false"; } ;
-    if ("trythat" == "trythis") { print "true"; } else { print "false"; } 
+    if ("trythat" == "trythis") { print "true"; } else { print "false"; } ;
+    if ("trythis" != "trythis") { print "true"; } else { print "false"; } ;
+    if ("trythat" != "trythis") { print "true"; } else { print "false"; } 
   
 }
 
