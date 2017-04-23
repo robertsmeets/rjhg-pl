@@ -1,0 +1,5 @@
+proc main()
+{
+    if (null == null ) { print "true"; } else { print "false"; } ;
+    if (null != null ) { print "true"; } else { print "false"; } ;
+}
