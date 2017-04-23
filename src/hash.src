@@ -88,18 +88,41 @@ method helement.getValue()
 method hashtable.add(k,v)
 {
     hk = self.f(k);
-    element = a[hk];
     e = helement();
     e.setKey(k);
     e.setValue(v);
+    e.setNext(null);
+    element = a[hk];
     if (element == null)
     {
        a.set(hk,e);
     }
     else
     {
-       element.setNext(e);
+       e.setNext(element);
+       a.set(hk,e);
     };
+    self.printme();
+}
+
+method hashtable.printme()
+{
+    print "PRINTING";
+    i = 0;
+    while i < claimed
+    {
+       print i;
+       element = a[i];
+       print element;
+       while element != null
+       {
+           print "ELEMENT IS NOT NULL";
+           element = element.getNext();
+           print element;
+       };
+       i = i + 1;
+    }
+     
 }
 
 method hashtable.init()
@@ -137,9 +160,15 @@ method hashtable.get(k)
 {
    hk = self.f(k);
    element = a[hk];
-   while ((element.getKey() != k ) && (element.getNext() != null))
+   if element.getKey() == k
    {
+      return element.getValue();
+   };
+   element = element.getNext(); 
+   while (element != null)
+   {
+      if element.getKey() == k { return element.getValue(); };
       element = element.getNext(); 
    };
-   return element.getValue();
+   return null;
 }

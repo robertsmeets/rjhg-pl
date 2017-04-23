@@ -1,0 +1,7 @@
+proc main()
+{
+    if ("trythis" == null ) { print "true"; } else { print "false"; } ;
+    if ("trythis" != null ) { print "true"; } else { print "false"; } ;
+  
+}
+
