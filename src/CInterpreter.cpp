@@ -494,6 +494,10 @@ if (debug) {
             //
             bool eq = true;
             fr1.atype=6;
+            if (a==9)
+            {
+                eq = !eq;
+            }
             fr1.address=eq;
             s[t-1]= fr1;
           }
@@ -515,21 +519,29 @@ if (debug) {
             fr1.address=eq;
             s[t-1]= fr1;
           }
-          else if ((fr1.atype == TYPE_OBJ) && (fr2.atype == TYPE_NULL)) {
+          else if (((fr1.atype == TYPE_OBJ)||(fr1.atype==TYPE_STRING)) && (fr2.atype == TYPE_NULL)) {
             //
             // pointer vs null
             //
             bool eq = false;
             fr1.atype=6;
+            if (a==9)
+            {
+                eq = !eq;
+            }
             fr1.address=eq;
             s[t-1]= fr1;
           }
-          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_OBJ)) {
+          else if ((fr1.atype == TYPE_NULL) && ((fr2.atype == TYPE_OBJ) || (fr2.atype == TYPE_STRING))) {
             //
             // pointer vs null
             //
             bool eq = false;
             fr1.atype=6;
+            if (a==9)
+            {
+                eq = !eq;
+            }
             fr1.address=eq;
             s[t-1]= fr1;}
           else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) {
