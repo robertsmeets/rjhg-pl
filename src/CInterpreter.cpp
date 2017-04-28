@@ -353,6 +353,40 @@ int CInterpreter::execute_next(bool debug) {
             memcpy(ptr + len1 + 2, &str, len2);
             fr1.address = (long long unsigned int) (ptr );
             s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_NULL)) {
+            //
+            // add a string and a null
+            //
+            char* ptr1 = (char*) fr1.address;
+            char str[5];
+            snprintf(str, 4, "null");
+            uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+            uint16_t len2 = strlen(str);
+            uint16_t newlen = len1 + len2;
+            ptr = GC_MALLOC(newlen + 2);
+            *ptr = newlen & 0xff;
+            *(ptr + 1) = newlen >> 8;
+            memcpy(ptr + 2, ptr1 + 2, len1);
+            memcpy(ptr + len1 + 2, &str, len2);
+            fr1.address = (long long unsigned int) (ptr );
+            s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_OBJ)) {
+            //
+            // add a string and an object
+            //
+            char* ptr1 = (char*) fr1.address;
+            char str[7];
+            snprintf(str, 6, "object");
+            uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
+            uint16_t len2 = strlen(str);
+            uint16_t newlen = len1 + len2;
+            ptr = GC_MALLOC(newlen + 2);
+            *ptr = newlen & 0xff;
+            *(ptr + 1) = newlen >> 8;
+            memcpy(ptr + 2, ptr1 + 2, len1);
+            memcpy(ptr + len1 + 2, &str, len2);
+            fr1.address = (long long unsigned int) (ptr );
+            s[t - 1] = fr1;
          } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) {
             //
             // integer plus float
