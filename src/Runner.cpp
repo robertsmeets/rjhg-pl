@@ -3,6 +3,24 @@
 
 int Runner::compile_run(string filename,bool debug)
 {  
+   glob = new ProgramNode();
+   compile("system/helement.src",debug);
+   compile("system/hashtable.src",debug);
+   compile(filename,debug);
+   CodeGenerator cg;
+   cg.start(glob,NULL, debug);
+   if (debug) {
+      Disassembler d; 
+      d.start(cg.getCodeBuffer(),cg.getHere(),NULL);}
+   //
+   // start interpreting
+   //
+   CInterpreter i(cg.getCodeBuffer(),NULL);
+   i.start(debug);
+}
+
+void Runner::compile(string filename,bool debug)
+{
    if (debug) {printf("Removing comments %s ...\n",filename.c_str());}
    FILE *infile = fopen (filename.c_str(), "rt");
    extern FILE * yyin;
@@ -17,22 +35,11 @@ int Runner::compile_run(string filename,bool debug)
    if (debug) {printf("Parsing... %s ...\n",filename.c_str());}
    extern FILE* yyin;
    yyin = fopen(outfilename,"r");
-   glob = new ProgramNode();
    char errmsg[] = "error";
    char* ptr = (char*)errmsg;
    int result = yyparse();
    fclose(yyin);
    remove(outfilename);
    if(debug){glob->print(0);}
-   CodeGenerator cg;
-   cg.start(glob,NULL, debug);
-   if (debug) {
-      Disassembler d; 
-      d.start(cg.getCodeBuffer(),cg.getHere(),NULL);}
-   //
-   // start interpreting
-   //
-   CInterpreter i(cg.getCodeBuffer(),NULL);
-   i.start(debug);
-}
 
+}

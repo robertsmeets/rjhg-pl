@@ -1,0 +1,35 @@
+class helement
+{
+   key, value, next
+}
+
+method helement.setKey(k)
+{
+   key = k;
+}
+
+method helement.setValue(v)
+{
+   value  = v;
+}
+
+method helement.setNext(e)
+{
+   next = e;
+}
+
+method helement.getKey()
+{
+   return key;
+}
+
+method helement.getNext()
+{
+   return next;
+}
+
+method helement.getValue()
+{
+   return value;
+}
+
