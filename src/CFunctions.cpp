@@ -80,16 +80,25 @@ void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInte
  */
 void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
-   if (debug){printf("In the array_add\n");}
+   if (debug){printf("In the array_add one\n");}
    //
    // byte 0 and 1 are the actual length
    // byte 2 and 3 are the claimed length
    //
-   int actual = (*ptr & 0xff) + ((*(ptr + 1) & 0xff) << 8) ;
-   int claimed = (*(ptr+2) & 0xff)  + ((*(ptr + 3) & 0xff) << 8);
+   uint16_t* uptr = (uint16_t*)  ptr;
+   if (debug){printf("In the array_add two ptr=%p\n",ptr);}
+   uint16_t actual = *uptr ;
+   if (debug){printf("In the array_add three\n");}
+   uptr = (uint16_t*) (ptr+2);
+   if (debug){printf("In the array_add four\n");}
+   uint16_t claimed = *uptr;
+   if (debug){printf("In the array_add five\n");}
    char* nptr = ptr+4;
+   if (debug){printf("In the array_add six\n");}
    char** ptrptr = (char**)nptr; 
+   if (debug){printf("In the array_add seven\n");}
    char* spaceptr =  *ptrptr;
+   if (debug){printf("In the array_add eight\n");}
    actual++;
    if (actual > claimed)
    {
