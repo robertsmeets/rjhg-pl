@@ -30,5 +30,6 @@ class Runner {
 
 public:
    int compile_run(string,bool);
+   void compile(string,bool);
 };
 #endif
