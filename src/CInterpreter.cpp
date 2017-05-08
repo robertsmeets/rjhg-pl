@@ -219,7 +219,7 @@ int CInterpreter::execute_next(bool debug) {
          t++;
          break;
       case TYPE_FLOAT: // float
-         ptr = GC_MALLOC(a);
+         ptr = (char*) GC_MALLOC(a);
          memcpy(ptr, buffer + pc, a);
          //
          // put the pointer and the type on the stack
@@ -239,7 +239,7 @@ int CInterpreter::execute_next(bool debug) {
          //
          // get some memory
          //
-         char* tmp = GC_MALLOC(a + 2);
+         char* tmp = (char*)GC_MALLOC(a + 2);
          //
          // copy the string to the heap
          //
@@ -329,7 +329,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
             uint16_t newlen = len1 + len2;
-            ptr = GC_MALLOC(newlen + 2);
+            ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -346,7 +346,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = GC_MALLOC(newlen + 2);
+            ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -363,7 +363,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = GC_MALLOC(newlen + 2);
+            ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -380,7 +380,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = GC_MALLOC(newlen + 2);
+            ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -396,7 +396,7 @@ int CInterpreter::execute_next(bool debug) {
             d3 = (*aidptr)(fr1.address, d2);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            char* tmp = GC_MALLOC(8);
+            char* tmp = (char*)GC_MALLOC(8);
             fr3->address = (long long unsigned int) tmp ;
             memcpy((void*) (fr3->address), &d3, 8);
             s[t - 1] = *fr3;
@@ -409,7 +409,7 @@ int CInterpreter::execute_next(bool debug) {
             d3 = (*adiptr)(d1, fr2.address);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            char* tmp = GC_MALLOC(8);
+            char* tmp = (char*)GC_MALLOC(8);
             fr3->address = (long long unsigned int)tmp ;
             memcpy((void*) (fr3->address), &d3, 8);
             s[t - 1] = *fr3;
@@ -434,7 +434,7 @@ int CInterpreter::execute_next(bool debug) {
             //
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
-            char* tmp = GC_MALLOC(8);
+            char* tmp = (char*)GC_MALLOC(8);
             fr3->address = (long long unsigned int) tmp ;
             memcpy((void*)(fr3->address), &d3, 8);
             s[t - 1] = *fr3;
@@ -832,14 +832,14 @@ if (debug) {
          // byte 4 to 11 are the pointer to the allocated memory
          //
          int claimed = 5;
-         ptr = GC_MALLOC(12);
+         ptr = (char*)GC_MALLOC(12);
          *ptr = 0;
          *(ptr + 1) = 0;
          *(ptr + 2) = claimed;
          *(ptr + 3) = 0;
          char* nptr = ptr + 4;
          char** vptr = (char**)nptr;
-         char* nnptr = GC_MALLOC(8 * claimed); 
+         char* nnptr = (char*)GC_MALLOC(8 * claimed); 
          *vptr = nnptr; 
          //
          // leave the new object on the stack
@@ -854,7 +854,7 @@ if (debug) {
          // l contains the classnum
          // a contains the number of instance variables
          //
-         ptr = GC_MALLOC(5 * a + 3);
+         ptr = (char*)GC_MALLOC(5 * a + 3);
          //
          // in the first 2 bytes, put in the class number
          // the rest is left for the instance variables
@@ -934,6 +934,11 @@ if (debug) {
             if(debug)printf("l=%d\n",l);
             uint16_t* uptr = (uint16_t*) ptr;
             uint16_t classnum = *uptr;
+            if (classnum == 0)
+            {
+                   printf("cannot call a method on class 0\n");
+                   exit(-1);
+            }
             if(debug)printf("Calling method %d on class %d\n",l,classnum);
             //
             // this creates a new block with depth for local variables and parameters
@@ -1194,7 +1199,7 @@ void CInterpreter::call_external(short unsigned int function_number,short unsign
          //
          // put the result on the stack
          //
-         char* ptr = GC_MALLOC(8);
+         char* ptr = (char*)GC_MALLOC(8);
          memcpy(ptr, &r, 8);
          tb--;
          s[t].atype = 5;
