@@ -107,19 +107,21 @@ method hashtable.add(k,v)
 
 method hashtable.printme()
 {
-    print "PRINTING";
+    print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     i = 0;
     while i < claimed
     {
-       print i;
        element = a[i];
-       print element;
+       print "before comparison";
        while element != null
        {
-           print "ELEMENT IS NOT NULL";
+           print "after comparison";
+           print "INDEX "+i + " ELEMENT "+ element +" KEY "  + element.getKey() +  " VALUE " + element.getValue() + " NEXT " + element.getNext();
+           print "before element "+element;
            element = element.getNext();
-           print element;
+           print "after element"
        };
+       print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" + i;
        i = i + 1;
     }
      
@@ -160,11 +162,6 @@ method hashtable.get(k)
 {
    hk = self.f(k);
    element = a[hk];
-   if element.getKey() == k
-   {
-      return element.getValue();
-   };
-   element = element.getNext(); 
    while (element != null)
    {
       if element.getKey() == k { return element.getValue(); };

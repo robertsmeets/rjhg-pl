@@ -13,10 +13,10 @@
 #include "Literal.h"
 #include "ProcedureCall.h"
 #include "MethodCall.h"
-#include "y.tab.h"
+//#include "y.tab.h"
 
 using namespace std;
-// int yyparse();
+ int yyparse();
 
 
 #ifdef  MAIN_FILE

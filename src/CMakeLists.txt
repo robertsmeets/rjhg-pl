@@ -13,10 +13,17 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include .)
+INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include ../bdwgc/include .)
 
 IF(WIN32)
-   LINK_DIRECTORIES(/usr/lib ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu)
+   LINK_DIRECTORIES(/usr/lib ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu ../bdwgc)
+   ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
+   ADD_LIBRARY(libdynload_s STATIC IMPORTED)
+   ADD_LIBRARY(gc.a STATIC IMPORTED)
+   SET_PROPERTY(TARGET libdyncall_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdyncall_s.lib)
+   SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdynload_s.lib)
+   SET_PROPERTY(TARGET gc.a PROPERTY IMPORTED_LOCATION ../bdwgc/gc.a)
+   TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s gc.a )
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -25,11 +32,6 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 #ADD_LIBRARY(libgccpp STATIC IMPORTED)
 
-IF(WIN32)
-   ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
-   ADD_LIBRARY(libdynload_s STATIC IMPORTED)
-   ADD_LIBRARY(libgc STATIC IMPORTED)
-ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
@@ -40,33 +42,15 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    ADD_LIBRARY(dyncall_s.a STATIC IMPORTED)
    ADD_LIBRARY(dyncallback_s.a STATIC IMPORTED)
    ADD_LIBRARY(libdl.so SHARED IMPORTED)
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-
-IF(WIN32)
-   SET_PROPERTY(TARGET libdyncall_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdyncall_s.lib)
-   SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdynload_s.lib)
-ENDIF(WIN32)
-
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    SET_PROPERTY(TARGET dyncall_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncall_s.a)
    SET_PROPERTY(TARGET dynload_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdynload_s.a)
    SET_PROPERTY(TARGET dyncallback_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncallback_s.a)
    SET_PROPERTY(TARGET libdl.so PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so)
+   TARGET_LINK_LIBRARIES(myparser dyncall_s.a dynload_s.a dyncallback_s.a libgc.a libgccpp.a libdl.so pthread)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-
-
-
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-fpermissive")
 ADD_DEFINITIONS(${GCC_COVERAGE_COMPILE_FLAGS})
-
-IF(WIN32)
-   TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s libgc.dll.a )
-ENDIF(WIN32)
-
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-   TARGET_LINK_LIBRARIES(myparser dyncall_s.a dynload_s.a dyncallback_s.a libgc.a libgccpp.a libdl.so pthread)
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 # Create target for the parser
 ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")
@@ -76,14 +60,14 @@ SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++
 # Create custom command for flex/lex (note the outputs)
 ADD_CUSTOM_COMMAND(
    COMMAND flex 
-   ARGS myparser.lex
+   ARGS --outfile=myparser.lex.c myparser.lex
    TARGET YaccParser
    OUTPUTS myparser.lex.c)
 
 # Create custom command for bison/yacc (note the DEPENDS)
 ADD_CUSTOM_COMMAND(
    COMMAND bison
-   ARGS -y -d -v -t myparser.y --output y.tab.c
+   ARGS  -d -v -t myparser.y --output y.tab.c
    TARGET YaccParser
    DEPENDS myparser.lex.c
    OUTPUTS y.tab.c)
