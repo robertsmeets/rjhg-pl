@@ -1,5 +1,6 @@
 #ifndef SELFTEST_H_
 #define SELFTEST_H_ 
+//#define YYSTYPE
 
 #include "Runner.h"
 #include "stdio.h"
