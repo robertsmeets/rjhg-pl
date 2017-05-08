@@ -107,21 +107,14 @@ method hashtable.add(k,v)
 
 method hashtable.printme()
 {
-    print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     i = 0;
     while i < claimed
     {
        element = a[i];
-       print "before comparison";
        while element != null
        {
-           print "after comparison";
-           print "INDEX "+i + " ELEMENT "+ element +" KEY "  + element.getKey() +  " VALUE " + element.getValue() + " NEXT " + element.getNext();
-           print "before element "+element;
            element = element.getNext();
-           print "after element"
        };
-       print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" + i;
        i = i + 1;
     }
      
