@@ -883,8 +883,9 @@ if (debug) {
       // figure out what class type is on top of the stack
       //
       int xtype = s[t-1].atype;
+      if (debug) printf("xtype is %d\n",xtype);
       if ((xtype != TYPE_OBJ) && (xtype != TYPE_ARRAY) && (xtype != TYPE_STRING)) {
-         puts("Performed a method call on a non-object");
+         printf("Performed a method call on a non-object");
          return -1;
       }
       ptr = (char*)(s[t-1].address);
@@ -929,54 +930,59 @@ if (debug) {
             //
             // figure out the classnum
             //
-            uint16_t classnum = *ptr + (*(ptr+1) >> 8);
+            if(debug)printf("before figurint out classnum ptr=%p\n",ptr);
+            if(debug)printf("l=%d\n",l);
+            uint16_t* uptr = (uint16_t*) ptr;
+            uint16_t classnum = *uptr;
+            if(debug)printf("Calling method %d on class %d\n",l,classnum);
             //
             // this creates a new block with depth for local variables and parameters
             //
             uint16_t* cl = methodmap[l][classnum];
             //
-         // some checks here to make sure this method exists
-         // 
-         if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
-         b[tb] = t - a - 1;
-         tb++;
-         //
-         // add room for the this pointer and the local vars
-         //
-         t += cl[2];
-         //
-         // add the program counter on the return stack
-         //
-         r[tr] = pc;
-         tr++;
-         pc = cl[0];
+            // some checks here to make sure this method exists
+            // 
+            if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
+            b[tb] = t - a - 1;
+            tb++;
+            //
+            // add room for the this pointer and the local vars
+            //
+            t += cl[2];
+            //
+            // add the program counter on the return stack
+            //
+            r[tr] = pc;
+            tr++;
+            pc = cl[0];
+            }
          }
-      }
-      break;}
-   case 13: {
-      if (debug) { printf("LDI %d %d", l, a); }
-      // access an instance variable and put it on the stack
-      //
-      // l is the instance variable
-      // a is the number of parameters
-      //
-      // first get the this pointer
-      // then calculate the address of the inst. variable
-      // But what is the offset of the this pointer?
-      //
-      unsigned int offset_self = b[tb-1] + a;
-      adr = (char*) (s[offset_self].address + 5 * l +3);
-      //
-      // put the value on the stack
-      //
-      s[t].atype = *((char*)adr) & 0xff;
-      s[t].address = (*((char*)(adr + 1)) & 0xff) + (*((char*)(adr + 2)) << 8) + ((*(adr+3) )<< 16) + ((*(adr+4)) << 24);
-      t++;
-      break; }
-   case 14:{
-      if (debug) { printf("STI %d %d", l,a ); }
-      // store a value inside an inst. variable
-      //
+         break;}
+      case 13: {
+         if (debug) { printf("LDI %d %d", l, a); }
+         // access an instance variable and put it on the stack
+         //
+         // l is the instance variable
+         // a is the number of parameters
+         //
+         // first get the this pointer
+         // then calculate the address of the inst. variable
+         // But what is the offset of the this pointer?
+         //
+         unsigned int offset_self = b[tb-1] + a;
+         adr = (char*) (s[offset_self].address + 5 * l +3);
+         //
+         // put the value on the stack
+         //
+         s[t].atype = *((char*)adr) & 0xff;
+         uint32_t* uptr = (uint32_t*)(adr+1); 
+         s[t].address = *uptr;
+         t++;
+         break; }
+      case 14:{
+         if (debug) { printf("STI %d %d", l,a ); }
+         // store a value inside an inst. variable
+         //
       // l is the instance variable
       // a is the number of parameters
       //
@@ -989,10 +995,8 @@ if (debug) {
       // store the value on the heap
       //
       *((char*) adr) = s[t-1].atype;
-      *((char*)(adr + 1)) = s[t-1].address & 0xff;
-      *((char*)(adr + 2)) = (s[t-1].address >> 8) & 0xff;
-      *((char*)(adr + 3)) = (s[t-1].address >> 16) & 0xff;
-      *((char*)(adr + 4)) = (s[t-1].address >> 24) & 0xff;
+      uint32_t* uptr = (uint32_t*)(adr+1);
+      *uptr = s[t-1].address; 
       t--;
       break;}
    case 15:
