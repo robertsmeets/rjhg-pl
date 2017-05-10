@@ -89,11 +89,13 @@ void Disassembler::print_magic_number() {
 }
 
 uint16_t Disassembler::find_offset() {
-   return buffer[6] + (buffer[7] >> 8);
+   uint16_t* uptr = (uint16_t*) (buffer + 6);
+   return *uptr;
 }
 
 uint16_t Disassembler::find_ext_proc_table() {
-   return buffer[8] + (buffer[9] >> 8);
+   uint16_t* uptr = (uint16_t*) (buffer + 8);
+   return *uptr;
 }
 
 
