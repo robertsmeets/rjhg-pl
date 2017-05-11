@@ -21,22 +21,7 @@ method hashtable.add(k,v)
        e.setNext(element);
        a.set(hk,e);
     };
-    self.printme();
-}
-
-method hashtable.printme()
-{
-    i = 0;
-    while i < claimed
-    {
-       element = a[i];
-       while element != null
-       {
-           element = element.getNext();
-       };
-       i = i + 1;
-    }
-     
+    filled = filled + 1;
 }
 
 method hashtable.init()
