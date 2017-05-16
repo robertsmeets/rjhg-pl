@@ -29,7 +29,7 @@
 #include "SelfTest.h"
 #include "Comments.h"
 #include "Runner.h"
-//#include "y.tab.h"
+#include "SelfStart.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -301,12 +301,18 @@ CommaSeparated:
 
 %%
 
+/**
+ *
+ * main entry point
+ *
+ */
 int main(int argc, char* argv[]) {
    //
    // workaround for a bug in the Eclipse console
    //
    setvbuf(stdout, NULL, _IONBF, 0);
    GC_INIT();
+   
    //yydebug=1;
    if (argc == 2)
    {
@@ -324,7 +330,12 @@ int main(int argc, char* argv[]) {
    }
    else
    {
-      cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
-      return -1;
+      SelfStart s;
+      int result = s.start(argv[0]); 
+      if (!result)
+      {
+         cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
+      return result;
+      }
    }
 }
