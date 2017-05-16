@@ -17,6 +17,7 @@ int Runner::compile_run(string filename,bool debug)
    //
    CInterpreter i(cg.getCodeBuffer(),NULL);
    i.start(debug);
+   return 0;
 }
 
 void Runner::compile(string filename,bool debug)
@@ -27,8 +28,8 @@ void Runner::compile(string filename,bool debug)
    char outfilename[100];
    snprintf(outfilename,100,"%s%s",filename.c_str(),".strip");
    FILE* outfile = fopen (outfilename, "w");
-   if (!infile) { printf("cannot open %s\n",filename.c_str()); return 1; }
-   if (!outfile) { printf("cannot open %s\n",outfilename); return 1; }
+   if (!infile) { printf("cannot open %s\n",filename.c_str()); }
+   if (!outfile) { printf("cannot open %s\n",outfilename);  }
    stripcmt(infile, outfile);
    fclose(infile);
    fclose(outfile);
