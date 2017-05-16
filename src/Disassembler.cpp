@@ -104,7 +104,7 @@ uint16_t Disassembler::find_ext_proc_table() {
  * Hexdump of a buffer
  *
  */
-void Disassembler::hexdump(char* buf, unsigned int buflen) {
+static void Disassembler::hexdump(char* buf, unsigned int buflen) {
    unsigned int i, j;
    for (i = 0; i < buflen; i += 16) {
       printf("%06x: ", i);

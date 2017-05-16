@@ -21,7 +21,6 @@ method hashtable.add(k,v)
        e.setNext(element);
        a.set(hk,e);
     };
-    self.printme();
 }
 
 method hashtable.printme()
@@ -37,6 +36,7 @@ method hashtable.printme()
        i = i + 1;
     }
      
+    filled = filled + 1;
 }
 
 method hashtable.init()
