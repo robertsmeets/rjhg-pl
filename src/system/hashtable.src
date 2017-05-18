@@ -21,7 +21,6 @@ method hashtable.add(k,v)
        e.setNext(element);
        a.set(hk,e);
     };
-    filled = filled + 1;
 }
 
 method hashtable.init()
