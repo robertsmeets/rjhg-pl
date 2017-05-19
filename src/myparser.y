@@ -30,6 +30,7 @@
 #include "Comments.h"
 #include "Runner.h"
 #include "SelfStart.h"
+#include "FileCreator.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -312,7 +313,6 @@ int main(int argc, char* argv[]) {
    //
    setvbuf(stdout, NULL, _IONBF, 0);
    GC_INIT();
-   
    //yydebug=1;
    if (argc == 2)
    {
@@ -328,14 +328,25 @@ int main(int argc, char* argv[]) {
          return runner.compile_run(filename,true);
       }
    }
+   else if (argc == 3)
+   {
+      if (strcmp(argv[1],"c") == 0)
+      {
+         Runner runner;
+         CodeGenerator* cg = new CodeGenerator();
+         runner.compile_with_system(cg,argv[2],true);
+         FileCreator fc;
+         fc.start(argv[0],cg->getCodeBuffer(),cg->getHere());
+      }
+   }
    else
    {
       SelfStart s;
       int result = s.start(argv[0]); 
       if (!result)
       {
-         cout << "Must provide filename as an argument, example " << argv[0] << " c:\\\\test\\\\test.src" << endl;
-      return result;
+         printf("Must provide filename as an argument, example %s c:\\\\test\\\\test.src\n",argv[0]);
+         return result;
       }
    }
 }

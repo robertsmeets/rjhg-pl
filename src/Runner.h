@@ -13,11 +13,9 @@
 #include "Literal.h"
 #include "ProcedureCall.h"
 #include "MethodCall.h"
-//#include "y.tab.h"
 
 using namespace std;
  int yyparse();
-
 
 #ifdef  MAIN_FILE
 ProgramNode* glob;
@@ -25,11 +23,27 @@ ProgramNode* glob;
 extern ProgramNode* glob;
 #endif
 
-
 class Runner {
 
 public:
-   int compile_run(string,bool);
-   void compile(string,bool);
+   int compile_run(string ,bool );
+   void compile_with_system(CodeGenerator* , string , bool );
+   void compile(string ,bool );
 };
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

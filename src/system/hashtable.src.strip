@@ -1,0 +1,126 @@
+class hashtable 
+{
+    a,claimed,filled
+}
+
+method hashtable.add(k,v)
+{
+    hk = self.f(k);
+    e = helement();
+    e.setKey(k);
+    e.setValue(v);
+    e.setNext(null);
+    element = a[hk];
+    if (element == null)
+    {
+       a.set(hk,e);
+    }
+    else
+    {
+       e.setNext(element);
+       a.set(hk,e);
+    };
+   
+   
+   
+   if ((filled + 1) / claimed) > 0.75
+   {
+      self.resize();
+   };
+   hk = self.f(k);
+   e = helement();
+   e.setKey(k);
+   e.setValue(v);
+   e.setNext(null);
+   element = a[hk];
+   if (element != null)
+   {
+      e.setNext(element);
+   };
+   a.set(hk,e);
+   filled = filled + 1;
+}
+
+method hashtable.resize()
+{
+   a2 = array();
+   oldclaimed = claimed;
+   claimed = 2 * claimed;
+   filled = 0;
+   int i = 0;
+   while i < claimed
+   {
+      a2.add(null);
+      i = i + 1;
+   };
+   i = 0;
+   while i < oldclaimed 
+   {
+      he = a[i];
+      while he != null
+      {
+         k = he.getKey();
+         v = he.getValue();
+         e = helement();
+         e.setKey(k);
+         e.setValue(v);
+         e.setNext(null);
+         hk = self.f(k);
+         element = a2[hk];
+         if (element != null)
+         {
+            e.setNext(element);
+         };
+         a2.set(hk,e);
+         filled = filled + 1;
+         he = he.getNext();
+      };
+      i = i + 1;
+   };
+   a = a2;
+>>>>>>> Stashed changes
+}
+
+
+method hashtable.init()
+{
+   a = array();
+   a.add(null);
+   a.add(null);
+   a.add(null);
+   a.add(null);
+   a.add(null);
+   claimed=5;
+   filled=0;
+}
+
+
+
+
+
+
+method hashtable.f(x)
+{
+   hash = 5381;
+   sz = x.size(); 
+   i = 0;
+   while (i < sz)
+   {
+      c = x[i];
+      hash = hash * 33 + c;
+      i = i + 1;
+   };
+   return hash % claimed;
+}
+
+method hashtable.get(k)
+{
+   hk = self.f(k);
+   element = a[hk];
+   while (element != null)
+   {
+      if element.getKey() == k { return element.getValue(); };
+      element = element.getNext(); 
+   };
+   return null;
+}
