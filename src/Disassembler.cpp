@@ -79,7 +79,7 @@ void Disassembler::print_tables()
       j += 8;
       string signature = string(buffer + j);
       printf("External symbol address=%p\n",(void*)ptr);
-      cout << "Signature " << signature << endl;
+      printf("Signature %s\n",signature.c_str());
       j+= signature.length() + 1;
    } 
 }
@@ -104,7 +104,7 @@ uint16_t Disassembler::find_ext_proc_table() {
  * Hexdump of a buffer
  *
  */
-static void Disassembler::hexdump(char* buf, unsigned int buflen) {
+void Disassembler::hexdump(char* buf, unsigned int buflen) {
    unsigned int i, j;
    for (i = 0; i < buflen; i += 16) {
       printf("%06x: ", i);

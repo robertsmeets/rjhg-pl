@@ -3,22 +3,29 @@
 
 int Runner::compile_run(string filename,bool debug)
 {  
+   CodeGenerator* cg = new CodeGenerator();
+   compile_with_system(cg, filename, debug);
+   //
+   // start interpreting
+   //
+   CInterpreter i(cg->getCodeBuffer(),NULL);
+   i.start(debug);
+   return 0;
+}
+
+void Runner::compile_with_system(CodeGenerator* cg, string filename, bool debug)
+{
    glob = new ProgramNode();
    compile("system/helement.src",debug);
    compile("system/hashtable.src",debug);
    compile(filename,debug);
-   CodeGenerator cg;
-   cg.start(glob,NULL, debug);
+   cg->start(glob,NULL, debug);
    if (debug) {
       Disassembler d; 
-      d.start(cg.getCodeBuffer(),cg.getHere(),NULL);}
-   //
-   // start interpreting
-   //
-   CInterpreter i(cg.getCodeBuffer(),NULL);
-   i.start(debug);
-   return 0;
+      d.start(cg->getCodeBuffer(),cg->getHere(),NULL);
+   }
 }
+
 
 void Runner::compile(string filename,bool debug)
 {
