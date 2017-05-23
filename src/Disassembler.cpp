@@ -5,9 +5,6 @@
  *      Author: robert
  */
 
-#include <iostream>
-#include <sstream>
-
 #include "Disassembler.h"
 
 using namespace std;

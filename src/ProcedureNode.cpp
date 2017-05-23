@@ -1,7 +1,5 @@
 #include "ProcedureNode.h"
 
-#include <iostream>
-
  /*
  * ProcedureNode.cpp
  *
