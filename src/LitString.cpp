@@ -1,7 +1,5 @@
 #include "LitString.h"
 
-#include <iostream>
-
 using namespace std;
 
 LitString::LitString(string s)

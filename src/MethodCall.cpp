@@ -1,7 +1,5 @@
 #include "MethodCall.h"
 
-#include <iostream>
-
 using namespace std;
 
 MethodCall::MethodCall(Expression* e, string n, ExpressionList* args)

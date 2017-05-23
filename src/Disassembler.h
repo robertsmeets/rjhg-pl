@@ -8,8 +8,8 @@
 #ifndef DISASSEMBLER_H_
 #define DISASSEMBLER_H_
 
+#include <sstream>
 #include <vector>
-#include <iostream>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>

@@ -29,14 +29,17 @@ void Runner::compile_with_system(CodeGenerator* cg, string filename, bool debug)
 
 void Runner::compile(string filename,bool debug)
 {
-   if (debug) {printf("Removing comments %s ...\n",filename.c_str());}
    FILE *infile = fopen (filename.c_str(), "rt");
+   if (infile == NULL)
+   {
+      printf("Cannot open %s\n",filename.c_str());
+      exit(-1);
+   }
    extern FILE * yyin;
    char outfilename[100];
    snprintf(outfilename,100,"%s%s",filename.c_str(),".strip");
    FILE* outfile = fopen (outfilename, "w");
-   if (!infile) { printf("cannot open %s\n",filename.c_str()); }
-   if (!outfile) { printf("cannot open %s\n",outfilename);  }
+   if (outfile == NULL) { printf("cannot open %s\n",outfilename); exit(-1);  }
    stripcmt(infile, outfile);
    fclose(infile);
    fclose(outfile);
@@ -49,5 +52,4 @@ void Runner::compile(string filename,bool debug)
    fclose(yyin);
    remove(outfilename);
    if(debug){glob->print(0);}
-
 }

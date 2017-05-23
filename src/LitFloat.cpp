@@ -1,7 +1,5 @@
 #include "LitFloat.h"
 
-#include <iostream>
-
 using namespace std;
 
 LitFloat::LitFloat(char* s)

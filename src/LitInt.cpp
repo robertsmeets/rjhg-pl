@@ -1,7 +1,5 @@
 #include "LitInt.h"
 
-#include <iostream>
-
 using namespace std;
 
 LitInt::LitInt(char* a_string)

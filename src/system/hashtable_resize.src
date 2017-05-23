@@ -20,6 +20,13 @@ method hashtable.add(k,v)
        e.setNext(element);
        a.set(hk,e);
     };
+   //
+   // determine if resizing is in order
+   //
+   if ((filled + 1) / claimed) > 0.75
+   {
+      self.resize();
+   };
    hk = self.f(k);
    e = helement();
    e.setKey(k);
@@ -32,6 +39,45 @@ method hashtable.add(k,v)
    };
    a.set(hk,e);
    filled = filled + 1;
+}
+
+method hashtable.resize()
+{
+   a2 = array();
+   oldclaimed = claimed;
+   claimed = 2 * claimed;
+   filled = 0;
+   int i = 0;
+   while i < claimed
+   {
+      a2.add(null);
+      i = i + 1;
+   };
+   i = 0;
+   while i < oldclaimed 
+   {
+      he = a[i];
+      while he != null
+      {
+         k = he.getKey();
+         v = he.getValue();
+         e = helement();
+         e.setKey(k);
+         e.setValue(v);
+         e.setNext(null);
+         hk = self.f(k);
+         element = a2[hk];
+         if (element != null)
+         {
+            e.setNext(element);
+         };
+         a2.set(hk,e);
+         filled = filled + 1;
+         he = he.getNext();
+      };
+      i = i + 1;
+   };
+   a = a2;
 }
 
 

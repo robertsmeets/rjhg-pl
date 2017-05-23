@@ -1,7 +1,5 @@
 #include "LitNull.h"
 
-#include <iostream>
-
 using namespace std;
 
 LitNull::LitNull()

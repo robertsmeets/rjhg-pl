@@ -15,7 +15,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <unordered_map>
-#include <iostream>
 #include <gc.h>
 
 #include "ClassDefinition.h"

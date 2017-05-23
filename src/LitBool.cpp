@@ -1,7 +1,5 @@
 #include "LitBool.h"
 
-#include <iostream>
-
 using namespace std;
 
 LitBool::LitBool(char* s)
