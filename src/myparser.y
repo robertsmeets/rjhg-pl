@@ -336,7 +336,7 @@ int main(int argc, char* argv[]) {
          CodeGenerator* cg = new CodeGenerator();
          runner.compile_with_system(cg,argv[2],true);
          FileCreator fc;
-         fc.start(argv[0],cg->getCodeBuffer(),cg->getHere());
+         fc.start(argv[0],argv[2],cg->getCodeBuffer(),cg->getHere());
       }
    }
    else
