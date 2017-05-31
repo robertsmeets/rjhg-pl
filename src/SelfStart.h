@@ -3,6 +3,9 @@
 
 #include "stdio.h"
 #include "stdint.h"
+#include "gc.h"
+#include <string.h>
+#include "CInterpreter.h"
 
 using namespace std;
 

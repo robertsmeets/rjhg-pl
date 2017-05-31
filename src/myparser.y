@@ -334,7 +334,7 @@ int main(int argc, char* argv[]) {
       {
          Runner runner;
          CodeGenerator* cg = new CodeGenerator();
-         runner.compile_with_system(cg,argv[2],true);
+         runner.compile_with_system(cg,argv[2],false);
          FileCreator fc;
          fc.start(argv[0],argv[2],cg->getCodeBuffer(),cg->getHere());
       }
@@ -343,7 +343,7 @@ int main(int argc, char* argv[]) {
    {
       SelfStart s;
       int result = s.start(argv[0]); 
-      if (!result)
+      if (result==-1)
       {
          printf("Must provide filename as an argument, example %s c:\\\\test\\\\test.src\n",argv[0]);
          return result;
