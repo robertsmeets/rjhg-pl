@@ -29,6 +29,7 @@ void FileCreator::start(char* filename_exe,char* filename_src_c, char* buffer, i
    //
    // 
    uint64_t size64 = size;
+   printf("Offset written to file = %ul\n",size);
    fwrite(&size64, 8, 1, outfile);
    fputs("RJHGBC",outfile); 
    fclose(outfile);
