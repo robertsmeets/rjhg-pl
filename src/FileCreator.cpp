@@ -1,7 +1,8 @@
 #include "FileCreator.h"
 
-void FileCreator::start(char* filename_exe,char* filename_src_c, char* buffer, int size)
+void FileCreator::start(char* filename_src_c, char* buffer, int size)
 {  
+   char filename_exe[] = "interpret.exe";
    FILE *infile = fopen(filename_exe, "rb");
    if (infile == NULL) { printf("cannot open %s\n",filename_exe); exit(-1);}
    string filename_src = filename_src_c; 
