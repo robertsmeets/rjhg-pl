@@ -10,6 +10,9 @@ int SelfStart::start(char* filename)
        printf("MZ header not found\n");
        return -1;
    }
+   //
+   // ELF binary:  0x7F followed by ELF(45 4c 46) in ASCII; these four bytes constitute the magic number. 
+   //
    fseek(infile, -14 , SEEK_END);
    fread(buffer,1,14,infile);
    if(strncmp(buffer+8,"RJHGBC",6) != 0)

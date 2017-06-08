@@ -8,7 +8,7 @@ using namespace std;
 class FileCreator {
 
 public:
-   void start(char* ,char*, char* , int );
+   void start(char*, char* , int );
 };
 #endif
 
