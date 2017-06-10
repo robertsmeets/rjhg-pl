@@ -1,7 +1,8 @@
 #ifndef FILECREATOR_H_
 #define FILECREATOR_H_ 
 
-#include <iostream>
+#include "stdio.h"
+#include <string>
 
 using namespace std;
 

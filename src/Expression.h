@@ -1,11 +1,13 @@
 #ifndef EXPRESSION_H_
 #define EXPRESSION_H_ 
 
-class ProcedureNode; // forward declaration
-
 #include <string>
 
 using namespace std;
+
+
+class ProcedureNode; // forward declaration
+
 
 class CodeGenerator; // forward declaration
 
