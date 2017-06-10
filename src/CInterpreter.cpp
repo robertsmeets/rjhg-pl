@@ -198,10 +198,7 @@ int CInterpreter::execute_next(bool debug) {
    //
    // opcode definitions
    //
-   char* ptr;
-   double d1;
-   double d2;
-   double d3;
+   // char* ptr;
    stack_element fr1;
    stack_element fr2;
    char* adr;
@@ -221,7 +218,8 @@ int CInterpreter::execute_next(bool debug) {
          t++;
          break;
       case TYPE_FLOAT: // float
-         ptr = (char*) GC_MALLOC(a);
+         {
+         char* ptr = (char*) GC_MALLOC(a);
          memcpy(ptr, buffer + pc, a);
          //
          // put the pointer and the type on the stack
@@ -230,7 +228,7 @@ int CInterpreter::execute_next(bool debug) {
          s[t].address = (unsigned long long int) ptr;
          t++;
          pc += a;
-         break;
+         break;}
       case TYPE_BOOLEAN: // boolean
          s[t].atype = 6;
          s[t].address = a;
@@ -311,6 +309,7 @@ int CInterpreter::execute_next(bool debug) {
       case 2:
       case 3:
       case 4:
+         {
          if (debug) { printf(" PLUS, MINUS or MUL"); }
          t--;
          fr1 = s[t - 1];
@@ -331,7 +330,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -348,7 +347,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -365,7 +364,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -382,7 +381,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -393,9 +392,10 @@ int CInterpreter::execute_next(bool debug) {
             //
             // integer plus float
             //
+            double d2;
             memcpy(&d2, (void*) fr2.address, 8);
             aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
-            d3 = (*aidptr)(fr1.address, d2);
+            double d3 = (*aidptr)(fr1.address, d2);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
@@ -406,9 +406,10 @@ int CInterpreter::execute_next(bool debug) {
             //
             // float plus integer
             //
+            double d1;
             memcpy(&d1, (void*) (fr1.address), 8);
             adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
-            d3 = (*adiptr)(d1, fr2.address);
+            double d3 = (*adiptr)(d1, fr2.address);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
@@ -422,6 +423,8 @@ int CInterpreter::execute_next(bool debug) {
             //
             // copy both floats to temp variables d1 and d2
             //
+            double d1;
+            double d2;
             memcpy(&d1, (void*)(fr1.address), 8);
             memcpy(&d2, (void*)(fr2.address), 8);
             //
@@ -431,7 +434,7 @@ int CInterpreter::execute_next(bool debug) {
             //
             // perform the operation
             //
-            d3 = (*addptr)(d1, d2);
+            double d3 = (*addptr)(d1, d2);
             //
             //
             stack_element* fr3 = new stack_element();
@@ -444,7 +447,7 @@ int CInterpreter::execute_next(bool debug) {
             printf("operation %d incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
             exit(-1);
          }
-         break;
+         break; }
       case 5:
 if (debug) {
          printf(" DIV");
@@ -496,6 +499,7 @@ if (debug) {
             //
             // integer plus float
             //
+            double d2;
             memcpy(&d2, (void*)(fr2.address), 8);
             abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abidptr)(fr1.address, d2);
@@ -506,6 +510,7 @@ if (debug) {
             //
             // float plus integer
             //
+            double d1;
             memcpy(&d1, (void*)(fr1.address), 8);
             abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abdiptr)(d1, fr2.address);
@@ -516,6 +521,7 @@ if (debug) {
             //
             // both floats
             //
+            double d1,d2;
             memcpy(&d1, (void*)(fr1.address), 8);
             memcpy(&d2, (void*)(fr2.address), 8);
             abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
@@ -792,6 +798,7 @@ if (debug) {
          // float
          //
          char* ptr = (char*) (fr1.address);
+         double d1;
          memcpy(&d1, ptr, 8);
          printf("%f\n",d1 );
       } else if (fr1.atype == TYPE_INT) {
@@ -834,7 +841,7 @@ if (debug) {
          // byte 4 to 11 are the pointer to the allocated memory
          //
          int claimed = 5;
-         ptr = (char*)GC_MALLOC(12);
+         char* ptr = (char*)GC_MALLOC(12);
          *ptr = 0;
          *(ptr + 1) = 0;
          *(ptr + 2) = claimed;
@@ -856,7 +863,7 @@ if (debug) {
          // l contains the classnum
          // a contains the number of instance variables
          //
-         ptr = (char*)GC_MALLOC(5 * a + 3);
+         char* ptr = (char*)GC_MALLOC(5 * a + 3);
          //
          // in the first 2 bytes, put in the class number
          // the rest is left for the instance variables
@@ -890,7 +897,7 @@ if (debug) {
          printf("Performed a method call on a non-object");
          return -1;
       }
-      ptr = (char*)(s[t-1].address);
+      char* ptr = (char*)(s[t-1].address);
       if (xtype == TYPE_ARRAY)
       {
         if (l==1)

@@ -21,25 +21,24 @@ IF(WIN32)
    ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
    ADD_LIBRARY(libdynload_s STATIC IMPORTED)
    ADD_LIBRARY(gc.a STATIC IMPORTED)
-   #ADD_LIBRARY(libstdc++.la STATIC IMPORTED)
-   #ADD_LIBRARY(libgcc_s_dw2-1.dll STATIC IMPORTED)
    SET_PROPERTY(TARGET libdyncall_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdyncall_s.lib)
    SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdynload_s.lib)
    SET_PROPERTY(TARGET gc.a PROPERTY IMPORTED_LOCATION ../bdwgc/gc.a)
-   #SET_PROPERTY(TARGET libstdc++.la PROPERTY IMPORTED_LOCATION /c/MinGW/lib/libstdc++.la)
-   #SET_PROPERTY(TARGET libgcc_s_dw2-1.dll PROPERTY IMPORTED_LOCATION /c/MinGW/bin/libgcc_s_dw2-1.dll)
    SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s gc.a )
    SET_TARGET_PROPERTIES(interpret PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(interpret libdyncall_s libdynload_s gc.a )
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl, -Wl,--build-id=none")
+#-Wl,norelro 
+#-Wl-z -fshort-double -fsingle-precision-constant 
+#-mfpmath=387 -mfancy-math-387 
+#-ffast-math 
+#--hash-style=gnu 
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    LINK_DIRECTORIES(/usr/lib /usr/lib/x86_64-linux-gnu ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib )
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-
-#ADD_LIBRARY(libgccpp STATIC IMPORTED)
-
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
@@ -79,35 +78,36 @@ ADD_CUSTOM_COMMAND(
    TARGET YaccParser
    DEPENDS myparser.lex.c
    OUTPUTS y.tab.c)
-SET (CMAKE_CXX_FLAGS "-fpermissive")
-
-# for visual studio: SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
+#SET (CMAKE_CXX_FLAGS "-fpermissive")
 
 IF(MSVC)
    SET (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO" )
+   # for visual studio
+   SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
 ENDIF(MSVC)
 
-#
-# add a cast to the result of the malloc() command
-# write the result to myparser.lex.c
-#
-FILE(READ lex.yy.c f0 )
-  STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
-FILE(WRITE myparser.lex.c "${f2}")
+IF (NOT MSVC)
+   #
+   # add a cast to the result of the malloc() command
+   # write the result to myparser.lex.c
+   #
+   FILE(READ lex.yy.c f0 )
+     STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
+   FILE(WRITE myparser.lex.c "${f2}")
+   # Add y.tab.c to the list of sources
+   SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
+   # Since some files do not exist yet when cmake is run, mark
+   # them as generated
+   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
+   # Include binary directory to include lexer.c in parser.c
+   INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
+   ADD_DEPENDENCIES(myparser YaccParser)
+   SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
+ENDIF (NOT MSVC)
 
-# Add y.tab.c to the list of sources
-SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
+SET (CMAKE_BUILD_TYPE Release)
 
-# Since some files do not exist yet when cmake is run, mark
-# them as generated
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
 
-# Include binary directory to include lexer.c in parser.c
-INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
-
-ADD_DEPENDENCIES(myparser YaccParser)
-
-SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
 
