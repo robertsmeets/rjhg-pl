@@ -198,9 +198,8 @@ int CInterpreter::execute_next(bool debug) {
    //
    // opcode definitions
    //
-   // char* ptr;
-   stack_element fr1;
-   stack_element fr2;
+   // stack_element fr1;
+   // stack_element fr2;
    char* adr;
    uint16_t classnum;
    switch (f) {
@@ -298,22 +297,22 @@ int CInterpreter::execute_next(bool debug) {
          }
          break;
       case 1:
-         if (debug) { printf(" UNARY MINUS"); }
-         fr1 = s[t - 1];
+         {if (debug) { printf(" UNARY MINUS"); }
+         stack_element fr1 = s[t - 1];
          if (fr1.atype != 2) {
             puts("type must be integer");
          }
          fr1.address = -fr1.address;
          s[t - 1] = fr1;
-         break;
+         break;}
       case 2:
       case 3:
       case 4:
          {
          if (debug) { printf(" PLUS, MINUS or MUL"); }
          t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
@@ -449,33 +448,30 @@ int CInterpreter::execute_next(bool debug) {
          }
          break; }
       case 5:
-if (debug) {
-         printf(" DIV");
-}
+         {
+         if (debug) { printf(" DIV"); }
          t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("division both types must be integer");
          }
          fr1.atype = 2;
          fr1.address = fr1.address / fr2.address;
          s[t - 1] = fr1;
-         break;
+         break; }
       case 6:
-if (debug) {
-         printf(" MOD");
-}
+         {if (debug) { printf(" MOD"); }
          t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("modulo both types must be integer");
          }
          fr1.atype = 2;
          fr1.address = fr1.address % fr2.address;
          s[t - 1] = fr1;
-         break;
+         break;}
       case 8:
       case 9:
       case 10:
@@ -483,9 +479,9 @@ if (debug) {
       case 12:
       case 13:
       case 19:
-         t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         {t--;
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
@@ -615,7 +611,7 @@ if (debug) {
             printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
             exit(-1);
          }
-         break;
+         break; }
       case 14:
          {
             int atype = s[t-1].atype;
@@ -663,7 +659,7 @@ if (debug) {
 	 case 15: // NOT
 	 {
 	 if (debug) { printf("NOT"); }
-         fr1 = s[t - 1];
+         stack_element fr1 = s[t - 1];
          if (fr1.atype != TYPE_BOOLEAN) {
             printf("NOT: type must be boolean");
 	    exit(-1);
@@ -675,8 +671,8 @@ if (debug) {
 	 case 16: // AND
 	 {
             t--;
-            fr1 = s[t - 1];
-            fr2 = s[t];
+            stack_element fr1 = s[t - 1];
+            stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
             printf("AND: both types must be boolean");
 	    exit(-1);
@@ -688,8 +684,8 @@ if (debug) {
 	 case 17: // OR
 	 {
             t--;
-            fr1 = s[t - 1];
-            fr2 = s[t];
+            stack_element fr1 = s[t - 1];
+            stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
             printf("OR: both types must be boolean");
 	    exit(-1);
@@ -701,8 +697,8 @@ if (debug) {
 	 case 18: // MOD 
 	 {
             t--;
-            fr1 = s[t - 1];
-            fr2 = s[t];
+            stack_element fr1 = s[t - 1];
+            stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_INT) || (fr2.atype != TYPE_INT)) {
             printf("MOD: both types must be integer");
 	    exit(-1);
@@ -760,8 +756,8 @@ if (debug) {
       pc = a;
       break;
    case 8:         // jpc - jump when true
-      if (debug) { printf("JPC %d " , a); }
-      fr1 = s[t - 1];
+      {if (debug) { printf("JPC %d " , a); }
+      stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPC value is not boolean");
       }
@@ -769,10 +765,10 @@ if (debug) {
          pc = a;
       }
       t--;
-      break;
+      break;}
    case 17:          // jpf: jump when false
-      if (debug) { printf("JPF %d " , a); }
-      fr1 = s[t - 1];
+      {if (debug) { printf("JPF %d " , a); }
+      stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPF value is not boolean");
       }
@@ -780,12 +776,11 @@ if (debug) {
          pc = a;
       }
       t--;
-      break;
+      break;}
    case 9: // print
-      if (debug) { printf("PRINT %d " , a); }
+      {if (debug) { printf("PRINT %d " , a); }
       t--;
-      fr1 = s[t];
-
+      stack_element fr1 = s[t];
       if (fr1.atype == TYPE_NULL)
       {
           printf("NULL\n");
@@ -817,7 +812,7 @@ if (debug) {
          printf( "Cannot print something of type %d\n", fr1.atype );
       }
       break;
-
+      }
    case 10: // external function call
       if (debug) { printf("EXTCALL %d",  a); }
       // parameters should have already been pushed on the stack
