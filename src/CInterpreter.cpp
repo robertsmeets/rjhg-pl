@@ -11,8 +11,8 @@
 using namespace std;
 
 CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
-   di = a_di;
-   buffer = a_buffer;
+   buffer=a_buffer;
+   di=a_di;
    pc = 0; // program counter
    t = 0;   // is the top of the stack s
    tr = 0;  // is the top of the stack r
@@ -149,7 +149,7 @@ void CInterpreter::start(bool indebug) {
    } 
    unsigned i = 0;
    for (; !i;) {
-      i = execute_next(debug);
+      i = execute_next();
    }
 }
 
@@ -176,7 +176,7 @@ uint16_t CInterpreter::find_ext_proc_table() {
  i: instruction; {instruction register}
  s: array [1..stacksize] of integer; {datastore}
  */
-int CInterpreter::execute_next(bool debug) {
+int CInterpreter::execute_next() {
    //
    // f is the opcode
    // l is the 2nd param

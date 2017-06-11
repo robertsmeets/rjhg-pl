@@ -76,7 +76,7 @@ public:
    CInterpreter(char*, DebugInfo*);
    virtual ~CInterpreter();
    void start(bool);
-   int execute_next(bool);
+   int execute_next();
    void print_a_string(char*,bool);
    void print_a_string(char*, uint16_t);
    void print_stack();
