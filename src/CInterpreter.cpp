@@ -1058,7 +1058,7 @@ if (debug) {
             printf("NULL");
             break;
          case TYPE_ARRAY:
-            printf("array %p",s[i].address);
+            printf("array %p",(void*)s[i].address);
             break;
          case TYPE_INT:
             printf("%llu",s[i].address);
@@ -1085,11 +1085,11 @@ if (debug) {
             break;
          case TYPE_PTR: // pointer
          {
-            printf("%p",s[i].address);
+            printf("%p",(void*)s[i].address);
             break;
          }
          case TYPE_OBJ: // object reference
-            printf("objref %p",s[i].address);
+            printf("objref %p",(void*)s[i].address);
             break;
          default:
             printf("?%d" , s[i].atype);

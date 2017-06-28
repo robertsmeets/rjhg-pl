@@ -1,14 +1,21 @@
 #include "SelfStart.h"
+
+#ifdef _WIN32
+   #define XMAGIC "MZ"
+#else
+   #define XMAGIC "\x7F""ELF" 
+#endif
+
 int SelfStart::start(char* filename)
 {
    FILE *infile = fopen (filename, "rt");
    if (!infile) { printf("cannot open %s\n",filename); }
    char* buffer = (char*) GC_MALLOC(14);
-   fread(buffer, 1, 2, infile);
-   if ((buffer[0] != 'M') || (buffer[1] != 'Z'))
-   {
-       printf("MZ header not found\n");
-       return -1;
+   fread(buffer, 1, 4, infile);
+   if(strncmp(buffer,XMAGIC,string(XMAGIC).length()) != 0)
+   {  
+      printf("<%s> does not appear to be an executable\n", filename);
+      return -1;
    }
    //
    // ELF binary:  0x7F followed by ELF(45 4c 46) in ASCII; these four bytes constitute the magic number. 

@@ -14,7 +14,7 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-INCLUDE_DIRECTORIES( ../dyncall-0.8_linux/include ../dyncall-0.8_win/include ../bdwgc/include .)
+INCLUDE_DIRECTORIES( ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include .)
 
 IF(WIN32)
    LINK_DIRECTORIES(/usr/lib ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu ../bdwgc /c/MinGW/lib)
@@ -35,26 +35,26 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-   LINK_DIRECTORIES(/usr/lib /usr/lib/x86_64-linux-gnu ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib )
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-
-#ADD_LIBRARY(libgccpp STATIC IMPORTED)
-
-
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+   LINK_DIRECTORIES(/usr/lib /usr/lib/x86_64-linux-gnu ../bdwgc ../dyncall-0.9/dyncall ../dyncall-0.9/dynload ../dyncall-0.9/dyncallback )
+   ADD_LIBRARY(libgc-lib.a STATIC IMPORTED)
+   #ADD_LIBRARY(libgcc_s.so.1 STATIC IMPORTED) 
    ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
    ADD_LIBRARY(libdynload_s STATIC IMPORTED)
-   ADD_LIBRARY(libgc STATIC IMPORTED)
    ADD_LIBRARY(libgccpp STATIC IMPORTED)
    ADD_LIBRARY(dynload_s.a STATIC IMPORTED)
    ADD_LIBRARY(dyncall_s.a STATIC IMPORTED)
    ADD_LIBRARY(dyncallback_s.a STATIC IMPORTED)
    ADD_LIBRARY(libdl.so SHARED IMPORTED)
-   SET_PROPERTY(TARGET dyncall_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncall_s.a)
-   SET_PROPERTY(TARGET dynload_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdynload_s.a)
-   SET_PROPERTY(TARGET dyncallback_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.8_linux/lib/libdyncallback_s.a)
+   SET_PROPERTY(TARGET libgc-lib.a PROPERTY IMPORTED_LOCATION ../bdwgc/libgc-lib.a)
+#   SET_PROPERTY(TARGET libgcc_s.so.1 PROPERTY IMPORTED_LOCATION /lib/x86_64-linux-gnu/libgcc_s.so.1)
+   SET_PROPERTY(TARGET dyncall_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.9/dyncall/libdyncall_s.a)
+   SET_PROPERTY(TARGET dynload_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.9/dynload/libdynload_s.a)
+   SET_PROPERTY(TARGET dyncallback_s.a PROPERTY IMPORTED_LOCATION ../dyncall-0.9/dyncallback/libdyncallback_s.a)
    SET_PROPERTY(TARGET libdl.so PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so)
-   TARGET_LINK_LIBRARIES(myparser dyncall_s.a dynload_s.a dyncallback_s.a libgc.a libgccpp.a libdl.so pthread)
+   SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-Wl,--as-needed -fPIC")
+   SET_TARGET_PROPERTIES(interpret PROPERTIES LINK_FLAGS "-Wl,--as-needed -fPIC")
+   TARGET_LINK_LIBRARIES(myparser dyncall_s.a dynload_s.a dyncallback_s.a libdl.so pthread libgc-lib.a)
+   TARGET_LINK_LIBRARIES(interpret dyncall_s.a dynload_s.a dyncallback_s.a libdl.so pthread libgc-lib.a)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-fpermissive")
@@ -65,49 +65,49 @@ ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")
 SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11 -SAFESEH:NO" )
 SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++11" )
 
-# Create custom command for flex/lex (note the outputs)
-ADD_CUSTOM_COMMAND(
-   COMMAND flex 
-   ARGS --outfile=myparser.lex.c myparser.lex
-   TARGET YaccParser
-   OUTPUTS myparser.lex.c)
-
-# Create custom command for bison/yacc (note the DEPENDS)
-ADD_CUSTOM_COMMAND(
-   COMMAND bison
-   ARGS  -d -v -t myparser.y --output y.tab.c
-   TARGET YaccParser
-   DEPENDS myparser.lex.c
-   OUTPUTS y.tab.c)
-SET (CMAKE_CXX_FLAGS "-fpermissive")
-
 # for visual studio: SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
-
 IF(MSVC)
    SET (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO" )
 ENDIF(MSVC)
 
-#
-# add a cast to the result of the malloc() command
-# write the result to myparser.lex.c
-#
-FILE(READ lex.yy.c f0 )
-  STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
-FILE(WRITE myparser.lex.c "${f2}")
-
-# Add y.tab.c to the list of sources
-SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
-
-# Since some files do not exist yet when cmake is run, mark
-# them as generated
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
-
-# Include binary directory to include lexer.c in parser.c
-INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
-
-ADD_DEPENDENCIES(myparser YaccParser)
-
-SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
-
+IF(NOT MSVC)
+   # Create custom command for flex/lex (note the outputs)
+   ADD_CUSTOM_COMMAND(
+      COMMAND flex 
+      ARGS --outfile=myparser.lex.c myparser.lex
+      TARGET YaccParser
+      OUTPUTS myparser.lex.c)
+   
+   # Create custom command for bison/yacc (note the DEPENDS)
+   ADD_CUSTOM_COMMAND(
+      COMMAND bison
+      ARGS  -d -v -t myparser.y --output y.tab.c
+      TARGET YaccParser
+      DEPENDS myparser.lex.c
+      OUTPUTS y.tab.c)
+   SET (CMAKE_CXX_FLAGS "-fpermissive")
+   #
+   # add a cast to the result of the malloc() command
+   # write the result to myparser.lex.c
+   #
+   FILE(READ lex.yy.c f0 )
+     STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
+   FILE(WRITE myparser.lex.c "${f2}")
+   
+   # Add y.tab.c to the list of sources
+   SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
+   
+   # Since some files do not exist yet when cmake is run, mark
+   # them as generated
+   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
+   
+   # Include binary directory to include lexer.c in parser.c
+   INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
+   
+   ADD_DEPENDENCIES(myparser YaccParser)
+   
+   SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
+ENDIF(NOT MSVC)
+ 
