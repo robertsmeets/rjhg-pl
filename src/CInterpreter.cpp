@@ -11,8 +11,8 @@
 using namespace std;
 
 CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
-   di = a_di;
-   buffer = a_buffer;
+   buffer=a_buffer;
+   di=a_di;
    pc = 0; // program counter
    t = 0;   // is the top of the stack s
    tr = 0;  // is the top of the stack r
@@ -149,7 +149,7 @@ void CInterpreter::start(bool indebug) {
    } 
    unsigned i = 0;
    for (; !i;) {
-      i = execute_next(debug);
+      i = execute_next();
    }
 }
 
@@ -176,7 +176,7 @@ uint16_t CInterpreter::find_ext_proc_table() {
  i: instruction; {instruction register}
  s: array [1..stacksize] of integer; {datastore}
  */
-int CInterpreter::execute_next(bool debug) {
+int CInterpreter::execute_next() {
    //
    // f is the opcode
    // l is the 2nd param
@@ -198,12 +198,8 @@ int CInterpreter::execute_next(bool debug) {
    //
    // opcode definitions
    //
-   char* ptr;
-   double d1;
-   double d2;
-   double d3;
-   stack_element fr1;
-   stack_element fr2;
+   // stack_element fr1;
+   // stack_element fr2;
    char* adr;
    uint16_t classnum;
    switch (f) {
@@ -221,7 +217,8 @@ int CInterpreter::execute_next(bool debug) {
          t++;
          break;
       case TYPE_FLOAT: // float
-         ptr = (char*) GC_MALLOC(a);
+         {
+         char* ptr = (char*) GC_MALLOC(a);
          memcpy(ptr, buffer + pc, a);
          //
          // put the pointer and the type on the stack
@@ -230,7 +227,7 @@ int CInterpreter::execute_next(bool debug) {
          s[t].address = (unsigned long long int) ptr;
          t++;
          pc += a;
-         break;
+         break;}
       case TYPE_BOOLEAN: // boolean
          s[t].atype = 6;
          s[t].address = a;
@@ -300,21 +297,22 @@ int CInterpreter::execute_next(bool debug) {
          }
          break;
       case 1:
-         if (debug) { printf(" UNARY MINUS"); }
-         fr1 = s[t - 1];
+         {if (debug) { printf(" UNARY MINUS"); }
+         stack_element fr1 = s[t - 1];
          if (fr1.atype != 2) {
             puts("type must be integer");
          }
          fr1.address = -fr1.address;
          s[t - 1] = fr1;
-         break;
+         break;}
       case 2:
       case 3:
       case 4:
+         {
          if (debug) { printf(" PLUS, MINUS or MUL"); }
          t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
@@ -331,7 +329,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -348,7 +346,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -365,7 +363,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -382,7 +380,7 @@ int CInterpreter::execute_next(bool debug) {
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
-            ptr = (char*)GC_MALLOC(newlen + 2);
+            char* ptr = (char*)GC_MALLOC(newlen + 2);
             *ptr = newlen & 0xff;
             *(ptr + 1) = newlen >> 8;
             memcpy(ptr + 2, ptr1 + 2, len1);
@@ -393,9 +391,10 @@ int CInterpreter::execute_next(bool debug) {
             //
             // integer plus float
             //
+            double d2;
             memcpy(&d2, (void*) fr2.address, 8);
             aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
-            d3 = (*aidptr)(fr1.address, d2);
+            double d3 = (*aidptr)(fr1.address, d2);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
@@ -406,9 +405,10 @@ int CInterpreter::execute_next(bool debug) {
             //
             // float plus integer
             //
+            double d1;
             memcpy(&d1, (void*) (fr1.address), 8);
             adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
-            d3 = (*adiptr)(d1, fr2.address);
+            double d3 = (*adiptr)(d1, fr2.address);
             stack_element* fr3 = new stack_element();
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
@@ -422,6 +422,8 @@ int CInterpreter::execute_next(bool debug) {
             //
             // copy both floats to temp variables d1 and d2
             //
+            double d1;
+            double d2;
             memcpy(&d1, (void*)(fr1.address), 8);
             memcpy(&d2, (void*)(fr2.address), 8);
             //
@@ -431,7 +433,7 @@ int CInterpreter::execute_next(bool debug) {
             //
             // perform the operation
             //
-            d3 = (*addptr)(d1, d2);
+            double d3 = (*addptr)(d1, d2);
             //
             //
             stack_element* fr3 = new stack_element();
@@ -444,35 +446,32 @@ int CInterpreter::execute_next(bool debug) {
             printf("operation %d incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
             exit(-1);
          }
-         break;
+         break; }
       case 5:
-if (debug) {
-         printf(" DIV");
-}
+         {
+         if (debug) { printf(" DIV"); }
          t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("division both types must be integer");
          }
          fr1.atype = 2;
          fr1.address = fr1.address / fr2.address;
          s[t - 1] = fr1;
-         break;
+         break; }
       case 6:
-if (debug) {
-         printf(" MOD");
-}
+         {if (debug) { printf(" MOD"); }
          t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("modulo both types must be integer");
          }
          fr1.atype = 2;
          fr1.address = fr1.address % fr2.address;
          s[t - 1] = fr1;
-         break;
+         break;}
       case 8:
       case 9:
       case 10:
@@ -480,9 +479,9 @@ if (debug) {
       case 12:
       case 13:
       case 19:
-         t--;
-         fr1 = s[t - 1];
-         fr2 = s[t];
+         {t--;
+         stack_element fr1 = s[t - 1];
+         stack_element fr2 = s[t];
          if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
@@ -496,6 +495,7 @@ if (debug) {
             //
             // integer plus float
             //
+            double d2;
             memcpy(&d2, (void*)(fr2.address), 8);
             abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abidptr)(fr1.address, d2);
@@ -506,6 +506,7 @@ if (debug) {
             //
             // float plus integer
             //
+            double d1;
             memcpy(&d1, (void*)(fr1.address), 8);
             abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
             bool eq = (*abdiptr)(d1, fr2.address);
@@ -516,6 +517,7 @@ if (debug) {
             //
             // both floats
             //
+            double d1,d2;
             memcpy(&d1, (void*)(fr1.address), 8);
             memcpy(&d2, (void*)(fr2.address), 8);
             abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
@@ -609,7 +611,7 @@ if (debug) {
             printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
             exit(-1);
          }
-         break;
+         break; }
       case 14:
          {
             int atype = s[t-1].atype;
@@ -657,7 +659,7 @@ if (debug) {
 	 case 15: // NOT
 	 {
 	 if (debug) { printf("NOT"); }
-         fr1 = s[t - 1];
+         stack_element fr1 = s[t - 1];
          if (fr1.atype != TYPE_BOOLEAN) {
             printf("NOT: type must be boolean");
 	    exit(-1);
@@ -669,8 +671,8 @@ if (debug) {
 	 case 16: // AND
 	 {
             t--;
-            fr1 = s[t - 1];
-            fr2 = s[t];
+            stack_element fr1 = s[t - 1];
+            stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
             printf("AND: both types must be boolean");
 	    exit(-1);
@@ -682,8 +684,8 @@ if (debug) {
 	 case 17: // OR
 	 {
             t--;
-            fr1 = s[t - 1];
-            fr2 = s[t];
+            stack_element fr1 = s[t - 1];
+            stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
             printf("OR: both types must be boolean");
 	    exit(-1);
@@ -695,8 +697,8 @@ if (debug) {
 	 case 18: // MOD 
 	 {
             t--;
-            fr1 = s[t - 1];
-            fr2 = s[t];
+            stack_element fr1 = s[t - 1];
+            stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_INT) || (fr2.atype != TYPE_INT)) {
             printf("MOD: both types must be integer");
 	    exit(-1);
@@ -754,8 +756,8 @@ if (debug) {
       pc = a;
       break;
    case 8:         // jpc - jump when true
-      if (debug) { printf("JPC %d " , a); }
-      fr1 = s[t - 1];
+      {if (debug) { printf("JPC %d " , a); }
+      stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPC value is not boolean");
       }
@@ -763,10 +765,10 @@ if (debug) {
          pc = a;
       }
       t--;
-      break;
+      break;}
    case 17:          // jpf: jump when false
-      if (debug) { printf("JPF %d " , a); }
-      fr1 = s[t - 1];
+      {if (debug) { printf("JPF %d " , a); }
+      stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPF value is not boolean");
       }
@@ -774,12 +776,11 @@ if (debug) {
          pc = a;
       }
       t--;
-      break;
+      break;}
    case 9: // print
-      if (debug) { printf("PRINT %d " , a); }
+      {if (debug) { printf("PRINT %d " , a); }
       t--;
-      fr1 = s[t];
-
+      stack_element fr1 = s[t];
       if (fr1.atype == TYPE_NULL)
       {
           printf("NULL\n");
@@ -792,6 +793,7 @@ if (debug) {
          // float
          //
          char* ptr = (char*) (fr1.address);
+         double d1;
          memcpy(&d1, ptr, 8);
          printf("%f\n",d1 );
       } else if (fr1.atype == TYPE_INT) {
@@ -810,7 +812,7 @@ if (debug) {
          printf( "Cannot print something of type %d\n", fr1.atype );
       }
       break;
-
+      }
    case 10: // external function call
       if (debug) { printf("EXTCALL %d",  a); }
       // parameters should have already been pushed on the stack
@@ -834,7 +836,7 @@ if (debug) {
          // byte 4 to 11 are the pointer to the allocated memory
          //
          int claimed = 5;
-         ptr = (char*)GC_MALLOC(12);
+         char* ptr = (char*)GC_MALLOC(12);
          *ptr = 0;
          *(ptr + 1) = 0;
          *(ptr + 2) = claimed;
@@ -856,7 +858,7 @@ if (debug) {
          // l contains the classnum
          // a contains the number of instance variables
          //
-         ptr = (char*)GC_MALLOC(5 * a + 3);
+         char* ptr = (char*)GC_MALLOC(5 * a + 3);
          //
          // in the first 2 bytes, put in the class number
          // the rest is left for the instance variables
@@ -890,7 +892,7 @@ if (debug) {
          printf("Performed a method call on a non-object");
          return -1;
       }
-      ptr = (char*)(s[t-1].address);
+      char* ptr = (char*)(s[t-1].address);
       if (xtype == TYPE_ARRAY)
       {
         if (l==1)

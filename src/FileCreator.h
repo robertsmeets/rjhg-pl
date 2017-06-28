@@ -5,6 +5,8 @@
 #ifndef _WIN32
 #include <sys/stat.h>
 #endif 
+#include "stdio.h"
+#include <string>
 
 using namespace std;
 
