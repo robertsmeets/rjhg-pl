@@ -21,17 +21,19 @@ IF(WIN32)
    ADD_LIBRARY(libdyncall_s STATIC IMPORTED)
    ADD_LIBRARY(libdynload_s STATIC IMPORTED)
    ADD_LIBRARY(gc.a STATIC IMPORTED)
-   #ADD_LIBRARY(libstdc++.la STATIC IMPORTED)
-   #ADD_LIBRARY(libgcc_s_dw2-1.dll STATIC IMPORTED)
    SET_PROPERTY(TARGET libdyncall_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdyncall_s.lib)
    SET_PROPERTY(TARGET libdynload_s PROPERTY IMPORTED_LOCATION ../dyncall-0.8_win/lib/libdynload_s.lib)
    SET_PROPERTY(TARGET gc.a PROPERTY IMPORTED_LOCATION ../bdwgc/gc.a)
-   #SET_PROPERTY(TARGET libstdc++.la PROPERTY IMPORTED_LOCATION /c/MinGW/lib/libstdc++.la)
-   #SET_PROPERTY(TARGET libgcc_s_dw2-1.dll PROPERTY IMPORTED_LOCATION /c/MinGW/bin/libgcc_s_dw2-1.dll)
    SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s gc.a )
    SET_TARGET_PROPERTIES(interpret PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(interpret libdyncall_s libdynload_s gc.a )
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl, -Wl,--build-id=none")
+#-Wl,norelro 
+#-Wl-z -fshort-double -fsingle-precision-constant 
+#-mfpmath=387 -mfancy-math-387 
+#-ffast-math 
+#--hash-style=gnu 
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -66,8 +68,26 @@ SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11 -SAFESEH:NO"
 SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++11" )
 
 # for visual studio: SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
+# Create custom command for flex/lex (note the outputs)
+ADD_CUSTOM_COMMAND(
+   COMMAND flex 
+   ARGS --outfile=myparser.lex.c myparser.lex
+   TARGET YaccParser
+   OUTPUTS myparser.lex.c)
+
+# Create custom command for bison/yacc (note the DEPENDS)
+ADD_CUSTOM_COMMAND(
+   COMMAND bison
+   ARGS  -d -v -t myparser.y --output y.tab.c
+   TARGET YaccParser
+   DEPENDS myparser.lex.c
+   OUTPUTS y.tab.c)
+#SET (CMAKE_CXX_FLAGS "-fpermissive")
+
 IF(MSVC)
    SET (CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO" )
+   # for visual studio
+   SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
 ENDIF(MSVC)
 
 IF(NOT MSVC)
@@ -111,3 +131,5 @@ IF(NOT MSVC)
    SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
 ENDIF(NOT MSVC)
  
+SET (CMAKE_BUILD_TYPE Release)
+
