@@ -614,6 +614,9 @@ int CInterpreter::execute_next() {
          break; }
       case 14:
          {
+            //
+            // Array index operation
+            //
             int atype = s[t-1].atype;
             if (atype != TYPE_INT) { printf("index is not an integer but type %d\n",atype); exit(-1);}
             int index = s[t-1].address;
@@ -639,19 +642,22 @@ int CInterpreter::execute_next() {
             t--;
             s[t-1].atype = *nptr ;
             char** xptr = (char**)(nptr+1);
-            char* zptr = *xptr;
+            char* zptr = (char*) ((long long unsigned int)(*xptr) & 0xffffffffffff);
             s[t-1].address = (long long unsigned int) zptr;
             }
             else
-            { if (atype == TYPE_STRING)
+            {
+              if (atype == TYPE_STRING)
               {
-            char* ptr = (char*)(s[t-2].address);
-              char* cptr = ptr+2+index;
-               t--;
-               s[t-1].atype=TYPE_INT;
-               s[t-1].address=*cptr;
-
-            }else
+                 //
+                 // string index operation
+                 //
+                 char* ptr = (char*)(s[t-2].address);
+                 char* cptr = ptr+2+index;
+                  t--;
+                  s[t-1].atype=TYPE_INT;
+                  s[t-1].address=*cptr;
+               }else
                { printf("indexed type is not an array but type %d\n",atype); exit(-1);}
             }
             break;
