@@ -1,14 +1,9 @@
 #include "SelfStart.h"
 
-#ifdef _WIN32
-   #define XMAGIC "MZ"
-#else
-   #define XMAGIC "\x7F""ELF" 
-#endif
-
 int SelfStart::start(char* filename)
 {
-   FILE *infile = fopen (filename, "rt");
+   string filename_open = shorten(filename);
+   FILE *infile = fopen (filename_open.c_str(), "rt");
    if (!infile) { printf("cannot open %s\n",filename); }
    char* buffer = (char*) GC_MALLOC(14);
    size_t result = fread(buffer, 1, 4, infile);
@@ -44,4 +39,31 @@ int SelfStart::start(char* filename)
    i.start(false); 
    return 0;
 }
+  
+int lower_case (int c)
+{
+  return tolower(c);
+}
+
  
+string SelfStart::shorten(char* filename)
+{
+   string filename_open = string(filename);
+#ifdef _WIN32
+   int len = filename_open.length();
+   if (len >= 5)
+   {
+       string endstring = filename_open.substr(len - 4,len);
+       transform(endstring.begin(), endstring.end(), endstring.begin(), lower_case);
+       if (endstring != ".exe")
+       {
+          filename_open += ".exe";
+       }
+   } 
+   else
+   {
+      filename_open += ".exe";
+   }
+#endif
+   return filename_open;
+}
