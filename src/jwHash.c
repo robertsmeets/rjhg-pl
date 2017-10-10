@@ -531,7 +531,7 @@ HASHRESULT add_ptr_by_int( jwHashTable *table, long int key, void *value )
 {
 	// compute hash on key
 	size_t hash = hashInt(key) % table->buckets;
-	HASH_DEBUG("adding %d -> %s hash: %d\n",key,value,hash);
+	HASH_DEBUG("add_ptr_by_int adding %d -> %s hash: %d\n",key,value,hash);
 
 	// add entry
 	jwHashEntry *entry = table->bucket[hash];
@@ -542,13 +542,13 @@ HASHRESULT add_ptr_by_int( jwHashTable *table, long int key, void *value )
 	{
 		HASH_DEBUG("checking entry: %x\n",entry);
 		// check for already indexed
-		if(entry->key.intValue==key && 0==strcmp(value,entry->value.ptrValue))
+		if(entry->key.intValue==key && (value==entry->value.ptrValue))
 			return HASHALREADYADDED;
 		// check for replacing entry
-		if(entry->key.intValue==key && 0!=strcmp(value,entry->value.ptrValue))
+		if(entry->key.intValue==key && (value==entry->value.ptrValue))
 		{
-			free(entry->value.ptrValue);
-			entry->value.ptrValue = copystring(value);
+			// free(entry->value.ptrValue);
+			entry->value.ptrValue = value;
 			return HASHREPLACEDVALUE;
 		}
 		// move to next entry
@@ -561,7 +561,7 @@ HASHRESULT add_ptr_by_int( jwHashTable *table, long int key, void *value )
 	HASH_DEBUG("new entry: %x\n",entry);
 	entry->key.intValue = key;
 	entry->valtag = HASHSTRING;
-	entry->value.strValue = copystring(value);
+	entry->value.ptrValue = value;
 	entry->next = table->bucket[hash];
 	table->bucket[hash] = entry;
 	HASH_DEBUG("added entry\n");
