@@ -10,20 +10,20 @@
 
 #include <vector>
 #include <map>
-#include "stdio.h"
-#include <cstdlib>
+#include <stdio.h>
 #include <cstring>
 #include <sstream>
 #include <dyncall.h>
 #include <dyncall_callf.h>
 #include <dynload.h>
 #include <math.h>
-#include "stdint.h"
+#include <stdint.h>
 #include <gc.h>
 
 #include "Disassembler.h"
 #include "CConstants.h"
 #include "DebugInfo.h"
+#include "jwHash.hpp"
 
 using namespace std;
 
