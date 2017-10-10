@@ -105,7 +105,7 @@ vector<stack_element>* CInterpreter::getStack() {
 void CInterpreter::start(bool indebug) {
    debug=indebug;
    if (debug) {printf("Starting interpreter...\n" );}
-   jwHashTable* methodmap = create_hash(10);
+   jwHashTable* methodmap = create_hash(100);
    check_magic_number();
    pc = find_offset();
    if (debug){ printf("PC is now 0x%x\n",pc);}
