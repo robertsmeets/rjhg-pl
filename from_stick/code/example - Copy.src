@@ -1,0 +1,18 @@
+proc main(in1)
+  x =1
+  s="a"
+  while x < 10
+     print x
+     x = x+1
+     s = s+s
+     print s
+  endwhile
+end
+
+proc do(a,b,c,d,e)
+   return a*b*c*d*e
+end
+
+proc dont(a,b,c,d,e)
+   return a+b+c+d+e
+end

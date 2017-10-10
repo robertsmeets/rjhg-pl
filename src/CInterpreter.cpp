@@ -105,7 +105,7 @@ vector<stack_element>* CInterpreter::getStack() {
 void CInterpreter::start(bool indebug) {
    debug=indebug;
    if (debug) {printf("Starting interpreter...\n" );}
-   methodmap.clear();
+   jwHashTable* methodmap = create_hash(10);
    check_magic_number();
    pc = find_offset();
    if (debug){ printf("PC is now 0x%x\n",pc);}
@@ -119,16 +119,29 @@ void CInterpreter::start(bool indebug) {
       uint16_t address = (buffer[j + 4] & 0xff) + ((buffer[j + 5] & 0xff) << 8);
       uint16_t num_params = buffer[j + 6];
       uint16_t num_local_vars = buffer[j + 7];
-      auto k = methodmap.find(methodnum);
-      if (k == methodmap.end()) {
+      jwHashTable* sstr1; 
+      get_ptr_by_int(methodmap,methodnum,&sstr1); 
+      if (sstr1 == NULL) {
          //
          // was not found
          //
-         methodmap[methodnum] = map<uint16_t, uint16_t[3]>();
+         jwHashTable* map2 = create_hash(10);
+         uint16_t ar[3];
+         ar[0] = address;
+         ar[1] = num_params;
+         ar[2] = num_local_vars;
+         add_ptr_by_int(map2,classnum,&ar);
+         add_ptr_by_int(methodmap,methodnum,map2);
       }
-      methodmap[methodnum][classnum][0] = address;
-      methodmap[methodnum][classnum][1] = num_params;
-      methodmap[methodnum][classnum][2] = num_local_vars;
+      else
+      {
+         // was found
+         uint16_t* ar;
+         get_ptr_by_int(sstr1,classnum,&ar);
+         ar[0] = address;
+         ar[1] = num_params;
+         ar[2] = num_local_vars;
+      }
    }
    //
    // get the external symbols

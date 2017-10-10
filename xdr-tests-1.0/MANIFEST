@@ -1,6 +1,0 @@
-.cvsignore
-Makefile
-MANIFEST
-test1.c
-test2.c
-test.x

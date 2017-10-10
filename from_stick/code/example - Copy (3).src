@@ -1,0 +1,7 @@
+class myclass
+   instance_variables a,b,c,d,e
+   
+   method bla(x)
+      print x
+   endmethod
+end
