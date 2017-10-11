@@ -15,7 +15,7 @@ limitations under the License.
 
 //#define HASHTHREADED  1
 //#define HASHTEST      1
-#define HASHDEBUG     1
+//#define HASHDEBUG     1
 
 // guards! guards!
 #ifndef jwhash_h

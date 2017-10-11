@@ -65,7 +65,7 @@ class CInterpreter {
    typedef bool (*bdiptr)(double, uint16_t);
    iiptr fptrs[14][8][8];
 
-   map<uint16_t,map<uint16_t, uint16_t[3]>> methodmap;
+   jwHashTable* methodmap;
    vector<extern_record> externs;
    uint16_t find_ext_proc_table(); 
    void check_magic_number();
