@@ -105,7 +105,7 @@ vector<stack_element>* CInterpreter::getStack() {
 void CInterpreter::start(bool indebug) {
    debug=indebug;
    if (debug) {printf("Starting interpreter...\n" );}
-   jwHashTable* methodmap = create_hash(100);
+   methodmap = create_hash(100);
    check_magic_number();
    pc = find_offset();
    if (debug){ printf("PC is now 0x%x\n",pc);}
@@ -119,28 +119,41 @@ void CInterpreter::start(bool indebug) {
       uint16_t address = (buffer[j + 4] & 0xff) + ((buffer[j + 5] & 0xff) << 8);
       uint16_t num_params = buffer[j + 6];
       uint16_t num_local_vars = buffer[j + 7];
-      jwHashTable* sstr1; 
+      void* sstr1; 
+      //
+      // check if this entry already exists
+      //
       get_ptr_by_int(methodmap,methodnum,&sstr1); 
       if (sstr1 == NULL) {
          //
          // was not found
          //
-         jwHashTable* map2 = create_hash(10);
+         jwHashTable* map2 = create_hash(100);
          uint16_t ar[3];
          ar[0] = address;
          ar[1] = num_params;
          ar[2] = num_local_vars;
-         add_ptr_by_int(map2,classnum,&ar);
-         add_ptr_by_int(methodmap,methodnum,map2);
+         add_ptr_by_int(map2,classnum,ar);
+         add_ptr_by_int(methodmap,methodnum,(void*)map2);
       }
       else
-      {
-         // was found
+      {  
+         //
+         // was found. See if the class has this method
+         //
          uint16_t* ar;
-         get_ptr_by_int(sstr1,classnum,&ar);
-         ar[0] = address;
-         ar[1] = num_params;
-         ar[2] = num_local_vars;
+         get_ptr_by_int((jwHashTable*)sstr1,classnum,(void**)&ar);
+         if (ar==NULL)
+         {
+            //
+            // class does not have this method. Add it
+            //
+            uint16_t bar[3];
+            bar[0] = address;
+            bar[1] = num_params;
+            bar[2] = num_local_vars;
+            add_ptr_by_int((jwHashTable*)sstr1,classnum,(void**)&bar);
+         }
       }
    }
    //
@@ -966,11 +979,15 @@ int CInterpreter::execute_next() {
             //
             // this creates a new block with depth for local variables and parameters
             //
-            uint16_t* cl = methodmap[l][classnum];
             //
             // some checks here to make sure this method exists
             // 
-            if (cl == NULL) { printf("class does not have method\n"); exit(-1); } 
+            jwHashTable* thing;
+            get_ptr_by_int(methodmap,l,(void**)&thing);
+            if (thing==NULL) { printf("class does not have method (one)\n"); exit(-1); } 
+            uint16_t* cl;
+            get_ptr_by_int(thing,classnum,(void**)&cl);
+            if (cl==NULL) { printf("class does not have method (two)\n"); exit(-1); } 
             b[tb] = t - a - 1;
             tb++;
             //
