@@ -58,7 +58,7 @@ static inline long int hashString(char * str)
 // helper for copying string keys and values
 static inline char * copystring(char * value)
 {
-   char * copy = (char *)malloc(strlen(value)+1);
+   char * copy = (char *)GC_MALLOC(strlen(value)+1);
    if(!copy) {
       printf("Unable to allocate string value %s\n",value);
       abort();
@@ -75,7 +75,7 @@ static inline char * copystring(char * value)
 jwHashTable *create_hash( size_t buckets )
 {
    // allocate space
-   jwHashTable *table= (jwHashTable *)malloc(sizeof(jwHashTable));
+   jwHashTable *table= (jwHashTable *)GC_MALLOC(sizeof(jwHashTable));
    if(!table) {
       // unable to allocate
       return NULL;
@@ -83,7 +83,7 @@ jwHashTable *create_hash( size_t buckets )
    // locks
 #ifdef HASHTHREADED
    table->lock = 0;
-   table->locks = (int *)malloc(buckets * sizeof(int));
+   table->locks = (int *)GC_MALLOC(buckets * sizeof(int));
    if( !table->locks ) {
       // free(table);
       return NULL;
@@ -91,7 +91,7 @@ jwHashTable *create_hash( size_t buckets )
    memset((int *)&table->locks[0],0,buckets*sizeof(int));
 #endif
    // setup
-   table->bucket = (jwHashEntry **)malloc(buckets*sizeof(void*));
+   table->bucket = (jwHashEntry **)GC_MALLOC(buckets*sizeof(void*));
    if( !table->bucket ) {
       // free(table);
       return NULL;
@@ -136,7 +136,7 @@ HASHRESULT add_str_by_str( jwHashTable *table, char *key, char *value )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.strValue = copystring(key);
    entry->valtag = HASHSTRING;
@@ -176,7 +176,7 @@ HASHRESULT add_dbl_by_str( jwHashTable *table, char *key, double value )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.strValue = copystring(key);
    entry->valtag = HASHNUMERIC;
@@ -226,7 +226,7 @@ HASHRESULT add_int_by_str( jwHashTable *table, char *key, long int value )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.strValue = copystring(key);
    entry->valtag = HASHNUMERIC;
@@ -271,7 +271,7 @@ HASHRESULT add_ptr_by_str( jwHashTable *table, char *key, void *ptr )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.strValue = copystring(key);
    entry->valtag = HASHPTR;
@@ -435,7 +435,7 @@ HASHRESULT add_str_by_int( jwHashTable *table, long int key, char *value )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.intValue = key;
    entry->valtag = HASHSTRING;
@@ -476,7 +476,7 @@ HASHRESULT add_dbl_by_int( jwHashTable* table, long int key, double value )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.intValue = key;
    entry->valtag = HASHNUMERIC;
@@ -516,7 +516,7 @@ HASHRESULT add_int_by_int( jwHashTable* table, long int key, long int value )
    
    // create a new entry and add at head of bucket
    HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    HASH_DEBUG("new entry: %x\n",entry);
    entry->key.intValue = key;
    entry->valtag = HASHNUMERIC;
@@ -541,7 +541,7 @@ HASHRESULT add_ptr_by_int( jwHashTable *table, long int key, void *value )
    // 
    // already an entry
    //
-   // HASH_DEBUG("entry: %x\n",entry);
+   HASH_DEBUG("!!!!!!!! value: %x\n",value);
    while(entry!=0)
    {
       //HASH_DEBUG("checking entry: %x\n",entry);
@@ -550,6 +550,7 @@ HASHRESULT add_ptr_by_int( jwHashTable *table, long int key, void *value )
       //
       if(entry->key.intValue==key && (value==entry->value.ptrValue))
       {
+         HASH_DEBUG("HASHALREADYADDED\n");
          return HASHALREADYADDED;
       }
       //
@@ -559,15 +560,17 @@ HASHRESULT add_ptr_by_int( jwHashTable *table, long int key, void *value )
       {
          // free(entry->value.ptrValue);
          entry->value.ptrValue = value;
+         HASH_DEBUG("HASHREPLACEDVALUE\n");
          return HASHREPLACEDVALUE;
       }
       // move to next entry
+      HASH_DEBUG("NEXT\n");
       entry = entry->next;
    }
    
    // create a new entry and add at head of bucket
    //HASH_DEBUG("creating new entry\n");
-   entry = (jwHashEntry *)malloc(sizeof(jwHashEntry));
+   entry = (jwHashEntry *)GC_MALLOC(sizeof(jwHashEntry));
    //HASH_DEBUG("new entry: %x\n",entry);
    entry->key.intValue = key;
    entry->valtag = HASHPTR;
@@ -591,7 +594,7 @@ HASHRESULT del_by_int( jwHashTable* table, long int key )
    jwHashEntry *prev = NULL;
    
    // found an entry
-   HASH_DEBUG("entry: %x\n",entry);
+   HASH_DEBUG("entry: %x\n",(void*)entry);
    while(entry!=0)
    {
       HASH_DEBUG("checking entry: %x\n",entry);
@@ -649,30 +652,23 @@ HASHRESULT get_ptr_by_int( jwHashTable *table, long int key, void **value )
 {
    // compute hash on key
    size_t hash = hashInt(key) % table->buckets;
-   HASH_DEBUG("get_ptr_by_int() key %d\n",key);
-
    // get entry
    jwHashEntry *entry = table->bucket[hash];
-  HASH_DEBUG("one\n"); 
    // already an entry
    while(entry)
    {
       // check for key
-  HASH_DEBUG("two\n"); 
       //HASH_DEBUG("found entry key: %d value: %p\n",entry->key.intValue,entry->value.ptrValue);
       //HASH_DEBUG("comparing: %d value: %d\n",entry->key.intValue,key);
       if(entry->key.intValue==key) {
-         HASH_DEBUG("found value %x\n",entry->value.ptrValue);
+         HASH_DEBUG("key = %d found value %x\n",key,entry->value.ptrValue);
          *value = entry->value.ptrValue;
-  HASH_DEBUG("three\n"); 
          return HASHOK;
       }
-  HASH_DEBUG("four\n"); 
       // move to next entry
                 HASH_DEBUG("move to next entry\n");
       entry = entry->next;
    }
-  HASH_DEBUG("five\n"); 
 *  value = NULL; 
    // not found
    return HASHNOTFOUND;

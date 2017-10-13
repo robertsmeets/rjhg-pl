@@ -57,9 +57,9 @@ bool func_le_dd(double i, double j) { return i <= j; }
  * return the size of a string
  *
  */
-void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
+void string_size(char* ptr,stack_element* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
-   stack_element fr1 = (*s)[*t-1];
+   stack_element fr1 = s[*t-1];
    if (fr1.atype != TYPE_STRING)
    {
       printf("size requested, but this is not a string\n");
@@ -67,8 +67,8 @@ void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInte
    }
    char * ptr1 = (char*) fr1.address;
    uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
-   (*s)[*t].atype=TYPE_INT;
-   (*s)[*t].address=len1;
+   s[*t].atype=TYPE_INT;
+   s[*t].address=len1;
    (*t)++; 
 }
 
@@ -78,7 +78,7 @@ void string_size(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInte
  * this adds an element to an array 
  *
  */
-void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
+void array_add(char* ptr,stack_element* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
    if (debug){printf("In the array_add one\n");}
    //
@@ -136,15 +136,15 @@ void array_add(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    // set the value
    //
    char* mptr = spaceptr + (actual-1) * 8;
-   *mptr = (*s)[*t-2].atype & 0xff;
-   char* avptr = (char*)(*s)[*t-2].address;
+   *mptr = s[*t-2].atype & 0xff;
+   char* avptr = (char*)s[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
    (*t)--;
    (*t)--;
 }
 
-void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterpreter* i) 
+void array_set(char* ptr,stack_element* s,uint16_t* t,bool debug,CInterpreter* i) 
 {
    //
    // byte 0 and 1 are the actual length
@@ -158,21 +158,21 @@ void array_set(char* ptr,vector<stack_element>* s,uint16_t* t,bool debug,CInterp
    //
    // set the value
    //
-   int atype = (*s)[*t-3].atype & 0xff;
+   int atype = s[*t-3].atype & 0xff;
    if (atype != TYPE_INT)
    {
        printf("array index is not an integer\n");
        exit(-1);
    }
-   int index = (*s)[*t-3].address;
+   int index = s[*t-3].address;
    if (index >= actual)
    {
        printf("array index %d out of range, array size is %d\n",index,actual);
        exit(-1);
    }       
    char* mptr = spaceptr + index * 8;
-   *mptr = (*s)[*t-2].atype & 0xff;
-   char* avptr = (char*)(*s)[*t-2].address;
+   *mptr = s[*t-2].atype & 0xff;
+   char* avptr = (char*)s[*t-2].address;
    char** vptr = (char**)(mptr+1);
    *vptr = avptr; 
    (*t)--;
