@@ -111,7 +111,7 @@ IF(NOT MSVC)
    # write the result to myparser.lex.c
    #
    FILE(READ lex.yy.c f0 )
-     STRING( REGEX REPLACE "malloc[(]strlen" "(char*)malloc(strlen" f2 "${f0}" )
+     STRING( REGEX REPLACE "malloc[(]strlen" "(char*)GC_MALLOC(strlen" f2 "${f0}" )
    FILE(WRITE myparser.lex.c "${f2}")
    
    # Add y.tab.c to the list of sources

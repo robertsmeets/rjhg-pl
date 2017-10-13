@@ -55,9 +55,9 @@ bool func_le_id(unsigned int, double);
 bool func_le_di(double, unsigned int);
 bool func_le_dd(double, double);
 
-void array_add(char* ,vector<stack_element>* ,uint16_t* ,bool,CInterpreter* );
-void array_set(char* ,vector<stack_element>* ,uint16_t* ,bool ,CInterpreter*);
-void string_size(char*, vector<stack_element>* ,uint16_t* ,bool ,CInterpreter*);
+void array_add(char* ,stack_element* ,uint16_t* ,bool,CInterpreter* );
+void array_set(char* ,stack_element* ,uint16_t* ,bool ,CInterpreter*);
+void string_size(char*, stack_element* ,uint16_t* ,bool ,CInterpreter*);
 
 template <typename T>
 void delete_pointed_to(T* const ptr)

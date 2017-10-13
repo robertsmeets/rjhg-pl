@@ -48,7 +48,7 @@ class CInterpreter {
    uint16_t t;
    uint16_t tr;
    uint16_t tb;
-   vector<stack_element> s;
+   stack_element s[500];
    vector<unsigned short int> r;
    vector<unsigned short int> b;
    HeapManager* hm;
@@ -80,7 +80,7 @@ public:
    void print_a_string(char*,bool);
    void print_a_string(char*, uint16_t);
    void print_stack();
-   vector<stack_element>* getStack();
+   stack_element* getStack();
    int getStackDepth();
 };
 

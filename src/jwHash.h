@@ -23,6 +23,7 @@ limitations under the License.
 
 // needed for size_t
 #include <stddef.h>
+#include "gc.h"
 
 #ifdef HASHDEBUG
 # define HASH_DEBUG(fmt,args...) printf(fmt, ## args)
@@ -116,6 +117,10 @@ HASHRESULT get_str_by_int( jwHashTable *table, long int key, char **value );
 HASHRESULT get_int_by_int( jwHashTable *table, long int key, int *i );
 HASHRESULT get_dbl_by_int( jwHashTable *table, long int key, double *val );
 HASHRESULT get_ptr_by_int( jwHashTable *table, long int key, void **value );
+
+
+//void printHash(jwHashTable *table);
+
 #endif
 
 

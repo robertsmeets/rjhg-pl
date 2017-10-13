@@ -17,7 +17,6 @@ CInterpreter::CInterpreter(char* a_buffer, DebugInfo* a_di) {
    t = 0;   // is the top of the stack s
    tr = 0;  // is the top of the stack r
    tb = 0;  // is the top of the stack b
-   s = vector<stack_element>(500);
    r = vector<unsigned short int>(500); // return stack
    b = vector<unsigned short int>(500); // block address stack
    //
@@ -98,14 +97,14 @@ int CInterpreter::getStackDepth()
    return t;
 }
 
-vector<stack_element>* CInterpreter::getStack() {
-   return &s;
+stack_element* CInterpreter::getStack() {
+   return s;
 }
 
 void CInterpreter::start(bool indebug) {
    debug=indebug;
    if (debug) {printf("Starting interpreter...\n" );}
-   methodmap = create_hash(100);
+   methodmap = create_hash(1);
    check_magic_number();
    pc = find_offset();
    if (debug){ printf("PC is now 0x%x\n",pc);}
@@ -128,11 +127,13 @@ void CInterpreter::start(bool indebug) {
          //
          // was not found
          //
-         jwHashTable* map2 = create_hash(100);
-         uint16_t ar[3];
+         jwHashTable* map2 = create_hash(1);
+         uint16_t* ar = (uint16_t*)GC_MALLOC(3* sizeof(uint16_t));
          ar[0] = address;
          ar[1] = num_params;
          ar[2] = num_local_vars;
+         if(debug) {printf("adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
+         if(debug) {printf("ar = %x\n",ar);}
          add_ptr_by_int(map2,classnum,ar);
          add_ptr_by_int(methodmap,methodnum,(void*)map2);
       }
@@ -148,11 +149,17 @@ void CInterpreter::start(bool indebug) {
             //
             // class does not have this method. Add it
             //
-            uint16_t bar[3];
+            if(debug) {printf("adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
+            uint16_t* bar = (uint16_t*)GC_MALLOC(3* sizeof(uint16_t));
             bar[0] = address;
             bar[1] = num_params;
             bar[2] = num_local_vars;
-            add_ptr_by_int((jwHashTable*)sstr1,classnum,(void**)&bar);
+            add_ptr_by_int((jwHashTable*)sstr1,classnum,(void*)bar);
+            if(debug) {printf("bar = %x\n",bar);}
+         }
+         else
+         {
+            if(debug) {printf("NOT adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
          }
       }
    }
@@ -932,14 +939,14 @@ int CInterpreter::execute_next() {
            // 
            // array.add() method
            //
-           array_add(ptr,&s,&t,debug,this);
+           array_add(ptr,s,&t,debug,this);
         }
         else if (l==2)
         {
            // 
            // array.set() method
            //
-           array_set(ptr,&s,&t,debug,this);
+           array_set(ptr,s,&t,debug,this);
         }
         else
         {
@@ -953,7 +960,7 @@ int CInterpreter::execute_next() {
          {
             if (l==3)
             {
-              string_size(ptr,&s,&t,debug,this);
+              string_size(ptr,s,&t,debug,this);
             }
             else
             {
@@ -966,8 +973,6 @@ int CInterpreter::execute_next() {
             //
             // figure out the classnum
             //
-            if(debug)printf("before figurint out classnum ptr=%p\n",ptr);
-            if(debug)printf("l=%d\n",l);
             uint16_t* uptr = (uint16_t*) ptr;
             uint16_t classnum = *uptr;
             if (classnum == 0)
@@ -988,6 +993,12 @@ int CInterpreter::execute_next() {
             uint16_t* cl;
             get_ptr_by_int(thing,classnum,(void**)&cl);
             if (cl==NULL) { printf("class does not have method (two)\n"); exit(-1); } 
+            if(debug){
+                 printf("-------------- Retrieved  methodnum =  %d classnum =  %d ptr= %x\n",l,classnum,cl);
+                 printf("cl[0] = %x\n",cl[0]);
+                 printf("cl[1] = %d\n",cl[1]);
+                 printf("cl[2] = %d\n",cl[2]);
+            }
             b[tb] = t - a - 1;
             tb++;
             //
@@ -1325,7 +1336,7 @@ void CInterpreter::pass_in_arg( DCCallVM* vm, char c,stack_element f)
              } 
                 char* adr = (char*) (f.address);
                 int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
-                char* str = (char*) malloc(len + 1);
+                char* str = (char*) GC_MALLOC(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
                 dcArgPointer(vm, str);

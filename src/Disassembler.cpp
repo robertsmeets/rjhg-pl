@@ -29,7 +29,7 @@ void Disassembler::start(char* inbuffer, unsigned int size, DebugInfo* a_di) {
    //
    hexdump(buffer, size);
    print_tables();
-   uint16_t i = (buffer[6] & 0xff) + ((buffer[7] & 0xff) >> 8);
+   i = (buffer[6] & 0xff) + ((buffer[7] & 0xff) >> 8);
    printf("---------------------------------------------------------\n");
    printf("i is now %d size is now %d\n",i,size);
    for (; i < size;) {
@@ -40,7 +40,6 @@ void Disassembler::start(char* inbuffer, unsigned int size, DebugInfo* a_di) {
       unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
       string s = decode(f, l, a);
       printf("%s\n",s.c_str() );
-      i += 5;
    }
 }
 
