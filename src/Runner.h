@@ -4,7 +4,6 @@
 #include "Comments.h"
 #include "CodeGenerator.h"
 #include "Disassembler.h"
-#include "CInterpreter.h"
 #include "stdio.h"
 #include "Assignment.h"
 #include "If.h"
@@ -15,13 +14,18 @@
 #include "MethodCall.h"
 
 using namespace std;
- int yyparse();
+ 
+
+int yyparse();
 
 #ifdef  MAIN_FILE
 ProgramNode* glob;
 #else
 extern ProgramNode* glob;
 #endif
+
+extern "C" void CI_init(char*);
+extern "C" void CI_start(bool);
 
 class Runner {
 
@@ -31,19 +35,5 @@ public:
    void compile(string ,bool );
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

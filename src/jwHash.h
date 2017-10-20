@@ -13,23 +13,12 @@ limitations under the License.
 
 */
 
-//#define HASHTHREADED  1
-//#define HASHTEST      1
-//#define HASHDEBUG     1
-
-// guards! guards!
 #ifndef jwhash_h
 #define jwhash_h
 
 // needed for size_t
 #include <stddef.h>
 #include "gc.h"
-
-#ifdef HASHDEBUG
-# define HASH_DEBUG(fmt,args...) printf(fmt, ## args)
-#else
-# define HASH_DEBUG(fmt,args...) do {} while (0);
-#endif
 
 // resuts codes
 typedef enum 
@@ -44,9 +33,7 @@ typedef enum
 
 typedef enum
 {
-	HASHPTR,
-	HASHNUMERIC,
-	HASHSTRING,
+	HASHPTR
 } HASHVALTAG;
 	
 
@@ -77,10 +64,6 @@ struct jwHashTable
 	size_t buckets;
 	size_t bucketsinitial;			// if we resize, may need to hash multiple times
 	HASHRESULT lastError;
-#ifdef HASHTHREADED
-	volatile int *locks;			// array of locks
-	volatile int lock;				// lock for entire table
-#endif
 };
 
 // Create/delete hash table
@@ -88,38 +71,8 @@ jwHashTable *create_hash( size_t buckets );
 void *delete_hash( jwHashTable *table );		// clean up all memory
 
 
-// Add to table - keyed by string
-HASHRESULT add_str_by_str( jwHashTable*, char *key, char *value );
-HASHRESULT add_dbl_by_str( jwHashTable*, char *key, double value );
-HASHRESULT add_int_by_str( jwHashTable*, char *key, long int value );
-HASHRESULT add_ptr_by_str( jwHashTable*, char *key, void *value );
-
-// Delete by string
-HASHRESULT del_by_str( jwHashTable*, char *key );
-
-// Get by string
-HASHRESULT get_str_by_str( jwHashTable *table, char *key, char **value );
-HASHRESULT get_int_by_str( jwHashTable *table, char *key, int *i );
-HASHRESULT get_dbl_by_str( jwHashTable *table, char *key, double *val );
-
-
-// Add to table - keyed by int
-HASHRESULT add_str_by_int( jwHashTable*, long int key, char *value );
-HASHRESULT add_dbl_by_int( jwHashTable*, long int key, double value );
-HASHRESULT add_int_by_int( jwHashTable*, long int key, long int value );
 HASHRESULT add_ptr_by_int( jwHashTable*, long int key, void *value );
-
-// Delete by int
-HASHRESULT del_by_int( jwHashTable*, long int key );
-
-// Get by int
-HASHRESULT get_str_by_int( jwHashTable *table, long int key, char **value );
-HASHRESULT get_int_by_int( jwHashTable *table, long int key, int *i );
-HASHRESULT get_dbl_by_int( jwHashTable *table, long int key, double *val );
 HASHRESULT get_ptr_by_int( jwHashTable *table, long int key, void **value );
-
-
-//void printHash(jwHashTable *table);
 
 #endif
 
