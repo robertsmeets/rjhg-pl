@@ -1,19 +1,10 @@
 cmake_minimum_required(VERSION 2.8.0)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
 PROJECT(myparser)
-ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.c CInterpreter.c ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp NotExpression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Self.cpp Runner.cpp SelfStart.cpp FileCreator.cpp myparser.lex.c y.tab.c jwHash.c)
-ADD_EXECUTABLE(interpret main.cpp CFunctions.c CInterpreter.c SelfStart.cpp jwHash.c)
-INCLUDE(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.c CInterpreter.c ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp NotExpression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Self.cpp Runner.cpp SelfStart.c FileCreator.cpp myparser.lex.c y.tab.c jwHash.c)
+ADD_EXECUTABLE(interpret main.cpp CFunctions.c CInterpreter.c SelfStart.c jwHash.c)
+#INCLUDE(CheckCXXCompilerFlag)
 ADD_DEFINITIONS(-std=c++11)
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-endif()
 INCLUDE_DIRECTORIES( ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include .)
 
 IF(WIN32)
@@ -26,14 +17,9 @@ IF(WIN32)
    SET_PROPERTY(TARGET gc.a PROPERTY IMPORTED_LOCATION ../bdwgc/gc.a)
    SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(myparser libdyncall_s libdynload_s gc.a )
-   SET_TARGET_PROPERTIES(interpret PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(interpret libdyncall_s libdynload_s gc.a )
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl, -Wl,--build-id=none")
-#-Wl,norelro 
-#-Wl-z -fshort-double -fsingle-precision-constant 
-#-mfpmath=387 -mfancy-math-387 
-#-ffast-math 
-#--hash-style=gnu 
+   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -Wno-incompatible-pointer-types -Wno-int-conversion")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -DDEBUG -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,--build-id=none -Wl,norelro -Wl-z -fshort-double -fsingle-precision-constant -mfpmath=387 -mfancy-math-387 -ffast-math --hash-style=gnu")
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -59,8 +45,8 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    TARGET_LINK_LIBRARIES(interpret dyncall_s.a dynload_s.a dyncallback_s.a libdl.so pthread libgc-lib.a)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
-SET(GCC_COVERAGE_COMPILE_FLAGS "-fpermissive")
-ADD_DEFINITIONS(${GCC_COVERAGE_COMPILE_FLAGS})
+#SET(GCC_COVERAGE_COMPILE_FLAGS "-fpermissive")
+#ADD_DEFINITIONS(${GCC_COVERAGE_COMPILE_FLAGS})
 
 # Create target for the parser
 ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")

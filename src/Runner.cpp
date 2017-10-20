@@ -8,8 +8,8 @@ int Runner::compile_run(string filename,bool debug)
    //
    // start interpreting
    //
-   CInterpreter i(cg->getCodeBuffer(),NULL);
-   i.start(debug);
+   CI_init(cg->getCodeBuffer());
+   CI_start(debug);
    return 0;
 }
 

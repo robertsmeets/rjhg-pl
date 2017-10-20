@@ -11,6 +11,7 @@
 #include "stdio.h"
 #include "CInterpreter.h"
 
+struct stack_element;
 unsigned int func_plus_ii(unsigned int, unsigned int);
 double func_plus_id(int, double);
 double func_plus_di(double, int);

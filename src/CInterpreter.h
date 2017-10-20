@@ -9,11 +9,13 @@
 #define INTERPRETER_SRC_INTERPRETER_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <dyncall.h>
 #include <dyncall_callf.h>
 #include <dynload.h>
 #include <math.h>
 #include <stdint.h>
+#include <string.h>
 #include <gc.h>
 #include <stdbool.h>
 
@@ -31,18 +33,17 @@ struct extern_record {
    char* signature;
 };
 
-   bool debug;
-   char* buffer;
-   uint16_t pc;
-   uint16_t t;
-   uint16_t tr;
-   uint16_t tb;
-   struct stack_element s[500];
-   unsigned short int r[500];
-   unsigned short int b[500];
+   static bool debug;
+   static char* buffer;
+   static uint16_t pc;
+   static uint16_t t;
+   static uint16_t tr;
+   static uint16_t tb;
+   static struct stack_element s[500];
+   static unsigned short int r[500];
+   static unsigned short int b[500];
    // HeapManager* hm;
 
-   //typedef void (*especial) (char* ,vector<stack_element>* ,uint16_t* ,bool,CInterpreter* );
    typedef uint16_t (*iiptr)(uint16_t, uint16_t);
    typedef double (*ddptr)(double, double);
    typedef double (*idptr)(uint16_t, double);
@@ -52,21 +53,21 @@ struct extern_record {
    typedef bool (*bddptr)(double, double);
    typedef bool (*bidptr)(uint16_t, double);
    typedef bool (*bdiptr)(double, uint16_t);
-   iiptr fptrs[14][8][8];
+   static iiptr fptrs[14][8][8];
 
-   jwHashTable* methodmap;
-   unsigned int extern_count = 0;
-   struct extern_record externs[100];
-   uint16_t find_ext_proc_table(); 
-   void check_magic_number();
-   uint16_t find_offset();
-   void call_external(short unsigned int,short unsigned int) ;
-   void pass_in_arg( DCCallVM* ,char ,struct stack_element);
-   void start(bool);
-   int execute_next();
-   void print_a_string(char*,bool);
-   void print_stack();
-   struct stack_element* getStack();
-   int getStackDepth();
+   static jwHashTable* methodmap;
+   static unsigned int extern_count ;
+   static struct extern_record externs[100];
+   int CI_getStackDepth();
+   struct stack_element* CI_getStack();
+   void CI_check_magic_number();
+   uint16_t CI_find_offset();
+   uint16_t CI_find_ext_proc_table();
+   int CI_execute_next();
+   void CI_print_stack();
+   void CI_print_a_string(char* ,bool ); 
+   void CI_print_a_string2(char* , uint16_t ); 
+   void CI_call_external(short unsigned int ,short unsigned int ); 
+   void CI_pass_in_arg( DCCallVM* , char ,struct stack_element );
 
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

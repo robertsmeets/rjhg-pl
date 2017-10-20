@@ -1,5 +1,5 @@
 /*
- * CInterpreter.cpp
+ * CInterpreter.c
  *
  *  Created on: Dec 11, 2014
  *      Author: robert
@@ -9,7 +9,7 @@
 #include "stdint.h"
 
 
-CI_init(char* a_buffer) {
+void CI_init(char* a_buffer) {
    buffer=a_buffer;
    pc = 0; // program counter
    t = 0;   // is the top of the stack s
@@ -97,10 +97,10 @@ void CI_start(bool indebug) {
    debug=indebug;
    if (debug) {printf("Starting interpreter...\n" );}
    methodmap = create_hash(1);
-   check_magic_number();
-   pc = find_offset();
+   CI_check_magic_number();
+   pc = CI_find_offset();
    if (debug){ printf("PC is now 0x%x\n",pc);}
-   uint16_t start_ext_proc_table = find_ext_proc_table();
+   uint16_t start_ext_proc_table = CI_find_ext_proc_table();
    //
    // fill the methodmap
    //
@@ -119,7 +119,7 @@ void CI_start(bool indebug) {
          //
          // was not found
          //
-         jwHashTable* map2 = create_hash(1);
+         jwHashTable* map2 = create_hash(100);
          uint16_t* ar = (uint16_t*)GC_MALLOC(3* sizeof(uint16_t));
          ar[0] = address;
          ar[1] = num_params;
@@ -173,11 +173,11 @@ void CI_start(bool indebug) {
       er.signature = signature; 
       externs[extern_count]=er;
       extern_count++;
-      j+= signature.length() + 1;
+      j+= len + 1;
    } 
    unsigned i = 0;
    for (; !i;) {
-      i = execute_next();
+      i = CI_execute_next();
    }
 }
 
@@ -222,7 +222,7 @@ int CI_execute_next() {
    lptr = (char*) buffer + pc;
    unsigned short int a = (*lptr & 0xff) + (*(lptr + 1) << 8);
    pc += 2;
-   stack_element temp;
+   struct stack_element temp;
    //
    // opcode definitions
    //
@@ -326,7 +326,7 @@ int CI_execute_next() {
          break;
       case 1:
          {if (debug) { printf(" UNARY MINUS"); }
-         stack_element fr1 = s[t - 1];
+         struct stack_element fr1 = s[t - 1];
          if (fr1.atype != 2) {
             puts("type must be integer");
          }
@@ -339,8 +339,8 @@ int CI_execute_next() {
          {
          if (debug) { printf(" PLUS, MINUS or MUL"); }
          t--;
-         stack_element fr1 = s[t - 1];
-         stack_element fr2 = s[t];
+         struct stack_element fr1 = s[t - 1];
+         struct stack_element fr2 = s[t];
          if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
@@ -423,7 +423,8 @@ int CI_execute_next() {
             memcpy(&d2, (void*) fr2.address, 8);
             aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
             double d3 = (*aidptr)(fr1.address, d2);
-            stack_element* fr3 = new stack_element();
+            struct stack_element se;
+            struct stack_element* fr3 = &se; 
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
             fr3->address = (long long unsigned int) tmp ;
@@ -437,7 +438,8 @@ int CI_execute_next() {
             memcpy(&d1, (void*) (fr1.address), 8);
             adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
             double d3 = (*adiptr)(d1, fr2.address);
-            stack_element* fr3 = new stack_element();
+            struct stack_element se;
+            struct stack_element* fr3 = &se;
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
             fr3->address = (long long unsigned int)tmp ;
@@ -464,7 +466,8 @@ int CI_execute_next() {
             double d3 = (*addptr)(d1, d2);
             //
             //
-            stack_element* fr3 = new stack_element();
+            struct stack_element se;
+            struct stack_element* fr3 = &se;
             fr3->atype = 5;
             char* tmp = (char*)GC_MALLOC(8);
             fr3->address = (long long unsigned int) tmp ;
@@ -479,8 +482,8 @@ int CI_execute_next() {
          {
          if (debug) { printf(" DIV"); }
          t--;
-         stack_element fr1 = s[t - 1];
-         stack_element fr2 = s[t];
+         struct stack_element fr1 = s[t - 1];
+         struct stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("division both types must be integer");
          }
@@ -491,8 +494,8 @@ int CI_execute_next() {
       case 6:
          {if (debug) { printf(" MOD"); }
          t--;
-         stack_element fr1 = s[t - 1];
-         stack_element fr2 = s[t];
+         struct stack_element fr1 = s[t - 1];
+         struct stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("modulo both types must be integer");
          }
@@ -508,8 +511,8 @@ int CI_execute_next() {
       case 13:
       case 19:
          {t--;
-         stack_element fr1 = s[t - 1];
-         stack_element fr2 = s[t];
+         struct stack_element fr1 = s[t - 1];
+         struct stack_element fr2 = s[t];
          if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
             //
             // operation on two integers
@@ -693,7 +696,7 @@ int CI_execute_next() {
 	 case 15: // NOT
 	 {
 	 if (debug) { printf("NOT"); }
-         stack_element fr1 = s[t - 1];
+         struct stack_element fr1 = s[t - 1];
          if (fr1.atype != TYPE_BOOLEAN) {
             printf("NOT: type must be boolean");
 	    exit(-1);
@@ -705,8 +708,8 @@ int CI_execute_next() {
 	 case 16: // AND
 	 {
             t--;
-            stack_element fr1 = s[t - 1];
-            stack_element fr2 = s[t];
+            struct stack_element fr1 = s[t - 1];
+            struct stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
             printf("AND: both types must be boolean");
 	    exit(-1);
@@ -718,8 +721,8 @@ int CI_execute_next() {
 	 case 17: // OR
 	 {
             t--;
-            stack_element fr1 = s[t - 1];
-            stack_element fr2 = s[t];
+            struct stack_element fr1 = s[t - 1];
+            struct stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_BOOLEAN) || (fr2.atype != TYPE_BOOLEAN)) {
             printf("OR: both types must be boolean");
 	    exit(-1);
@@ -731,8 +734,8 @@ int CI_execute_next() {
 	 case 18: // MOD 
 	 {
             t--;
-            stack_element fr1 = s[t - 1];
-            stack_element fr2 = s[t];
+            struct stack_element fr1 = s[t - 1];
+            struct stack_element fr2 = s[t];
          if ((fr1.atype != TYPE_INT) || (fr2.atype != TYPE_INT)) {
             printf("MOD: both types must be integer");
 	    exit(-1);
@@ -791,7 +794,7 @@ int CI_execute_next() {
       break;
    case 8:         // jpc - jump when true
       {if (debug) { printf("JPC %d " , a); }
-      stack_element fr1 = s[t - 1];
+      struct stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPC value is not boolean");
       }
@@ -802,7 +805,7 @@ int CI_execute_next() {
       break;}
    case 17:          // jpf: jump when false
       {if (debug) { printf("JPF %d " , a); }
-      stack_element fr1 = s[t - 1];
+      struct stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
          puts("JPF value is not boolean");
       }
@@ -814,14 +817,14 @@ int CI_execute_next() {
    case 9: // print
       {if (debug) { printf("PRINT %d " , a); }
       t--;
-      stack_element fr1 = s[t];
+      struct stack_element fr1 = s[t];
       if (fr1.atype == TYPE_NULL)
       {
           printf("NULL\n");
       }
       else if (fr1.atype == TYPE_STRING) {
          char* ptr = (char*) (fr1.address);
-         print_a_string(ptr,true);
+         CI_print_a_string(ptr,true);
       } else if (fr1.atype == TYPE_FLOAT) {
          //
          // float
@@ -854,7 +857,7 @@ int CI_execute_next() {
       //
       // call the procedure
       //
-      call_external(l,a);
+      CI_call_external(l,a);
       break;
    case 11: // object creation
       if (debug) { printf("OBJCREATE %d,%d " ,l,a); }
@@ -934,14 +937,14 @@ int CI_execute_next() {
            // 
            // array.add() method
            //
-           array_add(ptr,s,&t,debug,this);
+           array_add(ptr,s,&t,debug);
         }
         else if (l==2)
         {
            // 
            // array.set() method
            //
-           array_set(ptr,s,&t,debug,this);
+           array_set(ptr,s,&t,debug);
         }
         else
         {
@@ -955,7 +958,7 @@ int CI_execute_next() {
          {
             if (l==3)
             {
-              string_size(ptr,s,&t,debug,this);
+              string_size(ptr,s,&t,debug);
             }
             else
             {
@@ -1082,7 +1085,7 @@ int CI_execute_next() {
       exit(-1);
       break;
    }
-   print_stack();
+   CI_print_stack();
    return 0;
 }
 
@@ -1125,7 +1128,7 @@ if (debug) {
             break;
          case TYPE_STRING: // string
             adr = (char*) (s[i].address);
-            print_a_string(adr,false);
+            CI_print_a_string(adr,false);
             break;
          case TYPE_PTR: // pointer
          {
@@ -1155,7 +1158,7 @@ if (debug) {
 
 void CI_print_a_string(char* ptr,bool b) {
    uint16_t len = ((*ptr) & 0xff) + (*(ptr + 1) << 8);
-   print_a_string(ptr + 2, len);
+   CI_print_a_string2(ptr + 2, len);
    if (b)
    {
       printf("\n");
@@ -1163,7 +1166,7 @@ void CI_print_a_string(char* ptr,bool b) {
 
 }
 
-void CI_print_a_string(char* ptr, uint16_t len) {
+void CI_print_a_string2(char* ptr, uint16_t len) {
    for (char* i = ptr; i < ptr + len; i++) {
       printf("%c",*i);
    }
@@ -1180,24 +1183,26 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
         printf("illegal function number %d highest function number is %lu\n",function_number,extern_count);
         exit(-1);
    }
-   extern_record e = externs[function_number-1];
+   struct extern_record e = externs[function_number-1];
    void* sym = (void*)(e.address);
-   string signature = e.signature;
-   size_t pos = signature.find("-");
-   bool varargs =  (pos==std::string::npos);
+   char* signature = e.signature;
+   size_t pos = strchr(signature,'-');
+   bool varargs =  (pos==0);
    if (varargs)
    {
-      pos = signature.find("+");
+      pos = strchr(signature,'+');
    }
-   string ingoing =  signature.substr(0,pos);
-   int ilen = ingoing.length();
-   string outgoing = signature.substr(pos+1); 
+   char* ingoing = GC_MALLOC(pos+1);
+   strncpy(ingoing, signature,pos);
+   int ilen =pos;
+   char* outgoing = GC_MALLOC(pos+1);
+   strncpy(outgoing,signature,pos+1); 
    DCCallVM* vm = dcNewCallVM(4096);
    if (varargs)
    {
       if (a < ilen) 
       {
-         printf("Mismatch: ingoing arguments given %d but expected at least %lu",a,ingoing.size());
+         printf("Mismatch: ingoing arguments given %d but expected at least %lu",a,pos);
          exit(-1);
       }
       dcMode(vm, DC_CALL_C_ELLIPSIS);
@@ -1206,7 +1211,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    {
       if (a != ilen) 
       {
-         printf("Mismatch: ingoing arguments given %d but expected %lu",a,ingoing.size());
+         printf("Mismatch: ingoing arguments given %d but expected %lu",a,pos);
          exit(-1);
       }
       dcMode(vm, DC_CALL_C_DEFAULT);
@@ -1217,9 +1222,10 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    //
    int nr_ingoing = ilen;
    int cnt = a;
-   for(char& c : ingoing) {
-      stack_element f = s[t - cnt];
-      pass_in_arg(vm,c,f);
+   for(int i=0;i<ilen;i++) {
+      char* c = ingoing[i];
+      struct stack_element f = s[t - cnt];
+      CI_pass_in_arg(vm,c,f);
       cnt--;
    } 
    //
@@ -1228,8 +1234,8 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int left = a - ilen;
    for (int i = 0; i< left;i++)
    {
-      stack_element f = s[t - cnt];
-      pass_in_arg(vm,' ' ,f);
+      struct stack_element f = s[t - cnt];
+      CI_pass_in_arg(vm,' ' ,f);
       cnt--;
    }
    t -= a;
@@ -1294,7 +1300,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
 }
 
 
-void CI_pass_in_arg( DCCallVM* vm, char c,stack_element f)
+void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
 {
       uint16_t atype = f.atype;
       switch(atype)
