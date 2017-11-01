@@ -3,8 +3,10 @@
  * main entry point
  *
  */
+#include "gc.h"
 #include <stdio.h>
-#include "SelfStart.h"
+
+extern "C" void S_start(char*);
 
 int main(int argc, char* argv[]) {
    //
@@ -12,6 +14,6 @@ int main(int argc, char* argv[]) {
    //
    setvbuf(stdout, NULL, _IONBF, 0);
    GC_INIT();
-   SelfStart s;
-   return s.start(argv[0]); 
+   S_start(argv[0]);
+   return(0);
 }

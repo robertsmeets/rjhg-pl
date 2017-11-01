@@ -1,13 +1,16 @@
 #include "SelfStart.h"
 
-int SelfStart::start(char* filename)
+void CI_start(bool); 
+void CI_init(char*);
+
+int S_start(char* filename)
 {
-   string filename_open = shorten(filename);
-   FILE *infile = fopen (filename_open.c_str(), "rt");
+   char* filename_open = S_shorten(filename);
+   FILE *infile = fopen (filename_open, "rt");
    if (!infile) { printf("cannot open %s\n",filename); }
    char* buffer = (char*) GC_MALLOC(14);
    size_t result = fread(buffer, 1, 4, infile);
-   if(strncmp(buffer,XMAGIC,string(XMAGIC).length()) != 0)
+   if(strncmp(buffer,XMAGIC,strlen(XMAGIC)) != 0)
    {  
       printf("<%s> does not appear to be an executable\n", filename);
       return -1;
@@ -35,8 +38,8 @@ int SelfStart::start(char* filename)
    fseek(infile, -14-offset,SEEK_END);
    result = fread(bcbuffer,1,offset,infile);
    fclose(infile);
-   CInterpreter i(bcbuffer,NULL);
-   i.start(false); 
+   CI_init(bcbuffer);
+   CI_start(false); 
    return 0;
 }
   
@@ -46,23 +49,24 @@ int lower_case (int c)
 }
 
  
-string SelfStart::shorten(char* filename)
+char* S_shorten(char* filename)
 {
-   string filename_open = string(filename);
+   char* filename_open = filename;
 #ifdef _WIN32
-   int len = filename_open.length();
+   int len = strlen(filename_open);
    if (len >= 5)
    {
-       string endstring = filename_open.substr(len - 4,len);
-       transform(endstring.begin(), endstring.end(), endstring.begin(), lower_case);
+       char* endstring = GC_MALLOC(len-4);
+       strncpy(endstring,filename_open,len - 4);
+       //transform(endstring.begin(), endstring.end(), endstring.begin(), lower_case);
        if (endstring != ".exe")
        {
-          filename_open += ".exe";
+          //filename_open += ".exe";
        }
    } 
    else
    {
-      filename_open += ".exe";
+      //filename_open += ".exe";
    }
 #endif
    return filename_open;

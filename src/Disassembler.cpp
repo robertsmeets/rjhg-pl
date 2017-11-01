@@ -29,7 +29,9 @@ void Disassembler::start(char* inbuffer, unsigned int size, DebugInfo* a_di) {
    //
    hexdump(buffer, size);
    print_tables();
-   i = buffer[6] + buffer[7] * 256;
+   i = (buffer[6] & 0xff) + ((buffer[7] & 0xff) >> 8);
+   printf("---------------------------------------------------------\n");
+   printf("i is now %d size is now %d\n",i,size);
    for (; i < size;) {
       printf("%04X ",i );
       char f = buffer[i];

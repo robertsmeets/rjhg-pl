@@ -1,0 +1,24 @@
+class myclass
+ a,b,c,d,e
+end
+
+method myclass.zed(x)
+   a=x
+end
+
+method myclass.chemical(x)
+   return a
+end
+
+proc main(x)
+  c1= c1.chemical(0).chemical(1).chemical(2)
+  
+  
+
+
+  c1 = myclass(0)
+  c1.zed(123)
+  ps = c1.chemical(0)
+  print ps
+  return c1
+end

@@ -48,6 +48,7 @@ extern "C"
         {
                 return 1;
         }   
+        int S_start(char*);
 }
 void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
 
@@ -341,8 +342,7 @@ int main(int argc, char* argv[]) {
    }
    else
    {
-      SelfStart s;
-      int result = s.start(argv[0]); 
+      int result = S_start(argv[0]); 
       if (result==-1)
       {
          printf("Must provide filename as an argument, example %s c:\\\\test\\\\test.src\n",argv[0]);

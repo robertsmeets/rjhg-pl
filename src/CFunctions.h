@@ -9,11 +9,9 @@
 #define CFUNCTIONS_H_
 
 #include "stdio.h"
-#include <vector>
 #include "CInterpreter.h"
 
-using namespace std;
-class CInterpreter; // forward declaration
+struct stack_element;
 unsigned int func_plus_ii(unsigned int, unsigned int);
 double func_plus_id(int, double);
 double func_plus_di(double, int);
@@ -55,14 +53,8 @@ bool func_le_id(unsigned int, double);
 bool func_le_di(double, unsigned int);
 bool func_le_dd(double, double);
 
-void array_add(char* ,vector<stack_element>* ,uint16_t* ,bool,CInterpreter* );
-void array_set(char* ,vector<stack_element>* ,uint16_t* ,bool ,CInterpreter*);
-void string_size(char*, vector<stack_element>* ,uint16_t* ,bool ,CInterpreter*);
-
-template <typename T>
-void delete_pointed_to(T* const ptr)
-{
-    delete ptr;
-}
+void array_add(char* ,struct stack_element* ,uint16_t* ,bool);
+void array_set(char* ,struct stack_element* ,uint16_t* ,bool);
+void string_size(char*,struct stack_element* ,uint16_t* ,bool);
 
 #endif /* CFUNCTIONS_H_ */
