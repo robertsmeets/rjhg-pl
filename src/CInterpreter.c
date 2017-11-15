@@ -1186,11 +1186,14 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    struct extern_record e = externs[function_number-1];
    void* sym = (void*)(e.address);
    char* signature = e.signature;
-   size_t pos = strchr(signature,'-');
+   char* cpos = strchr(signature,'-');
+   int pos;
+   if (cpos == NULL) { pos=0; } else { pos = cpos - signature; } 
    bool varargs =  (pos==0);
    if (varargs)
    {
-      pos = strchr(signature,'+');
+      cpos = strchr(signature,'+');
+      if (cpos == NULL) { pos=0; } else { pos = cpos - signature; } 
    }
    char* ingoing = GC_MALLOC(pos+1);
    strncpy(ingoing, signature,pos);
