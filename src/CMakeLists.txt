@@ -7,8 +7,8 @@ PROJECT(myparser)
 ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.c CInterpreter.c ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp NotExpression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Self.cpp Runner.cpp SelfStart.c FileCreator.cpp myparser.lex.c y.tab.c jwHash.c)
 ADD_EXECUTABLE(interpret main.cpp CFunctions.c CInterpreter.c SelfStart.c jwHash.c)
 
-INCLUDE_DIRECTORIES( ../libffi-3.2.1/include ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include .)
-
+INCLUDE_DIRECTORIES( ../libffi-3.2.1/i686-pc-mingw32/include ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include .)
+# gcc -I../libffi-3.2.1/i686-pc-mingw32/include -L../libffi-3.2.1/i686-pc-mingw32/.libs simplex.c -llibffi
 IF(WIN32)
    LINK_DIRECTORIES(/usr/lib ../libffi-3.2.1/i686-pc-mingw32/.libs ../dyncall-0.8_win/lib ../dyncall-0.8_linux/lib /usr/lib/x86_64-linux-gnu ../bdwgc /c/MinGW/lib)
    ADD_LIBRARY(libffi.a STATIC IMPORTED)
