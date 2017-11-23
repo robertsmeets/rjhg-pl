@@ -1346,7 +1346,8 @@ ffi_type* CI_value(char c, struct stack_element f)
              double arg_in;
              char* adr = (char*) (f.address);
              memcpy(&arg_in, adr, 8);
-             dcArgDouble(vm, arg_in);
+             // dcArgDouble(vm, arg_in);
+             return &ffi_type_double;
              break;
           }
           case TYPE_STRING: // char*
@@ -1361,7 +1362,8 @@ ffi_type* CI_value(char c, struct stack_element f)
                 char* str = (char*) GC_MALLOC(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
-                dcArgPointer(vm, str);
+                // dcArgPointer(vm, str);
+                return &ffi_type_pointer;
                 break;
             }
          case TYPE_PTR: // pointer
@@ -1371,7 +1373,8 @@ ffi_type* CI_value(char c, struct stack_element f)
                   printf("expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
-               dcArgPointer(vm, (void*)f.address);
+                return &ffi_type_pointer;
+               // dcArgPointer(vm, (void*)f.address);
                break;
             }
           default:
