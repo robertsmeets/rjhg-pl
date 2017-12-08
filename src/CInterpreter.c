@@ -124,8 +124,6 @@ void CI_start(bool indebug) {
          ar[0] = address;
          ar[1] = num_params;
          ar[2] = num_local_vars;
-         if(debug) {printf("adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
-         if(debug) {printf("ar = %x\n",ar);}
          add_ptr_by_int(map2,classnum,ar);
          add_ptr_by_int(methodmap,methodnum,(void*)map2);
       }
@@ -141,17 +139,12 @@ void CI_start(bool indebug) {
             //
             // class does not have this method. Add it
             //
-            if(debug) {printf("adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
             uint16_t* bar = (uint16_t*)GC_MALLOC(3* sizeof(uint16_t));
             bar[0] = address;
             bar[1] = num_params;
             bar[2] = num_local_vars;
             add_ptr_by_int((jwHashTable*)sstr1,classnum,(void*)bar);
             if(debug) {printf("bar = %x\n",bar);}
-         }
-         else
-         {
-            if(debug) {printf("NOT adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
          }
       }
    }
@@ -1185,6 +1178,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    }
    struct extern_record e = externs[function_number-1];
    void* sym = (void*)(e.address);
+   if(debug)printf("sym = %x\n",sym); 
    char* signature = e.signature;
    char* cpos = strchr(signature,'-');
    int pos;
@@ -1200,19 +1194,10 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int ilen =pos;
    char* outgoing = GC_MALLOC(pos+1);
    strncpy(outgoing,signature,pos+1); 
-   //DCCallVM* vm = dcNewCallVM(4096);
-   
    ffi_cif cif;
    ffi_type *args[1];
    void *values[1];
-   //char *s;
-   int rc;
-   /* Initialize the argument info vectors */
-   args[0] = &ffi_type_pointer;
-   values[0] = &s;
-   /* Initialize the cif */
-   ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1, &ffi_type_uint, args);
-
+   ffi_arg rc;
    if (varargs)
    {
       if (a < ilen) 
@@ -1241,7 +1226,8 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
       char* c = ingoing[i];
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(c,f);
-// CI_pass_in_arg(vm,c,f);
+      values[i] = CI_pass_in_arg(c,f);
+      printf("values[%d] = %s\n",i,values[i]);
       cnt--;
    } 
    //
@@ -1252,16 +1238,32 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    {
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(' ',f);
-      //CI_pass_in_arg(vm,' ' ,f);
+      values[i] = CI_pass_in_arg(' ',f);
+      printf("values[%d] = %p\n",i,values[i]);
       cnt--;
    }
    t -= a;
    char c = outgoing[0];
-   ffi_call(&cif, sym, &rc, values);
-   /* rc now holds the result of the call to puts */
+   if(debug)printf("before ffi_prep_cif\n");
+   printf("Number Of Ingoing arguments %d\n",nr_ingoing);
+   int fresult = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, nr_ingoing, &ffi_type_pointer, args);
+   if (fresult != FFI_OK)
+   {
+        printf("something went wrong in ffi_prep_cif\n");
+        exit(-1);
+   }
+   if(debug)printf("after ffi_prep_cif\n");
    //
    // do the actual call
    //
+   printf("sym     %p\n",sym);
+   printf("fopen   %p\n",fopen);
+   printf("fclose  %p\n",fclose);
+   printf("printf  %p\n",printf);
+   printf("fprintf %p\n",fprintf);
+   ffi_call(&cif, fopen, &rc, values);
+   if(debug)printf("after call\n");
+   /* rc now holds the result of the call to puts */
    switch (c)
    {
       case 'd':
@@ -1320,6 +1322,43 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    // dcFree(vm);
 }
 
+void* CI_actual_value(struct stack_element f)
+{
+      uint16_t atype = f.atype;
+      switch(atype)
+      {
+          case TYPE_INT: // int
+          {
+             return &ffi_type_sint64;
+             break;
+          }
+          case TYPE_FLOAT:
+          {
+             double arg_in;
+             char* adr = (char*) (f.address);
+             memcpy(&arg_in, adr, 8);
+             return &ffi_type_double;
+             break;
+          }
+          case TYPE_STRING: // char*
+          {
+                char* adr = (char*) (f.address);
+                int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
+                char* str = (char*) GC_MALLOC(len + 1);
+                memcpy(str, adr + 2, len);
+                str[len] = '\0';
+                return &ffi_type_pointer;
+                break;
+         }
+         case TYPE_PTR: // pointer
+            {
+                return &ffi_type_pointer;
+            }
+        default:
+        {
+        }
+}
+}
 ffi_type* CI_value(char c, struct stack_element f)
 {
       uint16_t atype = f.atype;
@@ -1363,7 +1402,8 @@ ffi_type* CI_value(char c, struct stack_element f)
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
                 // dcArgPointer(vm, str);
-                return &ffi_type_pointer;
+                printf("-------------------------STRING-------------------------\n");
+               return &ffi_type_pointer;
                 break;
             }
          case TYPE_PTR: // pointer
@@ -1386,7 +1426,7 @@ ffi_type* CI_value(char c, struct stack_element f)
 }
 
 
-void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
+void* CI_pass_in_arg(char c,struct stack_element f)
 {
       uint16_t atype = f.atype;
       switch(atype)
@@ -1398,7 +1438,7 @@ void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
                 printf("expected %c in external call but got %d\n",c,atype);
                 exit(-1);
              }
-             dcArgInt(vm,f.address);
+             //dcArgInt(vm,f.address);
              break;
           }
           case TYPE_FLOAT:
@@ -1411,7 +1451,7 @@ void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
              double arg_in;
              char* adr = (char*) (f.address);
              memcpy(&arg_in, adr, 8);
-             dcArgDouble(vm, arg_in);
+             //dcArgDouble(vm, arg_in);
              break;
           }
           case TYPE_STRING: // char*
@@ -1426,7 +1466,9 @@ void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
                 char* str = (char*) GC_MALLOC(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
-                dcArgPointer(vm, str);
+                // dcArgPointer(vm, str);
+                printf("TYPE_STRING <%s>\n",str);
+                return str;
                 break;
             }
          case TYPE_PTR: // pointer
@@ -1436,7 +1478,8 @@ void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
                   printf("expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
-               dcArgPointer(vm, (void*)f.address);
+               //dcArgPointer(vm, (void*)f.address);
+               return (void*)f.address;
                break;
             }
           default:
