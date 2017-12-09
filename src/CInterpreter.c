@@ -1226,7 +1226,9 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
       char* c = ingoing[i];
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(c,f);
-      values[i] = CI_pass_in_arg(c,f);
+      char* someptr = CI_pass_in_arg(' ',f);
+      char** anotherptr =  &someptr;
+      values[i] = anotherptr;
       printf("values[%d] = %s\n",i,values[i]);
       cnt--;
    } 
@@ -1238,7 +1240,9 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    {
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(' ',f);
-      values[i] = CI_pass_in_arg(' ',f);
+      char* someptr = CI_pass_in_arg(' ',f);
+      char** anotherptr =  &someptr;
+      values[i] = anotherptr;
       printf("values[%d] = %p\n",i,values[i]);
       cnt--;
    }
@@ -1261,7 +1265,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    printf("fclose  %p\n",fclose);
    printf("printf  %p\n",printf);
    printf("fprintf %p\n",fprintf);
-   ffi_call(&cif, fopen, &rc, values);
+   ffi_call(&cif, puts, &rc, values);
    if(debug)printf("after call\n");
    /* rc now holds the result of the call to puts */
    switch (c)
