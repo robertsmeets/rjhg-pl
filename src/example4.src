@@ -1,0 +1,33 @@
+/**
+ *
+ * example program
+ *
+ */
+
+extern fopen   pp-p      ;
+extern fclose  p-p       ;
+extern fprintf pp+i      ;
+extern fgets   iii+p     ;
+
+ /*
+  * main 
+  *
+  */
+proc main()
+{
+   filename ="testfile.txt";
+   fp = fopen(filename,"w");
+   if (fp==null) { print "could not open the file "+filename+" for output"; return; };
+   fprintf(fp,"%d and %s\n",100,"BLA");
+   fclose(fp);
+   //
+   // read the file back in
+   //
+   fp = fopen(filename,"r"); 
+   if (fp==null) { print "could not open the file "+filename+" for input"; return; };
+   result = fgets(buf,1000,fp);
+   if (result==null) { print "could not get a string"; return; };
+   print(buf); 
+   fclose(fp);
+}
+

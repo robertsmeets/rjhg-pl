@@ -1195,9 +1195,9 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    char* outgoing = GC_MALLOC(pos+1);
    strncpy(outgoing,signature,pos+1); 
    ffi_cif cif;
-   ffi_type *args[1];
-   void *values[1];
-   ffi_arg rc;
+   ffi_type *args[2];
+   void *values[2];
+   long rc;
    if (varargs)
    {
       if (a < ilen) 
@@ -1226,10 +1226,9 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
       char* c = ingoing[i];
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(c,f);
-      char* someptr = CI_pass_in_arg(' ',f);
+      char* someptr = CI_pass_in_arg(c,f);
       char** anotherptr =  &someptr;
       values[i] = anotherptr;
-      printf("values[%d] = %s\n",i,values[i]);
       cnt--;
    } 
    //
@@ -1238,12 +1237,12 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int left = a - ilen;
    for (int i = 0; i< left;i++)
    {
+if(debug)printf("VARARGS-------------\n");
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(' ',f);
       char* someptr = CI_pass_in_arg(' ',f);
       char** anotherptr =  &someptr;
-      values[i] = anotherptr;
-      printf("values[%d] = %p\n",i,values[i]);
+      values[i+ilen] = anotherptr;
       cnt--;
    }
    t -= a;
@@ -1260,15 +1259,13 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    //
    // do the actual call
    //
-   printf("sym     %p\n",sym);
-   printf("fopen   %p\n",fopen);
-   printf("fclose  %p\n",fclose);
-   printf("printf  %p\n",printf);
-   printf("fprintf %p\n",fprintf);
-   ffi_call(&cif, puts, &rc, values);
+   sym = fopen;
+   ffi_call(&cif, sym, &rc, values);
    if(debug)printf("after call\n");
-   /* rc now holds the result of the call to puts */
-   switch (c)
+   /* rc now holds the result of the call to the function */
+   
+
+switch (c)
    {
       case 'd':
       {
@@ -1460,6 +1457,7 @@ void* CI_pass_in_arg(char c,struct stack_element f)
           }
           case TYPE_STRING: // char*
           {
+             if(debug)printf("-------- string in args\n");
              if ((c !=' ' ) && (c != 'p'))
              {
                 printf("expected string or pointer in external call but got %d\n",atype);
@@ -1477,6 +1475,7 @@ void* CI_pass_in_arg(char c,struct stack_element f)
             }
          case TYPE_PTR: // pointer
             {
+               if(debug)printf("-------- pointer in args\n");
                if ((c !=' ' ) && (c != 'p'))
                {
                   printf("expected string or pointer in external call but got %d\n",atype);
