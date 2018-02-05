@@ -259,7 +259,7 @@ Expression:
    |Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
    |Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
    |Expression AND Expression {$$=new Val2Expression('A',$1,$3);}
-   |Expression MOD Expression {$$=new Val2Expression('M',$1,$3);}
+   |Expression MOD Expression {$$=new Val2Expression('%',$1,$3);}
    |Expression OR Expression {$$=new Val2Expression('O',$1,$3);}
    |NOT Expression {$$=new NotExpression($2);}
    |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}

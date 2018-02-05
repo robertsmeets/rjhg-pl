@@ -15,11 +15,8 @@ CodeGenerator::CodeGenerator() {
    here = 0;
    pn = NULL;
    di = NULL;
-   opr_mapping['+'] = 2;
-   opr_mapping['-'] = 3;
-   opr_mapping['*'] = 4;
    opr_mapping['/'] = 5;
-   opr_mapping['%'] = 6;
+   opr_mapping['%'] = 6; // MOD
    opr_mapping['='] = 8;
    opr_mapping['N'] = 9;
    opr_mapping['<'] = 10;
@@ -30,7 +27,6 @@ CodeGenerator::CodeGenerator() {
    opr_mapping['n'] = 15; // NOT
    opr_mapping['A'] = 16; // AND
    opr_mapping['O'] = 17; // OR
-   opr_mapping['M'] = 18; // MOD 
 }
 
 CodeGenerator::~CodeGenerator() {
@@ -149,7 +145,8 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // emit RET
    //
-   emit(2, 0, 0, NULL);
+   emitByte(19);
+   emit2Byte(0);
    //
    // generate all the procedures
    //
@@ -214,9 +211,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
       Expression* s) {
-   if (s != NULL) {
-       // di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
-   }
    emitByte(f);
    emit2Byte(l);
    emit2Byte(a);
@@ -236,6 +230,11 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(char avalue, Expression* s) {
+
+   if (avalue=='+') {emit(OPCODE_PLS,0,0,s);return;}
+   if (avalue=='-') {emit(OPCODE_MIN,0,0,s);return;}
+   if (avalue=='*') {emit(OPCODE_MUL,0,0,s);return;}
+
    uint16_t atype = opr_mapping[avalue];
    if (atype == 0) {
       puts("Unexpected Operation" + avalue);

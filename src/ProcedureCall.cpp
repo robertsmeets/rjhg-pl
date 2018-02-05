@@ -98,7 +98,7 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
       //
       if (toplevel)
       {
-         cg->emit(15,0,0,NULL);
+         cg->emitByte(15);
       }
    }
 }

@@ -53,7 +53,7 @@ struct extern_record {
    typedef bool (*bddptr)(double, double);
    typedef bool (*bidptr)(uint16_t, double);
    typedef bool (*bdiptr)(double, uint16_t);
-   static iiptr fptrs[14][8][8];
+   static iiptr fptrs[35][8][8];
 
    static jwHashTable* methodmap;
    static unsigned int extern_count ;

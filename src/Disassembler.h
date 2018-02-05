@@ -15,6 +15,7 @@
 #include <string.h>
 
 #include "DebugInfo.h"
+#include "CConstants.h"
 
 using namespace std;
 
