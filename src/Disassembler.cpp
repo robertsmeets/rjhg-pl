@@ -174,12 +174,6 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
    case OPCODE_OPR: // opr
       sf = "OPR";
       switch (a) {
-      case OPR_DIV:
-         sa = "DIV";
-         break;
-      case OPR_MOD:
-         sa = "MOD";
-         break;
       case OPR_EQ:
          sa = "EQ";
          break;
@@ -307,6 +301,15 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
         sf = "UNA"; // UNARY MINUSs
         i+=5;
         break;
+   case OPCODE_DIV:
+        sf = "DIV";
+        i += 5;
+        break;
+   case OPCODE_MOD:
+        sf = "MOD";
+        i += 5;
+        break;
+
    default:
       sf = "-----------------------------------+> unexpected F value: " + int(f);
       printf(" F=%d L=%d A=%d" , (unsigned int) f , l , a );

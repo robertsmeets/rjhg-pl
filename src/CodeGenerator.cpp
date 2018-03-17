@@ -15,7 +15,7 @@ CodeGenerator::CodeGenerator() {
    here = 0;
    pn = NULL;
    di = NULL;
-   opr_mapping['/'] = 5;
+   opr_mapping['/'] = 5; // DIV
    opr_mapping['%'] = 6; // MOD
    opr_mapping['='] = 8;
    opr_mapping['N'] = 9;
@@ -234,6 +234,8 @@ void CodeGenerator::emitOperation(char avalue, Expression* s) {
    if (avalue=='+') {emit(OPCODE_PLS,0,0,s);return;}
    if (avalue=='-') {emit(OPCODE_MIN,0,0,s);return;}
    if (avalue=='*') {emit(OPCODE_MUL,0,0,s);return;}
+   if (avalue=='/') {emit(OPCODE_DIV,0,0,s);return;}
+   if (avalue=='%') {emit(OPCODE_MOD,0,0,s);return;}
 
    uint16_t atype = opr_mapping[avalue];
    if (atype == 0) {

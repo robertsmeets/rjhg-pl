@@ -34,9 +34,9 @@
 #define OPCODE_MIN  21
 #define OPCODE_MUL  22
 #define OPCODE_UNA  23 
+#define OPCODE_DIV  24
+#define OPCODE_MOD  25
 
-#define OPR_DIV  5
-#define OPR_MOD  6
 #define OPR_EQ   8
 #define OPR_NE   9
 #define OPR_LT  10

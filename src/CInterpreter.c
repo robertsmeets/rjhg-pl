@@ -450,6 +450,31 @@ int CI_execute_next() {
          }
          break; }
       case OPCODE_UNA: {if (debug) { printf(" UNARY MINUS"); } struct stack_element fr1 = s[t - 1]; if (fr1.atype != 2) { puts("type must be integer"); } fr1.address = -fr1.address; s[t - 1] = fr1; break;}
+      case OPCODE_DIV:
+         {
+         if (debug) { printf(" DIV"); }
+         t--;
+         struct stack_element fr1 = s[t - 1];
+         struct stack_element fr2 = s[t];
+         if ((fr1.atype != 2) || (fr2.atype != 2)) {
+            puts("division both types must be integer");
+         }
+         fr1.atype = 2;
+         fr1.address = fr1.address / fr2.address;
+         s[t - 1] = fr1;
+         break; }
+      case OPCODE_MOD:
+         {if (debug) { printf(" MOD"); }
+         t--;
+         struct stack_element fr1 = s[t - 1];
+         struct stack_element fr2 = s[t];
+         if ((fr1.atype != 2) || (fr2.atype != 2)) {
+            puts("modulo both types must be integer");
+         }
+         fr1.atype = 2;
+         fr1.address = fr1.address % fr2.address;
+         s[t - 1] = fr1;
+         break;}
    case OPCODE_OPR: // opr
       if (debug) { printf("OPR"); }
 
@@ -464,31 +489,6 @@ int CI_execute_next() {
       bddptr abddptr;
 
       switch (a) {
-      case OPR_DIV:
-         {
-         if (debug) { printf(" DIV"); }
-         t--;
-         struct stack_element fr1 = s[t - 1];
-         struct stack_element fr2 = s[t];
-         if ((fr1.atype != 2) || (fr2.atype != 2)) {
-            puts("division both types must be integer");
-         }
-         fr1.atype = 2;
-         fr1.address = fr1.address / fr2.address;
-         s[t - 1] = fr1;
-         break; }
-      case OPR_MOD:
-         {if (debug) { printf(" MOD"); }
-         t--;
-         struct stack_element fr1 = s[t - 1];
-         struct stack_element fr2 = s[t];
-         if ((fr1.atype != 2) || (fr2.atype != 2)) {
-            puts("modulo both types must be integer");
-         }
-         fr1.atype = 2;
-         fr1.address = fr1.address % fr2.address;
-         s[t - 1] = fr1;
-         break;}
       case OPR_EQ:
       case OPR_NE:
       case OPR_LT:
