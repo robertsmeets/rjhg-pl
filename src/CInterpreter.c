@@ -565,11 +565,7 @@ int CI_execute_next() {
             }
             break;
          }
-
-   case OPCODE_OPR: // opr
-      if (debug) { printf("OPR"); }
-      switch (a) {
-         case OPR_NOT: // NOT
+         case OPCODE_NOT: // NOT
 	 {
 	 if (debug) { printf("NOT"); }
          struct stack_element fr1 = s[t - 1];
@@ -581,7 +577,7 @@ int CI_execute_next() {
          s[t - 1] = fr1;
          break;
 	 }
-	 case OPR_AND: // AND
+      case OPCODE_AND: // AND
 	 {
             t--;
             struct stack_element fr1 = s[t - 1];
@@ -594,7 +590,7 @@ int CI_execute_next() {
          s[t - 1] = fr1;
           break;
 	 }
-	 case OPR_OR: // OR
+	 case OPCODE_OR: // OR
 	 {
             t--;
             struct stack_element fr1 = s[t - 1];
@@ -607,12 +603,6 @@ int CI_execute_next() {
          s[t - 1] = fr1;
           break;
 	 }
-      default:
-         printf("unexpected A value %d",a);
-         return -1;
-         break;
-      }
-      break;
    case OPCODE_LOD:
       if (debug) { printf("LOD %d ",a); }
       //

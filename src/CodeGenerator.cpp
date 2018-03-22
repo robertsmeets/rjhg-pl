@@ -224,7 +224,6 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(char avalue, Expression* s) {
-
    if (avalue=='+') {emit(OPCODE_PLS,0,0,s);return;}
    if (avalue=='-') {emit(OPCODE_MIN,0,0,s);return;}
    if (avalue=='*') {emit(OPCODE_MUL,0,0,s);return;}
@@ -237,13 +236,10 @@ void CodeGenerator::emitOperation(char avalue, Expression* s) {
    if (avalue=='L') {emit(OPCODE_LE,0,0,s);return;}
    if (avalue=='N') {emit(OPCODE_NE,0,0,s);return;}
    if (avalue=='I') {emit(OPCODE_I,0,0,s);return;}
-   
-   uint16_t atype = opr_mapping[avalue];
-   if (atype == 0) {
-      puts("Unexpected Operation" + avalue);
-   } else {
-      emit(2, 0, atype, s);
-   }
+   if (avalue=='&') {emit(OPCODE_AND,0,0,s);return;}
+   if (avalue=='|') {emit(OPCODE_OR,0,0,s);return;}
+   if (avalue=='!') {emit(OPCODE_NOT,0,0,s);return;}
+   puts("Unexpected Operation" + avalue);
 }
 
 /**

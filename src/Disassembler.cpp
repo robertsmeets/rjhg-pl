@@ -173,26 +173,20 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
       break;
    case OPCODE_I:
          sf = "I";
-         break;
-   case OPCODE_OPR: // opr
-      sf = "OPR";
-      switch (a) {
-      case OPR_NOT:
-         sa = "NOT";
-         break;
-      case OPR_AND:
-         sa = "AND";
-         break;
-      case OPR_OR:
-         sa = "OR";
-         break;
-      default:
-         sa = "unexpected A value: " + a;
-         printf("the a value was unexpected <%d>\n",a);
-         break;
-      }
       i += 5;
-      break;
+         break;
+      case OPCODE_NOT:
+         sf = "NOT";
+      i += 5;
+         break;
+      case OPCODE_AND:
+         sf = "AND";
+      i += 5;
+         break;
+      case OPCODE_OR:
+         sf = "OR";
+      i += 5;
+         break;
    case OPCODE_LOD:
       sf = "LOD";
       //lod: copy a local variable on top of the stack

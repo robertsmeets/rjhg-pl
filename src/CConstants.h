@@ -13,7 +13,6 @@
 #define TYPE_OBJ     9
 
 #define OPCODE_LIT   1
-#define OPCODE_OPR   2
 #define OPCODE_LOD   3
 #define OPCODE_STO   4
 #define OPCODE_CAL   5
@@ -43,8 +42,7 @@
 #define OPCODE_GT   30
 #define OPCODE_LE   31
 #define OPCODE_I    32
-
-#define OPR_NOT 15
-#define OPR_AND 16
-#define OPR_OR  17
+#define OPCODE_NOT  33 
+#define OPCODE_AND  34
+#define OPCODE_OR   35
 
