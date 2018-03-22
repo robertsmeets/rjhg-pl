@@ -236,6 +236,7 @@ void CodeGenerator::emitOperation(char avalue, Expression* s) {
    if (avalue=='>') {emit(OPCODE_GT,0,0,s);return;}
    if (avalue=='L') {emit(OPCODE_LE,0,0,s);return;}
    if (avalue=='N') {emit(OPCODE_NE,0,0,s);return;}
+   if (avalue=='I') {emit(OPCODE_I,0,0,s);return;}
    
    uint16_t atype = opr_mapping[avalue];
    if (atype == 0) {

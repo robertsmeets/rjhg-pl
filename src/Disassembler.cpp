@@ -171,12 +171,12 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
          break;
       }
       break;
+   case OPCODE_I:
+         sf = "I";
+         break;
    case OPCODE_OPR: // opr
       sf = "OPR";
       switch (a) {
-      case OPR_I:
-         sa = "I";
-         break;
       case OPR_NOT:
          sa = "NOT";
          break;

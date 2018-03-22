@@ -42,8 +42,8 @@
 #define OPCODE_GE   29
 #define OPCODE_GT   30
 #define OPCODE_LE   31
+#define OPCODE_I    32
 
-#define OPR_I   14
 #define OPR_NOT 15
 #define OPR_AND 16
 #define OPR_OR  17

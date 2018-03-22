@@ -515,11 +515,7 @@ int CI_execute_next() {
                 if (f==OPCODE_NE) { eq=!eq; } fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
          else { printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype); exit(-1); }
          break; }
-   case OPCODE_OPR: // opr
-      if (debug) { printf("OPR"); }
-
-      switch (a) {
-      case OPR_I:
+     case OPCODE_I:
          {
             //
             // Array index operation
@@ -569,7 +565,11 @@ int CI_execute_next() {
             }
             break;
          }
-	 case OPR_NOT: // NOT
+
+   case OPCODE_OPR: // opr
+      if (debug) { printf("OPR"); }
+      switch (a) {
+         case OPR_NOT: // NOT
 	 {
 	 if (debug) { printf("NOT"); }
          struct stack_element fr1 = s[t - 1];
