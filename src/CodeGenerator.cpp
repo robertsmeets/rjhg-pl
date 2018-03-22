@@ -17,12 +17,6 @@ CodeGenerator::CodeGenerator() {
    di = NULL;
    opr_mapping['/'] = 5; // DIV
    opr_mapping['%'] = 6; // MOD
-   opr_mapping['='] = 8;
-   opr_mapping['N'] = 9;
-   opr_mapping['<'] = 10;
-   opr_mapping['G'] = 11;
-   opr_mapping['>'] = 12;
-   opr_mapping['L'] = 13;
    opr_mapping['I'] = 14;
    opr_mapping['n'] = 15; // NOT
    opr_mapping['A'] = 16; // AND
@@ -236,7 +230,13 @@ void CodeGenerator::emitOperation(char avalue, Expression* s) {
    if (avalue=='*') {emit(OPCODE_MUL,0,0,s);return;}
    if (avalue=='/') {emit(OPCODE_DIV,0,0,s);return;}
    if (avalue=='%') {emit(OPCODE_MOD,0,0,s);return;}
-
+   if (avalue=='=') {emit(OPCODE_EQ,0,0,s);return;}
+   if (avalue=='<') {emit(OPCODE_LT,0,0,s);return;}
+   if (avalue=='G') {emit(OPCODE_GE,0,0,s);return;}
+   if (avalue=='>') {emit(OPCODE_GT,0,0,s);return;}
+   if (avalue=='L') {emit(OPCODE_LE,0,0,s);return;}
+   if (avalue=='N') {emit(OPCODE_NE,0,0,s);return;}
+   
    uint16_t atype = opr_mapping[avalue];
    if (atype == 0) {
       puts("Unexpected Operation" + avalue);

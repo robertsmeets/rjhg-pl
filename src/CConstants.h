@@ -36,13 +36,13 @@
 #define OPCODE_UNA  23 
 #define OPCODE_DIV  24
 #define OPCODE_MOD  25
+#define OPCODE_EQ   26
+#define OPCODE_NE   27
+#define OPCODE_LT   28
+#define OPCODE_GE   29
+#define OPCODE_GT   30
+#define OPCODE_LE   31
 
-#define OPR_EQ   8
-#define OPR_NE   9
-#define OPR_LT  10
-#define OPR_GE  11
-#define OPR_GT  12
-#define OPR_LE  13
 #define OPR_I   14
 #define OPR_NOT 15
 #define OPR_AND 16

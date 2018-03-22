@@ -48,39 +48,39 @@ void CI_init(char* a_buffer) {
    //
    // fill up for OPR 8..13
    //
-   fptrs[OPR_EQ][0][0] = (iiptr) (&func_eq_nn);
-   fptrs[OPR_EQ][2][2] = (iiptr) (&func_eq_ii);
-   fptrs[OPR_EQ][2][5] = (iiptr) (&func_eq_id);
-   fptrs[OPR_EQ][5][2] = (iiptr) (&func_eq_di);
-   fptrs[OPR_EQ][5][5] = (iiptr) (&func_eq_dd);
-   fptrs[OPR_EQ][0][9] = (iiptr) (&func_eq_no);
-   fptrs[OPR_EQ][9][0] = (iiptr) (&func_eq_on);
+   fptrs[OPCODE_EQ][0][0] = (iiptr) (&func_eq_nn);
+   fptrs[OPCODE_EQ][2][2] = (iiptr) (&func_eq_ii);
+   fptrs[OPCODE_EQ][2][5] = (iiptr) (&func_eq_id);
+   fptrs[OPCODE_EQ][5][2] = (iiptr) (&func_eq_di);
+   fptrs[OPCODE_EQ][5][5] = (iiptr) (&func_eq_dd);
+   fptrs[OPCODE_EQ][0][9] = (iiptr) (&func_eq_no);
+   fptrs[OPCODE_EQ][9][0] = (iiptr) (&func_eq_on);
 
-   fptrs[OPR_NE][2][2] = (iiptr) (&func_ne_nn);
-   fptrs[OPR_NE][2][2] = (iiptr) (&func_ne_ii);
-   fptrs[OPR_NE][2][5] = (iiptr) (&func_ne_id);
-   fptrs[OPR_NE][5][2] = (iiptr) (&func_ne_di);
-   fptrs[OPR_NE][5][5] = (iiptr) (&func_ne_dd);
+   fptrs[OPCODE_NE][2][2] = (iiptr) (&func_ne_nn);
+   fptrs[OPCODE_NE][2][2] = (iiptr) (&func_ne_ii);
+   fptrs[OPCODE_NE][2][5] = (iiptr) (&func_ne_id);
+   fptrs[OPCODE_NE][5][2] = (iiptr) (&func_ne_di);
+   fptrs[OPCODE_NE][5][5] = (iiptr) (&func_ne_dd);
 
-   fptrs[OPR_LT][2][2] = (iiptr) (&func_lt_ii);
-   fptrs[OPR_LT][2][5] = (iiptr) (&func_lt_id);
-   fptrs[OPR_LT][5][2] = (iiptr) (&func_lt_di);
-   fptrs[OPR_LT][5][5] = (iiptr) (&func_lt_dd);
+   fptrs[OPCODE_LT][2][2] = (iiptr) (&func_lt_ii);
+   fptrs[OPCODE_LT][2][5] = (iiptr) (&func_lt_id);
+   fptrs[OPCODE_LT][5][2] = (iiptr) (&func_lt_di);
+   fptrs[OPCODE_LT][5][5] = (iiptr) (&func_lt_dd);
 
-   fptrs[OPR_GE][2][2] = (iiptr) (&func_ge_ii);
-   fptrs[OPR_GE][2][5] = (iiptr) (&func_ge_id);
-   fptrs[OPR_GE][5][2] = (iiptr) (&func_ge_di);
-   fptrs[OPR_GE][5][5] = (iiptr) (&func_ge_dd);
+   fptrs[OPCODE_GE][2][2] = (iiptr) (&func_ge_ii);
+   fptrs[OPCODE_GE][2][5] = (iiptr) (&func_ge_id);
+   fptrs[OPCODE_GE][5][2] = (iiptr) (&func_ge_di);
+   fptrs[OPCODE_GE][5][5] = (iiptr) (&func_ge_dd);
 
-   fptrs[OPR_GT][2][2] = (iiptr) (&func_gt_ii);
-   fptrs[OPR_GT][2][5] = (iiptr) (&func_gt_id);
-   fptrs[OPR_GT][5][2] = (iiptr) (&func_gt_di);
-   fptrs[OPR_GT][5][5] = (iiptr) (&func_gt_dd);
+   fptrs[OPCODE_GT][2][2] = (iiptr) (&func_gt_ii);
+   fptrs[OPCODE_GT][2][5] = (iiptr) (&func_gt_id);
+   fptrs[OPCODE_GT][5][2] = (iiptr) (&func_gt_di);
+   fptrs[OPCODE_GT][5][5] = (iiptr) (&func_gt_dd);
 
-   fptrs[OPR_LE][2][2] = (iiptr) (&func_le_ii);
-   fptrs[OPR_LE][2][5] = (iiptr) (&func_le_id);
-   fptrs[OPR_LE][5][2] = (iiptr) (&func_le_di);
-   fptrs[OPR_LE][5][5] = (iiptr) (&func_le_dd);
+   fptrs[OPCODE_LE][2][2] = (iiptr) (&func_le_ii);
+   fptrs[OPCODE_LE][2][5] = (iiptr) (&func_le_id);
+   fptrs[OPCODE_LE][5][2] = (iiptr) (&func_le_di);
+   fptrs[OPCODE_LE][5][5] = (iiptr) (&func_le_dd);
 
 }
 
@@ -475,159 +475,50 @@ int CI_execute_next() {
          fr1.address = fr1.address % fr2.address;
          s[t - 1] = fr1;
          break;}
-   case OPCODE_OPR: // opr
-      if (debug) { printf("OPR"); }
-
-      iiptr aiiptr;
+      case OPCODE_EQ:
+      case OPCODE_NE:
+      case OPCODE_LT:
+      case OPCODE_GE:
+      case OPCODE_GT:
+      case OPCODE_LE:
+      {iiptr aiiptr;
       idptr aidptr;
       diptr adiptr;
       ddptr addptr;
-
       biiptr abiiptr;
       bidptr abidptr;
       bdiptr abdiptr;
       bddptr abddptr;
-
-      switch (a) {
-      case OPR_EQ:
-      case OPR_NE:
-      case OPR_LT:
-      case OPR_GE:
-      case OPR_GT:
-      case OPR_LE:
-         {t--;
+         if(debug) printf("COMPARISON");
+         t--;
          struct stack_element fr1 = s[t - 1];
          struct stack_element fr2 = s[t];
-         if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
-            //
-            // operation on two integers
-            //
-            abiiptr = (biiptr) fptrs[a][fr1.atype][fr2.atype];
-            bool eq = (*abiiptr)(fr1.address, fr2.address);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) {
-            //
-            // integer plus float
-            //
-            double d2;
-            memcpy(&d2, (void*)(fr2.address), 8);
-            abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
-            bool eq = (*abidptr)(fr1.address, d2);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } else if ((fr1.atype == TYPE_FLOAT) && (fr2.atype == TYPE_INT)) {
-            //
-            // float plus integer
-            //
-            double d1;
-            memcpy(&d1, (void*)(fr1.address), 8);
-            abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
-            bool eq = (*abdiptr)(d1, fr2.address);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } else if ((fr1.atype == TYPE_FLOAT) && (fr1.atype == TYPE_FLOAT)) {
-            //
-            // both floats
-            //
-            double d1,d2;
-            memcpy(&d1, (void*)(fr1.address), 8);
-            memcpy(&d2, (void*)(fr2.address), 8);
-            abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
-            bool eq = (*abddptr)(d1, d2);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } 
-          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_NULL)) {
-            //
-            // null vs null
-            //
-            bool eq = true;
-            fr1.atype=6;
-            if (a==9)
-            {
-                eq = !eq;
-            }
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_PTR)) {
-            //
-            // null vs pointer 
-            //
-            bool eq = (fr2.address == 0);
-            fr1.atype=6;
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if ((fr1.atype == TYPE_PTR) && (fr2.atype == TYPE_NULL)) {
-            //
-            // pointer vs null
-            //
-            bool eq = (fr1.address == 0);
-            fr1.atype=6;
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if (((fr1.atype == TYPE_OBJ)||(fr1.atype==TYPE_STRING)) && (fr2.atype == TYPE_NULL)) {
-            //
-            // pointer vs null
-            //
-            bool eq = false;
-            fr1.atype=6;
-            if (a==9)
-            {
-                eq = !eq;
-            }
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if ((fr1.atype == TYPE_NULL) && ((fr2.atype == TYPE_OBJ) || (fr2.atype == TYPE_STRING))) {
-            //
-            // pointer vs null
-            //
-            bool eq = false;
-            fr1.atype=6;
-            if (a==9)
-            {
-                eq = !eq;
-            }
-            fr1.address=eq;
-            s[t-1]= fr1;}
-          else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) {
-            //
-            // string vs string
-            //
-            char * ptr1 = (char*) fr1.address;
-            uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
-            char * ptr2 = (char*) fr2.address;
-            uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
-            bool eq;
-            if (len1 == len2)
-            {
-               eq = (strncmp(ptr1+2,ptr2+2,len1) == 0);
-            }
-            else
-            {
-               eq = false;
-            }
-            if (a==9)
-            {
-               eq=!eq;
-            }
-            fr1.atype=6;
-            fr1.address=eq;
-            s[t-1]= fr1;
-         }
-         else {
-            printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
-            exit(-1);
-         }
+         if ( (fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) { abiiptr = (biiptr) fptrs[f][fr1.atype][fr2.atype]; bool eq = (*abiiptr)(fr1.address, fr2.address); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) { double d2; memcpy(&d2, (void*)(fr2.address), 8); abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]); bool eq = (*abidptr)(fr1.address, d2); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr2.atype == TYPE_INT)) { double d1; memcpy(&d1, (void*)(fr1.address), 8); abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]); bool eq = (*abdiptr)(d1, fr2.address); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr1.atype == TYPE_FLOAT)) { double d1,d2; memcpy(&d1, (void*)(fr1.address), 8); memcpy(&d2, (void*)(fr2.address), 8); abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]); bool eq = (*abddptr)(d1, d2); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1; } 
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_NULL)) { bool eq = true; fr1.atype=6; if (f==OPCODE_NE) { eq = !eq; } fr1.address=eq; s[t-1]= fr1; }
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_PTR)) { bool eq = (fr2.address == 0); fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
+          else if ((fr1.atype == TYPE_PTR) && (fr2.atype == TYPE_NULL)) { bool eq = (fr1.address == 0); fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
+          else if (((fr1.atype == TYPE_OBJ)||(fr1.atype==TYPE_STRING)) && (fr2.atype == TYPE_NULL)) { bool eq = false; fr1.atype=6; if (f==OPCODE_NE) { eq = !eq; } fr1.address=eq; s[t-1]= fr1; }
+          else if ((fr1.atype == TYPE_NULL) && ((fr2.atype == TYPE_OBJ) || (fr2.atype == TYPE_STRING))) { bool eq = false; fr1.atype=6; if (f==OPCODE_NE) { eq = !eq; } fr1.address=eq; s[t-1]= fr1;}
+          else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) 
+          { 
+             char* ptr1 = (char*) fr1.address;
+             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8); 
+             char * ptr2 = (char*) fr2.address; 
+             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8); 
+             bool eq; 
+             if (len1 == len2) 
+             { 
+                eq = (strncmp(ptr1+2,ptr2+2,len1) == 0); } else { eq = false; } 
+                if (f==OPCODE_NE) { eq=!eq; } fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
+         else { printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype); exit(-1); }
          break; }
+   case OPCODE_OPR: // opr
+      if (debug) { printf("OPR"); }
+
+      switch (a) {
       case OPR_I:
          {
             //
