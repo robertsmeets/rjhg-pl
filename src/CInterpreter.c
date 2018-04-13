@@ -27,60 +27,60 @@ void CI_init(char* a_buffer) {
    //
    // fill up for OPR 2 (PLUS);
    //
-   fptrs[2][2][2] = (iiptr) (&func_plus_ii);
-   fptrs[2][2][5] = (iiptr) (&func_plus_id);
-   fptrs[2][5][2] = (iiptr) (&func_plus_di);
-   fptrs[2][5][5] = (iiptr) (&func_plus_dd);
+   fptrs[OPCODE_PLS][2][2] = (iiptr) (&func_plus_ii);
+   fptrs[OPCODE_PLS][2][5] = (iiptr) (&func_plus_id);
+   fptrs[OPCODE_PLS][5][2] = (iiptr) (&func_plus_di);
+   fptrs[OPCODE_PLS][5][5] = (iiptr) (&func_plus_dd);
    //
    // fill up for OPR 3 (MINUS);
    //
-   fptrs[3][2][2] = (iiptr) (&func_minus_ii);
-   fptrs[3][2][5] = (iiptr) (&func_minus_id);
-   fptrs[3][5][2] = (iiptr) (&func_minus_di);
-   fptrs[3][5][5] = (iiptr) (&func_minus_dd);
+   fptrs[OPCODE_MIN][2][2] = (iiptr) (&func_minus_ii);
+   fptrs[OPCODE_MIN][2][5] = (iiptr) (&func_minus_id);
+   fptrs[OPCODE_MIN][5][2] = (iiptr) (&func_minus_di);
+   fptrs[OPCODE_MIN][5][5] = (iiptr) (&func_minus_dd);
    //
    // fill up for OPR 4 (MUL);
    //
-   fptrs[4][2][2] = (iiptr) (&func_mul_ii);
-   fptrs[4][2][5] = (iiptr) (&func_mul_id);
-   fptrs[4][5][2] = (iiptr) (&func_mul_di);
-   fptrs[4][5][5] = (iiptr) (&func_mul_dd);
+   fptrs[OPCODE_MUL][2][2] = (iiptr) (&func_mul_ii);
+   fptrs[OPCODE_MUL][2][5] = (iiptr) (&func_mul_id);
+   fptrs[OPCODE_MUL][5][2] = (iiptr) (&func_mul_di);
+   fptrs[OPCODE_MUL][5][5] = (iiptr) (&func_mul_dd);
    //
    // fill up for OPR 8..13
    //
-   fptrs[8][0][0] = (iiptr) (&func_eq_nn);
-   fptrs[8][2][2] = (iiptr) (&func_eq_ii);
-   fptrs[8][2][5] = (iiptr) (&func_eq_id);
-   fptrs[8][5][2] = (iiptr) (&func_eq_di);
-   fptrs[8][5][5] = (iiptr) (&func_eq_dd);
-   fptrs[8][0][9] = (iiptr) (&func_eq_no);
-   fptrs[8][9][0] = (iiptr) (&func_eq_on);
+   fptrs[OPCODE_EQ][0][0] = (iiptr) (&func_eq_nn);
+   fptrs[OPCODE_EQ][2][2] = (iiptr) (&func_eq_ii);
+   fptrs[OPCODE_EQ][2][5] = (iiptr) (&func_eq_id);
+   fptrs[OPCODE_EQ][5][2] = (iiptr) (&func_eq_di);
+   fptrs[OPCODE_EQ][5][5] = (iiptr) (&func_eq_dd);
+   fptrs[OPCODE_EQ][0][9] = (iiptr) (&func_eq_no);
+   fptrs[OPCODE_EQ][9][0] = (iiptr) (&func_eq_on);
 
-   fptrs[9][2][2] = (iiptr) (&func_ne_nn);
-   fptrs[9][2][2] = (iiptr) (&func_ne_ii);
-   fptrs[9][2][5] = (iiptr) (&func_ne_id);
-   fptrs[9][5][2] = (iiptr) (&func_ne_di);
-   fptrs[9][5][5] = (iiptr) (&func_ne_dd);
+   fptrs[OPCODE_NE][2][2] = (iiptr) (&func_ne_nn);
+   fptrs[OPCODE_NE][2][2] = (iiptr) (&func_ne_ii);
+   fptrs[OPCODE_NE][2][5] = (iiptr) (&func_ne_id);
+   fptrs[OPCODE_NE][5][2] = (iiptr) (&func_ne_di);
+   fptrs[OPCODE_NE][5][5] = (iiptr) (&func_ne_dd);
 
-   fptrs[10][2][2] = (iiptr) (&func_lt_ii);
-   fptrs[10][2][5] = (iiptr) (&func_lt_id);
-   fptrs[10][5][2] = (iiptr) (&func_lt_di);
-   fptrs[10][5][5] = (iiptr) (&func_lt_dd);
+   fptrs[OPCODE_LT][2][2] = (iiptr) (&func_lt_ii);
+   fptrs[OPCODE_LT][2][5] = (iiptr) (&func_lt_id);
+   fptrs[OPCODE_LT][5][2] = (iiptr) (&func_lt_di);
+   fptrs[OPCODE_LT][5][5] = (iiptr) (&func_lt_dd);
 
-   fptrs[11][2][2] = (iiptr) (&func_ge_ii);
-   fptrs[11][2][5] = (iiptr) (&func_ge_id);
-   fptrs[11][5][2] = (iiptr) (&func_ge_di);
-   fptrs[11][5][5] = (iiptr) (&func_ge_dd);
+   fptrs[OPCODE_GE][2][2] = (iiptr) (&func_ge_ii);
+   fptrs[OPCODE_GE][2][5] = (iiptr) (&func_ge_id);
+   fptrs[OPCODE_GE][5][2] = (iiptr) (&func_ge_di);
+   fptrs[OPCODE_GE][5][5] = (iiptr) (&func_ge_dd);
 
-   fptrs[12][2][2] = (iiptr) (&func_gt_ii);
-   fptrs[12][2][5] = (iiptr) (&func_gt_id);
-   fptrs[12][5][2] = (iiptr) (&func_gt_di);
-   fptrs[12][5][5] = (iiptr) (&func_gt_dd);
+   fptrs[OPCODE_GT][2][2] = (iiptr) (&func_gt_ii);
+   fptrs[OPCODE_GT][2][5] = (iiptr) (&func_gt_id);
+   fptrs[OPCODE_GT][5][2] = (iiptr) (&func_gt_di);
+   fptrs[OPCODE_GT][5][5] = (iiptr) (&func_gt_dd);
 
-   fptrs[13][2][2] = (iiptr) (&func_le_ii);
-   fptrs[13][2][5] = (iiptr) (&func_le_id);
-   fptrs[13][5][2] = (iiptr) (&func_le_di);
-   fptrs[13][5][5] = (iiptr) (&func_le_dd);
+   fptrs[OPCODE_LE][2][2] = (iiptr) (&func_le_ii);
+   fptrs[OPCODE_LE][2][5] = (iiptr) (&func_le_id);
+   fptrs[OPCODE_LE][5][2] = (iiptr) (&func_le_di);
+   fptrs[OPCODE_LE][5][5] = (iiptr) (&func_le_dd);
 
 }
 
@@ -206,15 +206,23 @@ int CI_execute_next() {
    if (debug) { printf("pc=0x%x: ", pc ); }
    unsigned short int f = *((char*) buffer + pc) & 0xff;
    pc++;
-   //
-   // using little endian
-   //
-   char* lptr = (char*) buffer + pc;
-   unsigned short int l = (*lptr & 0xff) + (*(lptr + 1) << 8);
-   pc += 2;
-   lptr = (char*) buffer + pc;
-   unsigned short int a = (*lptr & 0xff) + (*(lptr + 1) << 8);
-   pc += 2;
+   unsigned short int l = 0;
+   unsigned short int a = 0;
+   if ((f != OPCODE_DRP) && (f != OPCODE_PRT)) // not for DROP and PRINT
+   {
+      //
+      // using little endian
+      //
+      char* lptr = (char*) buffer + pc;
+      l = (*lptr & 0xff) + (*(lptr + 1) << 8);
+      pc += 2;
+      if (f != OPCODE_RET) // not for RET
+      {
+         lptr = (char*) buffer + pc;
+         a = (*lptr & 0xff) + (*(lptr + 1) << 8);
+         pc += 2;
+      }
+   }
    struct stack_element temp;
    //
    // opcode definitions
@@ -224,7 +232,7 @@ int CI_execute_next() {
    char* adr;
    uint16_t classnum;
    switch (f) {
-   case 1:   // lit: Literal value, to be pushed on the stack
+   case OPCODE_LIT:   // lit: Literal value, to be pushed on the stack
       if (debug) { printf("LIT %d,%d", l , a); }
       switch (l) {
       case TYPE_NULL: // null
@@ -279,9 +287,11 @@ int CI_execute_next() {
          puts("unexpected LIT value " + s[t].atype);
       }
       break;
-   case 2: // opr
-      if (debug) { printf("OPR"); }
-
+    case OPCODE_PLS:
+    case OPCODE_MIN:
+    case OPCODE_MUL:
+         {
+         if (debug) { printf(" PLUS, MINUS or MUL"); }
       iiptr aiiptr;
       idptr aidptr;
       diptr adiptr;
@@ -292,45 +302,6 @@ int CI_execute_next() {
       bdiptr abdiptr;
       bddptr abddptr;
 
-      switch (a) {
-      case 0:
-         if (debug) { printf(" RET l= %d" , l); }
-         if (tr <= 0) {
-            if(debug){printf("Exiting program...\n" );}
-            // exit
-            return -1;
-         }
-         tr--;
-         pc = r[tr];
-         //
-         // also free the block
-         //
-         // there may be a return value on the top of the stack that needs to be saved
-         //
-         if (l > 0) {
-            temp = s[t - 1];
-         }
-         t = b[tb - 1];
-         tb--;
-         if (l > 0) {
-            s[t] = temp;
-            t++;
-         }
-         break;
-      case 1:
-         {if (debug) { printf(" UNARY MINUS"); }
-         struct stack_element fr1 = s[t - 1];
-         if (fr1.atype != 2) {
-            puts("type must be integer");
-         }
-         fr1.address = -fr1.address;
-         s[t - 1] = fr1;
-         break;}
-      case 2:
-      case 3:
-      case 4:
-         {
-         if (debug) { printf(" PLUS, MINUS or MUL"); }
          t--;
          struct stack_element fr1 = s[t - 1];
          struct stack_element fr2 = s[t];
@@ -338,7 +309,7 @@ int CI_execute_next() {
             //
             // operation on two integers
             //
-            aiiptr = fptrs[a][fr1.atype][fr2.atype];
+            aiiptr = fptrs[f][fr1.atype][fr2.atype];
             fr1.address = (*aiiptr)(fr1.address, fr2.address);
             s[t - 1] = fr1;
          } else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) {
@@ -414,7 +385,7 @@ int CI_execute_next() {
             //
             double d2;
             memcpy(&d2, (void*) fr2.address, 8);
-            aidptr = (idptr) (fptrs[a][fr1.atype][fr2.atype]);
+            aidptr = (idptr) (fptrs[f][fr1.atype][fr2.atype]);
             double d3 = (*aidptr)(fr1.address, d2);
             struct stack_element se;
             struct stack_element* fr3 = &se; 
@@ -429,7 +400,7 @@ int CI_execute_next() {
             //
             double d1;
             memcpy(&d1, (void*) (fr1.address), 8);
-            adiptr = (diptr) (fptrs[a][fr1.atype][fr2.atype]);
+            adiptr = (diptr) (fptrs[f][fr1.atype][fr2.atype]);
             double d3 = (*adiptr)(d1, fr2.address);
             struct stack_element se;
             struct stack_element* fr3 = &se;
@@ -452,7 +423,7 @@ int CI_execute_next() {
             //
             // find the function
             //
-            addptr = (ddptr) (fptrs[a][fr1.atype][fr2.atype]);
+            addptr = (ddptr) (fptrs[f][fr1.atype][fr2.atype]);
             //
             // perform the operation
             //
@@ -471,7 +442,8 @@ int CI_execute_next() {
             exit(-1);
          }
          break; }
-      case 5:
+      case OPCODE_UNA: {if (debug) { printf(" UNARY MINUS"); } struct stack_element fr1 = s[t - 1]; if (fr1.atype != 2) { puts("type must be integer"); } fr1.address = -fr1.address; s[t - 1] = fr1; break;}
+      case OPCODE_DIV:
          {
          if (debug) { printf(" DIV"); }
          t--;
@@ -484,7 +456,7 @@ int CI_execute_next() {
          fr1.address = fr1.address / fr2.address;
          s[t - 1] = fr1;
          break; }
-      case 6:
+      case OPCODE_MOD:
          {if (debug) { printf(" MOD"); }
          t--;
          struct stack_element fr1 = s[t - 1];
@@ -496,147 +468,47 @@ int CI_execute_next() {
          fr1.address = fr1.address % fr2.address;
          s[t - 1] = fr1;
          break;}
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-      case 12:
-      case 13:
-      case 19:
-         {t--;
+      case OPCODE_EQ:
+      case OPCODE_NE:
+      case OPCODE_LT:
+      case OPCODE_GE:
+      case OPCODE_GT:
+      case OPCODE_LE:
+      {iiptr aiiptr;
+      idptr aidptr;
+      diptr adiptr;
+      ddptr addptr;
+      biiptr abiiptr;
+      bidptr abidptr;
+      bdiptr abdiptr;
+      bddptr abddptr;
+         if(debug) printf("COMPARISON");
+         t--;
          struct stack_element fr1 = s[t - 1];
          struct stack_element fr2 = s[t];
-         if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) {
-            //
-            // operation on two integers
-            //
-            abiiptr = (biiptr) fptrs[a][fr1.atype][fr2.atype];
-            bool eq = (*abiiptr)(fr1.address, fr2.address);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) {
-            //
-            // integer plus float
-            //
-            double d2;
-            memcpy(&d2, (void*)(fr2.address), 8);
-            abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]);
-            bool eq = (*abidptr)(fr1.address, d2);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } else if ((fr1.atype == TYPE_FLOAT) && (fr2.atype == TYPE_INT)) {
-            //
-            // float plus integer
-            //
-            double d1;
-            memcpy(&d1, (void*)(fr1.address), 8);
-            abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]);
-            bool eq = (*abdiptr)(d1, fr2.address);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } else if ((fr1.atype == TYPE_FLOAT) && (fr1.atype == TYPE_FLOAT)) {
-            //
-            // both floats
-            //
-            double d1,d2;
-            memcpy(&d1, (void*)(fr1.address), 8);
-            memcpy(&d2, (void*)(fr2.address), 8);
-            abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]);
-            bool eq = (*abddptr)(d1, d2);
-            fr1.atype = 6;
-            fr1.address = eq;
-            s[t - 1] = fr1;
-         } 
-          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_NULL)) {
-            //
-            // null vs null
-            //
-            bool eq = true;
-            fr1.atype=6;
-            if (a==9)
-            {
-                eq = !eq;
-            }
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_PTR)) {
-            //
-            // null vs pointer 
-            //
-            bool eq = (fr2.address == 0);
-            fr1.atype=6;
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if ((fr1.atype == TYPE_PTR) && (fr2.atype == TYPE_NULL)) {
-            //
-            // pointer vs null
-            //
-            bool eq = (fr1.address == 0);
-            fr1.atype=6;
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if (((fr1.atype == TYPE_OBJ)||(fr1.atype==TYPE_STRING)) && (fr2.atype == TYPE_NULL)) {
-            //
-            // pointer vs null
-            //
-            bool eq = false;
-            fr1.atype=6;
-            if (a==9)
-            {
-                eq = !eq;
-            }
-            fr1.address=eq;
-            s[t-1]= fr1;
-          }
-          else if ((fr1.atype == TYPE_NULL) && ((fr2.atype == TYPE_OBJ) || (fr2.atype == TYPE_STRING))) {
-            //
-            // pointer vs null
-            //
-            bool eq = false;
-            fr1.atype=6;
-            if (a==9)
-            {
-                eq = !eq;
-            }
-            fr1.address=eq;
-            s[t-1]= fr1;}
-          else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) {
-            //
-            // string vs string
-            //
-            char * ptr1 = (char*) fr1.address;
-            uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
-            char * ptr2 = (char*) fr2.address;
-            uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8);
-            bool eq;
-            if (len1 == len2)
-            {
-               eq = (strncmp(ptr1+2,ptr2+2,len1) == 0);
-            }
-            else
-            {
-               eq = false;
-            }
-            if (a==9)
-            {
-               eq=!eq;
-            }
-            fr1.atype=6;
-            fr1.address=eq;
-            s[t-1]= fr1;
-         }
-         else {
-            printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype);
-            exit(-1);
-         }
+         if ( (fr1.atype == TYPE_INT) && (fr2.atype == TYPE_INT)) { abiiptr = (biiptr) fptrs[f][fr1.atype][fr2.atype]; bool eq = (*abiiptr)(fr1.address, fr2.address); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_INT) && (fr2.atype == TYPE_FLOAT)) { double d2; memcpy(&d2, (void*)(fr2.address), 8); abidptr = (bidptr) (fptrs[a][fr1.atype][fr2.atype]); bool eq = (*abidptr)(fr1.address, d2); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr2.atype == TYPE_INT)) { double d1; memcpy(&d1, (void*)(fr1.address), 8); abdiptr = (bdiptr) (fptrs[a][fr1.atype][fr2.atype]); bool eq = (*abdiptr)(d1, fr2.address); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1;
+         } else if ((fr1.atype == TYPE_FLOAT) && (fr1.atype == TYPE_FLOAT)) { double d1,d2; memcpy(&d1, (void*)(fr1.address), 8); memcpy(&d2, (void*)(fr2.address), 8); abddptr = (bddptr) (fptrs[a][fr1.atype][fr2.atype]); bool eq = (*abddptr)(d1, d2); fr1.atype = 6; fr1.address = eq; s[t - 1] = fr1; } 
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_NULL)) { bool eq = true; fr1.atype=6; if (f==OPCODE_NE) { eq = !eq; } fr1.address=eq; s[t-1]= fr1; }
+          else if ((fr1.atype == TYPE_NULL) && (fr2.atype == TYPE_PTR)) { bool eq = (fr2.address == 0); fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
+          else if ((fr1.atype == TYPE_PTR) && (fr2.atype == TYPE_NULL)) { bool eq = (fr1.address == 0); fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
+          else if (((fr1.atype == TYPE_OBJ)||(fr1.atype==TYPE_STRING)) && (fr2.atype == TYPE_NULL)) { bool eq = false; fr1.atype=6; if (f==OPCODE_NE) { eq = !eq; } fr1.address=eq; s[t-1]= fr1; }
+          else if ((fr1.atype == TYPE_NULL) && ((fr2.atype == TYPE_OBJ) || (fr2.atype == TYPE_STRING))) { bool eq = false; fr1.atype=6; if (f==OPCODE_NE) { eq = !eq; } fr1.address=eq; s[t-1]= fr1;}
+          else if ((fr1.atype == TYPE_STRING) && (fr2.atype == TYPE_STRING)) 
+          { 
+             char* ptr1 = (char*) fr1.address;
+             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8); 
+             char * ptr2 = (char*) fr2.address; 
+             uint16_t len2 = ((*ptr2) & 0xff) + (*(ptr2 + 1) << 8); 
+             bool eq; 
+             if (len1 == len2) 
+             { 
+                eq = (strncmp(ptr1+2,ptr2+2,len1) == 0); } else { eq = false; } 
+                if (f==OPCODE_NE) { eq=!eq; } fr1.atype=6; fr1.address=eq; s[t-1]= fr1; }
+         else { printf( "operation %d: incompatible types %d and %d\n",a,fr1.atype,fr2.atype); exit(-1); }
          break; }
-      case 14:
+     case OPCODE_I:
          {
             //
             // Array index operation
@@ -686,7 +558,7 @@ int CI_execute_next() {
             }
             break;
          }
-	 case 15: // NOT
+         case OPCODE_NOT: // NOT
 	 {
 	 if (debug) { printf("NOT"); }
          struct stack_element fr1 = s[t - 1];
@@ -698,7 +570,7 @@ int CI_execute_next() {
          s[t - 1] = fr1;
          break;
 	 }
-	 case 16: // AND
+      case OPCODE_AND: // AND
 	 {
             t--;
             struct stack_element fr1 = s[t - 1];
@@ -711,7 +583,7 @@ int CI_execute_next() {
          s[t - 1] = fr1;
           break;
 	 }
-	 case 17: // OR
+	 case OPCODE_OR: // OR
 	 {
             t--;
             struct stack_element fr1 = s[t - 1];
@@ -724,26 +596,7 @@ int CI_execute_next() {
          s[t - 1] = fr1;
           break;
 	 }
-	 case 18: // MOD 
-	 {
-            t--;
-            struct stack_element fr1 = s[t - 1];
-            struct stack_element fr2 = s[t];
-         if ((fr1.atype != TYPE_INT) || (fr2.atype != TYPE_INT)) {
-            printf("MOD: both types must be integer");
-	    exit(-1);
-            }
-            fr1.address=fr1.address % fr2.address;
-         s[t - 1] = fr1;
-          break;
-	 }
-      default:
-         printf("unexpected A value %d",a);
-         return -1;
-         break;
-      }
-      break;
-   case 3:
+   case OPCODE_LOD:
       if (debug) { printf("LOD %d ",a); }
       //
       // lod: copy a local variable or parameter on top of the stack
@@ -751,12 +604,12 @@ int CI_execute_next() {
       s[t] = s[b[tb - 1] + a];
       t++;
       break;
-   case 4:   // sto: pop a value from the stack and put it in a local variable or parameter
+   case OPCODE_STO:   // sto: pop a value from the stack and put it in a local variable or parameter
       if (debug) { printf("STO %d " ,a); }
       t--;
       s[b[tb - 1] + a] = s[t];
       break;
-   case 5:         //cal:
+   case OPCODE_CAL:         //cal:
       // parameters should have already been pushed on the stack
       // push the return address on the return stack
       // call the procedure
@@ -766,7 +619,7 @@ int CI_execute_next() {
       tr++;
       pc = a;
       break;
-   case 6:         // int:
+   case OPCODE_INT:         // int:
       if (debug) { printf("INT %d,%d", l , a); }
       //
       // this creates a new block with depth a for local variables and parameters
@@ -781,11 +634,11 @@ int CI_execute_next() {
       //
       t += a;
       break;
-   case 7:         // jmp
+   case OPCODE_JMP:         // jmp
       if (debug) { printf("JMP %d " , a); }
       pc = a;
       break;
-   case 8:         // jpc - jump when true
+   case OPCODE_JPC:         // jpc - jump when true
       {if (debug) { printf("JPC %d " , a); }
       struct stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
@@ -796,7 +649,7 @@ int CI_execute_next() {
       }
       t--;
       break;}
-   case 17:          // jpf: jump when false
+   case OPCODE_JPF:          // jpf: jump when false
       {if (debug) { printf("JPF %d " , a); }
       struct stack_element fr1 = s[t - 1];
       if (fr1.atype != 6) {
@@ -807,8 +660,8 @@ int CI_execute_next() {
       }
       t--;
       break;}
-   case 9: // print
-      {if (debug) { printf("PRINT %d " , a); }
+   case OPCODE_PRT: // print
+      {
       t--;
       struct stack_element fr1 = s[t];
       if (fr1.atype == TYPE_NULL)
@@ -843,7 +696,7 @@ int CI_execute_next() {
       }
       break;
       }
-   case 10: // external function call
+   case OPCODE_EXT: // external function call
       if (debug) { printf("EXTCALL %d",  a); }
       // parameters should have already been pushed on the stack
       //
@@ -852,7 +705,7 @@ int CI_execute_next() {
       //
       CI_call_external(l,a);
       break;
-   case 11: // object creation
+   case OPCODE_OBJ: // object creation
       if (debug) { printf("OBJCREATE %d,%d " ,l,a); }
       if (l == 1)
       {
@@ -904,7 +757,7 @@ int CI_execute_next() {
          t++;
       }
       break;
-   case 12:{
+   case OPCODE_MCL:{
       if (debug) printf("METHODCALL %d %d ",l,a);
       // method call, the object is already on the stack.
       //
@@ -1005,7 +858,7 @@ int CI_execute_next() {
             }
          }
          break;}
-      case 13: {
+      case OPCODE_LDI: {
          if (debug) { printf("LDI %d %d", l, a); }
          // access an instance variable and put it on the stack
          //
@@ -1026,7 +879,7 @@ int CI_execute_next() {
          s[t].address = *uptr;
          t++;
          break; }
-      case 14:{
+      case OPCODE_STI:{
          if (debug) { printf("STI %d %d", l,a ); }
          // store a value inside an inst. variable
          //
@@ -1046,20 +899,14 @@ int CI_execute_next() {
       *uptr = s[t-1].address; 
       t--;
       break;}
-   case 15:
+   case OPCODE_DRP:
       if (debug) { printf("DROP"); }
       //
       // drop the top value of the stack
       //
       t--;
       break;
-   case 16:
-      //
-      // built in method call
-      // 
-      printf("Calling a built in method\n");
-      break;
-   case 18:{
+   case OPCODE_SLF:{
       // 
       // self
       //
@@ -1073,6 +920,31 @@ int CI_execute_next() {
       t++;
       break;
      }
+      case OPCODE_RET: { // RET
+         if (debug) { printf(" RET l= %d" , l); }
+         if (tr <= 0) {
+            if(debug){printf("Exiting program...\n" );}
+            // exit
+            return -1;
+         }
+         tr--;
+         pc = r[tr];
+         //
+         // also free the block
+         //
+         // there may be a return value on the top of the stack that needs to be saved
+         //
+         if (l > 0) {
+            temp = s[t - 1];
+         }
+         t = b[tb - 1];
+         tb--;
+         if (l > 0) {
+            s[t] = temp;
+            t++;
+         }
+         break;
+   }
    default:
       printf("unexpected F value <0x%x> at PC <0x%x>\n",f,pc);
       exit(-1);

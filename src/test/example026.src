@@ -1,0 +1,19 @@
+/**
+ *
+ * test some operations
+ *
+ */
+proc main()
+{
+    print 3 - 2;
+    print 5 % 2;
+    // print -5;
+    // print -(2+3);
+    print 3 / 2;
+    print "woef" + "waf";
+    print "my " + 5;
+    // print "my " + 3.5;
+    print 3.3 - 2.2;
+    print 7 * 9;
+}
+

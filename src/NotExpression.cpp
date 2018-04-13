@@ -15,7 +15,7 @@ void NotExpression::print(int level) {
 void NotExpression::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
    rhs->emit(cg,pn);
-   cg->emitOperation('n',NULL);
+   cg->emitOperation('!',NULL);
 }
 
 string NotExpression::stype() { return "NotExpression";}

@@ -15,22 +15,12 @@ CodeGenerator::CodeGenerator() {
    here = 0;
    pn = NULL;
    di = NULL;
-   opr_mapping['+'] = 2;
-   opr_mapping['-'] = 3;
-   opr_mapping['*'] = 4;
-   opr_mapping['/'] = 5;
-   opr_mapping['%'] = 6;
-   opr_mapping['='] = 8;
-   opr_mapping['N'] = 9;
-   opr_mapping['<'] = 10;
-   opr_mapping['G'] = 11;
-   opr_mapping['>'] = 12;
-   opr_mapping['L'] = 13;
+   opr_mapping['/'] = 5; // DIV
+   opr_mapping['%'] = 6; // MOD
    opr_mapping['I'] = 14;
-   opr_mapping['n'] = 15; // NOT
-   opr_mapping['A'] = 16; // AND
-   opr_mapping['O'] = 17; // OR
-   opr_mapping['M'] = 18; // MOD 
+   opr_mapping['!'] = 15; // NOT
+   opr_mapping['&'] = 16; // AND
+   opr_mapping['|'] = 17; // OR
 }
 
 CodeGenerator::~CodeGenerator() {
@@ -50,9 +40,7 @@ ProgramNode* CodeGenerator::getProgramNode()
 }
 
 void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
-   if(debug){printf("Code generation...\n" );}
    pn=a_pn;
-   if(debug){printf("beginning of code here = %04x\n",here);}
    //
    // emit a magic number
    //
@@ -66,7 +54,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    // leave some space for the start address of the code
    //
    emit2Byte(0);
-   if(debug){printf("Before method table here = %04x\n",here);}
    //
    // count the number of methods
    //
@@ -87,10 +74,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    int i = 1;
    uint16_t the_index = start_ext_proc_table;
-   if(debug){printf("The index is now %04X\n",the_index);}
    int nExterns = a_pn->getExterns().size();
-   if(debug){printf("There are %d methods\n",amount_of_methods);}
-   if(debug){printf("There are %d external functions\n",nExterns);}
    for (auto an_extern:a_pn->getExterns())
    {
       an_extern->setNumber(i);
@@ -101,7 +85,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
          *((char*) codebuffer + the_index) = a & 255;
          a = a >> 8;
          the_index++;
-   if(debug){printf("The index is now %04X\n",the_index);}
       }
       //
       // now save the signature as as string
@@ -149,7 +132,8 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // emit RET
    //
-   emit(2, 0, 0, NULL);
+   emitByte(19);
+   emit2Byte(0);
    //
    // generate all the procedures
    //
@@ -172,7 +156,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
          a_method->emit(this, here, a_class);
       }
    }
-   if (debug) {printf("------------Done generating code for methods\n");}
    //
    // fix the proc addresses
    //
@@ -180,14 +163,12 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // emit the method table
    //
-   if(debug){printf("Emitting method table\n"); }
    the_index = 10;
    for (auto const &a_class : a_pn->getClasses()) {
       for (auto const &a_method : a_class->getMethods()) {
          uint16_t cnum = a_class->getClassNum();
          uint16_t mnum = a_method->getMethodNumber();
          uint16_t address = a_method->getProcAddress();
-         if(debug){printf("A method %s classnum %d methodnum %d address %04X params %lu localvars %lu\n",a_method->getName().c_str(),cnum,mnum,address,a_method->getParameters()->size(),a_method->getLocalVariables()->size());}
          *((char*) codebuffer + the_index) = cnum & 255;
          the_index++;
          *((char*) codebuffer + the_index) = cnum >> 8;
@@ -206,7 +187,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
          the_index++;
       }
    }
-   if(debug){printf("Generated %d bytes of code\n",here );}
 }
 
 //
@@ -214,9 +194,6 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
 //
 void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
       Expression* s) {
-   if (s != NULL) {
-       // di->setPosition(here, s->getLinepos(), s->getCharpos(), s->getAbspos());
-   }
    emitByte(f);
    emit2Byte(l);
    emit2Byte(a);
@@ -236,12 +213,22 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(char avalue, Expression* s) {
-   uint16_t atype = opr_mapping[avalue];
-   if (atype == 0) {
-      puts("Unexpected Operation" + avalue);
-   } else {
-      emit(2, 0, atype, s);
-   }
+   if (avalue=='+') {emit(OPCODE_PLS,0,0,s);return;}
+   if (avalue=='-') {emit(OPCODE_MIN,0,0,s);return;}
+   if (avalue=='*') {emit(OPCODE_MUL,0,0,s);return;}
+   if (avalue=='/') {emit(OPCODE_DIV,0,0,s);return;}
+   if (avalue=='%') {emit(OPCODE_MOD,0,0,s);return;}
+   if (avalue=='=') {emit(OPCODE_EQ,0,0,s);return;}
+   if (avalue=='<') {emit(OPCODE_LT,0,0,s);return;}
+   if (avalue=='G') {emit(OPCODE_GE,0,0,s);return;}
+   if (avalue=='>') {emit(OPCODE_GT,0,0,s);return;}
+   if (avalue=='L') {emit(OPCODE_LE,0,0,s);return;}
+   if (avalue=='N') {emit(OPCODE_NE,0,0,s);return;}
+   if (avalue=='I') {emit(OPCODE_I,0,0,s);return;}
+   if (avalue=='&') {emit(OPCODE_AND,0,0,s);return;}
+   if (avalue=='|') {emit(OPCODE_OR,0,0,s);return;}
+   if (avalue=='!') {emit(OPCODE_NOT,0,0,s);return;}
+   printf("Unexpected Operation %c\n" , avalue);
 }
 
 /**
@@ -322,7 +309,6 @@ void CodeGenerator::addCallToProc(string name, Expression* s) {
          //
          // it's a method call
          //
-         printf("METHOD CALL " );
       }
       else
       {

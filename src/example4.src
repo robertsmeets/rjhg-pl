@@ -7,7 +7,7 @@
 extern fopen   pp-p      ;
 extern fclose  p-p       ;
 extern fprintf pp+i      ;
-extern fgets   iii+p     ;
+extern fgets   pip+p     ;
 
  /*
   * main 
@@ -25,6 +25,7 @@ proc main()
    //
    fp = fopen(filename,"r"); 
    if (fp==null) { print "could not open the file "+filename+" for input"; return; };
+   buf = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
    result = fgets(buf,1000,fp);
    if (result==null) { print "could not get a string"; return; };
    print(buf); 

@@ -147,7 +147,7 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
    out2 << a;
    sa = out2.str();
    switch (f) {
-   case 1:   // lit: Literal value, to be pushed on the stack
+   case OPCODE_LIT:   // lit: Literal value, to be pushed on the stack
       sf = "LIT";
       switch (l) {
       case 2: // Int
@@ -172,144 +172,127 @@ string Disassembler::decode(char f, unsigned short l, unsigned short a) {
          break;
       }
       break;
-   case 2: // opr
-      sf = "OPR";
-      switch (a) {
-      case 0:
-         sa = "RET";
-         break;
-      case 1:
-         sa = "UNARY MINUS";
-         break;
-      case 2:
-         sa = "PLUS";
-         break;
-      case 3:
-         sa = "MINUS";
-         break;
-      case 4:
-         sa = "MUL";
-         break;
-      case 5:
-         sa = "DIV";
-         break;
-      case 6:
-         sa = "MOD";
-         break;
-      case 8:
-         sa = "EQ";
-         break;
-      case 9:
-         sa = "NE";
-         break;
-      case 10:
-         sa = "LT";
-         break;
-      case 11:
-         sa = "GE";
-         break;
-      case 12:
-         sa = "GT";
-         break;
-      case 13:
-         sa = "LE";
-         break;
-      case 14:
-         sa = "I";
-         break;
-      case 15:
-         sa = "NOT";
-         break;
-      case 16:
-         sa = "AND";
-         break;
-      case 17:
-         sa = "OR";
-         break;
-      case 18:
-         sa = "MOD";
-         break;
-      default:
-         sa = "unexpected A value: " + a;
-         printf("the a value was unexpected <%d>\n",a);
-         break;
-      }
+   case OPCODE_I:
+         sf = "I";
       i += 5;
-      break;
-   case 3:
+         break;
+      case OPCODE_NOT:
+         sf = "NOT";
+      i += 5;
+         break;
+      case OPCODE_AND:
+         sf = "AND";
+      i += 5;
+         break;
+      case OPCODE_OR:
+         sf = "OR";
+      i += 5;
+         break;
+   case OPCODE_LOD:
       sf = "LOD";
       //lod: copy a local variable on top of the stack
       i += 5;
       break;
-   case 4:
+   case OPCODE_STO:
       // sto: pop a value from the stack and put it in a local variable
       sf = "STO";
       i += 5;
       break;
-   case 5:
+   case OPCODE_CAL:
       //cal:
       // parameters should have already been pushed on the stack
       // push the return address on the return stack
       // call the procedure
       //
-      sf = "CAL";
+      sf = "CAL"; // procedure call
       i += 5;
       break;
-   case 6:
+   case OPCODE_INT:
       // int:
       sf = "INT";
       i += 5;
       break;
-   case 7:
+   case OPCODE_JMP:
       // jmp
       sf = "JMP";
       i += 5;
       break;
-   case 8:
+   case OPCODE_JPC:
       // jpc
       sf = "JPC";
       i += 5;
       break;
-   case 9:
-      sf = "PRINT";
+   case OPCODE_PRT:
+      sf = "PRT";
+      i++;
+      break;
+   case OPCODE_EXT:
+      sf = "EXT";
       i += 5;
       break;
-   case 10:
-      sf = "DYNCAL";
+   case OPCODE_OBJ:
+      sf = "OBJ";
       i += 5;
       break;
-   case 11:
-      sf = "OBJ CREATION";
+   case OPCODE_MCL:
+      sf = "MCL"; // method call
       i += 5;
       break;
-   case 12:
-      sf = "METHOD CALL";
-      i += 5;
-      break;
-   case 13:
+   case OPCODE_LDI:
       sf = "LDI";
       i +=5;
       break;
-   case 14:
+   case OPCODE_STI:
       sf = "STI";
       i +=5;
       break;
-   case 15:
-      sf = "DROP";
-      i += 5;
+   case OPCODE_DRP:
+      sf = "DRP";
+      i ++;
       break;
-   case 16:
-      sf = "METHOD CALL BUILTIN";
-      i += 5;
-      break;
-   case 17:
+   case OPCODE_JPF:
       sf = "JPF";
       i += 5;
       break;
-   case 18: 
-      sf = "SELF";
+   case OPCODE_SLF: 
+      sf = "SLF";
       i += 5;
       break;
+   case OPCODE_RET: 
+      sf = "RET";
+      i += 3;
+      break;
+   case OPCODE_PLS:
+      sf = "PLS";
+      i += 5;
+      break;
+   case OPCODE_MIN:
+      sf = "MIN";
+      i += 5;
+      break;
+   case OPCODE_MUL:
+      sf = "MUL";
+      i += 5;
+      break;
+   case OPCODE_UNA: 
+        sf = "UNA"; // UNARY MINUSs
+        i+=5;
+        break;
+   case OPCODE_DIV:
+        sf = "DIV";
+        i += 5;
+        break;
+   case OPCODE_MOD:
+        sf = "MOD";
+        i += 5;
+        break;
+   case OPCODE_EQ: sf = "EQ"; i+=5;break; 
+   case OPCODE_NE: sf = "NE"; i+=5;break;
+   case OPCODE_LT: sf = "LT"; i+=5;break;
+   case OPCODE_GE: sf = "GE"; i+=5;break;
+   case OPCODE_GT: sf = "GT"; i+=5;break;
+   case OPCODE_LE: sf = "LE"; i+=5;break;
+
    default:
       sf = "-----------------------------------+> unexpected F value: " + int(f);
       printf(" F=%d L=%d A=%d" , (unsigned int) f , l , a );
