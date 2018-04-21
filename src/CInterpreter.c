@@ -1097,10 +1097,16 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    for(int i=0;i<ilen;i++) {
       char* c = ingoing[i];
       struct stack_element f = s[t - cnt];
-      args[i] = CI_value(c,f);
-      char* someptr = CI_pass_in_arg(c,f);
-      char** anotherptr =  &someptr;
-      values[i] = anotherptr;
+      printf("atype is <%d> string is <%d>\n",f.atype,TYPE_STRING);
+      char* aptr = f.address;
+      uint16_t* uptr = (uint16_t*)aptr;
+      uint16_t len = *aptr;
+      printf("len is <%d>\n",len);
+      char* nstring = GC_MALLOC(len+1);
+      memcpy(nstring,aptr+2,len);
+      *(nstring+len+2) = '\0';
+      printf("the copied string is <%s>\n",nstring);
+      values[i] = nstring;
       cnt--;
    } 
    //
@@ -1109,7 +1115,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int left = a - ilen;
    for (int i = 0; i< left;i++)
    {
-if(debug)printf("VARARGS-------------\n");
+      if(debug)printf("VARARGS-------------\n");
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(' ',f);
       char* someptr = CI_pass_in_arg(' ',f);
@@ -1121,6 +1127,10 @@ if(debug)printf("VARARGS-------------\n");
    char c = outgoing[0];
    if(debug)printf("before ffi_prep_cif\n");
    printf("Number Of Ingoing arguments %d\n",nr_ingoing);
+   printf("values[0] <%s>\n",values[0]);
+   printf("values[1] <%s>\n",values[1]);
+  args[0] = &ffi_type_pointer;
+  args[1] = &ffi_type_pointer;
    int fresult = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, nr_ingoing, &ffi_type_pointer, args);
    if (fresult != FFI_OK)
    {
@@ -1134,6 +1144,33 @@ if(debug)printf("VARARGS-------------\n");
    sym = fopen;
    ffi_call(&cif, sym, &rc, values);
    if(debug)printf("after call\n");
+
+
+/*
+
+  ffi_cif cif;
+  ffi_type *args[2];
+  void *values[2];
+  char *s1;
+  char *s2;
+  long rc;
+  args[0] = &ffi_type_pointer;
+  args[1] = &ffi_type_pointer;
+  values[0] = &s1;
+  values[1] = &s2;
+  void* sym = fopen;
+  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, &ffi_type_pointer, args) == FFI_OK)
+    {
+      s1 = "f1.txt";
+      s2 = "w";
+      ffi_call(&cif, sym, &rc, values);
+    }
+
+
+*/
+
+
+
    /* rc now holds the result of the call to the function */
    
 
