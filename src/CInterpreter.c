@@ -1102,11 +1102,14 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
       uint16_t* uptr = (uint16_t*)aptr;
       uint16_t len = *aptr;
       printf("len is <%d>\n",len);
+      char** loc = GC_MALLOC(8); 
       char* nstring = GC_MALLOC(len+1);
       memcpy(nstring,aptr+2,len);
-      *(nstring+len+2) = '\0';
-      printf("the copied string is <%s>\n",nstring);
-      values[i] = nstring;
+      *(nstring+len) = '\0';
+      *loc = nstring; 
+      printf("the copied string is <%p>\n",nstring);
+      values[i] = loc;
+      printf("values[%d] =  <%p>\n",i,values[i]);
       cnt--;
    } 
    //
@@ -1127,10 +1130,16 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    char c = outgoing[0];
    if(debug)printf("before ffi_prep_cif\n");
    printf("Number Of Ingoing arguments %d\n",nr_ingoing);
-   printf("values[0] <%s>\n",values[0]);
-   printf("values[1] <%s>\n",values[1]);
-  args[0] = &ffi_type_pointer;
-  args[1] = &ffi_type_pointer;
+   //char *s1;
+   //char *s2;
+   //values[0] = &s1;
+   //values[1] = &s2;
+   //s1 = "testfile.txt";
+   //s2 = "w";
+   printf("values[0] <%p>\n",values[0]);
+   printf("values[1] <%p>\n",values[1]);
+   args[0] = &ffi_type_pointer;
+   args[1] = &ffi_type_pointer;
    int fresult = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, nr_ingoing, &ffi_type_pointer, args);
    if (fresult != FFI_OK)
    {
