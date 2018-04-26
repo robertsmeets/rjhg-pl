@@ -71,5 +71,5 @@ struct extern_record {
    ffi_type* CI_value(char, struct stack_element);
    void* CI_actual_value(struct stack_element);
    void* CI_pass_in_arg(char ,struct stack_element );
-
+   ffi_type* CI_outgoing(char );
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */
