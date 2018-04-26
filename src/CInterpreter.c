@@ -1130,12 +1130,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    char c = outgoing[0];
    if(debug)printf("before ffi_prep_cif\n");
    printf("Number Of Ingoing arguments %d\n",nr_ingoing);
-   //char *s1;
-   //char *s2;
-   //values[0] = &s1;
-   //values[1] = &s2;
-   //s1 = "testfile.txt";
-   //s2 = "w";
    printf("values[0] <%p>\n",values[0]);
    printf("values[1] <%p>\n",values[1]);
    args[0] = &ffi_type_pointer;
@@ -1150,7 +1144,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    //
    // do the actual call
    //
-   sym = fopen;
+//   sym = fopen;
    ffi_call(&cif, sym, &rc, values);
    if(debug)printf("after call\n");
 
