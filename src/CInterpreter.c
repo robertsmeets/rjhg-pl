@@ -1077,7 +1077,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          printf("Mismatch: ingoing arguments given %d but expected at least %lu",a,pos);
          exit(-1);
       }
-      //dcMode(vm, DC_CALL_C_ELLIPSIS);
    }
    else
    {
@@ -1086,30 +1085,27 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          printf("Mismatch: ingoing arguments given %d but expected %lu",a,pos);
          exit(-1);
       }
-      //dcMode(vm, DC_CALL_C_DEFAULT);
    }
-   //dcReset(vm);
    //
    // loop over the given args
    //
    int nr_ingoing = ilen;
    int cnt = a;
-   for(int i=0;i<ilen;i++) {
+   for(int i=0;i < ilen;i++) {
       char* c = ingoing[i];
       struct stack_element f = s[t - cnt];
-      printf("atype is <%d> string is <%d>\n",f.atype,TYPE_STRING);
-      char* aptr = f.address;
-      uint16_t* uptr = (uint16_t*)aptr;
-      uint16_t len = *aptr;
-      printf("len is <%d>\n",len);
-      char** loc = GC_MALLOC(8); 
-      char* nstring = GC_MALLOC(len+1);
-      memcpy(nstring,aptr+2,len);
-      *(nstring+len) = '\0';
-      *loc = nstring; 
-      printf("the copied string is <%p>\n",nstring);
-      values[i] = loc;
-      printf("values[%d] =  <%p>\n",i,values[i]);
+      //char* aptr = f.address;
+      //uint16_t len = *aptr;
+      //char** loc = GC_MALLOC(8); 
+      //char* nstring = GC_MALLOC(len+1);
+      //memcpy(nstring,aptr+2,len);
+      //*(nstring+len) = '\0';
+      //*loc = nstring; 
+      //values[i] = loc;
+      char* someptr = CI_pass_in_arg(' ',f);
+      char** anotherptr = GC_MALLOC(8);
+      *anotherptr= someptr;
+      values[i] = anotherptr;
       cnt--;
    } 
    //
@@ -1144,35 +1140,8 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    //
    // do the actual call
    //
-//   sym = fopen;
    ffi_call(&cif, sym, &rc, values);
    if(debug)printf("after call\n");
-
-
-/*
-
-  ffi_cif cif;
-  ffi_type *args[2];
-  void *values[2];
-  char *s1;
-  char *s2;
-  long rc;
-  args[0] = &ffi_type_pointer;
-  args[1] = &ffi_type_pointer;
-  values[0] = &s1;
-  values[1] = &s2;
-  void* sym = fopen;
-  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, &ffi_type_pointer, args) == FFI_OK)
-    {
-      s1 = "f1.txt";
-      s2 = "w";
-      ffi_call(&cif, sym, &rc, values);
-    }
-
-
-*/
-
-
 
    /* rc now holds the result of the call to the function */
    
@@ -1272,6 +1241,7 @@ void* CI_actual_value(struct stack_element f)
         }
 }
 }
+
 ffi_type* CI_value(char c, struct stack_element f)
 {
       uint16_t atype = f.atype;
@@ -1285,8 +1255,6 @@ ffi_type* CI_value(char c, struct stack_element f)
                 exit(-1);
              }
              return &ffi_type_sint64;
-             // dcArgInt(vm,f.address);
-             break;
           }
           case TYPE_FLOAT:
           {
@@ -1298,9 +1266,7 @@ ffi_type* CI_value(char c, struct stack_element f)
              double arg_in;
              char* adr = (char*) (f.address);
              memcpy(&arg_in, adr, 8);
-             // dcArgDouble(vm, arg_in);
              return &ffi_type_double;
-             break;
           }
           case TYPE_STRING: // char*
           {
@@ -1375,15 +1341,22 @@ void* CI_pass_in_arg(char c,struct stack_element f)
                 printf("expected string or pointer in external call but got %d\n",atype);
                 exit(-1);
              } 
+      //char* aptr = f.address;
+      //uint16_t len = *aptr;
+      //char** loc = GC_MALLOC(8); 
+      //char* nstring = GC_MALLOC(len+1);
+      //memcpy(nstring,aptr+2,len);
+      //*(nstring+len) = '\0';
+      //*loc = nstring; 
+      //values[i] = loc;
+
                 char* adr = (char*) (f.address);
-                int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
+                uint16_t len = *adr;
                 char* str = (char*) GC_MALLOC(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
-                // dcArgPointer(vm, str);
                 printf("TYPE_STRING <%s>\n",str);
                 return str;
-                break;
             }
          case TYPE_PTR: // pointer
             {
