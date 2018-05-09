@@ -1063,8 +1063,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    char* ingoing = GC_MALLOC(pos+1);
    strncpy(ingoing, signature,pos);
    int ilen =pos;
-   char* outgoing = GC_MALLOC(pos+1);
-   strncpy(outgoing,signature,pos+1); 
+   char c = signature[pos+1];
    ffi_cif cif;
    ffi_type *args[20];
    void *values[20];
@@ -1112,7 +1111,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
       cnt--;
    }
    t -= a;
-   char c = outgoing[0];
    int rtype = CI_outgoing(c);
    if(debug)printf("before ffi_prep_cif\n");
    printf("Number Of Ingoing arguments %d\n",a);
@@ -1153,16 +1151,19 @@ switch (c)
           //
           // put the result on the stack
           //
-          char* ptr = rc;
+          printf("found S1\n");
+          char* ptr = &rc;
+          printf("found S2\n");
           int len = strlen(ptr);
-          printf("FOUND STRING <%s> with length %d\n",ptr,len); 
+          printf("FOUND STRING with length %d\n",len); 
           char* nptr = GC_MALLOC(len+2);
+          printf("found S3\n");
           uint16_t* uptr = nptr;
           *uptr = len;
           strncpy(nptr+2,ptr,len);
           tb--;
           s[t].atype = TYPE_STRING;
-          s[t].address = (long long unsigned int)ptr;
+          s[t].address = (long long unsigned int)nptr;
           t++;
          break;
       }
