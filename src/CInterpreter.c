@@ -1066,8 +1066,8 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    char* outgoing = GC_MALLOC(pos+1);
    strncpy(outgoing,signature,pos+1); 
    ffi_cif cif;
-   ffi_type *args[2];
-   void *values[2];
+   ffi_type *args[20];
+   void *values[20];
    long rc;
    if (varargs)
    {
