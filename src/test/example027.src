@@ -8,7 +8,7 @@ extern fopen   pp-p      ;
 extern fclose  p-p       ;
 extern printf  p+i       ;
 extern fprintf pp+i      ;
-extern fgets   sip-s     ;
+extern fgetc   p-s       ;
 
 /**
  *
@@ -28,9 +28,8 @@ proc main()
    // 
    fp = fopen(filename,"r");
    if (fp==null) { print "could not open the file for reading"; return; };
-   t = "oiweroiwuewoier";
-   s = fgets(t,5,fp); 
-   print "Found string " + s;
+   s = fgetc(fp); 
+   print "Found char " + s;
    fclose(fp);
 }
 
