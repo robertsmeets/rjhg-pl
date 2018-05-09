@@ -1113,7 +1113,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    t -= a;
    int rtype = CI_outgoing(c);
    if(debug)printf("before ffi_prep_cif\n");
-   printf("Number Of Ingoing arguments %d\n",a);
    int fresult = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, a, rtype, args);
    if (fresult != FFI_OK)
    {
@@ -1151,13 +1150,9 @@ switch (c)
           //
           // put the result on the stack
           //
-          printf("found S1\n");
           char* ptr = &rc;
-          printf("found S2\n");
           int len = strlen(ptr);
-          printf("FOUND STRING with length %d\n",len); 
           char* nptr = GC_MALLOC(len+2);
-          printf("found S3\n");
           uint16_t* uptr = nptr;
           *uptr = len;
           strncpy(nptr+2,ptr,len);
