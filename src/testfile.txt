@@ -1,1 +1,1 @@
-25 and BLA
+25 and (null)

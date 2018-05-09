@@ -1,0 +1,17 @@
+/**
+ *
+ * example program
+ *
+ */
+
+extern puts    p-i       ;
+
+/**
+ *
+ * main 
+ *
+ */
+proc main()
+{
+   x = puts("Hello World");
+}

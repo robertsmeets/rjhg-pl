@@ -18,6 +18,7 @@
 #include <string.h>
 #include <gc.h>
 #include <stdbool.h>
+#include <ffi.h>
 
 #include "CConstants.h"
 #include "jwHash.h"
@@ -42,7 +43,6 @@ struct extern_record {
    static struct stack_element s[500];
    static unsigned short int r[500];
    static unsigned short int b[500];
-   // HeapManager* hm;
 
    typedef uint16_t (*iiptr)(uint16_t, uint16_t);
    typedef double (*ddptr)(double, double);
@@ -68,6 +68,7 @@ struct extern_record {
    void CI_print_a_string(char* ,bool ); 
    void CI_print_a_string2(char* , uint16_t ); 
    void CI_call_external(short unsigned int ,short unsigned int ); 
-   void CI_pass_in_arg( DCCallVM* , char ,struct stack_element );
-
+   ffi_type* CI_value(char, struct stack_element);
+   void* CI_pass_in_arg(char ,struct stack_element );
+   ffi_type* CI_outgoing(char );
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

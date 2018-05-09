@@ -124,8 +124,6 @@ void CI_start(bool indebug) {
          ar[0] = address;
          ar[1] = num_params;
          ar[2] = num_local_vars;
-         if(debug) {printf("adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
-         if(debug) {printf("ar = %x\n",ar);}
          add_ptr_by_int(map2,classnum,ar);
          add_ptr_by_int(methodmap,methodnum,(void*)map2);
       }
@@ -141,17 +139,12 @@ void CI_start(bool indebug) {
             //
             // class does not have this method. Add it
             //
-            if(debug) {printf("adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
             uint16_t* bar = (uint16_t*)GC_MALLOC(3* sizeof(uint16_t));
             bar[0] = address;
             bar[1] = num_params;
             bar[2] = num_local_vars;
             add_ptr_by_int((jwHashTable*)sstr1,classnum,(void*)bar);
             if(debug) {printf("bar = %x\n",bar);}
-         }
-         else
-         {
-            if(debug) {printf("NOT adding %d %d %x %d %d\n",classnum, methodnum, address,num_params,num_local_vars);}
          }
       }
    }
@@ -1070,9 +1063,11 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    char* ingoing = GC_MALLOC(pos+1);
    strncpy(ingoing, signature,pos);
    int ilen =pos;
-   char* outgoing = GC_MALLOC(pos+1);
-   strncpy(outgoing,signature,pos+1); 
-   DCCallVM* vm = dcNewCallVM(4096);
+   char c = signature[pos+1];
+   ffi_cif cif;
+   ffi_type *args[20];
+   void *values[20];
+   long rc;
    if (varargs)
    {
       if (a < ilen) 
@@ -1080,7 +1075,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          printf("Mismatch: ingoing arguments given %d but expected at least %lu",a,pos);
          exit(-1);
       }
-      dcMode(vm, DC_CALL_C_ELLIPSIS);
    }
    else
    {
@@ -1089,18 +1083,18 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          printf("Mismatch: ingoing arguments given %d but expected %lu",a,pos);
          exit(-1);
       }
-      dcMode(vm, DC_CALL_C_DEFAULT);
    }
-   dcReset(vm);
    //
    // loop over the given args
    //
    int nr_ingoing = ilen;
    int cnt = a;
-   for(int i=0;i<ilen;i++) {
+   for(int i=0;i < ilen;i++) {
       char* c = ingoing[i];
       struct stack_element f = s[t - cnt];
-      CI_pass_in_arg(vm,c,f);
+      args[i] = CI_value(c,f);
+      char** anotherptr = CI_pass_in_arg(c,f);
+      values[i] = anotherptr;
       cnt--;
    } 
    //
@@ -1109,20 +1103,37 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int left = a - ilen;
    for (int i = 0; i< left;i++)
    {
+      if(debug)printf("VARARGS-------------\n");
       struct stack_element f = s[t - cnt];
-      CI_pass_in_arg(vm,' ' ,f);
+      args[i+ilen] = CI_value(' ',f);
+      char** anotherptr = CI_pass_in_arg(' ',f);
+      values[i+ilen] = anotherptr;
       cnt--;
    }
    t -= a;
-   char c = outgoing[0];
+   int rtype = CI_outgoing(c);
+   if(debug)printf("before ffi_prep_cif\n");
+   int fresult = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, a, rtype, args);
+   if (fresult != FFI_OK)
+   {
+        printf("something went wrong in ffi_prep_cif\n");
+        exit(-1);
+   }
+   if(debug)printf("after ffi_prep_cif\n");
    //
    // do the actual call
    //
-   switch (c)
+   ffi_call(&cif, sym, &rc, values);
+   if(debug)printf("after call\n");
+
+   /* rc now holds the result of the call to the function */
+  if(debug)printf("RETURN TYPE is <%c>\n",c); 
+
+switch (c)
    {
       case 'd':
       {
-         double r = dcCallDouble(vm, sym);
+         double r = (double) rc;
          //
          // put the result on the stack
          //
@@ -1134,15 +1145,31 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          t++;
          break;
       }
+      case 's':
+      {
+          //
+          // put the result on the stack
+          //
+          char* ptr = &rc;
+          int len = strlen(ptr);
+          char* nptr = GC_MALLOC(len+2);
+          uint16_t* uptr = nptr;
+          *uptr = len;
+          strncpy(nptr+2,ptr,len);
+          tb--;
+          s[t].atype = TYPE_STRING;
+          s[t].address = (long long unsigned int)nptr;
+          t++;
+         break;
+      }
       case 'p':
       {
-          DCpointer r = dcCallPointer(vm, sym);
           //
           // put the result on the stack
           //
           tb--;
           s[t].atype = 8;
-          s[t].address = (long long unsigned int)r;
+          s[t].address = (long long unsigned int)rc;
           t++;
          break;
       }
@@ -1151,7 +1178,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          //
          // no return value
          //
-         dcCallVoid(vm,sym);
          break;
       }
       case 'i': 
@@ -1159,7 +1185,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          // 
          // integer return type
          //
-         int i = dcCallInt(vm,sym);
+         int i = (int) rc;
          tb--;
          s[t].atype = 2;
          s[t].address = i;
@@ -1171,11 +1197,34 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
          exit(-1);
 
    }
-   dcFree(vm);
 }
 
+/**
+ * return the value pointer for this return type
+ * c is the descriptor  
+ **/
+ffi_type* CI_outgoing(char c)
+{
+   switch(c)
+   {
+       case 'i': return &ffi_type_sint64;
+       case 'd': return &ffi_type_double;
+       case 'p': return &ffi_type_pointer;
+       case 's': return &ffi_type_pointer;
+       default:
+          {
+             printf("unexpected return type given <%c> in external call\n", c);
+             exit(-1);
+          }
+ }
+}
 
-void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
+/**
+ * return the value pointer for this type
+ * c is the desired type or ' ' if not known
+ * stack_element is the variable to pass in
+ */
+ffi_type* CI_value(char c, struct stack_element f)
 {
       uint16_t atype = f.atype;
       switch(atype)
@@ -1187,8 +1236,68 @@ void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
                 printf("expected %c in external call but got %d\n",c,atype);
                 exit(-1);
              }
-             dcArgInt(vm,f.address);
-             break;
+             if(debug)printf("CI_value TYPE_INT\n");
+             return &ffi_type_sint64;
+          }
+          case TYPE_FLOAT:
+          {
+             if ( (c != ' ' ) && ( c!= 'd'))
+             {
+                printf("expected double in external call but got %d\n",atype);
+                exit(-1);
+             }
+             return &ffi_type_double;
+          }
+          case TYPE_STRING: // char*
+          {
+             if ((c !=' ' ) && (c != 'p'))
+             {
+                printf("expected <%c> in external call but got string\n",c);
+                exit(-1);
+             } 
+             if(debug)printf("CI_value TYPE_STRING\n");
+               return &ffi_type_pointer;
+            }
+         case TYPE_PTR: // pointer
+            {
+               if ((c !=' ' ) && (c != 'p'))
+               {
+                  printf("two expected string or pointer in external call but got %d\n",atype);
+                  exit(-1);
+               }
+             if(debug)printf("CI_value TYPE_PTR\n");
+                return &ffi_type_pointer;
+            }
+          default:
+          {
+             printf("unexpected type given <%d> but expected <%c> in external call\n", atype,c);
+             exit(-1);
+          }
+      } 
+}
+
+
+/**
+ * return a pointer to an argument for this type
+ * c is the desired type or ' ' if not known
+ * stack_element is the variable to pass in
+ */
+void* CI_pass_in_arg(char c,struct stack_element f)
+{
+      uint16_t atype = f.atype;
+      switch(atype)
+      {
+          case TYPE_INT: // int
+          {
+             if ((c != ' ' ) && (c!= 'i'))
+             {
+                printf("expected %c in external call but got %d\n",c,atype);
+                exit(-1);
+             }
+             if(debug)printf("CI_pass_in_arg TYPE_INT %d\n",f.address);
+             char** v = GC_MALLOC(8);
+             *v = f.address;
+             return v;
           }
           case TYPE_FLOAT:
           {
@@ -1200,33 +1309,37 @@ void CI_pass_in_arg( DCCallVM* vm, char c,struct stack_element f)
              double arg_in;
              char* adr = (char*) (f.address);
              memcpy(&arg_in, adr, 8);
-             dcArgDouble(vm, arg_in);
              break;
           }
           case TYPE_STRING: // char*
           {
              if ((c !=' ' ) && (c != 'p'))
              {
-                printf("expected string or pointer in external call but got %d\n",atype);
+                printf("three expected string or pointer in external call but got %d\n",atype);
                 exit(-1);
              } 
                 char* adr = (char*) (f.address);
-                int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
+                uint16_t len = *adr;
                 char* str = (char*) GC_MALLOC(len + 1);
                 memcpy(str, adr + 2, len);
                 str[len] = '\0';
-                dcArgPointer(vm, str);
-                break;
+                if(debug)printf("CI_pass_in_arg TYPE_STRING %s\n",str);
+                char** anotherptr = GC_MALLOC(8);
+                *anotherptr= str;
+                return anotherptr;
             }
          case TYPE_PTR: // pointer
             {
+               if(debug)printf("-------- pointer in args\n");
                if ((c !=' ' ) && (c != 'p'))
                {
-                  printf("expected string or pointer in external call but got %d\n",atype);
+                  printf("four expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
-               dcArgPointer(vm, (void*)f.address);
-               break;
+                if(debug)printf("CI_pass_in_arg TYPE_PTR %p\n",f.address);
+             char** v = GC_MALLOC(8);
+             *v = f.address;
+               return v;
             }
           default:
           {
