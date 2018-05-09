@@ -1130,7 +1130,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    if(debug)printf("after call\n");
 
    /* rc now holds the result of the call to the function */
-   
+  if(debug)printf("RETURN TYPE is <%c>\n",c); 
 
 switch (c)
    {
@@ -1148,9 +1148,26 @@ switch (c)
          t++;
          break;
       }
+      case 's':
+      {
+          //
+          // put the result on the stack
+          //
+          char* ptr = rc;
+          int len = strlen(ptr);
+          printf("FOUND STRING <%s> with length %d\n",ptr,len); 
+          char* nptr = GC_MALLOC(len+2);
+          uint16_t* uptr = nptr;
+          *uptr = len;
+          strncpy(nptr+2,ptr,len);
+          tb--;
+          s[t].atype = TYPE_STRING;
+          s[t].address = (long long unsigned int)ptr;
+          t++;
+         break;
+      }
       case 'p':
       {
-          // DCpointer r = dcCallPointer(vm, sym);
           //
           // put the result on the stack
           //
@@ -1184,45 +1201,6 @@ switch (c)
          exit(-1);
 
    }
-   // dcFree(vm);
-}
-
-void* CI_actual_value(struct stack_element f)
-{
-      uint16_t atype = f.atype;
-      switch(atype)
-      {
-          case TYPE_INT: // int
-          {
-             return &ffi_type_sint64;
-             break;
-          }
-          case TYPE_FLOAT:
-          {
-             double arg_in;
-             char* adr = (char*) (f.address);
-             memcpy(&arg_in, adr, 8);
-             return &ffi_type_double;
-             break;
-          }
-          case TYPE_STRING: // char*
-          {
-                char* adr = (char*) (f.address);
-                int len = ((*adr) & 0xff) + (*(adr + 1) << 8);
-                char* str = (char*) GC_MALLOC(len + 1);
-                memcpy(str, adr + 2, len);
-                str[len] = '\0';
-                return &ffi_type_pointer;
-                break;
-         }
-         case TYPE_PTR: // pointer
-            {
-                return &ffi_type_pointer;
-            }
-        default:
-        {
-        }
-}
 }
 
 /**
@@ -1236,6 +1214,7 @@ ffi_type* CI_outgoing(char c)
        case 'i': return &ffi_type_sint64;
        case 'd': return &ffi_type_double;
        case 'p': return &ffi_type_pointer;
+       case 's': return &ffi_type_pointer;
        default:
           {
              printf("unexpected return type given <%c> in external call\n", c);
@@ -1277,7 +1256,7 @@ ffi_type* CI_value(char c, struct stack_element f)
           {
              if ((c !=' ' ) && (c != 'p'))
              {
-                printf("expected string or pointer in external call but got %d\n",atype);
+                printf("expected <%c> in external call but got string\n",c);
                 exit(-1);
              } 
              if(debug)printf("CI_value TYPE_STRING\n");
@@ -1287,7 +1266,7 @@ ffi_type* CI_value(char c, struct stack_element f)
             {
                if ((c !=' ' ) && (c != 'p'))
                {
-                  printf("expected string or pointer in external call but got %d\n",atype);
+                  printf("two expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
              if(debug)printf("CI_value TYPE_PTR\n");
@@ -1340,7 +1319,7 @@ void* CI_pass_in_arg(char c,struct stack_element f)
           {
              if ((c !=' ' ) && (c != 'p'))
              {
-                printf("expected string or pointer in external call but got %d\n",atype);
+                printf("three expected string or pointer in external call but got %d\n",atype);
                 exit(-1);
              } 
                 char* adr = (char*) (f.address);
@@ -1358,7 +1337,7 @@ void* CI_pass_in_arg(char c,struct stack_element f)
                if(debug)printf("-------- pointer in args\n");
                if ((c !=' ' ) && (c != 'p'))
                {
-                  printf("expected string or pointer in external call but got %d\n",atype);
+                  printf("four expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
                 if(debug)printf("CI_pass_in_arg TYPE_PTR %p\n",f.address);

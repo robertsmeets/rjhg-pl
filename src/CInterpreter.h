@@ -69,7 +69,6 @@ struct extern_record {
    void CI_print_a_string2(char* , uint16_t ); 
    void CI_call_external(short unsigned int ,short unsigned int ); 
    ffi_type* CI_value(char, struct stack_element);
-   void* CI_actual_value(struct stack_element);
    void* CI_pass_in_arg(char ,struct stack_element );
    ffi_type* CI_outgoing(char );
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */
