@@ -37,9 +37,9 @@ string Extern::getEstring()
    return estring;
 }
 
-DCpointer Extern::address()
+void* Extern::address()
 {
-   string libpath = "msvcrt.dll";
+   /* string libpath = "msvcrt.dll";
    const char* lp = libpath.c_str();
    DLLib* ll = dlLoadLibrary(lp);
    if (ll == NULL) {
@@ -50,9 +50,11 @@ DCpointer Extern::address()
    // to it for use in dlFreeLibrary and dlFindSymbol calls.
    // dlFreeLibrary frees the loaded library with handle pLib.
    //
-   DCpointer sym = dlFindSymbol(ll, name.c_str());
+   void* sym = dlFindSymbol(ll, name.c_str());
    if (sym == NULL) {
       puts("could not find external symbol");
    }
-   return sym;
+   */
+   printf("Extern::adress() not implemented\n");
+   return NULL;
 }

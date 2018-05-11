@@ -1,9 +1,6 @@
 #ifndef EXTERN_H_ 
 #define EXTERN_H_ 
 
-#include <dyncall.h>
-#include <dyncall_callf.h>
-#include <dynload.h>
 #include <string>
 #include "stdio.h"
 #include <vector>
@@ -23,7 +20,7 @@ public:
    string getName();
    void setNumber(int);
    int getNumber();
-   DCpointer address();
+   void* address();
 };
 
 #endif

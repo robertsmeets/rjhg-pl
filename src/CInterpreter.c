@@ -534,7 +534,7 @@ int CI_execute_next() {
             //
             // get the value
             //
-            char* nptr = spaceptr + index * 8 ;
+            char* nptr = spaceptr + index * 9 ;
             t--;
             s[t-1].atype = *nptr ;
             char** xptr = (char**)(nptr+1);
@@ -726,7 +726,8 @@ int CI_execute_next() {
          *(ptr + 3) = 0;
          char* nptr = ptr + 4;
          char** vptr = (char**)nptr;
-         char* nnptr = (char*)GC_MALLOC(8 * claimed); 
+         char* nnptr = (char*)GC_MALLOC(9 * claimed); 
+         if(debug)printf("ARRAY: Created 45 bytes here: %p\n",nnptr);
          *vptr = nnptr; 
          //
          // leave the new object on the stack

@@ -10,9 +10,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <dyncall.h>
-#include <dyncall_callf.h>
-#include <dynload.h>
 #include <math.h>
 #include <stdint.h>
 #include <string.h>
