@@ -81,58 +81,85 @@ void array_add(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
    // byte 0 and 1 are the actual length
    // byte 2 and 3 are the claimed length
    //
-   uint16_t* uptr = (uint16_t*)  ptr;
+   uint16_t* uptr = (uint16_t*) ptr;
+   if (debug){printf("uptr = %p\n",uptr);}
    uint16_t actual = *uptr ;
-   uptr = (uint16_t*) (ptr+2);
-   uint16_t claimed = *uptr;
+   if (debug){printf("actual = %d\n",actual);}
+   uint16_t* cptr = (uint16_t*) (ptr+2);
+   uint16_t claimed = *cptr;
+   if (debug){printf("claimed = %d\n",claimed);}
    char* nptr = ptr+4;
    char** ptrptr = (char**)nptr; 
    char* spaceptr =  *ptrptr;
    actual++;
+   if (debug){printf("In the array_add two\n");}
    if (actual > claimed)
    {
       //
       // resize that array
       //
       if (debug) {printf("resize larger spaceptr = %p actual = %d claimed = %d\n",spaceptr,actual,claimed);};
-      spaceptr = (char*)GC_MALLOC(16 * claimed);
-      if (debug) printf("copying %d bytes from %p to %p\n",claimed,*ptrptr,spaceptr);
-      memcpy(spaceptr,*ptrptr,8*claimed);
+      spaceptr = (char*)GC_MALLOC(18 * claimed);
+      if (debug) printf("copying %d bytes from %p to %p\n",9*claimed,*ptrptr,spaceptr);
+      memcpy(spaceptr,*ptrptr,9*claimed);
       claimed *= 2;
       *ptrptr = spaceptr;
-      if (debug) {printf("after larger\n");};
+      if (debug) {printf("after larger spaceptr = %p actual = %d claimed = %d\n",spaceptr,actual,claimed);};
    }
+   if (debug){printf("In the array_add three\n");}
    if ((actual > 10) && (actual < claimed / 3))
    {
       //
       // resize that array
       //
-      spaceptr = (char*)GC_MALLOC(4 * claimed);
       claimed /= 2;
+      spaceptr = (char*)GC_MALLOC(9 * claimed);
       if (debug) printf("copying %d bytes from %p to %p\n",claimed,*ptrptr,spaceptr);
-      memcpy(spaceptr,*ptrptr,8*claimed);
-      if (debug) {printf("resize smaller %p actual = %d claimed = %d\n",ptr,actual,8*claimed);};
+      memcpy(spaceptr,*ptrptr,9*claimed);
+      if (debug) {printf("resize smaller %p actual = %d claimed = %d\n",ptr,actual,9*claimed);};
       *ptrptr = spaceptr;
       if (debug) {printf("after smaller\n");};
    }
    //
    // set the new size
    //
-   *ptr = actual & 0xff;
-   *(ptr+1) = actual >> 8;
+   if (debug){printf("In the array_add four\n");}
+   *uptr = actual;
    //
    // set the new claimed value
    //
-   *(ptr+2) = claimed & 0xff;
-   *(ptr+3) = claimed >> 8;
+   *cptr = claimed;
    //
    // set the value
    //
-   char* mptr = spaceptr + (actual-1) * 8;
+   if (debug){printf("In the array_add four a\n");}
+   //
+   // mptr is the location of the new value
+   //
+   char* mptr = spaceptr + (actual-1) * 9;
+   if (debug){printf("In the array_add four b\n");}
+   //
+   // place the type in the location
+   //
    *mptr = s[*t-2].atype & 0xff;
+   if (debug){printf("In the array_add four c\n");}
+   //
+   // avptr is the value
+   //
    char* avptr = (char*)s[*t-2].address;
+   if (debug){printf("In the array_add four d\n");}
+   //
+   // vptr is the location where the value should be placed
+   //
    char** vptr = (char**)(mptr+1);
-   *vptr = avptr; 
+   if (debug){printf("In the array_add four e\n");}
+   //
+   // copy the value
+   //
+   if (debug)printf("pointer %p will now receive value %d\n",vptr,avptr);
+   if (debug)printf("this is offset %d claimed = %d actual = %d\n",((void*)vptr - (void*)spaceptr),claimed,actual);
+   memcpy(vptr,&avptr,8);
+   if (debug){printf("In the array_add five\n");}
    (*t)--;
    (*t)--;
 }
@@ -163,7 +190,7 @@ void array_set(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
        printf("array index %d out of range, array size is %d\n",index,actual);
        exit(-1);
    }       
-   char* mptr = spaceptr + index * 8;
+   char* mptr = spaceptr + index * 9;
    *mptr = s[*t-2].atype & 0xff;
    char* avptr = (char*)s[*t-2].address;
    char** vptr = (char**)(mptr+1);
