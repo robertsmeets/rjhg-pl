@@ -27,8 +27,8 @@ struct stack_element {
 };
 
 struct extern_record {
-   unsigned long long int address;
    char* signature;
+   char* name;
 };
 
    static bool debug;
@@ -68,4 +68,6 @@ struct extern_record {
    ffi_type* CI_value(char, struct stack_element);
    void* CI_pass_in_arg(char ,struct stack_element );
    ffi_type* CI_outgoing(char );
+   void* CI_find_ext_address(char*);
+
 #endif /* INTERPRETER_SRC_INTERPRETER_H_ */

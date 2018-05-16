@@ -78,14 +78,14 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    for (auto an_extern:a_pn->getExterns())
    {
       an_extern->setNumber(i);
-      void* ptr = an_extern->address();
-      unsigned long long a = (unsigned long long)ptr;  
-      for (int j = 0;j< 8;j++)
-      { 
-         *((char*) codebuffer + the_index) = a & 255;
-         a = a >> 8;
-         the_index++;
-      }
+      //
+      // save the name
+      //
+      string name = an_extern->getName(); 
+      const char* cs = name.c_str();
+      int len = strlen(cs);
+      memcpy(codebuffer+the_index,cs,len+1); 
+      the_index+=len+1;
       //
       // now save the signature as as string
       //
@@ -93,7 +93,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
       const char * ss = s.c_str();
       char signature[50];
       strncpy(signature, ss, 49);
-      int len = strlen(signature);
+      len = strlen(signature);
       memcpy((char*) codebuffer + the_index,signature,len+1);
       the_index += len + 1;
       i++;

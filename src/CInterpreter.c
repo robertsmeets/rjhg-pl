@@ -144,7 +144,6 @@ void CI_start(bool indebug) {
             bar[1] = num_params;
             bar[2] = num_local_vars;
             add_ptr_by_int((jwHashTable*)sstr1,classnum,(void*)bar);
-            if(debug) {printf("bar = %x\n",bar);}
          }
       }
    }
@@ -155,15 +154,18 @@ void CI_start(bool indebug) {
    uint16_t j = start_ext_proc_table;
    while (j < pc)
    {
-      void* ptr;
-      memcpy(&ptr,buffer + j,8); 
-      j += 8;
       struct extern_record er;
       int len = strlen(buffer + j);
       char* signature = GC_MALLOC(len+1);
       strncpy(signature,buffer+j,len+1);
-      er.address = (long long unsigned int)ptr;
+      printf("---------------- signature <%s>\n",signature);
       er.signature = signature; 
+      j+= len + 1;
+      len = strlen(buffer + j);
+      char* name = GC_MALLOC(len+1);
+      strncpy(name,buffer+j,len+1);
+      printf("---------------- name <%s>\n",name);
+      er.name = name; 
       externs[extern_count]=er;
       extern_count++;
       j+= len + 1;
@@ -351,7 +353,7 @@ int CI_execute_next() {
             //
             char* ptr1 = (char*) fr1.address;
             char str[5];
-            snprintf(str, 4, "null");
+            snprintf(str, 5, "null");
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
@@ -368,7 +370,7 @@ int CI_execute_next() {
             //
             char* ptr1 = (char*) fr1.address;
             char str[7];
-            snprintf(str, 6, "object");
+            snprintf(str, 7, "object");
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
@@ -518,28 +520,44 @@ int CI_execute_next() {
             int index = s[t-1].address;
             atype=s[t-2].atype;
             if (atype == TYPE_ARRAY)
-            {char* ptr = (char*)(s[t-2].address);
-            //
-            // byte 0 and 1 are the actual length
-            // byte 2 and 3 are the claimed length
-            //
-            int actual = ((*ptr) & 0xff) + ((*(ptr + 1))  << 8) ;
-            if (index > actual) { printf("index out of bounds: %d array size = %d\n",index,actual); exit(-1);}
-            //
-            // get the spaceptr
-            //
-            char* mptr = ptr+4;
-            char** aptr = (char**) mptr;
-            char* spaceptr = *aptr;
-            //
-            // get the value
-            //
-            char* nptr = spaceptr + index * 9 ;
-            t--;
-            s[t-1].atype = *nptr ;
-            char** xptr = (char**)(nptr+1);
-            char* zptr = (char*) ((long long unsigned int)(*xptr) & 0xffffffffffff);
-            s[t-1].address = (long long unsigned int) zptr;
+            {
+               if(debug)printf("array index one\n");
+               char* ptr = (char*)(s[t-2].address);
+               //
+               // byte 0 and 1 are the actual length
+               // byte 2 and 3 are the claimed length
+               //
+               if(debug)printf("array index 2\n");
+               uint16_t* uptr = (uint16_t*) ptr;
+               if(debug)printf("array index 2a the famous pointer is %p\n",uptr);
+               uint16_t actual = *uptr;
+               if(debug)printf("array index 3 the actual is %d\n",actual);
+               if (index > actual) { printf("index out of bounds: %d array size = %d\n",index,actual); exit(-1);}
+               //
+               // get the spaceptr
+               //
+               if(debug)printf("array index 4\n");
+               char* mptr = ptr+4;
+               if(debug)printf("array index 5\n");
+               char** aptr = (char**) mptr;
+               if(debug)printf("array index 6\n");
+               char* spaceptr = *aptr;
+               if(debug)printf("array index 7\n");
+               //
+               // get the value
+               //
+               char* nptr = spaceptr + index * 9 ;
+               if(debug)printf("array index 8\n");
+               t--;
+               if(debug)printf("array index 9\n");
+               s[t-1].atype = *nptr ;
+               if(debug)printf("array index 10\n");
+               char** xptr = (char**)(nptr+1);
+               if(debug)printf("array index 11\n");
+               char* zptr = (char*) ((long long unsigned int)(*xptr) & 0xffffffffffff);
+               if(debug)printf("array index 12\n");
+               s[t-1].address = (long long unsigned int) zptr;
+               if(debug)printf("array index 13\n");
             }
             else
             {
@@ -728,7 +746,9 @@ int CI_execute_next() {
          char** vptr = (char**)nptr;
          char* nnptr = (char*)GC_MALLOC(9 * claimed); 
          if(debug)printf("ARRAY: Created 45 bytes here: %p\n",nnptr);
-         *vptr = nnptr; 
+         *vptr = nnptr;
+         char* rptr = *vptr;
+         if(debug)printf("the pointer actually stored is %p\n",rptr);
          //
          // leave the new object on the stack
          //
@@ -742,7 +762,7 @@ int CI_execute_next() {
          // l contains the classnum
          // a contains the number of instance variables
          //
-         char* ptr = (char*)GC_MALLOC(5 * a + 3);
+         char* ptr = (char*)GC_MALLOC(9 * a + 3);
          //
          // in the first 2 bytes, put in the class number
          // the rest is left for the instance variables
@@ -838,12 +858,6 @@ int CI_execute_next() {
             uint16_t* cl;
             get_ptr_by_int(thing,classnum,(void**)&cl);
             if (cl==NULL) { printf("class does not have method (two)\n"); exit(-1); } 
-            if(debug){
-                 printf("-------------- Retrieved  methodnum =  %d classnum =  %d ptr= %x\n",l,classnum,cl);
-                 printf("cl[0] = %x\n",cl[0]);
-                 printf("cl[1] = %d\n",cl[1]);
-                 printf("cl[2] = %d\n",cl[2]);
-            }
             b[tb] = t - a - 1;
             tb++;
             //
@@ -871,12 +885,12 @@ int CI_execute_next() {
          // But what is the offset of the this pointer?
          //
          unsigned int offset_self = b[tb-1] + a;
-         adr = (char*) (s[offset_self].address + 5 * l +3);
+         adr = (char*) (s[offset_self].address + 9 * l +3);
          //
          // put the value on the stack
          //
          s[t].atype = *((char*)adr) & 0xff;
-         uint32_t* uptr = (uint32_t*)(adr+1); 
+         uint64_t* uptr = (uint64_t*)(adr+1); 
          s[t].address = *uptr;
          t++;
          break; }
@@ -891,12 +905,12 @@ int CI_execute_next() {
       // then calculate the address of the inst. variable
       //
       char* selfptr =  (char*) (s[b[tb - 1] + a].address );
-      adr = (char*) (selfptr+ 5 * l + 3);
+      adr = (char*) (selfptr+ 9 * l + 3);
       //
       // store the value on the heap
       //
       *((char*) adr) = s[t-1].atype;
-      uint32_t* uptr = (uint32_t*)(adr+1);
+      uint64_t* uptr = (uint64_t*)(adr+1);
       *uptr = s[t-1].address; 
       t--;
       break;}
@@ -1002,8 +1016,14 @@ if (debug) {
             break;
          }
          case TYPE_OBJ: // object reference
-            printf("objref %p",(void*)s[i].address);
+         {
+            char* ptr = (char*)s[i].address;
+            uint16_t* uptr = (uint16_t*) ptr;
+            uint16_t classnum = *uptr;
+            char n = *(ptr+2);
+            printf("objref %p class number %d inst vars %d", ptr, classnum, n);
             break;
+         }
          default:
             printf("?%d" , s[i].atype);
             break;
@@ -1046,11 +1066,12 @@ void CI_print_a_string2(char* ptr, uint16_t len) {
 void CI_call_external(short unsigned int function_number,short unsigned int a) {
    if (function_number > extern_count)
    {
-        printf("illegal function number %d highest function number is %lu\n",function_number,extern_count);
+        printf("illegal function number %d highest function number is %d\n",function_number,extern_count);
         exit(-1);
    }
    struct extern_record e = externs[function_number-1];
-   void* sym = (void*)(e.address);
+   void* sym = CI_find_ext_address(e.name);
+   if(debug)printf("sym = %p\n",sym);
    char* signature = e.signature;
    char* cpos = strchr(signature,'-');
    int pos;
@@ -1073,7 +1094,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    {
       if (a < ilen) 
       {
-         printf("Mismatch: ingoing arguments given %d but expected at least %lu",a,pos);
+         printf("Mismatch: ingoing arguments given %d but expected at least %d",a,pos);
          exit(-1);
       }
    }
@@ -1081,7 +1102,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    {
       if (a != ilen) 
       {
-         printf("Mismatch: ingoing arguments given %d but expected %lu",a,pos);
+         printf("Mismatch: ingoing arguments given %d but expected %d",a,pos);
          exit(-1);
       }
    }
@@ -1091,7 +1112,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int nr_ingoing = ilen;
    int cnt = a;
    for(int i=0;i < ilen;i++) {
-      char* c = ingoing[i];
+      char c = ingoing[i];
       struct stack_element f = s[t - cnt];
       args[i] = CI_value(c,f);
       char** anotherptr = CI_pass_in_arg(c,f);
@@ -1112,7 +1133,7 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
       cnt--;
    }
    t -= a;
-   int rtype = CI_outgoing(c);
+   ffi_type* rtype = CI_outgoing(c);
    if(debug)printf("before ffi_prep_cif\n");
    int fresult = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, a, rtype, args);
    if (fresult != FFI_OK)
@@ -1151,10 +1172,10 @@ switch (c)
           //
           // put the result on the stack
           //
-          char* ptr = &rc;
+          char* ptr = (char*)&rc;
           int len = strlen(ptr);
           char* nptr = GC_MALLOC(len+2);
-          uint16_t* uptr = nptr;
+          uint16_t* uptr = (uint16_t*)nptr;
           *uptr = len;
           strncpy(nptr+2,ptr,len);
           tb--;
@@ -1295,9 +1316,8 @@ void* CI_pass_in_arg(char c,struct stack_element f)
                 printf("expected %c in external call but got %d\n",c,atype);
                 exit(-1);
              }
-             if(debug)printf("CI_pass_in_arg TYPE_INT %d\n",f.address);
              char** v = GC_MALLOC(8);
-             *v = f.address;
+             *v = (char*)f.address;
              return v;
           }
           case TYPE_FLOAT:
@@ -1337,9 +1357,8 @@ void* CI_pass_in_arg(char c,struct stack_element f)
                   printf("four expected string or pointer in external call but got %d\n",atype);
                   exit(-1);
                }
-                if(debug)printf("CI_pass_in_arg TYPE_PTR %p\n",f.address);
              char** v = GC_MALLOC(8);
-             *v = f.address;
+             *v = (char*)f.address;
                return v;
             }
           default:
@@ -1348,5 +1367,12 @@ void* CI_pass_in_arg(char c,struct stack_element f)
              exit(-1);
           }
       } 
+
+}
+
+
+void* CI_find_ext_address(char* name)
+{
+  printf("NOT IMPLEMENTED\n"); 
 
 }

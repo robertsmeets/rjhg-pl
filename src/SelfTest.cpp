@@ -31,14 +31,13 @@ void SelfTest::Test(char * filename)
    char filename_out[256];
    snprintf(filename_out,255,"%s.out",filename);
    FILE* org_stdout = stdout;
-   freopen(filename_out,"w",stdout);
+   FILE* result = freopen(filename_out,"w",stdout);
    Runner runner;
    runner.compile_run(filename_src,false); 
-   // windows: freopen("CON", "w", stdout);
 #ifdef _WIN32
- freopen("CON","w",stdout);
+   result =freopen("CON","w",stdout);
 #else
- freopen("/dev/tty","w",stdout);
+   result = freopen("/dev/tty","w",stdout);
 #endif
    char filename_tst[256];
    snprintf(filename_tst,255,"%s.tst",filename);
