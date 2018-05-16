@@ -20,7 +20,6 @@ public:
    string getName();
    void setNumber(int);
    int getNumber();
-   void* address();
 };
 
 #endif

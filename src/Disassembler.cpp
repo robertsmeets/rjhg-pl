@@ -78,7 +78,6 @@ void Disassembler::print_tables()
       j += 8;
       string signature = string(buffer + j);
       printf("External symbol address=%p\n",ptr);
-      printf("fopen=%p\n",fopen);
       printf("Signature %s\n",signature.c_str());
       j+= signature.length() + 1;
    } 

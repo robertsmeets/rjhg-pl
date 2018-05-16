@@ -1,0 +1,15 @@
+extern fopen   pp-p      ;
+extern fclose  p-p       ;
+extern printf  p+i       ;
+extern fprintf pp+i      ;
+extern fgetc   p-s       ;
+
+
+proc main()
+{
+   f = fopen("testfile.txt","w");
+   fprintf(f,"hello");
+   fclose(f);
+}
+
+

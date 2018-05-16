@@ -156,10 +156,7 @@ void array_add(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
    //
    // copy the value
    //
-   if (debug)printf("pointer %p will now receive value %d\n",vptr,avptr);
-   if (debug)printf("this is offset %d claimed = %d actual = %d\n",((void*)vptr - (void*)spaceptr),claimed,actual);
    memcpy(vptr,&avptr,8);
-   if (debug){printf("In the array_add five\n");}
    (*t)--;
    (*t)--;
 }
