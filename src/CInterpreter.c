@@ -156,16 +156,14 @@ void CI_start(bool indebug) {
    {
       struct extern_record er;
       int len = strlen(buffer + j);
-      char* signature = GC_MALLOC(len+1);
-      strncpy(signature,buffer+j,len+1);
-      printf("---------------- signature <%s>\n",signature);
-      er.signature = signature; 
-      j+= len + 1;
-      len = strlen(buffer + j);
       char* name = GC_MALLOC(len+1);
       strncpy(name,buffer+j,len+1);
-      printf("---------------- name <%s>\n",name);
       er.name = name; 
+      j+= len + 1;
+      len = strlen(buffer + j);
+      char* signature = GC_MALLOC(len+1);
+      strncpy(signature,buffer+j,len+1);
+      er.signature = signature; 
       externs[extern_count]=er;
       extern_count++;
       j+= len + 1;
@@ -1125,7 +1123,6 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    int left = a - ilen;
    for (int i = 0; i< left;i++)
    {
-      if(debug)printf("VARARGS-------------\n");
       struct stack_element f = s[t - cnt];
       args[i+ilen] = CI_value(' ',f);
       char** anotherptr = CI_pass_in_arg(' ',f);
@@ -1373,6 +1370,10 @@ void* CI_pass_in_arg(char c,struct stack_element f)
 
 void* CI_find_ext_address(char* name)
 {
-  printf("NOT IMPLEMENTED\n"); 
-
+    arbitrary my_function;
+    // Introduce already loaded functions to runtime linker's space
+    void* handle = dlopen(0,RTLD_NOW|RTLD_GLOBAL);
+    // Load the function to our pointer, which doesn't know how many arguments there sould be
+    *(void**)(&my_function) = dlsym(handle,name);
+    return my_function;
 }

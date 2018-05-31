@@ -16,6 +16,10 @@
 #include <gc.h>
 #include <stdbool.h>
 #include <ffi.h>
+#include <dlfcn.h>
+
+// do not mix this with   typedef void* (*arbitrary)(void); 
+typedef void* (*arbitrary)();
 
 #include "CConstants.h"
 #include "jwHash.h"
