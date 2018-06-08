@@ -15,12 +15,6 @@ CodeGenerator::CodeGenerator() {
    here = 0;
    pn = NULL;
    di = NULL;
-   opr_mapping['/'] = 5; // DIV
-   opr_mapping['%'] = 6; // MOD
-   opr_mapping['I'] = 14;
-   opr_mapping['!'] = 15; // NOT
-   opr_mapping['&'] = 16; // AND
-   opr_mapping['|'] = 17; // OR
 }
 
 CodeGenerator::~CodeGenerator() {
@@ -119,20 +113,20 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // put a dummy value on the stack
    //
-   emit(1, 2, 0, NULL);
+   emit(OPCODE_LIT, 2, 0, NULL);
    //
    // emit INT
    //
-   emit(6, 0, 0, NULL);
+   emit(OPCODE_INT, 0, 0, NULL);
    //
    // emit CAL
    //
-   emit(5, 0, 0, NULL);
+   emit(OPCODE_CAL, 0, 0, NULL);
    callpoints[here - 2] = "main";
    //
    // emit RET
    //
-   emitByte(19);
+   emitByte(OPCODE_RET);
    emit2Byte(0);
    //
    // generate all the procedures
@@ -213,21 +207,21 @@ void CodeGenerator::emit2Byte(uint16_t val) {
 // emit the code for an operation
 //
 void CodeGenerator::emitOperation(char avalue, Expression* s) {
-   if (avalue=='+') {emit(OPCODE_PLS,0,0,s);return;}
-   if (avalue=='-') {emit(OPCODE_MIN,0,0,s);return;}
-   if (avalue=='*') {emit(OPCODE_MUL,0,0,s);return;}
-   if (avalue=='/') {emit(OPCODE_DIV,0,0,s);return;}
-   if (avalue=='%') {emit(OPCODE_MOD,0,0,s);return;}
-   if (avalue=='=') {emit(OPCODE_EQ,0,0,s);return;}
-   if (avalue=='<') {emit(OPCODE_LT,0,0,s);return;}
-   if (avalue=='G') {emit(OPCODE_GE,0,0,s);return;}
-   if (avalue=='>') {emit(OPCODE_GT,0,0,s);return;}
-   if (avalue=='L') {emit(OPCODE_LE,0,0,s);return;}
-   if (avalue=='N') {emit(OPCODE_NE,0,0,s);return;}
-   if (avalue=='I') {emit(OPCODE_I,0,0,s);return;}
-   if (avalue=='&') {emit(OPCODE_AND,0,0,s);return;}
-   if (avalue=='|') {emit(OPCODE_OR,0,0,s);return;}
-   if (avalue=='!') {emit(OPCODE_NOT,0,0,s);return;}
+   if (avalue=='+') {emitByte(OPCODE_PLS);return;}
+   if (avalue=='-') {emitByte(OPCODE_MIN);return;}
+   if (avalue=='*') {emitByte(OPCODE_MUL);return;}
+   if (avalue=='/') {emitByte(OPCODE_DIV);return;}
+   if (avalue=='%') {emitByte(OPCODE_MOD);return;}
+   if (avalue=='=') {emitByte(OPCODE_EQ);return;}
+   if (avalue=='<') {emitByte(OPCODE_LT);return;}
+   if (avalue=='G') {emitByte(OPCODE_GE);return;}
+   if (avalue=='>') {emitByte(OPCODE_GT);return;}
+   if (avalue=='L') {emitByte(OPCODE_LE);return;}
+   if (avalue=='N') {emitByte(OPCODE_NE);return;}
+   if (avalue=='I') {emitByte(OPCODE_I);return;}
+   if (avalue=='&') {emitByte(OPCODE_AND);return;}
+   if (avalue=='|') {emitByte(OPCODE_OR);return;}
+   if (avalue=='!') {emitByte(OPCODE_NOT);return;}
    printf("Unexpected Operation %c\n" , avalue);
 }
 
@@ -323,13 +317,13 @@ void CodeGenerator::addCallToProc(string name, Expression* s) {
 void CodeGenerator::addCallToMethod(string method_name, ProcedureNode* procn, Expression* s) {
    //
    //
-   emit(12, pn->getMethodNumber(method_name), procn->getParameters()->size(), s);
+   emit(OPCODE_MCL, pn->getMethodNumber(method_name), procn->getParameters()->size(), s);
 }
 
 void CodeGenerator::addCallToClassConstructor(ClassDefinition* cd, Expression* s) {
    uint16_t ivs = cd->getInstanceVariables().size();
    uint16_t classnum = cd->getClassNum();
-   emit(11, classnum, ivs, s);
+   emit(OPCODE_OBJ, classnum, ivs, s);
 }
 
 void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s) 
@@ -340,7 +334,7 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s)
    // Since we don't know how many, leave 0 for the INT parameter
    // this will be corrected in the fix stage
    //
-   emit(6, 0, 0, s);
+   emit(OPCODE_INT, 0, 0, s);
    //
    // determine if procedure_name was defined
    // in the program code, if not it's a dynamic call
@@ -351,7 +345,7 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s)
       // emit a "cal"
       // leave the call address 0, since this will be corrected in the fix stage
       //
-      emit(5, 0, 0, s);
+      emit(OPCODE_CAL, 0, 0, s);
       addCallAddress(here - 2, procedure_name);
    } else {
       //
@@ -359,7 +353,7 @@ void CodeGenerator::addCallToProcedure(string procedure_name, Expression* s)
       // The string is saved.
       //
       uint16_t strlen = procedure_name.length();
-      emit(10, 1, strlen, s);
+      emit(OPCODE_EXT, 1, strlen, s);
       addCallAddress(here - 2, procedure_name);
       memcpy(codebuffer + here, procedure_name.c_str(), strlen);
       here += strlen;

@@ -29,7 +29,8 @@ void While::emit(CodeGenerator* cg, ProcedureNode* pn)
    //
    // emit JPF, jump if the stack top is 0 (false)
    //
-   cg->emit(17, 0, 0, this);
+   cg->emitByte(OPCODE_JPF);
+   cg->emit2Byte(0);
    unsigned int jump_address2 = cg->getHere() - 2;
    //
    // emit the block statements
@@ -41,7 +42,8 @@ void While::emit(CodeGenerator* cg, ProcedureNode* pn)
    //
    // jump back to the dest_address
    //
-   cg->emit(7, 0, 0, this);
+   cg->emitByte(OPCODE_JMP);
+   cg->emit2Byte(0);
    unsigned int dest_address2 = cg->getHere();
    unsigned int jump_address1 = cg->getHere() - 2;
    cg->fix(jump_address1, dest_address1);

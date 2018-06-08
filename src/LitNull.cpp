@@ -16,7 +16,7 @@ void LitNull::print(int level)
 
 void LitNull::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
-   cg->emit(1, 0, 0, NULL);
+   cg->emit(OPCODE_LIT, 0, 0, NULL);
 }
 
 string LitNull::stype() { return "LitNull"; }

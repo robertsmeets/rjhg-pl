@@ -208,7 +208,7 @@ int CI_execute_next() {
    pc++;
    unsigned short int l = 0;
    unsigned short int a = 0;
-   if ((f != OPCODE_DRP) && (f != OPCODE_PRT)) // not for DROP and PRINT
+   if (f <= 15) // these opcodes need l and a
    {
       //
       // using little endian
@@ -216,7 +216,7 @@ int CI_execute_next() {
       char* lptr = (char*) buffer + pc;
       l = (*lptr & 0xff) + (*(lptr + 1) << 8);
       pc += 2;
-      if (f != OPCODE_RET) // not for RET
+      if (!(f==OPCODE_RET || f==OPCODE_JMP || f==OPCODE_JPC || f==OPCODE_JPF)) // not for RET and jumps
       {
          lptr = (char*) buffer + pc;
          a = (*lptr & 0xff) + (*(lptr + 1) << 8);
@@ -227,8 +227,6 @@ int CI_execute_next() {
    //
    // opcode definitions
    //
-   // stack_element fr1;
-   // stack_element fr2;
    char* adr;
    uint16_t classnum;
    switch (f) {
@@ -652,7 +650,7 @@ int CI_execute_next() {
       break;
    case OPCODE_JMP:         // jmp
       if (debug) { printf("JMP %d " , a); }
-      pc = a;
+      pc = l;
       break;
    case OPCODE_JPC:         // jpc - jump when true
       {if (debug) { printf("JPC %d " , a); }
@@ -661,7 +659,7 @@ int CI_execute_next() {
          puts("JPC value is not boolean");
       }
       if (fr1.address != 0) {
-         pc = a;
+         pc = l;
       }
       t--;
       break;}
@@ -672,7 +670,7 @@ int CI_execute_next() {
          puts("JPF value is not boolean");
       }
       if (fr1.address == 0) {
-         pc = a;
+         pc = l;
       }
       t--;
       break;}
@@ -961,7 +959,6 @@ int CI_execute_next() {
    default:
       printf("unexpected F value <0x%x> at PC <0x%x>\n",f,pc);
       exit(-1);
-      break;
    }
    CI_print_stack();
    return 0;

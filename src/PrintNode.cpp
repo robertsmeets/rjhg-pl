@@ -23,7 +23,7 @@ void PrintNode::emit(CodeGenerator* cg, ProcedureNode* pn) {
    //
    // return
    //
-   cg->emitByte(9);
+   cg->emitByte(OPCODE_PRT);
 }
 
 string PrintNode::stype() {

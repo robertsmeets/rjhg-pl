@@ -20,7 +20,7 @@ void LitFloat::print(int level)
 void LitFloat::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
 	int sz = sizeof(value);
-	cg -> emit(1, 5, sz, NULL);
+	cg -> emit(OPCODE_LIT, TYPE_FLOAT, sz, NULL);
 	void* loc= cg->allot(sz);
 	memcpy(loc, &value, sz);
 }
