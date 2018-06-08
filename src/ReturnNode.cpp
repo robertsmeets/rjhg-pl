@@ -27,12 +27,12 @@ void ReturnNode::emit(CodeGenerator* cg, ProcedureNode* pn)
    if (expression != NULL)
    {
       expression->emit(cg,pn);
-      cg->emitByte(19);
+      cg->emitByte(OPCODE_RET);
       cg->emit2Byte(1);
    }
    else
    {
-      cg->emitByte(19);
+      cg->emitByte(OPCODE_RET);
       cg->emit2Byte(0);
    }
 }

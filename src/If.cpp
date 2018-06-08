@@ -35,7 +35,8 @@ void If::emit(CodeGenerator* cg, ProcedureNode* pn)
       //
       // emit JPF, jump if the stack top is false 
       //
-      cg->emit(17, 0, 0, this);
+      cg->emitByte(OPCODE_JPF);
+      cg->emit2Byte(0);
       unsigned int jump_address = cg->getHere() - 2;
       for (auto it = vstatements1.begin(); it != vstatements1.end(); ++it) {
          (*it)->emit(cg,pn);
@@ -46,7 +47,8 @@ void If::emit(CodeGenerator* cg, ProcedureNode* pn)
       //
       // emit JPC, jump if the stack top is true
       //
-      cg->emit(8, 0, 0, this);
+      cg->emitByte(OPCODE_JPC);
+      cg->emit2Byte(0);
       unsigned int jump_address1 = cg->getHere() - 2;
       vector<Expression*> vstatements2 = statements2->getStatements();
       for (auto it = vstatements2.begin(); it != vstatements2.end(); ++it) {
@@ -55,7 +57,8 @@ void If::emit(CodeGenerator* cg, ProcedureNode* pn)
       //
       // jump
       //
-      cg->emit(7, 0, 0, this);
+      cg->emitByte(OPCODE_JMP);
+      cg->emit2Byte(0);
       unsigned int jump_address2 = cg->getHere() - 2;
       unsigned int dest_address1 = cg->getHere();
       for (auto it = vstatements1.begin(); it != vstatements1.end(); ++it) {

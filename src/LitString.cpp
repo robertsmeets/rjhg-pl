@@ -20,7 +20,7 @@ void LitString::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
    int strlen = value.length() - 2;
    string my_string = value.substr(1, strlen);
-   cg->emit(1, 7, strlen, NULL);
+   cg->emit(OPCODE_LIT, TYPE_STRING, strlen, NULL);
    char* loc = cg->allot(strlen);
    memcpy(loc, my_string.c_str(), strlen);
 }

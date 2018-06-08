@@ -13,7 +13,7 @@ void Self::print(int level) {
 
 void Self::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
-   cg->emit(18,0,0,0);
+   cg->emitByte(OPCODE_SLF);
 }
 
 string Self::stype() { return "Self";}

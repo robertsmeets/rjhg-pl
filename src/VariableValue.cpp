@@ -41,7 +41,7 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
             //
             // it is a parameter
             //
-            cg->emit(3, 0, number, NULL); // LOD
+            cg->emit(OPCODE_LOD, 0, number, NULL); // LOD
             break;
          }
       }
@@ -51,7 +51,7 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
          //
          uint16_t j = pn->getInstanceVarNum(value);
          if (j != 0xffff) {
-            cg->emit(13, j, pn->getParameters()->size(), NULL); // LDI
+            cg->emit(OPCODE_LDI, j, pn->getParameters()->size(), NULL); // LDI
             return;
          }
       }
@@ -67,7 +67,7 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
       {
           offset++;
       }
-      cg->emit(3, 0, offset, NULL); // LOD
+      cg->emit(OPCODE_LOD, 0, offset, NULL); // LOD
    }
 
 }

@@ -46,7 +46,7 @@ void MethodCall::emit(CodeGenerator* cg, ProcedureNode* pn)
    //
    // add a call
    //
-   cg->emit(12,cg->getProgramNode()->getMethodNumber(name),expressions.size(),NULL);
+   cg->emit(OPCODE_MCL,cg->getProgramNode()->getMethodNumber(name),expressions.size(),NULL);
 }
 
 

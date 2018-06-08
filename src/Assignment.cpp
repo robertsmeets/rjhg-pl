@@ -29,7 +29,7 @@ void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
       // instance variable.  emit a STI
       //
       //
-      cg->emit(14, varnum, pn->getParameters()->size(), this);
+      cg->emit(OPCODE_STI, varnum, pn->getParameters()->size(), this);
    } else {
       //
       // emit a "sto" to store the value in a local variable
@@ -46,7 +46,7 @@ void Assignment::emit(CodeGenerator* cg, ProcedureNode* pn) {
       {
          offset++;
       }
-      cg->emit(4, 0, offset, this);
+      cg->emit(OPCODE_STO, 0, offset, this);
    }
 }
 

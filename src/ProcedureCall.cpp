@@ -67,12 +67,12 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
       // Since we don't know how many, leave 0 for the INT parameter
       // this will be corrected in the fix stage
       //
-      cg->emit(6, 0, 0, NULL);
+      cg->emit(OPCODE_INT, 0, 0, NULL);
       //
       // emit a "cal"
       // leave the call address 0, since this will be corrected in the fix stage
       //
-      cg->emit(5, 0, 0, NULL);
+      cg->emit(OPCODE_CAL, 0, 0, NULL);
       cg->addCallAddress(cg->getHere() - 2, procedure_name);
    } else {
       //
@@ -82,7 +82,7 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
       //
       // Emit an INT. A dynamic call has sz parameters but 0 local variables
       //
-      cg->emit(6,sz,0,NULL);
+      cg->emit(OPCODE_INT,sz,0,NULL);
       //
       // look up the external function
       //
@@ -92,13 +92,13 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
          printf("Could not find procedure <%s>\n",procedure_name.c_str());
          exit(-1);
       }
-      cg->emit(10, external->getNumber(), sz , NULL);
+      cg->emit(OPCODE_EXT, external->getNumber(), sz , NULL);
       //
       // if this is a top level call, the result is ignored. Therefore we must drop it from the stack
       //
       if (toplevel)
       {
-         cg->emitByte(15);
+         cg->emitByte(OPCODE_DRP);
       }
    }
 }

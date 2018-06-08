@@ -43,7 +43,6 @@ class CodeGenerator {
   uint16_t codesize;
   ProgramNode* pn;
   DebugInfo* di;
-  unordered_map<char, unsigned int> opr_mapping;
 public:
   CodeGenerator();
   virtual ~CodeGenerator();
