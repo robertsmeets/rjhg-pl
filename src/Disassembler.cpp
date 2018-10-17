@@ -12,6 +12,7 @@ using namespace std;
 Disassembler::Disassembler() {
    di = NULL;
    i = 0;
+   buffer = NULL;
 }
 
 Disassembler::~Disassembler() {
@@ -20,25 +21,17 @@ Disassembler::~Disassembler() {
 void Disassembler::start(char* inbuffer, unsigned int size, DebugInfo* a_di) {
    printf("Starting disassembler...\n" );
    buffer = inbuffer;
-   if (!(buffer[0] == 'R' && buffer[1] == 'J' && buffer[2] == 'H'
-         && buffer[3] == 'G' && buffer[4] == 'P' && buffer[5] == 'L')) {
-      puts("Magic number does not match, invalid bytecode");
-   }
+   if (strncmp(buffer,"RJHGPL",6) != 0) { printf("Magic number does not match, invalid bytecode"); exit(-1); }
    //
    // hexdump
    //
    hexdump(buffer, size);
    print_tables();
-   i = (buffer[6] & 0xff) + ((buffer[7] & 0xff) >> 8);
-   printf("---------------------------------------------------------\n");
-   printf("i is now %d size is now %d\n",i,size);
+   i = *( (uint16_t*) (buffer + 6));
    for (; i < size;) {
       printf("%04X ",i );
-      char f = buffer[i];
-      unsigned short l = (buffer[i + 1] & 255) + (buffer[i + 2] << 8);
-      unsigned short a = (buffer[i + 3] & 255) + (buffer[i + 4] << 8);
-      decode(f, l, a);
-   }
+      decode( buffer[i], *((uint16_t*)(buffer + i + 1)), *((uint16_t*)(buffer + i + 3)));
+   } 
 }
 
 /**
@@ -110,7 +103,7 @@ void Disassembler::hexdump(char* buf, unsigned int buflen) {
        unsigned int location = i + j;
          if (location < buflen)
        {
-            printf("%02x ", buf[location] & 0xff);
+            printf("%02x ", buf[location]);
        }
        else
        {
@@ -132,89 +125,59 @@ void Disassembler::hexdump(char* buf, unsigned int buflen) {
    }
 }
 
-string Disassembler::decode(char f, unsigned short l, unsigned short a) {
-//
-// opcode definitions
-//
-   string sf, sl, sa;
-   stringstream out1;
-   out1 << l;
-   sl = out1.str();
-   stringstream out2;
-   out2 << a;
-   sa = out2.str();
+string Disassembler::decode(char f, uint16_t l, uint16_t a) {
+   //
+   // opcode definitions
+   //
    switch (f) {
-   case OPCODE_LIT:   // lit: Literal value, to be pushed on the stack
-      sf = "LIT";
+      case OPCODE_LIT:   // lit: Literal value, to be pushed on the stack
+      printf("LIT");
       switch (l) {
-      case 2: // Int
-         sf += " INT";
-         i += 5;
-         break;
-      case 5: // float
-         sf += " FLOAT";
-         i += 13;
-         break;
-      case 7: // string
-         //
-         sf += " STRING";
-         i += 5 + a;
-         break;
-      case 6: // boolean
-         sf += " BOOL";
-         i += 5;
-         break;
-      case 0: // null
-         sf += " NULL";
-         i +=5;
-         break;
-      default:
-         printf("unexpected LIT value");
-         i += 5;
-         break;
+         case 0: printf(" NULL\n"); i +=5; break;
+         case 2: printf(" INT\n"); i += 5; break;
+         case 5: printf(" FLOAT\n"); i += 13; break;
+         case 7: printf(" STRING\n"); i += 5 + a; break;
+         case 6: printf( " BOOL\n"); i += 5; break;
+         default: printf("unexpected LIT value\n"); i += 5; break;
       }
       break;
-   case OPCODE_I: sf = "I"; i ++; break;
-      case OPCODE_NOT: sf = "NOT"; i ++; break;
-      case OPCODE_AND: sf = "AND"; i ++; break;
-      case OPCODE_OR: sf = "OR"; i ++; break;
-   case OPCODE_LOD: sf = "LOD "+sf+ " " +sa; i += 5; break; //lod: copy a local variable on top of the stack
-   case OPCODE_STO: sf = "STO "+sf+" " +sa; i += 5; break; // sto: pop a value from the stack and put it in a local variable
-   case OPCODE_CAL: sf = "CAL "+sf+" "+sa; i += 5; break; // procedure call 
-      //cal:
-      // parameters should have already been pushed on the stack
-      // push the return address on the return stack
-      // call the procedure
-      //
-   case OPCODE_INT: sf = "INT "+sl+" "+sa; i += 5; break; // int:
-   case OPCODE_JMP: printf("JMP %04X",l); i += 3; break; // jmp
-   case OPCODE_JPC: printf("JPC %04X",l); i += 3; break; // jpc
-   case OPCODE_JPF: printf("JPF %04X",l); i += 3; break;
-   case OPCODE_PRT: sf = "PRT"; i++; break;
-   case OPCODE_EXT: sf = "EXT "+sl+" " +sa; i += 5; break;
-   case OPCODE_OBJ: sf = "OBJ " +sl+" " +sa; i += 5; break; 
-   case OPCODE_MCL: sf = "MCL " +sl+" " +sa; i += 5; break; // method call
-   case OPCODE_LDI: sf = "LDI " +sl+" " +sa; ; i +=5; break;
-   case OPCODE_STI: sf = "STI" +sl+" " +sa; ; i +=5; break;
-   case OPCODE_DRP: sf = "DRP"; i ++; break;
-   case OPCODE_SLF: sf = "SLF"; i ++; break;
-   case OPCODE_RET: sf = "RET " +sl;  i += 3; break;
-   case OPCODE_PLS: sf = "PLS"; i ++; break;
-   case OPCODE_MIN: sf = "MIN"; i ++; break;
-   case OPCODE_MUL: sf = "MUL"; i ++; break;
-   case OPCODE_UNA: sf = "UNA"; i++; break; // UNARY MINUS 
-   case OPCODE_DIV: sf = "DIV"; i ++; break;
-   case OPCODE_MOD: sf = "MOD"; i ++ ; break;
-   case OPCODE_EQ: sf = "EQ"; i++;break; 
-   case OPCODE_NE: sf = "NE"; i++;break;
-   case OPCODE_LT: sf = "LT"; i++;break;
-   case OPCODE_GE: sf = "GE"; i++;break;
-   case OPCODE_GT: sf = "GT"; i++;break;
-   case OPCODE_LE: sf = "LE"; i++;break;
+      case OPCODE_I: printf("I\n"); i ++; break;
+      case OPCODE_NOT: printf( "NOT\n"); i ++; break;
+      case OPCODE_AND: printf( "AND\n"); i ++; break;
+      case OPCODE_OR: printf( "OR\n"); i ++; break;
+      case OPCODE_LOD: printf( "LOD %d\n",a); i += 5; break; //lod: copy a local variable on top of the stack
+      case OPCODE_STO: printf( "STO %d\n",a); i += 5; break; // sto: pop a value from the stack and put it in a local variable
+      case OPCODE_CAL: printf( "CAL %04X\n",a); i += 5; break; // procedure call 
+      case OPCODE_INT: printf( "INT %d %d\n",l,a); i += 5; break; // int:
+      case OPCODE_JMP: printf("JMP %04X\n",l); i += 3; break; // jmp
+      case OPCODE_JPC: printf("JPC %04X\n",l); i += 3; break; // jpc
+      case OPCODE_JPF: printf("JPF %04X\n",l); i += 3; break;
+      case OPCODE_PRT: printf( "PRT\n"); i++; break;
+      case OPCODE_EXT: printf( "EXT %d %d\n",l,a); i += 5; break;
+      case OPCODE_OBJ: printf( "OBJ %d %d\n" ,l,a); i += 5; break; 
+      case OPCODE_MCL: printf( "MCL %d %d\n" ,l,a); i += 5; break; // method call
+      case OPCODE_LDI: printf( "LDI %d %d\n" ,l,a); ; i +=5; break;
+      case OPCODE_STI: printf( "STI %d %d\n" ,l,a); ; i +=5; break;
+      case OPCODE_DRP: printf( "DRP\n"); i ++; break;
+      case OPCODE_SLF: printf( "SLF\n"); i ++; break;
+      case OPCODE_RET: printf( "RET %d\n" ,l);  i += 3; break;
+      case OPCODE_PLS: printf( "PLS\n"); i ++; break;
+      case OPCODE_MIN: printf( "MIN\n"); i ++; break;
+      case OPCODE_MUL: printf( "MUL\n"); i ++; break;
+      case OPCODE_UNA: printf( "UNA\n"); i++; break; // UNARY MINUS 
+      case OPCODE_DIV: printf( "DIV\n") ; i ++; break;
+      case OPCODE_MOD: printf( "MOD\n"); i ++ ; break;
+      case OPCODE_EQ: printf( "EQ\n"); i++;break; 
+      case OPCODE_NE: printf( "NE\n"); i++;break;
+      case OPCODE_LT: printf( "LT\n"); i++;break;
+      case OPCODE_GE: printf( "GE\n"); i++;break;
+      case OPCODE_GT: printf( "GT\n"); i++;break;
+      case OPCODE_LE: printf( "LE\n"); i++;break;
    default:
-      sf = "-----------------------------------+> unexpected F value: " + int(f);
-      printf(" F=%d L=%d A=%d" , (unsigned int) f , l , a );
+     {
+      printf( "-----------------------------------+> unexpected F value: %d",f);
+      printf(" F=%d L=%d A=%d" , f , l , a );
       exit(-1);
+      }
    }
-   printf("%s\n",sf.c_str());
 }

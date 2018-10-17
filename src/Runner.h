@@ -17,6 +17,7 @@ using namespace std;
  
 
 int yyparse();
+int yy_scan_string ( const char *yy_str  );
 
 #ifdef  MAIN_FILE
 ProgramNode* glob;
@@ -31,6 +32,7 @@ class Runner {
 
 public:
    int compile_run(string ,bool );
+   int compile_run_string(char*,bool );
    void compile_with_system(CodeGenerator* , string , bool );
    void compile(string ,bool );
 };
