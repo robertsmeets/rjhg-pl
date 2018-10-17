@@ -31,6 +31,7 @@
 #include "Runner.h"
 #include "SelfStart.h"
 #include "FileCreator.h"
+#include "Interactive.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -344,8 +345,8 @@ int main(int argc, char* argv[]) {
       int result = S_start(argv[0]); 
       if (result==-1)
       {
-         printf("Must provide filename as an argument, example %s c:\\\\test\\\\test.src\n",argv[0]);
-         return result;
+         Interactive i;
+         i.run();
       }
    }
 }

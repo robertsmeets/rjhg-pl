@@ -22,7 +22,6 @@ int S_start(char* filename)
    result = fread(buffer,1,14,infile);
    if(strncmp(buffer+8,"RJHGBC",6) != 0)
    {
-      printf("Indicator RJHGBC NOT found\n");
       return -1;
    }
    uint64_t* uptr = (uint64_t*)buffer;
@@ -31,7 +30,6 @@ int S_start(char* filename)
    result = fread(buffer,1,6,infile);
    if(strncmp(buffer,"RJHGPL",6) != 0)
    {
-      printf("Indicator RJHGPL NOT found\n");
       return -1;
    }
    char* bcbuffer = (char*) GC_MALLOC(offset);
