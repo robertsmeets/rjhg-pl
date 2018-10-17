@@ -1,0 +1,8 @@
+/*
+ * test script mode (program without main function)
+ */
+
+
+   print "Hello";
+
+

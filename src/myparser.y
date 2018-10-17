@@ -187,6 +187,7 @@ Highlevelblock:
    |Procedure { glob->addProcedure($1);}
    |Method { glob->addMethodDefinition($1);}
    |Extern { glob->addExtern($1); }
+   |Statements {glob->addStatements($1); }
     {$$=glob;};
 
 Procedure:
@@ -204,8 +205,7 @@ Method:
    METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {  $$ = new ProcedureNode($2,$4,$6,$8);};
 
 Statements:
-    /* empty */ { $$=new Statements();} 
-   |Statement { $$ = new Statements(); $$->addStatement($1); }
+   Statement { $$ = new Statements(); $$->addStatement($1); }
    |Statements SEMICOL Statement { $$=$1;$1->addStatement($3); }
    |Statements SEMICOL { $$=$1; }
    ;
@@ -325,8 +325,7 @@ int main(int argc, char* argv[]) {
       else
       {
          Runner runner;
-         string filename = argv[1];
-         return runner.compile_run(filename,true);
+         return runner.compile_run(argv[1],true);
       }
    }
    else if (argc == 3)
