@@ -19,7 +19,6 @@ int Runner::compile_run_string(char* buffer,bool debug)
    glob = new ProgramNode();
    char buffer2[100];
    memcpy(buffer2,buffer,strlen(buffer)+1);
-   printf("buffer2 now contains <%s>\n",buffer2);
    yy_scan_string(buffer2); 
    int result = yyparse();
    if(debug){glob->print(0);}

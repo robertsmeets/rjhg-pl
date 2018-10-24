@@ -13,11 +13,12 @@ void Interactive::run()
         perror("Unable to allocate buffer");
         exit(1);
     }
-    printf("Type something: ");
-    characters = getline(&buffer,&bufsize,stdin);
-    printf("%zu characters were read.\n",characters);
-    printf("You typed: '%s'\n",buffer);
     Runner r;
-    r.compile_run_string(buffer,true);
+    for (;;)
+    {
+       printf("here> ");
+       characters = getline(&buffer,&bufsize,stdin);
+       r.compile_run_string(buffer,false);
+    }
 }
 
