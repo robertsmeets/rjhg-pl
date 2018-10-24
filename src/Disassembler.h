@@ -21,13 +21,13 @@ using namespace std;
 
 class Disassembler {
    DebugInfo* di;
-   unsigned int i;
+   uint16_t i;
    char* buffer;
 public:
    Disassembler();
    virtual ~Disassembler();
    void start(char*, unsigned int, DebugInfo*);
-   string decode(char, unsigned short, unsigned short);
+   string decode(char,uint16_t, uint16_t);
    static void hexdump(char*, unsigned int);
    void print_tables();
    void print_magic_number();
