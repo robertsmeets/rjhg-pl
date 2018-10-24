@@ -14,7 +14,6 @@
    #define XMAGIC "\x7F""ELF" 
 #endif
 
-   //int S_start(char*);
    char* S_shorten(char*);
 
 #endif

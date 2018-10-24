@@ -26,6 +26,7 @@ private:
    vector<ClassDefinition*> my_classes;
    vector<ProcedureNode*> methods;
    vector<Extern*> externs;
+   vector<Statements*> statements_list;
    map<string, unsigned int> method_numbers;
    unsigned int next_methodnumber;
 
@@ -40,12 +41,14 @@ public:
    void addClassByName(string);
    void addMethodDefinition(ProcedureNode*);
    void addExtern(Extern*);
+   void addStatements(Statements*);
    void print(int);
    vector<ClassDefinition*> getClasses();
    vector<ProcedureNode*> getProcedures();
    void assignClassNumbers();
    vector<Extern*> getExterns();
    Extern* lookupExternal(string);
+   void findMain();
 };
 
 #endif

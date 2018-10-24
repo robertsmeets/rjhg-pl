@@ -4,7 +4,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 PROJECT(myparser)
-ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.c CInterpreter.c ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp NotExpression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Self.cpp Runner.cpp SelfStart.c FileCreator.cpp myparser.lex.c y.tab.c jwHash.c)
+ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.c CInterpreter.c ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp NotExpression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Interactive.cpp Self.cpp Runner.cpp SelfStart.c FileCreator.cpp myparser.lex.c y.tab.c jwHash.c)
 ADD_EXECUTABLE(interpret main.cpp CFunctions.c CInterpreter.c SelfStart.c jwHash.c)
 
 INCLUDE_DIRECTORIES( ../libffi-3.2.1/i686-pc-mingw32/include ../tinygc .)

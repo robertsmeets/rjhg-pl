@@ -51,6 +51,11 @@ void ProgramNode::addMethodDefinition(ProcedureNode* m) {
    methods.push_back(m);
 }
 
+void ProgramNode::addStatements(Statements* statements)
+{
+   statements_list.push_back(statements);
+}
+
 void ProgramNode::addExtern(Extern* e)
 {
    externs.push_back(e);
@@ -70,15 +75,10 @@ void ProgramNode::print(int level) {
    {
       an_extern->print(level+1);
    }
-   for (ClassDefinition* a_class : my_classes) {
-      a_class->print(level + 1);
-   }
-   for (ProcedureNode* a_method : methods) {
-      a_method->print(level + 1);
-   }
-   for (ProcedureNode* a_proc : procedures) {
-      a_proc->print(level + 1);
-   }
+   for (ClassDefinition* a_class : my_classes) { a_class->print(level + 1); }
+   for (ProcedureNode* a_method : methods) { a_method->print(level + 1); }
+   for (ProcedureNode* a_proc : procedures) { a_proc->print(level + 1); }
+   for (Statements* statements: statements_list) { statements->print(level + 1); }
 }
 
 vector <ClassDefinition*> ProgramNode::getClasses()
@@ -141,6 +141,18 @@ Extern* ProgramNode::lookupExternal(string name)
         {
             return an_extern;
         }
+   }
+}
+
+void ProgramNode::findMain()
+{
+   int sz = statements_list.size();
+   if (sz > 0)
+   { 
+      Statements* statements = statements_list[0];
+      statements->addStatement(new ReturnNode(NULL));
+      ProcedureNode* p = new ProcedureNode("","main",new CommaSeparated(),statements);
+      procedures.push_back(p);
    }
 }
 

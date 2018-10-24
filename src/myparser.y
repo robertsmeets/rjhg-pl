@@ -31,6 +31,7 @@
 #include "Runner.h"
 #include "SelfStart.h"
 #include "FileCreator.h"
+#include "Interactive.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -187,6 +188,7 @@ Highlevelblock:
    |Procedure { glob->addProcedure($1);}
    |Method { glob->addMethodDefinition($1);}
    |Extern { glob->addExtern($1); }
+   |Statements {glob->addStatements($1); }
     {$$=glob;};
 
 Procedure:
@@ -204,8 +206,7 @@ Method:
    METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {  $$ = new ProcedureNode($2,$4,$6,$8);};
 
 Statements:
-    /* empty */ { $$=new Statements();} 
-   |Statement { $$ = new Statements(); $$->addStatement($1); }
+   Statement { $$ = new Statements(); $$->addStatement($1); }
    |Statements SEMICOL Statement { $$=$1;$1->addStatement($3); }
    |Statements SEMICOL { $$=$1; }
    ;
@@ -325,8 +326,7 @@ int main(int argc, char* argv[]) {
       else
       {
          Runner runner;
-         string filename = argv[1];
-         return runner.compile_run(filename,true);
+         return runner.compile_run(argv[1],true);
       }
    }
    else if (argc == 3)
@@ -345,8 +345,8 @@ int main(int argc, char* argv[]) {
       int result = S_start(argv[0]); 
       if (result==-1)
       {
-         printf("Must provide filename as an argument, example %s c:\\\\test\\\\test.src\n",argv[0]);
-         return result;
+         Interactive i;
+         i.run();
       }
    }
 }

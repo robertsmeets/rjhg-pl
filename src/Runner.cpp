@@ -13,12 +13,34 @@ int Runner::compile_run(string filename,bool debug)
    return 0;
 }
 
+int Runner::compile_run_string(char* buffer,bool debug)
+{  
+   CodeGenerator* cg = new CodeGenerator();
+   glob = new ProgramNode();
+   char buffer2[100];
+   memcpy(buffer2,buffer,strlen(buffer)+1);
+   yy_scan_string(buffer2); 
+   int result = yyparse();
+   if(debug){glob->print(0);}
+   glob->findMain();
+   cg->start(glob,NULL, debug);
+   //
+   // start interpreting
+   //
+   CI_init(cg->getCodeBuffer());
+   CI_start(debug);
+   return 0;
+}
+
+
 void Runner::compile_with_system(CodeGenerator* cg, string filename, bool debug)
 {
    glob = new ProgramNode();
    compile("system/helement.src",debug);
    compile("system/hashtable.src",debug);
    compile(filename,debug);
+   glob->findMain();
+   if(debug){glob->print(0);}
    cg->start(glob,NULL, debug);
    if (debug) {
       Disassembler d; 
@@ -51,5 +73,4 @@ void Runner::compile(string filename,bool debug)
    int result = yyparse();
    fclose(yyin);
    remove(outfilename);
-   if(debug){glob->print(0);}
 }
