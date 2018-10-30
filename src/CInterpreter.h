@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include <ffi.h>
 #include <dlfcn.h>
+#include <inttypes.h>
 
 // do not mix this with   typedef void* (*arbitrary)(void); 
 typedef void* (*arbitrary)();
@@ -45,7 +46,7 @@ struct extern_record {
    static unsigned short int r[500];
    static unsigned short int b[500];
 
-   typedef uint16_t (*iiptr)(uint16_t, uint16_t);
+   typedef long (*iiptr)(long, long);
    typedef double (*ddptr)(double, double);
    typedef double (*idptr)(uint16_t, double);
    typedef double (*diptr)(double, uint16_t);

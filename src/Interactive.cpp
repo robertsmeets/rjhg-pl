@@ -18,7 +18,7 @@ void Interactive::run()
     {
        printf("here> ");
        characters = getline(&buffer,&bufsize,stdin);
-       r.compile_run_string(buffer,false);
+       r.compile_run_string(buffer,true);
     }
 }
 

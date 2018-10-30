@@ -3,9 +3,9 @@
 
 void SelfTest::run()
 {
-	//
-	// open test directory
-	//
+   //
+   // open test directory
+   //
    string path = "test/list.txt";
    FILE *infile;
    infile = fopen(path.c_str(), "r");       
@@ -19,7 +19,7 @@ void SelfTest::run()
        line[strcspn(line, "\r\n")] = 0;
        char line2[100];
        snprintf(line2,sizeof(line2),"test/%s", line);
-            Test(line2);
+       Test(line2);
    }
    fclose(infile);
 }

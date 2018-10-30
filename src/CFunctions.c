@@ -7,7 +7,7 @@
 
 #include "CFunctions.h"
 
-unsigned int func_plus_ii(unsigned int i, unsigned int j) { return i + j; }
+long func_plus_ii(long i, long j) { return i + j; }
 double func_plus_id(int i, double j) { return i + j; } 
 double func_plus_di(double i, int j) { return i + j; }
 double func_plus_dd(double i, double j) { return i + j; }

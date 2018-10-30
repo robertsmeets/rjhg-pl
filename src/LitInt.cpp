@@ -19,7 +19,8 @@ void LitInt::print(int level)
 
 void LitInt::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
-   cg -> emit(OPCODE_LIT, TYPE_INT, value, NULL);
+   cg -> emitByte(OPCODE_LINT);
+   cg -> emit4Byte(value);
 }
 
 string LitInt::stype() { return "LitInt"; }
