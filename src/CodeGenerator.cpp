@@ -47,7 +47,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // leave some space for the start address of the code
    //
-   emit2Byte(0);
+   emit2Byte((uint16_t)0);
    //
    // count the number of methods
    //
@@ -113,7 +113,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    //
    // put a dummy value on the stack
    //
-   emit(OPCODE_LIT, 2, 0, NULL);
+   emit(OPCODE_LINT, 2, 0, NULL);
    //
    // emit INT
    //
@@ -127,7 +127,7 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
    // emit RET
    //
    emitByte(OPCODE_RET);
-   emit2Byte(0);
+   emit2Byte((uint16_t)0);
    //
    // generate all the procedures
    //
@@ -186,21 +186,26 @@ void CodeGenerator::start(ProgramNode* a_pn, DebugInfo* a_di,bool debug) {
 //
 // emit a f,l,a combination
 //
-void CodeGenerator::emit(char f, unsigned short int l, unsigned short int a,
-      Expression* s) {
+void CodeGenerator::emit(char f, uint16_t l, uint16_t a, Expression* s) {
    emitByte(f);
    emit2Byte(l);
    emit2Byte(a);
 }
 
 void CodeGenerator::emitByte(char b) {
-   *((char*) codebuffer + here) = b;
+   *(codebuffer + here) = b;
    here++;
 }
 
 void CodeGenerator::emit2Byte(uint16_t val) {
-   emitByte(val & 255);
-   emitByte(val >> 8);
+   *((uint16_t*) (codebuffer + here)) = val;
+   here += 2;
+}
+
+void CodeGenerator::emit4Byte(uint32_t val) {
+   uint32_t* ulocation= (uint32_t*) ((char*) codebuffer + here);
+   *ulocation = val;
+   here += 4;
 }
 
 //

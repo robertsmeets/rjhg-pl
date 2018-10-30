@@ -1,0 +1,9 @@
+/*
+ * test long integers - should cover 32 bits 
+ */
+proc main()
+{
+   print 32767 * 32767 ;
+   print 65535 + 65535 ;
+   print 1234123412 ;
+}

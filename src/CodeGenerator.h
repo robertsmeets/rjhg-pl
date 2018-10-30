@@ -64,6 +64,7 @@ public:
   Expression* procDefined(string);
   void emitByte(char);
   void emit2Byte(uint16_t);
+  void emit4Byte(uint32_t);
   char* allot(int size);
   ClassDefinition* getClassDefinition(string);
 };

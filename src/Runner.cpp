@@ -28,6 +28,10 @@ int Runner::compile_run_string(char* buffer,bool debug)
    // start interpreting
    //
    CI_init(cg->getCodeBuffer());
+   /* if (debug) {
+      Disassembler d; 
+      d.start(cg->getCodeBuffer(),cg->getHere(),NULL);
+   } */
    CI_start(debug);
    return 0;
 }
