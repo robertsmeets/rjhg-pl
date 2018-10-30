@@ -16,6 +16,7 @@
 // opcodes with l and a
 //
 #define OPCODE_LIT   1
+#define OPCODE_LINT  2 
 #define OPCODE_LOD   3
 #define OPCODE_STO   4
 #define OPCODE_CAL   5

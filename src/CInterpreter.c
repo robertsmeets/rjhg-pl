@@ -208,12 +208,13 @@ int CI_execute_next() {
    pc++;
    unsigned short int l = 0;
    unsigned short int a = 0;
+   char* lptr;
    if (f <= 15) // these opcodes need l and a
    {
       //
       // using little endian
       //
-      char* lptr = (char*) buffer + pc;
+      lptr = (char*) buffer + pc;
       l = (*lptr & 0xff) + (*(lptr + 1) << 8);
       pc += 2;
       if (!(f==OPCODE_RET || f==OPCODE_JMP || f==OPCODE_JPC || f==OPCODE_JPF)) // not for RET and jumps
@@ -236,11 +237,6 @@ int CI_execute_next() {
       case TYPE_NULL: // null
          s[t].atype=0;
          s[t].address = 0;
-         t++;
-         break;
-      case TYPE_INT : // Int
-         s[t].atype = 2;
-         s[t].address = a;
          t++;
          break;
       case TYPE_FLOAT: // float
@@ -285,6 +281,13 @@ int CI_execute_next() {
          puts("unexpected LIT value " + s[t].atype);
       }
       break;
+   case OPCODE_LINT:   // lit: Literal int value, to be pushed on the stack
+      {if (debug) { printf("LINT"); }
+         s[t].atype = 2;
+         uint32_t* xptr = (uint32_t*) (lptr -2) ;
+         s[t].address = *xptr;
+         t++;
+         break;}
     case OPCODE_PLS:
     case OPCODE_MIN:
     case OPCODE_MUL:
@@ -332,7 +335,7 @@ int CI_execute_next() {
             //
             char* ptr1 = (char*) fr1.address;
             char str[15];
-            snprintf(str, 15, "%llu", fr2.address);
+            snprintf(str, 15, "%" PRId32 "", (int32_t) fr2.address);
             uint16_t len1 = ((*ptr1) & 0xff) + (*(ptr1 + 1) << 8);
             uint16_t len2 = strlen(str);
             uint16_t newlen = len1 + len2;
@@ -694,7 +697,7 @@ int CI_execute_next() {
          memcpy(&d1, ptr, 8);
          printf("%f\n",d1 );
       } else if (fr1.atype == TYPE_INT) {
-         printf("%llu\n",fr1.address );
+         printf("%" PRId32 "\n", (int32_t) fr1.address);
       } else if (fr1.atype == TYPE_BOOLEAN) { // boolean
          if (fr1.address) {
             printf("true\n" );
@@ -964,7 +967,6 @@ int CI_execute_next() {
    return 0;
 }
 
-
 void CI_print_stack()
 {
 if (debug) {
@@ -983,7 +985,7 @@ if (debug) {
             printf("array %p",(void*)s[i].address);
             break;
          case TYPE_INT:
-            printf("%llu",s[i].address);
+            printf("%" PRId32 "", (int32_t) s[i].address);
             break;
          case TYPE_FLOAT:
             adr = (char*)(s[i].address);
