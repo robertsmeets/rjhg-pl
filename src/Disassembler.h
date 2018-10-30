@@ -20,14 +20,14 @@
 using namespace std;
 
 class Disassembler {
+   char* buffer;
    DebugInfo* di;
    uint16_t i;
-   char* buffer;
 public:
    Disassembler();
    virtual ~Disassembler();
    void start(char*, unsigned int, DebugInfo*);
-   string decode(char,uint16_t, uint16_t);
+   string decode(char*);
    static void hexdump(char*, unsigned int);
    void print_tables();
    void print_magic_number();

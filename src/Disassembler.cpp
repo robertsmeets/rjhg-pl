@@ -12,7 +12,6 @@ using namespace std;
 Disassembler::Disassembler() {
    di = NULL;
    i = 0;
-   buffer = NULL;
 }
 
 Disassembler::~Disassembler() {
@@ -20,17 +19,17 @@ Disassembler::~Disassembler() {
 
 void Disassembler::start(char* inbuffer, unsigned int size, DebugInfo* a_di) {
    printf("Starting disassembler...\n" );
-   buffer = inbuffer;
-   if (strncmp(buffer,"RJHGPL",6) != 0) { printf("Magic number does not match, invalid bytecode"); exit(-1); }
+   if (strncmp(inbuffer,"RJHGPL",6) != 0) { printf("Magic number does not match, invalid bytecode"); exit(-1); }
    //
    // hexdump
    //
-   hexdump(buffer, size);
+   buffer = inbuffer;
+   hexdump(inbuffer, size);
    print_tables();
-   i = *( (uint16_t*) (buffer + 6));
+   i = *( (uint16_t*) (inbuffer + 6));
    for (; i < size;) {
       printf("%04X ",i );
-      decode( buffer[i], *((uint16_t*)(buffer + i + 1)), *((uint16_t*)(buffer + i + 3)));
+      decode( inbuffer+i);
    } 
 }
 
@@ -97,19 +96,19 @@ uint16_t Disassembler::find_ext_proc_table() {
 void Disassembler::hexdump(char* buf, unsigned int buflen) {
    unsigned int i, j;
    for (i = 0; i < buflen; i += 16) {
-      printf("%06x: ", i);
+     printf("%06x: ", i);
      for (j = 0; j < 16; j++)
      {
-       unsigned int location = i + j;
-         if (location < buflen)
-       {
-            printf("%02x ", buf[location]);
-       }
-       else
-       {
-          printf("   ");
-       }
-      printf(" ");
+        unsigned int location = i + j;
+        if (location < buflen)
+        {
+            printf("%02x ", buf[location] & 0xff);
+        }
+        else
+        {
+            printf("   ");
+        }
+        printf(" ");
      }
      for (j = 0; j < 16; j++)
      {
@@ -125,22 +124,25 @@ void Disassembler::hexdump(char* buf, unsigned int buflen) {
    }
 }
 
-string Disassembler::decode(char f, uint16_t l, uint16_t a) {
+string Disassembler::decode(char* inbuffer) {
    //
    // opcode definitions
    //
+   char f = *inbuffer;
+   uint16_t l = *(uint16_t*)(inbuffer + 1);
+   uint16_t a = *(uint16_t*)(inbuffer + 3);
    switch (f) {
+      case OPCODE_LINT: printf("LINT\n"); i += 5; break;
       case OPCODE_LIT:   // lit: Literal value, to be pushed on the stack
-      printf("LIT");
+      {printf("LIT");
       switch (l) {
          case 0: printf(" NULL\n"); i +=5; break;
-         case 2: printf(" INT\n"); i += 5; break;
          case 5: printf(" FLOAT\n"); i += 13; break;
          case 7: printf(" STRING\n"); i += 5 + a; break;
          case 6: printf( " BOOL\n"); i += 5; break;
          default: printf("unexpected LIT value\n"); i += 5; break;
       }
-      break;
+      break; }
       case OPCODE_I: printf("I\n"); i ++; break;
       case OPCODE_NOT: printf( "NOT\n"); i ++; break;
       case OPCODE_AND: printf( "AND\n"); i ++; break;

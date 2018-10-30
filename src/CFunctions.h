@@ -12,7 +12,7 @@
 #include "CInterpreter.h"
 
 struct stack_element;
-unsigned int func_plus_ii(unsigned int, unsigned int);
+long func_plus_ii(long, long);
 double func_plus_id(int, double);
 double func_plus_di(double, int);
 double func_plus_dd(double, double);
