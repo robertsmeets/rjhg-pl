@@ -15,8 +15,13 @@ int Runner::compile_run(string filename,bool debug)
 
 int Runner::compile_run_string(char* buffer,bool debug)
 {  
+   if (debug) printf("--------------------- in compile_run_string()\n");
    CodeGenerator* cg = new CodeGenerator();
-   glob = new ProgramNode();
+   if (glob == NULL)
+   {
+      glob = new ProgramNode();
+   }
+   glob->clearStatements();
    char buffer2[100];
    memcpy(buffer2,buffer,strlen(buffer)+1);
    yy_scan_string(buffer2); 
@@ -28,10 +33,10 @@ int Runner::compile_run_string(char* buffer,bool debug)
    // start interpreting
    //
    CI_init(cg->getCodeBuffer());
-   /* if (debug) {
-      Disassembler d; 
-      d.start(cg->getCodeBuffer(),cg->getHere(),NULL);
-   } */
+   if (debug) {
+      //Disassembler d ; 
+      //d.start(cg->getCodeBuffer(),cg->getHere());
+   }
    CI_start(debug);
    return 0;
 }
@@ -48,7 +53,7 @@ void Runner::compile_with_system(CodeGenerator* cg, string filename, bool debug)
    cg->start(glob,NULL, debug);
    if (debug) {
       Disassembler d; 
-      d.start(cg->getCodeBuffer(),cg->getHere(),NULL);
+      d.start(cg->getCodeBuffer(),cg->getHere());
    }
 }
 

@@ -20,16 +20,9 @@ ProgramNode::ProgramNode() {
    addMethodDefinition(new ProcedureNode("string","size",new CommaSeparated(),3));
 }
 
-ProgramNode::~ProgramNode() {
-   for (auto a_procedure : procedures) {
-      delete a_procedure;
-   }
-   for (auto a_class : my_classes) {
-      delete a_class;
-   }
-   for (auto an_extern : externs) {
-      delete an_extern;
-   }
+vector<string> ProgramNode::getGlobalVariables()
+{
+   return global_variables;
 }
 
 void ProgramNode::addClass(ClassDefinition* c) {
@@ -54,6 +47,18 @@ void ProgramNode::addMethodDefinition(ProcedureNode* m) {
 void ProgramNode::addStatements(Statements* statements)
 {
    statements_list.push_back(statements);
+}
+
+void ProgramNode::clearStatements()
+{
+   printf("-------------------------- clearing the statements list\n");
+   statements_list.clear();
+   //
+   // also remove main procedure
+   //
+   /* for (ProcedureNode* a_proc:procedures)
+   {
+       if  */
 }
 
 void ProgramNode::addExtern(Extern* e)
