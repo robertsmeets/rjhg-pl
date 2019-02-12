@@ -209,7 +209,7 @@ int CI_execute_next() {
    unsigned short int l = 0;
    unsigned short int a = 0;
    char* lptr;
-   if (f <= 15) // these opcodes need l and a
+   if (f <= OPCODE_RET) // these opcodes need l and a
    {
       //
       // using little endian
