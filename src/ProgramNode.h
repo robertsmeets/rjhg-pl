@@ -27,12 +27,13 @@ private:
    vector<ProcedureNode*> methods;
    vector<Extern*> externs;
    vector<Statements*> statements_list;
+   vector<string> global_variables;
    map<string, unsigned int> method_numbers;
    unsigned int next_methodnumber;
 
 public:
    ProgramNode();
-   virtual ~ProgramNode();
+   vector<string> getGlobalVariables();
    ClassDefinition* getClass(string);
    unsigned int getMethodNumber(string);
    unsigned int assignMethodNumber(string);
@@ -42,6 +43,7 @@ public:
    void addMethodDefinition(ProcedureNode*);
    void addExtern(Extern*);
    void addStatements(Statements*);
+   void clearStatements();
    void print(int);
    vector<ClassDefinition*> getClasses();
    vector<ProcedureNode*> getProcedures();
