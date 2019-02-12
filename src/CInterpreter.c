@@ -452,7 +452,13 @@ int CI_execute_next() {
          struct stack_element fr2 = s[t];
          if ((fr1.atype != 2) || (fr2.atype != 2)) {
             puts("division both types must be integer");
+            exit(-1);
          }
+         if (fr2.address == 0)
+         {
+            puts("division by zero");
+            exit(-1);
+         } 
          fr1.atype = 2;
          fr1.address = fr1.address / fr2.address;
          s[t - 1] = fr1;
