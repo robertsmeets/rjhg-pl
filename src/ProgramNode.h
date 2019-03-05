@@ -34,6 +34,7 @@ private:
 public:
    ProgramNode();
    vector<string> getGlobalVariables();
+   int addGlobalVariable(string);
    ClassDefinition* getClass(string);
    unsigned int getMethodNumber(string);
    unsigned int assignMethodNumber(string);

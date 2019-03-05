@@ -45,7 +45,8 @@ struct extern_record {
    static struct stack_element s[500];
    static unsigned short int r[500];
    static unsigned short int b[500];
-
+   static struct stack_element globals[500];
+   
    typedef long (*iiptr)(long, long);
    typedef double (*ddptr)(double, double);
    typedef double (*idptr)(uint16_t, double);

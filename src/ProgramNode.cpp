@@ -25,6 +25,12 @@ vector<string> ProgramNode::getGlobalVariables()
    return global_variables;
 }
 
+int ProgramNode::addGlobalVariable(string s)
+{
+   global_variables.push_back(s);
+   return global_variables.size();
+}
+
 void ProgramNode::addClass(ClassDefinition* c) {
    my_classes.push_back(c);
 }

@@ -29,7 +29,8 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
    vector<string>::iterator it2;
    //
    // now we have to look up the variable name.
-   // Can be either a local variable, a parameter name or an instance variable
+   // Can be either a local variable, a parameter name, an instance variable or
+   // a global variable
    //
    local_variables = pn->getLocalVariables();
    foundIter = local_variables->find(value);
@@ -50,7 +51,32 @@ void VariableValue::emit(CodeGenerator* cg, ProcedureNode* pn) {
          // look for instance variable
          //
          uint16_t j = pn->getInstanceVarNum(value);
-         if (j != 0xffff) {
+         if (j == 0xffff)
+         {
+            //
+            // check for global variable
+            //
+            vector<string> globals = cg->getProgramNode()->getGlobalVariables();
+            it2 = find(globals.begin(), globals.end(), value);
+            if (it2 == globals.end())
+            {
+               //
+               // not found. error
+               //
+               printf("Variable not found <%s>\n",value.c_str());
+               exit(-1);
+            }
+            else
+            {
+               //
+               // global was found. Emit LDG
+               //
+               uint16_t number = it2 - globals.begin() + 1;
+               cg -> emit(OPCODE_LDG, number, 0, NULL);
+            }
+         }
+         else
+         {
             cg->emit(OPCODE_LDI, j, pn->getParameters()->size(), NULL); // LDI
             return;
          }
