@@ -796,7 +796,6 @@ int CI_execute_next() {
       // figure out what class type is on top of the stack
       //
       int xtype = s[t-1].atype;
-      if (debug) printf("xtype is %d\n",xtype);
       if ((xtype != TYPE_OBJ) && (xtype != TYPE_ARRAY) && (xtype != TYPE_STRING)) {
          printf("Performed a method call on a non-object");
          return -1;
@@ -850,7 +849,6 @@ int CI_execute_next() {
                    printf("cannot call a method on class 0\n");
                    exit(-1);
             }
-            if(debug)printf("Calling method %d on class %d\n",l,classnum);
             //
             // this creates a new block with depth for local variables and parameters
             //
@@ -899,26 +897,38 @@ int CI_execute_next() {
          s[t].address = *uptr;
          t++;
          break; }
+      case OPCODE_LDG: {
+         if (debug) { printf("LDG %d %d", l, a); }
+         s[t] = globals[l];
+         t++;
+         break;
+        }
       case OPCODE_STI:{
          if (debug) { printf("STI %d %d", l,a ); }
          // store a value inside an inst. variable
          //
-      // l is the instance variable
-      // a is the number of parameters
-      //
-      // first get the this pointer
-      // then calculate the address of the inst. variable
-      //
-      char* selfptr =  (char*) (s[b[tb - 1] + a].address );
-      adr = (char*) (selfptr+ 9 * l + 3);
-      //
-      // store the value on the heap
-      //
-      *((char*) adr) = s[t-1].atype;
-      uint64_t* uptr = (uint64_t*)(adr+1);
-      *uptr = s[t-1].address; 
-      t--;
-      break;}
+         // l is the instance variable
+         // a is the number of parameters
+         //
+         // first get the this pointer
+         // then calculate the address of the inst. variable
+         //
+         char* selfptr =  (char*) (s[b[tb - 1] + a].address );
+         adr = (char*) (selfptr+ 9 * l + 3);
+         //
+         // store the value on the heap
+         //
+         *((char*) adr) = s[t-1].atype;
+         uint64_t* uptr = (uint64_t*)(adr+1);
+         *uptr = s[t-1].address; 
+         t--;
+         break;}
+      case OPCODE_STG:{
+         if (debug) { printf("STG %d %d", l,a ); }
+         t--;
+         globals[l] = s[t];
+         break;
+        }
    case OPCODE_DRP:
       if (debug) { printf("DROP"); }
       //
@@ -930,8 +940,8 @@ int CI_execute_next() {
       // 
       // self
       //
-      if (debug){printf("SELF");}
-      adr = (char*) (s[b[tb - 1] + a-1].address);
+      if (debug){printf("SELF %d %d",l,a);}
+      adr = (char*) (s[b[tb - 1] +l  ].address);
       //
       // put the value on the stack
       //

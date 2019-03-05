@@ -11,7 +11,6 @@
 #define TYPE_STRING  7
 #define TYPE_PTR     8
 #define TYPE_OBJ     9
-
 //
 // opcodes with l and a
 //
@@ -31,12 +30,11 @@
 #define OPCODE_STI  14
 #define OPCODE_LDG  15
 #define OPCODE_STG  16
-#define OPCODE_RET  17
-
+#define OPCODE_SLF  17
+#define OPCODE_RET  18
 //
 // opcodes without l and a
 //
-#define OPCODE_SLF  18
 #define OPCODE_I    19
 #define OPCODE_PLS  20
 #define OPCODE_MIN  21

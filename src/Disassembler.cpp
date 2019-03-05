@@ -133,7 +133,7 @@ string Disassembler::decode() {
       case OPCODE_LINT: { printf("LINT\n"); i += 5; break; }
       case OPCODE_LIT:   // lit: Literal value, to be pushed on the stack
          {
-            printf("LIT\n");
+            printf("LIT");
             switch (l) {
                 case 0: printf(" NULL\n"); i +=5; break;
                 case 5: printf(" FLOAT\n"); i += 13; break;
@@ -159,9 +159,11 @@ string Disassembler::decode() {
       case OPCODE_OBJ: printf( "OBJ %d %d\n" ,l,a); i += 5; break; 
       case OPCODE_MCL: printf( "MCL %d %d\n" ,l,a); i += 5; break; // method call
       case OPCODE_LDI: printf( "LDI %d %d\n" ,l,a); ; i +=5; break;
+      case OPCODE_LDG: printf( "LDG %d %d\n" ,l,a); ; i +=5; break;
       case OPCODE_STI: printf( "STI %d %d\n" ,l,a); ; i +=5; break;
+      case OPCODE_STG: printf( "STG %d %d\n" ,l,a); ; i +=5; break;
       case OPCODE_DRP: printf( "DRP\n"); i ++; break;
-      case OPCODE_SLF: printf( "SLF\n"); i ++; break;
+      case OPCODE_SLF: printf( "SLF %d %d\n",l,a); i += 5; break;
       case OPCODE_RET: printf( "RET %d\n" ,l);  i += 3; break;
       case OPCODE_PLS: printf( "PLS\n"); i ++; break;
       case OPCODE_MIN: printf( "MIN\n"); i ++; break;
