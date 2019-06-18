@@ -28,7 +28,7 @@ extern ProgramNode* glob;
 extern "C" void CI_init(char*);
 extern "C" void CI_start(bool);
 
-class Runner {
+class Runner: public gc {
 
 public:
    int compile_run(string ,bool );

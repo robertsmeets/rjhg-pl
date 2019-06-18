@@ -9,13 +9,14 @@
 #define STATEMENT_H_
 
 #include "stdio.h"
+#include "gc_cpp.h"
 #include <string>
 
 using namespace std;
 class CodeGenerator;
 // forward declaration
 
-class Statement {
+class Statement: public gc {
 
 public:
 	unsigned int linepos;

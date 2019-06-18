@@ -8,12 +8,13 @@
 #ifndef DEBUGINFO_H_
 #define DEBUGINFO_H_
 
-#include <vector>
 #include "stdio.h"
+#include "gc_cpp.h"
+#include <vector>
 
 using namespace std;
 
-class DebugInfo {
+class DebugInfo:public gc {
 	struct cposition {
 		unsigned int code_location;
 		unsigned int linepos;

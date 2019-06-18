@@ -20,7 +20,7 @@ class ClassDefinition; // forward declaration
 
 class ProcedureNode; // forward declaration
 
-class ProgramNode {
+class ProgramNode: public gc {
 private:
    vector<ProcedureNode*> procedures;
    vector<ClassDefinition*> my_classes;

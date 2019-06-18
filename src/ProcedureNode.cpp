@@ -21,7 +21,7 @@ ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identi
    name = a_name;
    parameters = identifiers;
    statements = some_statements;
-   local_variables = new map<string, uint16_t>();
+   local_variables = new (GC) map<string, uint16_t>();
    built_in_method_nr = 0;
    cd = NULL;
 }
@@ -36,7 +36,7 @@ ProcedureNode::ProcedureNode(string cname, string a_name, CommaSeparated* identi
    class_name = cname;
    name = a_name;
    parameters = identifiers;
-   local_variables = new map<string, uint16_t>();
+   local_variables = new (GC) map<string, uint16_t>();
    built_in_method_nr = pbuilt_in_method_nr;
    cd = NULL;
 }
@@ -160,7 +160,7 @@ void ProcedureNode::fixReturn() {
       addreturn = (last->stype() != "return");
    }
    if (addreturn) {
-      ReturnNode* r = new ReturnNode(NULL);
+      ReturnNode* r = new (GC) ReturnNode(NULL);
       statements->addStatement(r);
    }
 }

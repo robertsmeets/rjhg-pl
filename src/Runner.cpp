@@ -15,11 +15,10 @@ int Runner::compile_run(string filename,bool debug)
 
 int Runner::compile_run_string(char* buffer,bool debug)
 {  
-   if (debug) printf("--------------------- in compile_run_string()\n");
-   CodeGenerator* cg = new CodeGenerator();
+   CodeGenerator* cg = new (GC) CodeGenerator();
    if (glob == NULL)
    {
-      glob = new ProgramNode();
+      glob = new (GC) ProgramNode();
    }
    glob->clearStatements();
    char buffer2[100];
@@ -44,7 +43,7 @@ int Runner::compile_run_string(char* buffer,bool debug)
 
 void Runner::compile_with_system(CodeGenerator* cg, string filename, bool debug)
 {
-   glob = new ProgramNode();
+   glob = new (GC) ProgramNode();
    compile("system/helement.src",debug);
    compile("system/hashtable.src",debug);
    compile(filename,debug);

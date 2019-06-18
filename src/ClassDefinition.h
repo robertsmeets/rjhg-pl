@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 #include "stdio.h"
-
+#include "gc.h"
 #include "ProcedureNode.h"
 #include "CommaSeparated.h"
 using namespace std;
 
 class ProcedureNode; // forward declaration
 
-class ClassDefinition {
+class ClassDefinition: public gc {
 private:
    string name;
    unsigned int classnum;

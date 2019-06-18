@@ -6,7 +6,7 @@ using namespace std;
 
 CommaSeparated::CommaSeparated()
 {
-   identifiers = new vector<string>();
+   identifiers = new (GC) vector<string>();
 }
 
 void CommaSeparated::addIdentifier(char* s)

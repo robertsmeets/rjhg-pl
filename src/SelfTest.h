@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class SelfTest {
+class SelfTest: public gc {
 
 public:
    void run();

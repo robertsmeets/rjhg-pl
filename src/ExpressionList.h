@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class ExpressionList {
+class ExpressionList:public gc {
 private:
 	vector<Expression*> expressions;
 public:

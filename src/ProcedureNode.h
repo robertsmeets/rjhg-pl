@@ -34,7 +34,7 @@ class ProgramNode;
 class Statement;
 // forward declaration
 
-class ProcedureNode {
+class ProcedureNode: public gc {
    string class_name;
    string name;
    ClassDefinition* cd;

@@ -192,21 +192,21 @@ Highlevelblock:
     {$$=glob;};
 
 Procedure:
-   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {$$=new ProcedureNode("",$2,$4,$6);} ;
+   PROCEDURE IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {$$=new (GC) ProcedureNode("",$2,$4,$6);} ;
 
 Class:
    CLASS IDENTIFIER BLOCK CommaSeparated ENDBLOCK
-    {  $$ = new ClassDefinition($2,$4);};
+    {  $$ = new (GC) ClassDefinition($2,$4);};
 
 Extern:
    EXTERN IDENTIFIER ESTRING SEMICOL
-    { $$ = new Extern($2,$3); };
+    { $$ = new (GC) Extern($2,$3); };
 
 Method:
-   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {  $$ = new ProcedureNode($2,$4,$6,$8);};
+   METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {  $$ = new (GC) ProcedureNode($2,$4,$6,$8);};
 
 Statements:
-   Statement { $$ = new Statements(); $$->addStatement($1); }
+   Statement { $$ = new (GC) Statements(); $$->addStatement($1); }
    |Statements SEMICOL Statement { $$=$1;$1->addStatement($3); }
    |Statements SEMICOL { $$=$1; }
    ;
@@ -217,59 +217,59 @@ BSB:
 
 Assignment:
    Lhs EQUALS Expression 
-    { $$ = new Assignment($1,$3);};
+    { $$ = new (GC) Assignment($1,$3);};
 
 Return:
-   RETURN Expression { $$ = new ReturnNode($2); }
-  |RETURN { $$ = new ReturnNode(NULL); }
+   RETURN Expression { $$ = new (GC) ReturnNode($2); }
+  |RETURN { $$ = new (GC) ReturnNode(NULL); }
    ;
 
 While:
-   WHILE Expression BSB { $$ = new While($2,$3); }
+   WHILE Expression BSB { $$ = new (GC) While($2,$3); }
    ;
 
 If:
-   IF Expression BSB { $$ = new If($2,$3,NULL); }
-  |IF Expression BSB ELSE BSB { $$ = new If($2,$3,$5); }
+   IF Expression BSB { $$ = new (GC) If($2,$3,NULL); }
+  |IF Expression BSB ELSE BSB { $$ = new (GC) If($2,$3,$5); }
    ;
 
 Lhs:
-   IDENTIFIER  { $$ = new VariableValue($1);};
+   IDENTIFIER  { $$ = new (GC) VariableValue($1);};
 
 ProcedureCall:
-   IDENTIFIER LPAREN ExpressionList RPAREN  { $$=new ProcedureCall($1,$3); };
+   IDENTIFIER LPAREN ExpressionList RPAREN  { $$=new (GC) ProcedureCall($1,$3); };
 
 ExpressionList:
-    /* empty */ {$$ = new ExpressionList();}
-   | Expression { $$ = new ExpressionList();$$->addExpression($1);}
+    /* empty */ {$$ = new (GC) ExpressionList();}
+   | Expression { $$ = new (GC) ExpressionList();$$->addExpression($1);}
    | ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
    ;
 
 MethodCall: 
-   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN { $$ = new MethodCall($1,$3,$5);};
+   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN { $$ = new (GC) MethodCall($1,$3,$5);};
 
 Expression:
     Literal { $$=$1; }
-   |IDENTIFIER { $$=new VariableValue($1); }
-   |Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
-   |Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
-   |Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
-   |Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
-   |Expression GE Expression {$$=new Val2Expression('G',$1,$3);}
-   |Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
-   |Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
-   |Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
-   |Expression AND Expression {$$=new Val2Expression('&',$1,$3);}
-   |Expression MOD Expression {$$=new Val2Expression('%',$1,$3);}
-   |Expression OR Expression {$$=new Val2Expression('|',$1,$3);}
-   |NOT Expression {$$=new NotExpression($2);}
-   |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
-   |Expression NE Expression {$$=new Val2Expression('N',$1,$3);}
+   |IDENTIFIER { $$=new (GC) VariableValue($1); }
+   |Expression PLUS Expression {$$=new (GC) Val2Expression('+',$1,$3);}
+   |Expression MINUS Expression {$$=new (GC) Val2Expression('-',$1,$3);}
+   |Expression MUL Expression {$$=new (GC) Val2Expression('*',$1,$3);}
+   |Expression DIV Expression {$$=new (GC) Val2Expression('/',$1,$3);}
+   |Expression GE Expression {$$=new (GC) Val2Expression('G',$1,$3);}
+   |Expression GT Expression {$$=new (GC) Val2Expression('>',$1,$3);}
+   |Expression LE Expression {$$=new (GC) Val2Expression('L',$1,$3);}
+   |Expression LT Expression {$$=new (GC) Val2Expression('<',$1,$3);}
+   |Expression AND Expression {$$=new (GC) Val2Expression('&',$1,$3);}
+   |Expression MOD Expression {$$=new (GC) Val2Expression('%',$1,$3);}
+   |Expression OR Expression {$$=new (GC) Val2Expression('|',$1,$3);}
+   |NOT Expression {$$=new (GC) NotExpression($2);}
+   |Expression SEQUALS Expression {$$=new (GC) Val2Expression('=',$1,$3);}
+   |Expression NE Expression {$$=new (GC) Val2Expression('N',$1,$3);}
    |LPAREN Expression RPAREN {$$=$2;}
-   |Expression LBRACKET Expression RBRACKET  {$$=new Val2Expression('I',$1,$3);}
+   |Expression LBRACKET Expression RBRACKET  {$$=new (GC) Val2Expression('I',$1,$3);}
    |MethodCall {$$=$1;}
    |ProcedureCall {$$=$1;}
-   |SELF { $$ = new Self(); }
+   |SELF { $$ = new (GC) Self(); }
    ;
 
 Statement:
@@ -284,20 +284,20 @@ Statement:
 
 
 Print:
-   PRINT Expression {$$=new PrintNode($2);}
+   PRINT Expression {$$=new (GC) PrintNode($2);}
    ;
 
 Literal:
-    FLOAT {$$=new LitFloat($1);}
-   |INTEGER {$$=new LitInt($1);}
-   |BOOLEAN {$$=new LitBool($1);}
-   |STRING {$$=new LitString($1);}
-   |NULLID {$$=new LitNull();}
+    FLOAT {$$=new (GC) LitFloat($1);}
+   |INTEGER {$$=new (GC) LitInt($1);}
+   |BOOLEAN {$$=new (GC) LitBool($1);}
+   |STRING {$$=new (GC) LitString($1);}
+   |NULLID {$$=new (GC) LitNull();}
    ;
 
 CommaSeparated:
-         /* empty */ {$$=new CommaSeparated();}
-   |IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
+         /* empty */ {$$=new (GC) CommaSeparated();}
+   |IDENTIFIER {$$=new (GC) CommaSeparated();$$->addIdentifier($1);}
    |CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
      ; 
 
@@ -334,7 +334,7 @@ int main(int argc, char* argv[]) {
       if (strcmp(argv[1],"c") == 0)
       {
          Runner runner;
-         CodeGenerator* cg = new CodeGenerator();
+         CodeGenerator* cg = new (GC) CodeGenerator();
          runner.compile_with_system(cg,argv[2],false);
          FileCreator fc;
          fc.start(argv[2],cg->getCodeBuffer(),cg->getHere());

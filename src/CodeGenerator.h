@@ -32,7 +32,7 @@ class ClassDefinition; // forward declaration
 
 class Expression; // forward declaration
 
-class CodeGenerator {
+class CodeGenerator: public gc {
   bool debug;
   ofstream myfile;
   map<string, ProcedureNode*> procaddresses;

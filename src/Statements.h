@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class Statements {
+class Statements: public gc {
 private:
    vector<Expression*> statements;
 

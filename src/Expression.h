@@ -1,6 +1,7 @@
 #ifndef EXPRESSION_H_
 #define EXPRESSION_H_ 
 
+#include "gc_cpp.h"
 #include <string>
 
 using namespace std;
@@ -11,7 +12,7 @@ class ProcedureNode; // forward declaration
 
 class CodeGenerator; // forward declaration
 
-class Expression {
+class Expression: public gc {
 public:
    virtual void print(int) =0;
    virtual void emit(CodeGenerator*, ProcedureNode*)=0;

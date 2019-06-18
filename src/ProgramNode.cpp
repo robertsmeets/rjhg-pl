@@ -12,12 +12,12 @@ ProgramNode::ProgramNode() {
    //
    // add the array class
    // 
-   addClass(new ClassDefinition("array",new CommaSeparated()));
-   addClass(new ClassDefinition("string",new CommaSeparated()));
+   addClass(new (GC) ClassDefinition("array",new (GC) CommaSeparated()));
+   addClass(new (GC) ClassDefinition("string",new (GC) CommaSeparated()));
    uint16_t i=0;
-   addMethodDefinition(new ProcedureNode("array","add",new CommaSeparated(),1));
-   addMethodDefinition(new ProcedureNode("array","set",new CommaSeparated(),2));
-   addMethodDefinition(new ProcedureNode("string","size",new CommaSeparated(),3));
+   addMethodDefinition(new (GC) ProcedureNode("array","add",new (GC) CommaSeparated(),1));
+   addMethodDefinition(new (GC) ProcedureNode("array","set",new (GC) CommaSeparated(),2));
+   addMethodDefinition(new (GC) ProcedureNode("string","size",new (GC) CommaSeparated(),3));
 }
 
 vector<string> ProgramNode::getGlobalVariables()
@@ -161,8 +161,8 @@ void ProgramNode::findMain()
    if (sz > 0)
    { 
       Statements* statements = statements_list[0];
-      statements->addStatement(new ReturnNode(NULL));
-      ProcedureNode* p = new ProcedureNode("","main",new CommaSeparated(),statements);
+      statements->addStatement(new (GC) ReturnNode(NULL));
+      ProcedureNode* p = new (GC) ProcedureNode("","main",new (GC) CommaSeparated(),statements);
       procedures.push_back(p);
    }
 }

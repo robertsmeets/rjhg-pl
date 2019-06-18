@@ -1,13 +1,14 @@
 #ifndef EXTERN_H_ 
 #define EXTERN_H_ 
 
-#include <string>
 #include "stdio.h"
+#include "gc_cpp.h"
+#include <string>
 #include <vector>
 
 using namespace std;
 
-class Extern {
+class Extern:public gc {
 private:
    string name;
    string estring;

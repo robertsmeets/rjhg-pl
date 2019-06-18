@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class SingleMethodCall {
+class SingleMethodCall: public gc {
 public:
 	SingleMethodCall(string, ExpressionList*);
 	void print(int);

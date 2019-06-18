@@ -6,11 +6,12 @@
 #include <sys/stat.h>
 #endif 
 #include "stdio.h"
+#include "gc_cpp.h"
 #include <string>
 
 using namespace std;
 
-class FileCreator {
+class FileCreator:public gc {
 
 public:
    void start(char*, char* , int );

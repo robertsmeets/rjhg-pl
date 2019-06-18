@@ -19,7 +19,7 @@
 
 using namespace std;
 
-class Disassembler {
+class Disassembler:public gc {
    char* buffer;
    uint16_t i;
 public:

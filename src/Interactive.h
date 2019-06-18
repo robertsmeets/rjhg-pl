@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 using namespace std;
-class Interactive{
+class Interactive: public gc {
 public:
    void run();
 };
