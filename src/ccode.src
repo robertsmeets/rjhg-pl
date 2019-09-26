@@ -1,0 +1,15 @@
+proc main()
+{
+    ccode = "#include <stdio.h>\n" +
+            "int main()\n" +
+            "{\n" +
+            "   printf(Hello, World!);\n" +
+            "   return 0;" +
+            "}";
+      
+
+    print "before ccode";
+    crun(ccode);
+    print "after ccode";
+
+}
