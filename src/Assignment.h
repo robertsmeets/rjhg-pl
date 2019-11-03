@@ -6,6 +6,8 @@
 #include "stdio.h"
 #include "ProcedureNode.h"
 
+#include <string.h>
+
 using namespace std;
 
 class Assignment: public Expression {

@@ -1,0 +1,19 @@
+Download msys from here
+https://www.msys2.org/
+
+install 64 bit version msys2-x86_64-20190524.exe
+
+Run the following multiple times: pacman -Syu
+pacman -S git
+pacman -S cmake
+pacman -S gcc
+pacman -S make
+pacman -S bison
+pacman -S mingw-w64-i686-dlfcn
+
+Install cmake from the web site into c:\Program Files\CMake (the cmake that comes witn MSYS32 is missing some configuration)
+Add the following line to ~/.bashrc: PATH=$PATH:/c/Program\ Files/CMake/bin
+
+
+
+cmake .

@@ -17,7 +17,8 @@ void Interactive::run()
     for (;;)
     {
        printf("here> ");
-       characters = getline(&buffer,&bufsize,stdin);
+       fgets(buffer,bufsize,stdin);
+       // characters = getline(&buffer,&bufsize,stdin);
        r.compile_run_string(buffer,true);
     }
 }

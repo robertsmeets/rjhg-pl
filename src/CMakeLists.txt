@@ -7,19 +7,19 @@ PROJECT(myparser)
 ADD_EXECUTABLE(myparser Assignment.cpp CFunctions.c CInterpreter.c ClassDefinition.cpp CodeGenerator.cpp CommaSeparated.cpp DebugInfo.cpp Disassembler.cpp Expression.cpp ExpressionList.cpp Extern.cpp If.cpp LitBool.cpp Literal.cpp LitFloat.cpp LitInt.cpp LitNull.cpp LitString.cpp MethodCall.cpp PrintNode.cpp ProcedureCall.cpp ProcedureNode.cpp ProgramNode.cpp ReturnNode.cpp SingleMethodCall.cpp Statement.cpp Statements.cpp Val2Expression.cpp NotExpression.cpp VariableValue.cpp While.cpp Comments.cpp SelfTest.cpp Interactive.cpp Self.cpp Runner.cpp SelfStart.c FileCreator.cpp myparser.lex.c y.tab.c jwHash.c)
 ADD_EXECUTABLE(interpret main.cpp CFunctions.c CInterpreter.c SelfStart.c jwHash.c)
 
-INCLUDE_DIRECTORIES( ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include ../libffi-3.2.1/i686-pc-mingw32/include .)
+INCLUDE_DIRECTORIES(/mingw32/include /usr/lib/gcc/x86_64-pc-msys/9.1.0/include/c++ ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include ../libffi-3.2.1/i686-pc-mingw32/include .)
 
 IF(WIN32)
-   LINK_DIRECTORIES(/usr/lib ../libffi-3.2.1/i686-pc-mingw32/.libs /usr/lib/x86_64-linux-gnu ../bdwgc /c/MinGW/lib)
+   LINK_DIRECTORIES(/usr/lib ../libffi-3.2.1/x86_64-w64-mingw32/.libs /usr/lib/x86_64-linux-gnu ../bdwgc /c/MinGW/lib)
    ADD_LIBRARY(libffi.a STATIC IMPORTED)
    ADD_LIBRARY(libgc.dll.a STATIC IMPORTED)
-   SET_PROPERTY(TARGET libffi.a PROPERTY IMPORTED_LOCATION ../libffi-3.2.1/i686-pc-mingw32/.libs/libffi.a) 
+   SET_PROPERTY(TARGET libffi.a PROPERTY IMPORTED_LOCATION ../libffi-3.2.1/x86_64-w64-mingw32/.libs/libffi.a ) 
    SET_PROPERTY(TARGET libgc.dll.a PROPERTY IMPORTED_LOCATION ../bdwgc/.libs/libgc.dll.a)
    SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(myparser libffi.a libgc.dll.a )
    TARGET_LINK_LIBRARIES(interpret libffi.a libgc.dll.a )
    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -Wno-incompatible-pointer-types -Wno-int-conversion")
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,--build-id=none -Wl,norelro -Wl-z -fshort-double -fsingle-precision-constant -mfpmath=387 -mfancy-math-387 -ffast-math --hash-style=gnu")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Os -m32 -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1 -fno-math-errno -fno-unroll-loops -fmerge-all-constants -fno-ident -Wl,--build-id=none -Wl,norelro -fsingle-precision-constant -mfpmath=387 -mfancy-math-387 -ffast-math")
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -40,8 +40,8 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 # Create target for the parser
 ADD_CUSTOM_TARGET(YaccParser echo "Creating parser.c")
-SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-std=gnu++11 -SAFESEH:NO" )
-SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS "-std=gnu++11" )
+SET_PROPERTY(TARGET YaccParser PROPERTY COMPILE_FLAGS "-SAFESEH:NO" )
+#SET_SOURCE_FILES_PROPERTIES( myparser.lex.c PROPERTIES COMPILE_FLAGS)
 
 # for visual studio: SET (CMAKE_CXX_FLAGS "-fpermissive /EHsc")
 # Create custom command for flex/lex (note the outputs)
@@ -81,7 +81,7 @@ IF(NOT MSVC)
       TARGET YaccParser
       DEPENDS myparser.lex.c
       OUTPUTS y.tab.c)
-   SET (CMAKE_CXX_FLAGS "-fpermissive")
+   #SET (CMAKE_CXX_FLAGS "-fpermissive")
    #
    # add a cast to the result of the malloc() command
    # write the result to myparser.lex.c
@@ -100,11 +100,13 @@ IF(NOT MSVC)
    SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
    
    # Include binary directory to include lexer.c in parser.c
-   INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
+   #INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
    
    ADD_DEPENDENCIES(myparser YaccParser)
    
    SET_SOURCE_FILES_PROPERTIES(lex.yy.c y.tab.c myparser.lex.c PROPERTIES LANGUAGE CXX )
+   SET(CMAKE_C_FLAGS " -I/mingw32/include ${CMAKE_CXX_FLAGS}")
+   SET(CMAKE_CXX_FLAGS " -I/mingw32/include -I/usr/lib/gcc/x86_64-pc-msys/9.1.0/include/c++ -I/usr/lib/gcc/x86_64-pc-msys/9.1.0/include/c++/bits ${CMAKE_CXX_FLAGS}")
 ENDIF(NOT MSVC)
  
 SET (CMAKE_BUILD_TYPE Release)

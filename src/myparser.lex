@@ -1,4 +1,5 @@
 %{
+
 #include "Expression.h"
 #include "Assignment.h"
 #include "While.h"
@@ -20,7 +21,7 @@
 
 #include "y.tab.h"
 
-#undef __cplusplus
+// #undef __cplusplus
 
 int line_num = 1;
 
