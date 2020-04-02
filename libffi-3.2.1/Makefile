@@ -3689,3 +3689,4 @@ dist-hook dist-hook-all:
 
 #### CONFIGURATIONS FOR TOPLEVEL MAKEFILE: 
 ####  |i686-pc-mingw32
+####  |x86_64-w64-mingw32
