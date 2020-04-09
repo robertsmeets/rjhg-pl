@@ -79,38 +79,44 @@ estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
 "null"      return(NULLID);
 
 {boolean} {
-            yylval.sval = (char*)GC_MALLOC(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            int len = strlen(yytext) + 1;
+            yylval.sval = (char*)GC_MALLOC(len);
+            strncpy(yylval.sval, yytext, len);
             return(BOOLEAN);
       }
 
 {string} {
-            yylval.sval = (char*)GC_MALLOC(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            int len = strlen(yytext) + 1;
+            yylval.sval = (char*)GC_MALLOC(len);
+            strncpy(yylval.sval, yytext, len);
             return(STRING);
       }
 
 {identifier}   {
-	    yylval.sval = (char*)GC_MALLOC(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            int len = strlen(yytext) + 1;
+            yylval.sval = (char*)GC_MALLOC(len);
+            strncpy(yylval.sval, yytext, len);
             return(IDENTIFIER);
       }
 
 {estring}   {
-	    yylval.sval = (char*)GC_MALLOC(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            int len = strlen(yytext) + 1;
+            yylval.sval = (char*)GC_MALLOC(len);
+            strncpy(yylval.sval, yytext, len);
             return(ESTRING);
       }
 
 {float}   {
-            yylval.sval = (char*)GC_MALLOC(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            int len = strlen(yytext) + 1;
+            yylval.sval = (char*)GC_MALLOC(len);
+            strncpy(yylval.sval, yytext, len);
             return(FLOAT);
       }
 
 {integer}   {
-            yylval.sval = (char*)GC_MALLOC(strlen(yytext)+1);
-            strncpy(yylval.sval, yytext, strlen(yytext)+1);
+            int len = strlen(yytext) + 1;
+            yylval.sval = (char*)GC_MALLOC(len);
+            strncpy(yylval.sval, yytext, len);
             return(INTEGER);
       }
 

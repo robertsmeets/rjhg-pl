@@ -123,7 +123,7 @@ void Disassembler::hexdump(unsigned int buflen) {
    }
 }
 
-string Disassembler::decode() {
+void Disassembler::decode() {
    //
    // opcode definitions
    //

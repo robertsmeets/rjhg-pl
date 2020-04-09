@@ -153,6 +153,7 @@ Extern* ProgramNode::lookupExternal(string name)
             return an_extern;
         }
    }
+   return NULL;
 }
 
 void ProgramNode::findMain()
