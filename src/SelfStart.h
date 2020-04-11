@@ -8,10 +8,10 @@
 #include <string.h>
 #include "CInterpreter.h"
 
-#ifdef _WIN32
-   #define XMAGIC "MZ"
-#else
+#if defined(__linux__)
    #define XMAGIC "\x7F""ELF" 
+#else
+   #define XMAGIC "MZ"
 #endif
 
    char* S_shorten(char*);

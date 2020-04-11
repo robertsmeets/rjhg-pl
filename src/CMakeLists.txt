@@ -91,16 +91,16 @@ IF(NOT MSVC)
    FILE(WRITE myparser.lex.c "${f2}")
    
    # Add y.tab.c to the list of sources
-   SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
+   SET(myparser ${PROJ_SRCS} ${PROJ_BINARY_DIR}/src/y.tab.c)
    
    # Since some files do not exist yet when cmake is run, mark
    # them as generated
-   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
-   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
-   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${PROJ_BINARY_DIR}/src/lex.yy.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${PROJ_BINARY_DIR}/src/myparser.lex.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${PROJ_BINARY_DIR}/src/y.tab.c GENERATED)
    
    # Include binary directory to include lexer.c in parser.c
-   INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
+   INCLUDE_DIRECTORIES(${PROJ_BINARY_DIR}/src)
    
    ADD_DEPENDENCIES(myparser YaccParser)
    
