@@ -25,7 +25,7 @@ class Disassembler {
 public:
    Disassembler();
    void start(char*, unsigned int);
-   string decode();
+   void decode();
    void hexdump(unsigned int);
    void print_tables();
    void print_magic_number();

@@ -10,10 +10,10 @@ ADD_EXECUTABLE(interpret main.cpp CFunctions.c CInterpreter.c SelfStart.c jwHash
 INCLUDE_DIRECTORIES( ../dyncall-0.9/include ../dyncall-0.8_win/include ../bdwgc/include ../libffi-3.2.1/i686-pc-mingw32/include .)
 
 IF(WIN32)
-   LINK_DIRECTORIES(/usr/lib ../libffi-3.2.1/i686-pc-mingw32/.libs /usr/lib/x86_64-linux-gnu ../bdwgc /c/MinGW/lib)
+   LINK_DIRECTORIES(/usr/lib ../libffi-3.2.1/x86_64-w64-mingw32/.libs /usr/lib/x86_64-linux-gnu ../bdwgc /c/MinGW/lib)
    ADD_LIBRARY(libffi.a STATIC IMPORTED)
    ADD_LIBRARY(libgc.dll.a STATIC IMPORTED)
-   SET_PROPERTY(TARGET libffi.a PROPERTY IMPORTED_LOCATION ../libffi-3.2.1/i686-pc-mingw32/.libs/libffi.a) 
+   SET_PROPERTY(TARGET libffi.a PROPERTY IMPORTED_LOCATION ../libffi-3.2.1/x86_64-w64-mingw32/.libs/libffi.a) 
    SET_PROPERTY(TARGET libgc.dll.a PROPERTY IMPORTED_LOCATION ../bdwgc/.libs/libgc.dll.a)
    SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
    TARGET_LINK_LIBRARIES(myparser libffi.a libgc.dll.a )
@@ -91,16 +91,16 @@ IF(NOT MSVC)
    FILE(WRITE myparser.lex.c "${f2}")
    
    # Add y.tab.c to the list of sources
-   SET(myparser ${Foo_SRCS} ${Foo_BINARY_DIR}/src/y.tab.c)
+   SET(myparser ${PROJ_SRCS} ${PROJ_BINARY_DIR}/src/y.tab.c)
    
    # Since some files do not exist yet when cmake is run, mark
    # them as generated
-   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/lex.yy.c GENERATED)
-   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/myparser.lex.c GENERATED)
-   SET_SOURCE_FILES_PROPERTIES(${Foo_BINARY_DIR}/src/y.tab.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${PROJ_BINARY_DIR}/src/lex.yy.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${PROJ_BINARY_DIR}/src/myparser.lex.c GENERATED)
+   SET_SOURCE_FILES_PROPERTIES(${PROJ_BINARY_DIR}/src/y.tab.c GENERATED)
    
    # Include binary directory to include lexer.c in parser.c
-   INCLUDE_DIRECTORIES(${Foo_BINARY_DIR}/src)
+   INCLUDE_DIRECTORIES(${PROJ_BINARY_DIR}/src)
    
    ADD_DEPENDENCIES(myparser YaccParser)
    

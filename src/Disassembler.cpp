@@ -15,7 +15,8 @@ Disassembler::Disassembler() {
 }
 
 void Disassembler::start(char* inbuffer, unsigned int size) {
-   printf("Starting disassembler...\n" );
+   printf("NOT Starting disassembler...\n" );
+   return ;
    if (strncmp(inbuffer,"RJHGPL",6) != 0) { printf("Magic number does not match, invalid bytecode"); exit(-1); }
    //
    // hexdump
@@ -27,7 +28,8 @@ void Disassembler::start(char* inbuffer, unsigned int size) {
       printf("%04X ",i );
       decode();
       printf("%04X ",i );
-   } 
+   }
+   printf("Finishing disassembler\n"); 
 }
 
 /**
@@ -121,7 +123,7 @@ void Disassembler::hexdump(unsigned int buflen) {
    }
 }
 
-string Disassembler::decode() {
+void Disassembler::decode() {
    //
    // opcode definitions
    //

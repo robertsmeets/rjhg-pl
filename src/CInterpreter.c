@@ -1085,6 +1085,11 @@ void CI_call_external(short unsigned int function_number,short unsigned int a) {
    struct extern_record e = externs[function_number-1];
    void* sym = CI_find_ext_address(e.name);
    if(debug)printf("sym = %p\n",sym);
+   if (sym == 0)
+   {
+	   printf("Symbol not found for <%s>\n",e.name);
+	   exit(-1);
+   }
    char* signature = e.signature;
    char* cpos = strchr(signature,'-');
    int pos;
@@ -1388,7 +1393,28 @@ void* CI_find_ext_address(char* name)
     arbitrary my_function;
     // Introduce already loaded functions to runtime linker's space
     void* handle = dlopen(0,RTLD_NOW|RTLD_GLOBAL);
-    // Load the function to our pointer, which doesn't know how many arguments there sould be
+
+/*
+    The dlsym() function allows a process to obtain the address of a symbol defined within a shared object or executable. The handle argument is either the value returned from a call to dlopen() or one of the special handles RTLD_DEFAULT, RTLD_NEXT, or RTLD_SELF. The name argument is the symbol's name as a character string.
+
+    If handle is returned from dlopen(), the corresponding shared object must not have been closed using dlclose(). A handle can be obtained from dlopen() using the RTLD_FIRST mode. With this mode, the dlsym() function searches for the named symbol in the initial object referenced by handle. Without this mode, the dlsym() function searches for the named symbol in the group of shared objects loaded automatically as a result of loading the object referenced by handle. See dlopen(3DL).
+
+    If handle is RTLD_DEFAULT, dlsym() searches for the named symbol starting with the first object loaded and proceeding through the list of initial loaded objects and any global objects obtained with dlopen(3DL) until a match is found. This search follows the default model employed to relocate all objects within the process.
+
+    If handle is RTLD_NEXT, dlsym() searches for the named symbol in the objects that were loaded following the object from which the dlsym() call is being made.
+
+    If handle RTLD_SELF, dlsym() searches for the named symbol in the objects that were loaded starting with the object from which the dlsym() call is being made.
+
+    In the case of RTLD_DEFAULT, RTLD_NEXT, and RTLD_SELF, if the objects being searched have been loaded from dlopen() calls, dlsym() searches the object only if the caller is part of the same dlopen() dependency hierarchy or if the object was given global search access. See dlopen(3DL) for a discussion of the RTLD_GLOBAL mode.
+
+*/
+
+    // Load the function to our pointer, which doesn't know how many arguments there should be
+    //
     *(void**)(&my_function) = dlsym(handle,name);
+    if (my_function == NULL)
+    {
+       my_function = dlsym(RTLD_DEFAULT,name);
+    }
     return my_function;
 }
