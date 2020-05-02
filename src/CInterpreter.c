@@ -642,6 +642,16 @@ int CI_execute_next() {
       tr++;
       pc = a;
       break;
+   case OPCODE_ICA:
+      // parameters should have already been pushed on the stack
+      // push the return address on the return stack
+      // call the procedure
+      //
+      if (debug) { printf("ICA %d ",a); }
+      char* ptr = (char*)(s[t-1].address);
+      crun(ptr,s,&t,debug);
+      t--;
+      break;
    case OPCODE_INT:         // int:
       if (debug) { printf("INT %d,%d", l , a); }
       //

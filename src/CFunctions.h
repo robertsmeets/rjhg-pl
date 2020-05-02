@@ -56,5 +56,6 @@ bool func_le_dd(double, double);
 void array_add(char* ,struct stack_element* ,uint16_t* ,bool);
 void array_set(char* ,struct stack_element* ,uint16_t* ,bool);
 void string_size(char*,struct stack_element* ,uint16_t* ,bool);
+void crun(char*,struct stack_element* ,uint16_t* ,bool);
 
 #endif /* CFUNCTIONS_H_ */

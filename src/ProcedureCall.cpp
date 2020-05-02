@@ -75,6 +75,12 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
       cg->emit(OPCODE_CAL, 0, 0, NULL);
       cg->addCallAddress(cg->getHere() - 2, procedure_name);
    } else {
+       if ((procedure_name.compare("crun")) == 0)
+       {
+	       cg->emit(OPCODE_ICA,0,0,NULL);
+       }
+       else
+       {
       //
       // dealing with a dynamic call, to a library function
       //
@@ -93,6 +99,7 @@ void ProcedureCall::addCallToProcedure(CodeGenerator* cg, string procedure_name)
          exit(-1);
       }
       cg->emit(OPCODE_EXT, external->getNumber(), sz , NULL);
+       }
       //
       // if this is a top level call, the result is ignored. Therefore we must drop it from the stack
       //

@@ -152,6 +152,7 @@ void Disassembler::decode() {
       case OPCODE_LOD: printf( "LOD %d\n",a); i += 5; break; //lod: copy a local variable on top of the stack
       case OPCODE_STO: printf( "STO %d\n",a); i += 5; break; // sto: pop a value from the stack and put it in a local variable
       case OPCODE_CAL: printf( "CAL %04X\n",a); i += 5; break; // procedure call 
+      case OPCODE_ICA: printf( "ICA %04X\n",a); i += 5; break; // internal function all
       case OPCODE_INT: printf( "INT %d %d\n",l,a); i += 5; break; // int:
       case OPCODE_JMP: printf("JMP %04X\n",l); i += 3; break; // jmp
       case OPCODE_JPC: printf("JPC %04X\n",l); i += 3; break; // jpc

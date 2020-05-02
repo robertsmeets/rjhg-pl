@@ -182,3 +182,23 @@ void array_set(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
    (*t)--;
 }
 
+void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
+{
+	if(debug)printf("------------------ crun()\n");
+         struct stack_element fr1 = s[*t-1];
+         if (fr1.atype != TYPE_STRING)
+	 {
+		 printf("Not a string but a <%d>\n",fr1.atype);
+		 exit(-1);
+	 }
+	 char* cptr = (char*) fr1.address;
+         uint16_t* ptr1 = (uint16_t*) cptr;
+         uint16_t len1 = *ptr1;
+         if(debug)printf("len = %d\n",len1);
+         char* ad = cptr + 2;
+         char* stringy = malloc(len1+1);
+	 strncpy(stringy,ad,len1);
+	 stringy[len1] = '\0';
+	 if(debug)printf("Found string <%s>\n",stringy);
+}
+
