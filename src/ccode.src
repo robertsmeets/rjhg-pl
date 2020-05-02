@@ -6,8 +6,6 @@ proc main()
             "   printf(Hello, World!);\n" +
             "   return 0;" +
             "}";
-      
-
     print "before ccode";
     crun(ccode);
     print "after ccode";

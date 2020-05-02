@@ -31,11 +31,11 @@
 #define OPCODE_LDG  15
 #define OPCODE_STG  16
 #define OPCODE_SLF  17
-#define OPCODE_RET  18
+#define OPCODE_ICA  18
+#define OPCODE_RET  19
 //
 // opcodes without l and a
 //
-#define OPCODE_I    19
 #define OPCODE_PLS  20
 #define OPCODE_MIN  21
 #define OPCODE_MUL  22
@@ -53,4 +53,5 @@
 #define OPCODE_AND  34
 #define OPCODE_OR   35
 #define OPCODE_DRP  36
+#define OPCODE_I    37
 
