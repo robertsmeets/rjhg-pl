@@ -184,21 +184,49 @@ void array_set(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
 
 void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
 {
-	if(debug)printf("------------------ crun()\n");
+	debug=true;
+   if(debug)printf("------------------ crun()\n");
          struct stack_element fr1 = s[*t-1];
          if (fr1.atype != TYPE_STRING)
-	 {
-		 printf("Not a string but a <%d>\n",fr1.atype);
-		 exit(-1);
-	 }
-	 char* cptr = (char*) fr1.address;
-         uint16_t* ptr1 = (uint16_t*) cptr;
-         uint16_t len1 = *ptr1;
-         if(debug)printf("len = %d\n",len1);
-         char* ad = cptr + 2;
-         char* stringy = malloc(len1+1);
-	 strncpy(stringy,ad,len1);
-	 stringy[len1] = '\0';
-	 if(debug)printf("Found string <%s>\n",stringy);
+    {
+       printf("Not a string but a <%d>\n",fr1.atype);
+       exit(-1);
+    }
+    char* cptr = (char*) fr1.address;
+    uint16_t* ptr1 = (uint16_t*) cptr;
+    uint16_t len1 = *ptr1;
+    if(debug)printf("len = %d\n",len1);
+    char* ad = cptr + 2;
+    char* stringy = malloc(len1+1);
+    strncpy(stringy,ad,len1);
+    stringy[len1] = '\0';
+    if(debug)printf("Found string <%s>\n",stringy);
+    TCCState *astate;
+    astate = tcc_new();
+    if (!astate) {
+        printf("Could not create tcc state\n");
+        exit(-1);
+    }
+    tcc_set_output_type(astate, TCC_OUTPUT_MEMORY);
+    if (tcc_compile_string(astate, stringy) == -1)
+    {
+       printf("Could not compile\n");
+       exit(-1);
+    }
+    if (tcc_relocate(astate, TCC_RELOCATE_AUTO) < 0)
+    {
+      printf("could not relocate\n");
+      exit(-1);
+    }
+    
+    int (*func)(int);
+    func = tcc_get_symbol(astate, "tccmain");
+    if (!func)
+    {
+      printf("could not find tccmain()\n");
+      exit(-1);
+    }
+    /* run the code */
+    func(0);
+    tcc_delete(s);
 }
-
