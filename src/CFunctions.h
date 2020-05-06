@@ -10,6 +10,7 @@
 
 #include "stdio.h"
 #include "CInterpreter.h"
+#include "libtcc.h"
 
 struct stack_element;
 long func_plus_ii(long, long);
