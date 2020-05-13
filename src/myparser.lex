@@ -23,21 +23,31 @@
 #undef __cplusplus
 
 int line_num = 1;
-
+char* strbuf = (char*)GC_MALLOC(1024);
+int lenstring = 0;
 extern "C" int yylex();
 %}
 
 %option noyywrap
+%x string   
 
 blanks          [ \t]+
 identifier   	[_a-zA-Z]+
 float 		[0-9]+\.[0-9]*
 integer		-?[0-9]+
 boolean        	true|false
-string        	\"[\% \.a-zA-Z0-9\,\;\!\{\}\(\)\#\\\>\<]*\"
 estring         [BcCsSiIjJlLfdpZv]+[\-\+][BcCsSiIjJlLfdpZv]+
+string        	\"[\% \.a-zA-Z0-9\,\;\!\{\}\(\)\#\\\>\<]*\"\\
 
 %%
+\"                  { BEGIN string; strbuf[0] = '\0'; lenstring = 0; }
+<string>[^\\"\n]*   { int len = strlen(yytext); strncpy(strbuf+lenstring,yytext,len);lenstring+=len; strbuf[lenstring] = '\0'; }
+<string>\\n         { strbuf[lenstring] = '\n'; lenstring++; strbuf[lenstring]='\0'; }
+<string>\\t         { strbuf[lenstring] = '\t'; lenstring++; strbuf[lenstring]='\0'; }
+<string>\\\"        { strbuf[lenstring] = yytext[1]; lenstring++; strbuf[lenstring] = '\0'; }
+<string>\"          { yylval.sval = (char*)GC_MALLOC(lenstring+1); strncpy(yylval.sval,strbuf,lenstring+1); BEGIN 0; return STRING; }
+<string>\\.         { printf("bogus escape '%s' in string\n", yytext);exit(-1); }
+<string>\n          { printf("newline in string\n"); exit(-1); }
 
 {blanks}        { /* ignore */ }
 \n             { ++line_num; }
