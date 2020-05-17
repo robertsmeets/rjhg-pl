@@ -14,11 +14,9 @@ void LitString::print(int level)
 
 void LitString::emit(CodeGenerator* cg, ProcedureNode* pn)
 {
-   printf("emitting LitString <%s>\n",value.c_str());
    int strlen = value.length();
    if (strlen <= 0)
    {
-	   printf("emitting nothing. strlen = %d\n",strlen);
 	   return;
    }
    string my_string = value.substr(0, strlen);
