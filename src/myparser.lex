@@ -44,6 +44,7 @@ string        	\"[\% \.a-zA-Z0-9\,\;\!\{\}\(\)\#\\\>\<]*\"\\
 <string>[^\\"\n]*   { int len = strlen(yytext); strncpy(strbuf+lenstring,yytext,len);lenstring+=len; strbuf[lenstring] = '\0'; }
 <string>\\n         { strbuf[lenstring] = '\n'; lenstring++; strbuf[lenstring]='\0'; }
 <string>\\t         { strbuf[lenstring] = '\t'; lenstring++; strbuf[lenstring]='\0'; }
+<string>\\\\        { strbuf[lenstring] = '\\'; lenstring++; strbuf[lenstring]='\0'; }
 <string>\\\"        { strbuf[lenstring] = yytext[1]; lenstring++; strbuf[lenstring] = '\0'; }
 <string>\"          { yylval.sval = (char*)GC_MALLOC(lenstring+1); strncpy(yylval.sval,strbuf,lenstring+1); BEGIN 0; return STRING; }
 <string>\\.         { printf("bogus escape '%s' in string\n", yytext);exit(-1); }

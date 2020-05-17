@@ -1,10 +1,10 @@
 proc main()
 {
     ccode = "#include <tcclib.h>   \n" +
-            "int main() \n" +
+            "int tccmain() \n" +
             "{ \n" +
-            "   printf(\"Hello, World!\"); \n" +
-            "   return 0; \n" +
+            "   printf(\"Hello, World!\\n\"); \n" +
+            "   return 5; \n" +
             "}";
     print "before ccode";
     crun(ccode);
