@@ -184,14 +184,13 @@ void array_set(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
 
 void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
 {
-	debug=true;
    if(debug)printf("------------------ crun()\n");
-         struct stack_element fr1 = s[*t-1];
-         if (fr1.atype != TYPE_STRING)
-    {
-       printf("Not a string but a <%d>\n",fr1.atype);
-       exit(-1);
-    }
+   struct stack_element fr1 = s[*t-1];
+   if (fr1.atype != TYPE_STRING)
+   {
+      printf("Not a string but a <%d>\n",fr1.atype);
+      exit(-1);
+   }
     char* cptr = (char*) fr1.address;
     uint16_t* ptr1 = (uint16_t*) cptr;
     uint16_t len1 = *ptr1;
@@ -207,6 +206,9 @@ void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
         printf("Could not create tcc state\n");
         exit(-1);
     }
+    tcc_set_lib_path(astate,"../tcc/lib");
+    tcc_add_include_path(astate,"../tcc/include");
+    tcc_add_library_path(astate,"../tcc/lib");
     tcc_set_output_type(astate, TCC_OUTPUT_MEMORY);
     if (tcc_compile_string(astate, stringy) == -1)
     {
@@ -218,7 +220,6 @@ void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
       printf("could not relocate\n");
       exit(-1);
     }
-    
     int (*func)(int);
     func = tcc_get_symbol(astate, "tccmain");
     if (!func)
@@ -227,6 +228,8 @@ void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
       exit(-1);
     }
     /* run the code */
-    func(0);
+    if(debug)printf("------- before running the code\n");
+    int result = func(0);
+    if(debug)printf("------- after running the code result = %d\n",result);
     tcc_delete(s);
 }
