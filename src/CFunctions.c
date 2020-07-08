@@ -215,11 +215,7 @@ void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
        printf("Could not compile\n");
        exit(-1);
     }
-    if (tcc_relocate(astate, TCC_RELOCATE_AUTO) < 0)
-    {
-      printf("could not relocate\n");
-      exit(-1);
-    }
+    if (tcc_relocate(astate, TCC_RELOCATE_AUTO) < 0) { printf("could not relocate\n"); exit(-1); }
     int (*func)(int);
     func = tcc_get_symbol(astate, "tccmain");
     if (!func)
@@ -231,5 +227,5 @@ void crun(char* ptr,struct stack_element* s,uint16_t* t,bool debug)
     if(debug)printf("------- before running the code\n");
     int result = func(0);
     if(debug)printf("------- after running the code result = %d\n",result);
-    tcc_delete(s);
+    tcc_delete(astate);
 }

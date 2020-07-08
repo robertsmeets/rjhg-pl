@@ -1424,7 +1424,7 @@ void* CI_find_ext_address(char* name)
     *(void**)(&my_function) = dlsym(handle,name);
     if (my_function == NULL)
     {
-       my_function = dlsym(RTLD_DEFAULT,name);
+       my_function = dlsym(RTLD_LOCAL,name);
     }
     return my_function;
 }

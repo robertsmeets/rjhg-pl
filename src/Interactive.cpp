@@ -14,11 +14,13 @@ void Interactive::run()
         exit(1);
     }
     Runner r;
+    string command ;
     for (;;)
     {
        printf("here> ");
-       characters = getline(&buffer,&bufsize,stdin);
-       r.compile_run_string(buffer,true);
+       // characters = getline(&buffer,&bufsize,stdin);
+       getline(cin,command);
+       r.compile_run_string(command.c_str(),true);
     }
 }
 
