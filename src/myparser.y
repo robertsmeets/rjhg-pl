@@ -32,6 +32,7 @@
 #include "SelfStart.h"
 #include "FileCreator.h"
 #include "Interactive.h"
+#include "ast.h"
 
 #include <stdio.h>
 #include <iostream>

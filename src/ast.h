@@ -1,0 +1,52 @@
+typedef struct AST AST; // Forward reference
+
+struct AST {
+  enum {
+    AST_ASSIGNMENT,
+    AST_CLASSDEFINITION,
+    AST_COMMASEPARATED,
+    AST_EXPRESSIONLIST,
+    AST_EXTERN,
+    AST_IF,
+    AST_LITBOOL,
+    AST_LITFLOAT,
+    AST_LITINT,
+    AST_LITNULL,
+    AST_LITSTRING,
+    AST_METHODCALL,
+    AST_NOTEXPRESSION,
+    AST_PRINTNODE,
+    AST_PROCEDURECALL,
+    AST_PROCEDURENODE,
+    AST_RETURNNODE,
+    AST_SELF ,
+    AST_STATEMENTS ,
+    AST_VAL2EXPRESSION,
+    AST_VARIABLEVALUE,
+    AST_WHILE
+  } tag;
+  union {
+    struct AST_ASSIGNMENT {AST *lhs; AST *rhs;} AST_ASSIGNMENT;
+    struct AST_CLASSDEFINITION {AST *left; AST *right;} AST_CLASSDEFINITION;
+    struct AST_COMMASEPARATED {} AST_COMMASEPARATED;
+    struct AST_EXPRESSIONLIST {} AST_EXPRESSIONLIST;
+    struct AST_EXTERN {AST *left; AST *right;} AST_EXTERN;
+    struct AST_IF {AST *cond; AST *truestat; AST *falsestat;} AST_IF;
+    struct AST_LITBOOL {AST *value;} AST_LITBOOL;
+    struct AST_LITFLOAT {AST *value;} AST_LITFLOAT;
+    struct AST_LITINT {AST *value;} AST_LITINT;
+    struct AST_LITNULL {} AST_LITNULL;
+    struct AST_LITSTRING {AST *value;} AST_LITSTRING;
+    struct AST_METHODCALL {AST *one; AST *two; AST *three;} AST_METHODCALL;
+    struct AST_NOTEXPRESSION {AST *exp;} AST_NOTEXPRESSION;
+    struct AST_PRINTNODE {AST *value;} AST_PRINTNODE;
+    struct AST_PROCEDURECALL {AST *value;} AST_PROCEDURECALL;
+    struct AST_PROCEDURENODE {AST *one; AST* two; AST* three; AST* four;} AST_PROCEDURENODE;
+    struct AST_RETURNNODE {AST *value;} AST_RETURNNODE;
+    struct AST_SELF {} AST_SELF;
+    struct AST_STATEMENTS {} AST_STATEMENTS;
+    struct AST_VAL2EXPRESSION {AST *operand; AST *exp1; AST* exp2;} AST_VAL2EXPRESSION;
+    struct AST_VARIABLEVALUE {AST *value;} AST_VARIABLEVALUE;
+    struct AST_WHILE {AST* exp1; AST* exp2;} AST_WHILE;
+  } data;
+};
