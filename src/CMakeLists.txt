@@ -24,16 +24,20 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-   LINK_DIRECTORIES(/usr/lib /usr/lib/x86_64-linux-gnu ../bdwgc ../libffi-3.2.1/x86_64-unknown-linux-gnu/.libs /usr/lib/x86_64-linux-gnu ../tcc-0.9.27)
+   LINK_DIRECTORIES(/usr/lib /usr/lib/x86_64-linux-gnu 
+	            ../bdwgc 
+		    /usr/lib/x86_64-linux-gnu 
+		    ../libffi-3.2.1/x86_64-unknown-linux-gnu/.libs 
+		    ../tcc-0.9.27)
    ADD_LIBRARY(libffi.a STATIC IMPORTED)
    ADD_LIBRARY(libgc-lib.a STATIC IMPORTED)
    ADD_LIBRARY(libgccpp STATIC IMPORTED)
    ADD_LIBRARY(libdl.so SHARED IMPORTED)
    ADD_LIBRARY(libtcc.a STATIC IMPORTED)
-   SET_PROPERTY(TARGET libffi.a PROPERTY IMPORTED_LOCATION ../libffi-3.2.1/x86_64-unknown-linux-gnu/.libs/libffi.a)
+   SET_PROPERTY(TARGET libffi.a PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libffi.a)
    SET_PROPERTY(TARGET libgc-lib.a PROPERTY IMPORTED_LOCATION ../bdwgc/libgc-lib.a)
-   SET_PROPERTY(TARGET libdl.so PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so)
-   SET_PROPERTY(TARGET libtcc.a PROPERTY IMPORTED_LOCATION ../tcc-0.9.27/libtcc.a)
+   SET_PROPERTY(TARGET libdl.so PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libdl.so.2)
+   SET_PROPERTY(TARGET libtcc.a PROPERTY IMPORTED_LOCATION /usr/lib/x86_64-linux-gnu/libtcc.a)
    SET_TARGET_PROPERTIES(myparser PROPERTIES LINK_FLAGS "-Wl,--as-needed -fPIC")
    SET_TARGET_PROPERTIES(interpret PROPERTIES LINK_FLAGS "-Wl,--as-needed -fPIC")
    TARGET_LINK_LIBRARIES(myparser libgc-lib.a libffi.a libdl.so pthread libgc-lib.a libtcc.a)

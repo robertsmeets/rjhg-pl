@@ -2,6 +2,7 @@
 #define FILECREATOR_H_ 
 
 #include <iostream>
+#include <cstdint>
 #ifndef _WIN32
 #include <sys/stat.h>
 #endif 
