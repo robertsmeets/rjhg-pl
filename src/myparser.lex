@@ -17,7 +17,7 @@
 #include "ProcedureCall.h"
 #include "PrintNode.h"
 #include "Extern.h"
-
+#include "ast.h"
 #include "y.tab.h"
 
 #undef __cplusplus

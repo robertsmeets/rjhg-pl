@@ -33,24 +33,22 @@
 #include "FileCreator.h"
 #include "Interactive.h"
 #include "ast.h"
-
 #include <stdio.h>
 #include <iostream>
 
 extern int line_num;
 extern char *yytext;
 
-
 using namespace std;
 
 extern "C"
 {
-        int yylex(void);  
-        int yywrap()
-        {
-                return 1;
-        }   
-        int S_start(char*);
+    int yylex(void);  
+    int yywrap()
+    {
+        return 1;
+    }   
+    int S_start(char*);
 }
 void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
 
@@ -85,6 +83,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
     Extern *an_extern;
     char* an_estring;
     void* nullid;
+    AST* ast;
 };
 
 %token IDENTIFIER
@@ -288,10 +287,15 @@ Print:
    PRINT Expression {$$=new PrintNode($2);}
    ;
 
+
 Literal:
     FLOAT {$$=new LitFloat($1);}
-   |INTEGER {$$=new LitInt($1);}
    |BOOLEAN {$$=new LitBool($1);}
+   |INTEGER {AST *term = (AST*) malloc(sizeof(struct AST)); 
+             term -> operand = 1 ; 
+             ASTdata glue = term -> data ;
+             glue.intValue = atoi($1); 
+             $$ = (Literal*) term;}
    |STRING {$$=new LitString($1);}
    |NULLID {$$=new LitNull();}
    ;
