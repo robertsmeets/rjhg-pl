@@ -290,7 +290,10 @@ Print:
 
 
 Literal:
-    FLOAT {$$=new LitFloat($1);}
+    FLOAT {AST *term = (AST*) malloc(sizeof(struct AST)); 
+             term -> operand = AST_LITFLOAT ; 
+             term -> data.intValue = atof($1); 
+             $$ = (Literal*) term;}
    |BOOLEAN {AST *term = (AST*) malloc(sizeof(struct AST)); 
              term -> operand = AST_LITBOOL ; 
              term -> data.boolValue = litboolconversion($1); 
@@ -299,8 +302,13 @@ Literal:
              term -> operand = AST_LITINT ; 
              term -> data.intValue = atoi($1); 
              $$ = (Literal*) term;}
-   |STRING {$$=new LitString($1);}
-   |NULLID {$$=new LitNull();}
+   |STRING {AST *term = (AST*) malloc(sizeof(struct AST)); 
+             term -> operand = AST_LITSTRING ; 
+             term -> data.ptrValue = $1; 
+             $$ = (Literal*) term;}
+   |NULLID {AST *term = (AST*) malloc(sizeof(struct AST)); 
+             term -> operand = AST_LITNULL ; 
+             $$ = (Literal*) term;}
    ;
 
 CommaSeparated:
