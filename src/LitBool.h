@@ -14,5 +14,6 @@ public:
    virtual string stype();
    virtual void setTopLevel();
 };
+   bool litboolconversion(char*);
 
 #endif

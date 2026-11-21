@@ -21,6 +21,20 @@ LitBool::LitBool(char* s)
    }
 }
 
+bool litboolconversion(char* s)
+{
+    if (strcmp(s,"true")==0 )
+    {
+       return true;
+    }
+    if (strcmp(s,"false")==0 )
+    {
+        return false;
+    }
+    puts("boolean must be true or false");
+    return false;
+}
+
 void LitBool::print(int level)
 {
    for (int i = 0; i < level; i++) {

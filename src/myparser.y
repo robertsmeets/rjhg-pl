@@ -35,6 +35,7 @@
 #include "ast.h"
 #include <stdio.h>
 #include <iostream>
+#include <stdbool.h>
 
 extern int line_num;
 extern char *yytext;
@@ -290,11 +291,13 @@ Print:
 
 Literal:
     FLOAT {$$=new LitFloat($1);}
-   |BOOLEAN {$$=new LitBool($1);}
+   |BOOLEAN {AST *term = (AST*) malloc(sizeof(struct AST)); 
+             term -> operand = AST_LITBOOL ; 
+             term -> data.boolValue = litboolconversion($1); 
+             $$ = (Literal*) term;}
    |INTEGER {AST *term = (AST*) malloc(sizeof(struct AST)); 
-             term -> operand = 1 ; 
-             ASTdata glue = term -> data ;
-             glue.intValue = atoi($1); 
+             term -> operand = AST_LITINT ; 
+             term -> data.intValue = atoi($1); 
              $$ = (Literal*) term;}
    |STRING {$$=new LitString($1);}
    |NULLID {$$=new LitNull();}
