@@ -48,7 +48,7 @@ extern "C"
     int yywrap()
     {
         return 1;
-    }  
+    } 
     int S_start(char*);
 }
 void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
@@ -235,10 +235,19 @@ If:
    ;
 
 Lhs:
-   IDENTIFIER  { $$ = new VariableValue($1);};
+   IDENTIFIER  {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VARIABLEVALUE;
+             term -> two = $1;
+             $$ = (VariableValue*) term;}
 
 ProcedureCall:
-   IDENTIFIER LPAREN ExpressionList RPAREN  { $$=new ProcedureCall($1,$3); };
+   IDENTIFIER LPAREN ExpressionList RPAREN  {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+      term -> operand = AST_PROCEDURECALL;
+      term -> two = $1;
+      term -> three = $3;
+      $$ = (ProcedureCall*) term;}
 
 ExpressionList:
     /* empty */ {$$ = new ExpressionList();}
@@ -247,7 +256,13 @@ ExpressionList:
    ;
 
 MethodCall:
-   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN { $$ = new MethodCall($1,$3,$5);};
+   Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_METHODCALL;
+             term -> two = $1;
+             term -> three = $3;
+             term -> four = $5;
+             $$ = (MethodCall*) term;}
 
 Expression:
     Literal { $$=$1; }
@@ -335,13 +350,34 @@ Expression:
              term -> two = (void*) '!';
              term -> three = $2;
              $$ = (Literal*) term;}
-   |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
-   |Expression NE Expression {$$=new Val2Expression('N',$1,$3);}
+   |Expression SEQUALS Expression {
+             AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*)'=';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (MethodCall*) term;}
+   |Expression NE Expression {
+             AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*)'N';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (MethodCall*) term;}
    |LPAREN Expression RPAREN {$$=$2;}
-   |Expression LBRACKET Expression RBRACKET  {$$=new Val2Expression('I',$1,$3);}
+   |Expression LBRACKET Expression RBRACKET  {
+             AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*)'I';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (MethodCall*) term;}
    |MethodCall {$$=$1;}
    |ProcedureCall {$$=$1;}
-   |SELF { $$ = new Self(); }
+   |SELF {
+             AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_SELF;
+             $$ = (MethodCall*) term;}
    ;
 
 Statement:
@@ -356,7 +392,11 @@ Statement:
 
 
 Print:
-   PRINT Expression {$$=new PrintNode($2);}
+   PRINT Expression {
+             AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_PRINTNODE;
+             term -> two = $2;
+             $$ = (PrintNode*) term;}
    ;
 
 
