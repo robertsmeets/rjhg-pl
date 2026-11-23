@@ -44,11 +44,11 @@ using namespace std;
 
 extern "C"
 {
-    int yylex(void);  
+    int yylex(void);
     int yywrap()
     {
         return 1;
-    }   
+    }  
     int S_start(char*);
 }
 void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
@@ -88,7 +88,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
 };
 
 %token IDENTIFIER
-%token SELF 
+%token SELF
 %token PROCEDURE
 %token BLOCK
 %token ENDBLOCK
@@ -153,7 +153,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
 %type <a_method> Method
 %type <a_program> Highlevelblock
 %type <an_assignment> Assignment
-%type <an_if> If 
+%type <an_if> If
 %type <a_return> Return
 %type <a_while> While
 %type <a_methodcall> MethodCall
@@ -217,7 +217,7 @@ BSB:
    ;
 
 Assignment:
-   Lhs EQUALS Expression 
+   Lhs EQUALS Expression
     { $$ = new Assignment($1,$3);};
 
 Return:
@@ -246,24 +246,95 @@ ExpressionList:
    | ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
    ;
 
-MethodCall: 
+MethodCall:
    Expression POINT IDENTIFIER LPAREN ExpressionList RPAREN { $$ = new MethodCall($1,$3,$5);};
 
 Expression:
     Literal { $$=$1; }
    |IDENTIFIER { $$=new VariableValue($1); }
-   |Expression PLUS Expression {$$=new Val2Expression('+',$1,$3);}
-   |Expression MINUS Expression {$$=new Val2Expression('-',$1,$3);}
-   |Expression MUL Expression {$$=new Val2Expression('*',$1,$3);}
-   |Expression DIV Expression {$$=new Val2Expression('/',$1,$3);}
-   |Expression GE Expression {$$=new Val2Expression('G',$1,$3);}
-   |Expression GT Expression {$$=new Val2Expression('>',$1,$3);}
-   |Expression LE Expression {$$=new Val2Expression('L',$1,$3);}
-   |Expression LT Expression {$$=new Val2Expression('<',$1,$3);}
-   |Expression AND Expression {$$=new Val2Expression('&',$1,$3);}
-   |Expression MOD Expression {$$=new Val2Expression('%',$1,$3);}
-   |Expression OR Expression {$$=new Val2Expression('|',$1,$3);}
-   |NOT Expression {$$=new NotExpression($2);}
+   |Expression PLUS Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '+';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression MINUS Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '-';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression MUL Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '*';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression DIV Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '/';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression GE Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) 'G';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression GT Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '>';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression LE Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) 'L';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression LT Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '>';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression AND Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '&';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression MOD Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '%';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |Expression OR Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '|';
+             term -> three = $1;
+             term -> four = $3;
+             $$ = (Literal*) term;}
+   |NOT Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VAL2EXPRESSION;
+             term -> two = (void*) '!';
+             term -> three = $2;
+             $$ = (Literal*) term;}
    |Expression SEQUALS Expression {$$=new Val2Expression('=',$1,$3);}
    |Expression NE Expression {$$=new Val2Expression('N',$1,$3);}
    |LPAREN Expression RPAREN {$$=$2;}
@@ -290,24 +361,24 @@ Print:
 
 
 Literal:
-    FLOAT {AST *term = (AST*) malloc(sizeof(struct AST)); 
-             term -> operand = AST_LITFLOAT ; 
-             term -> data.intValue = atof($1); 
+    FLOAT {  AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_LITFLOAT ;
+             term -> data.intValue = atof($1);
              $$ = (Literal*) term;}
-   |BOOLEAN {AST *term = (AST*) malloc(sizeof(struct AST)); 
-             term -> operand = AST_LITBOOL ; 
-             term -> data.boolValue = litboolconversion($1); 
+   |BOOLEAN {AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_LITBOOL ;
+             term -> data.boolValue = litboolconversion($1);
              $$ = (Literal*) term;}
-   |INTEGER {AST *term = (AST*) malloc(sizeof(struct AST)); 
-             term -> operand = AST_LITINT ; 
-             term -> data.intValue = atoi($1); 
+   |INTEGER {AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_LITINT ;
+             term -> data.intValue = atoi($1);
              $$ = (Literal*) term;}
-   |STRING {AST *term = (AST*) malloc(sizeof(struct AST)); 
-             term -> operand = AST_LITSTRING ; 
-             term -> data.ptrValue = $1; 
+   |STRING {AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_LITSTRING ;
+             term -> data.ptrValue = $1;
              $$ = (Literal*) term;}
-   |NULLID {AST *term = (AST*) malloc(sizeof(struct AST)); 
-             term -> operand = AST_LITNULL ; 
+   |NULLID {AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_LITNULL ;
              $$ = (Literal*) term;}
    ;
 
@@ -315,7 +386,7 @@ CommaSeparated:
          /* empty */ {$$=new CommaSeparated();}
    |IDENTIFIER {$$=new CommaSeparated();$$->addIdentifier($1);}
    |CommaSeparated COMMA IDENTIFIER {$$ = $1; $1->addIdentifier($3);}
-     ; 
+     ;
 
 
 %%
@@ -358,7 +429,7 @@ int main(int argc, char* argv[]) {
    }
    else
    {
-      int result = S_start(argv[0]); 
+      int result = S_start(argv[0]);
       if (result==-1)
       {
          Interactive i;
