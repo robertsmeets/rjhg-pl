@@ -48,7 +48,7 @@ extern "C"
     int yywrap()
     {
         return 1;
-    } 
+    }
     int S_start(char*);
 }
 void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-1); }
@@ -250,9 +250,24 @@ ProcedureCall:
       $$ = (ProcedureCall*) term;}
 
 ExpressionList:
-    /* empty */ {$$ = new ExpressionList();}
-   | Expression { $$ = new ExpressionList();$$->addExpression($1);}
-   | ExpressionList COMMA Expression  { $$ = $1; $1->addExpression($3); }
+    /* empty */ {
+      AST *term = (AST*) malloc(sizeof(struct AST) );
+             term -> operand = AST_EXPRESSIONLIST;
+             term -> data.intValue = 0;
+             $$ = (ExpressionList*) term;}
+   | Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST) + sizeof(void*));
+             term -> operand = AST_EXPRESSIONLIST;
+             term -> data.intValue = 1;
+             term -> list[0] = $1;
+             $$ = (ExpressionList*) term;}
+   | ExpressionList COMMA Expression  {
+             AST* term = (AST*) $1;
+             int size = term->data.intValue + 1;
+             AST* newloc = (AST*) realloc(term, sizeof(struct AST)  + size * sizeof(void*));
+             newloc -> data.intValue = size;
+             newloc -> list[size-1] = $3;
+             $$ = (ExpressionList*) newloc; }
    ;
 
 MethodCall:

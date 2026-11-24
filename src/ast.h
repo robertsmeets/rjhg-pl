@@ -41,4 +41,5 @@ struct AST {
     void* two;
     void* three;
     void* four;
+    void* list[];
 };
