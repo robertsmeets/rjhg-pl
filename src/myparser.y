@@ -221,8 +221,16 @@ Assignment:
     { $$ = new Assignment($1,$3);};
 
 Return:
-   RETURN Expression { $$ = new ReturnNode($2); }
-  |RETURN { $$ = new ReturnNode(NULL); }
+   RETURN Expression {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+      term -> operand = AST_RETURNNODE;
+      term -> two = $2;
+      $$ = (ReturnNode*) term;}
+  |RETURN {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+      term -> operand = AST_RETURNNODE;
+      term -> two = 0;
+      $$ = (ReturnNode*) term;}
    ;
 
 While:
