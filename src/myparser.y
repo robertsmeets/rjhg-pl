@@ -66,7 +66,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
     ProcedureNode *a_method;
     Assignment *an_assignment;
     If *an_if;
-    ReturnNode* a_return;
+    AST* a_return;
     While* a_while;
     MethodCall *a_methodcall;
     ProcedureCall *a_procedurecall;
@@ -74,7 +74,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
     Expression *an_expression;
     Statements *a_statements;
     CommaSeparated *a_comma_separated;
-    Literal *a_literal;
+    AST *a_literal;
     VariableValue *a_variablevalue;
     char* Integer;
     double Double;
@@ -235,12 +235,12 @@ Return:
       AST *term = (AST*) malloc(sizeof(struct AST));
       term -> operand = AST_RETURNNODE;
       term -> two = $2;
-      $$ = (ReturnNode*) term;}
+      $$ = term;}
   |RETURN {
       AST *term = (AST*) malloc(sizeof(struct AST));
       term -> operand = AST_RETURNNODE;
       term -> two = 0;
-      $$ = (ReturnNode*) term;}
+      $$ = term;}
    ;
 
 While:
@@ -298,15 +298,19 @@ MethodCall:
              $$ = (MethodCall*) term;}
 
 Expression:
-    Literal { $$=$1; }
-   |IDENTIFIER { $$=new VariableValue($1); }
+    Literal { $$=(Expression*) $1; }
+   |IDENTIFIER {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+             term -> operand = AST_VARIABLEVALUE;
+             term -> three = $1;
+             $$ = (Expression*) term;}
    |Expression PLUS Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '+';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = (Expression*) term;}
    |Expression MINUS Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
@@ -415,7 +419,7 @@ Expression:
 
 Statement:
     Assignment {$$ = $1;}
-   |Return {$$ = $1;}
+   |Return {$$ = (Expression*) $1;}
    |While {$$ = $1;}
    |If {$$ = $1;}
    |Print {$$ = $1;}
@@ -437,22 +441,22 @@ Literal:
     FLOAT {  AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_LITFLOAT ;
              term -> data.intValue = atof($1);
-             $$ = (Literal*) term;}
+             $$ = term;}
    |BOOLEAN {AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_LITBOOL ;
              term -> data.boolValue = litboolconversion($1);
-             $$ = (Literal*) term;}
+             $$ = term;}
    |INTEGER {AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_LITINT ;
              term -> data.intValue = atoi($1);
-             $$ = (Literal*) term;}
+             $$ = term;}
    |STRING {AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_LITSTRING ;
              term -> data.ptrValue = $1;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |NULLID {AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_LITNULL ;
-             $$ = (Literal*) term;}
+             $$ = term;}
    ;
 
 CommaSeparated:
