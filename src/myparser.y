@@ -207,8 +207,18 @@ Method:
    METHOD IDENTIFIER POINT IDENTIFIER LPAREN CommaSeparated RPAREN BSB  {  $$ = new ProcedureNode($2,$4,$6,$8);};
 
 Statements:
-   Statement { $$ = new Statements(); $$->addStatement($1); }
-   |Statements SEMICOL Statement { $$=$1;$1->addStatement($3); }
+   Statement {
+      AST *term = (AST*) malloc(sizeof(struct AST));
+      term -> operand = AST_STATEMENTS;
+      term -> two = $1;
+      $$ = (Statements*) term;}
+   |Statements SEMICOL Statement {
+      AST* term = (AST*) $1;
+      int size = term->data.intValue + 1;
+      AST* newloc = (AST*) realloc(term, sizeof(struct AST)  + size * sizeof(void*));
+      newloc -> data.intValue = size;
+      newloc -> list[size-1] = $3;
+      $$ = (Statements*) newloc; }
    |Statements SEMICOL { $$=$1; }
    ;
 
