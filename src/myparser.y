@@ -80,7 +80,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
     double Double;
     char* Boolean;
     char* String;
-    PrintNode *a_printnode;
+    AST* a_printnode;
     Extern *an_extern;
     char* an_estring;
     void* nullid;
@@ -422,7 +422,7 @@ Statement:
    |Return {$$ = (Expression*) $1;}
    |While {$$ = $1;}
    |If {$$ = $1;}
-   |Print {$$ = $1;}
+   |Print {$$ = (Expression*) $1;}
    |MethodCall {$$=$1;}
    |ProcedureCall {$$=$1;}
    ;
@@ -433,7 +433,7 @@ Print:
              AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_PRINTNODE;
              term -> two = $2;
-             $$ = (PrintNode*) term;}
+             $$ = term;}
    ;
 
 
