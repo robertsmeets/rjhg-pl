@@ -68,9 +68,9 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
     If *an_if;
     AST* a_return;
     While* a_while;
-    MethodCall *a_methodcall;
+    AST *a_methodcall;
     ProcedureCall *a_procedurecall;
-    ExpressionList *an_expressionlist;
+    AST *an_expressionlist;
     Expression *an_expression;
     Statements *a_statements;
     CommaSeparated *a_comma_separated;
@@ -272,20 +272,20 @@ ExpressionList:
       AST *term = (AST*) malloc(sizeof(struct AST) );
              term -> operand = AST_EXPRESSIONLIST;
              term -> data.intValue = 0;
-             $$ = (ExpressionList*) term;}
+             $$ = term;}
    | Expression {
       AST *term = (AST*) malloc(sizeof(struct AST) + sizeof(void*));
              term -> operand = AST_EXPRESSIONLIST;
              term -> data.intValue = 1;
              term -> list[0] = $1;
-             $$ = (ExpressionList*) term;}
+             $$ = term;}
    | ExpressionList COMMA Expression  {
              AST* term = (AST*) $1;
              int size = term->data.intValue + 1;
              AST* newloc = (AST*) realloc(term, sizeof(struct AST)  + size * sizeof(void*));
              newloc -> data.intValue = size;
              newloc -> list[size-1] = $3;
-             $$ = (ExpressionList*) newloc; }
+             $$ = newloc; }
    ;
 
 MethodCall:
@@ -295,7 +295,7 @@ MethodCall:
              term -> two = $1;
              term -> three = $3;
              term -> four = $5;
-             $$ = (MethodCall*) term;}
+             $$ = term;}
 
 Expression:
     Literal { $$=(Expression*) $1; }
@@ -409,7 +409,7 @@ Expression:
              term -> three = $1;
              term -> four = $3;
              $$ = (MethodCall*) term;}
-   |MethodCall {$$=$1;}
+   |MethodCall {$$=(MethodCall*) $1;}
    |ProcedureCall {$$=$1;}
    |SELF {
              AST *term = (AST*) malloc(sizeof(struct AST));
@@ -423,7 +423,7 @@ Statement:
    |While {$$ = $1;}
    |If {$$ = $1;}
    |Print {$$ = (Expression*) $1;}
-   |MethodCall {$$=$1;}
+   |MethodCall {$$=(Expression*) $1;}
    |ProcedureCall {$$=$1;}
    ;
 
