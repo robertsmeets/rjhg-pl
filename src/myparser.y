@@ -71,7 +71,7 @@ void yyerror(const char* y) { printf("yyerror : line_num %d\n",line_num); exit(-
     AST *a_methodcall;
     ProcedureCall *a_procedurecall;
     AST *an_expressionlist;
-    Expression *an_expression;
+    AST *an_expression;
     Statements *a_statements;
     CommaSeparated *a_comma_separated;
     AST *a_literal;
@@ -228,7 +228,7 @@ BSB:
 
 Assignment:
    Lhs EQUALS Expression
-    { $$ = new Assignment($1,$3);};
+    { $$ = new Assignment((VariableValue*) $1, (Expression*) $3);};
 
 Return:
    RETURN Expression {
@@ -244,12 +244,12 @@ Return:
    ;
 
 While:
-   WHILE Expression BSB { $$ = new While($2,$3); }
+   WHILE Expression BSB { $$ = new While((Expression*) $2,(Statements*) $3); }
    ;
 
 If:
-   IF Expression BSB { $$ = new If($2,$3,NULL); }
-  |IF Expression BSB ELSE BSB { $$ = new If($2,$3,$5); }
+   IF Expression BSB { $$ = new If((Expression*) $2,(Statements*) $3,NULL); }
+  |IF Expression BSB ELSE BSB { $$ = new If((Expression*) $2,(Statements*) $3,(Statements*) $5); }
    ;
 
 Lhs:
@@ -298,109 +298,109 @@ MethodCall:
              $$ = term;}
 
 Expression:
-    Literal { $$=(Expression*) $1; }
+    Literal { $$= $1; }
    |IDENTIFIER {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VARIABLEVALUE;
              term -> three = $1;
-             $$ = (Expression*) term;}
+             $$ = term;}
    |Expression PLUS Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '+';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Expression*) term;}
+             $$ = term;}
    |Expression MINUS Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '-';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression MUL Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '*';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression DIV Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '/';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression GE Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) 'G';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression GT Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '>';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression LE Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) 'L';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression LT Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '>';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression AND Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '&';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression MOD Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '%';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression OR Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '|';
              term -> three = $1;
              term -> four = $3;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |NOT Expression {
       AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*) '!';
              term -> three = $2;
-             $$ = (Literal*) term;}
+             $$ = term;}
    |Expression SEQUALS Expression {
              AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*)'=';
              term -> three = $1;
              term -> four = $3;
-             $$ = (MethodCall*) term;}
+             $$ = term;}
    |Expression NE Expression {
              AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_VAL2EXPRESSION;
              term -> two = (void*)'N';
              term -> three = $1;
              term -> four = $3;
-             $$ = (MethodCall*) term;}
+             $$ = term;}
    |LPAREN Expression RPAREN {$$=$2;}
    |Expression LBRACKET Expression RBRACKET  {
              AST *term = (AST*) malloc(sizeof(struct AST));
@@ -408,23 +408,23 @@ Expression:
              term -> two = (void*)'I';
              term -> three = $1;
              term -> four = $3;
-             $$ = (MethodCall*) term;}
-   |MethodCall {$$=(MethodCall*) $1;}
-   |ProcedureCall {$$=$1;}
+             $$ = term;}
+   |MethodCall {$$=$1;}
+   |ProcedureCall {$$=(AST*) $1;}
    |SELF {
              AST *term = (AST*) malloc(sizeof(struct AST));
              term -> operand = AST_SELF;
-             $$ = (MethodCall*) term;}
+             $$ = term;}
    ;
 
 Statement:
-    Assignment {$$ = $1;}
-   |Return {$$ = (Expression*) $1;}
-   |While {$$ = $1;}
-   |If {$$ = $1;}
-   |Print {$$ = (Expression*) $1;}
-   |MethodCall {$$=(Expression*) $1;}
-   |ProcedureCall {$$=$1;}
+    Assignment {$$ = (AST*) $1;}
+   |Return {$$ = $1;}
+   |While {$$ = (AST*) $1;}
+   |If {$$ = (AST*) $1;}
+   |Print {$$ = $1;}
+   |MethodCall {$$= $1;}
+   |ProcedureCall {$$=(AST*) $1;}
    ;
 
 
